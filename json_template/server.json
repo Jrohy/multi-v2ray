@@ -10,7 +10,7 @@
     "protocol": "vmess",
     "settings": {
       "auth": null,
-      "udp": false,
+      "udp": true,
       "ip": null,
       "clients": [
         {

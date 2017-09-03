@@ -1,0 +1,10 @@
+{
+      "network": "ws",
+      "security": "",
+      "tcpSettings": null,
+      "kcpSettings": null,
+      "wsSettings": {
+        "connectionReuse": true,
+        "path": ""
+      }
+    }

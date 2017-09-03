@@ -1,0 +1,112 @@
+#!/bin/bash
+export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+#Check Root
+[ $(id -u) != "0" ] && { echo "Error: You must be root to run this script"; exit 1; }
+
+echo "欢迎使用V2ray.sh管理程序 Author:雨落无声"
+echo ""
+echo "1.服务管理"
+echo "2.更改配置"
+echo "3.查看服务端信息"
+echo "4.下载客户端配置文件"
+echo "请输入数字选择功能："
+
+while :; do echo
+	read -p "请选择： " choice
+	if [[ ! $choice =~ ^[1-3]$ ]]; then
+		echo "输入错误! 请输入正确的数字!"
+	else
+		break	
+	fi
+done
+
+if [[ ${choice} == 1 ]]; then
+    echo "1.启动服务"
+    echo "2.停止服务"
+    echo "3.重启服务"
+    echo "4.运行状态"
+    echo "5.运行日志"
+    while :; do echo
+	    read -p "请选择： " schoice
+	    if [[ ! $schoice =~ ^[1-5]$ ]]; then
+		    echo "输入错误! 请输入正确的数字!"
+	    else
+		    break
+	    fi
+    done
+    if [[ ${schoice} == 1 ]]; then
+        service v2ray start
+        python /usr/local/v2ray.fun/openport.py
+        python /usr/local/v2ray.fun/genclient.py
+        echo "服务启动成功！"
+    fi
+    if [[ ${schoice} == 2 ]]; then
+        server v2ray stop
+        echo "服务停止成功！"
+    fi
+    if [[ ${schoice} == 3 ]]; then
+        server v2ray restart
+        python /usr/local/v2ray.fun/openport.py
+        python /usr/local/v2ray.fun/genclient.py
+        echo "服务已重启！"
+    fi
+    if [[ ${schoice} == 4 ]]; then
+        service v2ray status
+    fi
+    if [[ ${schoice} == 5 ]]; then
+        echo "按Ctrl + C 可以退出日志功能"
+        echo ""
+        tail -f /var/log/v2ray/access.log
+    fi
+fi
+
+if [[ ${choice} == 2 ]]; then
+    echo ""
+    echo "1.更改UUID"
+    echo "2.更改主端口"
+    echo "3.更改加密方式"
+    echo "4.更改传输方式"
+    echo ""
+    echo "请输入数字选择功能："
+
+    while :; do echo
+	    read -p "请选择： " changechoice
+	    if [[ ! $changechoice =~ ^[1-4]$ ]]; then
+		    echo "输入错误! 请输入正确的数字!"
+	    else
+		    break
+	fi
+
+    if [[ ${changechoice} == 1 ]]; then
+        python /usr/local/v2ray.fun/changeuuid.py
+        python /usr/local/v2ray.fun/genclient.py
+    fi
+    
+    if [[ ${changechoice} == 2 ]]; then
+        python /usr/local/v2ray.fun/changeport.py
+        python /usr/local/v2ray.fun/genclient.py
+    fi
+    
+    if [[ ${changechoice} == 3 ]]; then
+        python /usr/local/v2ray.fun/changesecurity.py
+        python /usr/local/v2ray.fun/genclient.py
+    fi
+    
+    if [[ ${changechoice} == 4 ]]; then
+        python /usr/local/v2ray.fun/changestream.py
+        python /usr/local/v2ray.fun/genclient.py
+    fi
+    
+done
+fi
+
+if [[ ${choice} == 3 ]]; then
+    python /usr/local/v2ray.fun/serverinfo.py
+fi
+
+if [[ ${choice} == 4 ]]; then
+    echo "请选择文件保存位置（此功能仅限Xshell使用）"
+    python /usr/local/v2ray.fun/genclient.py
+    sz /root/config.json
+fi

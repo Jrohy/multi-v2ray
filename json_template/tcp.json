@@ -1,0 +1,7 @@
+{
+    "network": "tcp",
+    "security": "",
+    "tcpSettings": null,
+    "kcpSettings": null,
+    "wsSettings": null
+}

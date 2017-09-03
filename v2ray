@@ -42,11 +42,11 @@ if [[ ${choice} == 1 ]]; then
         echo "服务启动成功！"
     fi
     if [[ ${schoice} == 2 ]]; then
-        server v2ray stop
+        service v2ray stop
         echo "服务停止成功！"
     fi
     if [[ ${schoice} == 3 ]]; then
-        server v2ray restart
+        service v2ray restart
         python /usr/local/v2ray.fun/openport.py
         python /usr/local/v2ray.fun/genclient.py
         echo "服务已重启！"
@@ -81,21 +81,25 @@ if [[ ${choice} == 2 ]]; then
     if [[ ${changechoice} == 1 ]]; then
         python /usr/local/v2ray.fun/changeuuid.py
         python /usr/local/v2ray.fun/genclient.py
+	service v2ray restart
     fi
     
     if [[ ${changechoice} == 2 ]]; then
         python /usr/local/v2ray.fun/changeport.py
         python /usr/local/v2ray.fun/genclient.py
+	service v2ray restart
     fi
     
     if [[ ${changechoice} == 3 ]]; then
         python /usr/local/v2ray.fun/changesecurity.py
         python /usr/local/v2ray.fun/genclient.py
+	service v2ray restart
     fi
     
     if [[ ${changechoice} == 4 ]]; then
         python /usr/local/v2ray.fun/changestream.py
         python /usr/local/v2ray.fun/genclient.py
+	service v2ray restart
     fi
     
 done

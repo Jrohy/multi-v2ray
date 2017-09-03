@@ -38,7 +38,7 @@ git clone https://github.com/FunctionClub/v2ray.fun
 bash <(curl -L -s https://install.direct/go.sh)
 
 #配置V2ray初始环境
-mv /usr/local/v2ray.fun/v2ray /usr/local/bin
+cp /usr/local/v2ray.fun/v2ray /usr/local/bin
 mv /usr/local/v2ray.fun/v2ray /usr/bin
 chmod +x /usr/bin/v2ray
 chmod +x /usr/local/bin/v2ray

@@ -34,39 +34,39 @@ def WriteSecurity(mysecurity):
 def WriteStreamNetwork(network,para):
     
     if (network == "tcp" and para=="none"):
-        streamfile=file("json_template/tcp.json")
+        streamfile=file("/usr/local/v2ray.fun/json_template/tcp.json")
         tcp=json.load(streamfile)
         config[u"inbound"][u"streamSettings"]=tcp
         Write()
     if (network == "tcp" and para != "none"):
-        streamfile=file("json_template/http.json")
+        streamfile=file("/usr/local/v2ray.fun/json_template/http.json")
         http=json.load(streamfile)
         http[u"tcpSettings"][u"header"][u"request"][u"headers"][u"Host"]=para
         config[u"inbound"][u"streamSettings"]=http
         Write()
     if (network == "ws"):
-        streamfile=file("json_template/ws.json")
+        streamfile=file("/usr/local/v2ray.fun/json_template/ws.json")
         ws=json.load(streamfile)
         config[u"inbound"][u"streamSettings"]=ws
         Write()
     if (network == "mkcp" and para=="none"):
-        streamfile=file("json_template/kcp.json")
+        streamfile=file("/usr/local/v2ray.fun/json_template/kcp.json")
         kcp=json.load(streamfile)
         config[u"inbound"][u"streamSettings"]=kcp
         Write()
     if (network == "mkcp" and para=="kcp utp"):
-        streamfile=file("json_template/kcp_utp.json")
+        streamfile=file("/usr/local/v2ray.fun/json_template/kcp_utp.json")
         utp=json.load(streamfile)
         config[u"inbound"][u"streamSettings"]=utp
         Write()
     if (network == "mkcp" and para=="kcp srtp"):
-        streamfile=file("json_template/kcp_srtp.json")
+        streamfile=file("/usr/local/v2ray.fun/json_template/kcp_srtp.json")
         srtp=json.load(streamfile)
         config[u"inbound"][u"streamSettings"]=srtp
         Write()    
         
     if (network == "mkcp" and para=="kcp wechat-video"):
-        streamfile=file("json_template/kcp_wechat.json")
+        streamfile=file("/usr/local/v2ray.fun/json_template/kcp_wechat.json")
         wechat=json.load(streamfile)
         config[u"inbound"][u"streamSettings"]=wechat
         Write()  

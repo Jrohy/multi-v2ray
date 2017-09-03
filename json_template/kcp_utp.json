@@ -1,0 +1,20 @@
+{
+    "network": "kcp",
+    "security": "",
+    "tcpSettings": null,
+    "kcpSettings": {
+      "mtu": 1350,
+      "tti": 50,
+      "uplinkCapacity": 100,
+      "downlinkCapacity": 100,
+      "congestion": false,
+      "readBufferSize": 2,
+      "writeBufferSize": 2,
+      "header": {
+        "type": "utp",
+        "request": null,
+        "response": null
+      }
+    },
+    "wsSettings": null
+  }

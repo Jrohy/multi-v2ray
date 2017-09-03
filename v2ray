@@ -4,7 +4,7 @@ export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 #Check Root
 [ $(id -u) != "0" ] && { echo "Error: You must be root to run this script"; exit 1; }
 
-echo "欢迎使用V2ray.sh管理程序 Author:雨落无声"
+echo "欢迎使用 V2ray.fun 管理程序 Author:雨落无声"
 echo ""
 echo "1.服务管理"
 echo "2.更改配置"

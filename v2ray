@@ -76,8 +76,9 @@ if [[ ${choice} == 2 ]]; then
 		    echo "输入错误! 请输入正确的数字!"
 	    else
 		    break
-	fi
-
+	    fi
+    done
+    
     if [[ ${changechoice} == 1 ]]; then
         python /usr/local/v2ray.fun/changeuuid.py
         python /usr/local/v2ray.fun/genclient.py
@@ -101,8 +102,6 @@ if [[ ${choice} == 2 ]]; then
         python /usr/local/v2ray.fun/genclient.py
 	service v2ray restart
     fi
-    
-done
 fi
 
 if [[ ${choice} == 3 ]]; then
@@ -114,3 +113,4 @@ if [[ ${choice} == 4 ]]; then
     python /usr/local/v2ray.fun/genclient.py
     sz /root/config.json
 fi
+

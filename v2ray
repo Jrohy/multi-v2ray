@@ -82,25 +82,26 @@ if [[ ${choice} == 2 ]]; then
     if [[ ${changechoice} == 1 ]]; then
         python /usr/local/v2ray.fun/changeuuid.py
         python /usr/local/v2ray.fun/genclient.py
-	service v2ray restart
+	    service v2ray restart
     fi
     
     if [[ ${changechoice} == 2 ]]; then
         python /usr/local/v2ray.fun/changeport.py
         python /usr/local/v2ray.fun/genclient.py
-	service v2ray restart
+        python /usr/local/v2ray.fun/openport.py
+	    service v2ray restart
     fi
     
     if [[ ${changechoice} == 3 ]]; then
         python /usr/local/v2ray.fun/changesecurity.py
         python /usr/local/v2ray.fun/genclient.py
-	service v2ray restart
+	    service v2ray restart
     fi
     
     if [[ ${changechoice} == 4 ]]; then
         python /usr/local/v2ray.fun/changestream.py
         python /usr/local/v2ray.fun/genclient.py
-	service v2ray restart
+	    service v2ray restart
     fi
 fi
 

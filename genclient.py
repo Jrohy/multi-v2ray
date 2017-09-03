@@ -17,7 +17,7 @@ myip = urllib2.urlopen('http://members.3322.org/dyndns/getip').read()
 myip = myip.strip()
 
 #加载客户端配置模板
-clientjsonfile = file("json_template/client.json")
+clientjsonfile = file("/usr/local/v2ray.fun/json_template/client.json")
 clientconfig = json.load(clientjsonfile)
 
 #使用服务端配置来修改客户端模板

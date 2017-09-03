@@ -39,14 +39,18 @@ bash <(curl -L -s https://install.direct/go.sh)
 
 #配置V2ray初始环境
 cp /usr/local/v2ray.fun/v2ray /usr/local/bin
-mv /usr/local/v2ray.fun/v2ray /usr/bin
 chmod +x /usr/bin/v2ray
 chmod +x /usr/local/bin/v2ray
 rm -rf /etc/v2ray/config.json
 mv /usr/local/v2ray.fun/json_template/server.json /etc/v2ray/config.json
+UUID=$(cat /proc/sys/kernel/random/uuid)
+sed -i "s/cc4f8d5b-967b-4557-a4b6-bde92965bc27/${UUID}/g" /etc/v2ray/config.json
 python /usr/local/v2ray.fun/genclient.py
 python /usr/local/v2ray.fun/openport.py
 service v2ray restart
+
+
+clear
 
 echo "V2ray.fun 安装成功！By: 雨落无声"
 echo "输入 v2ray 回车即可使用"

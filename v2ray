@@ -53,6 +53,7 @@ if [[ ${choice} == 1 ]]; then
     fi
     if [[ ${schoice} == 4 ]]; then
         service v2ray status
+	bash /usr/local/bin/v2ray
     fi
     if [[ ${schoice} == 5 ]]; then
         echo "按Ctrl + C 可以退出日志功能"
@@ -115,6 +116,7 @@ fi
 
 if [[ ${choice} == 3 ]]; then
     python /usr/local/v2ray.fun/serverinfo.py
+    bash /usr/local/bin/v2ray
 fi
 
 if [[ ${choice} == 4 ]]; then

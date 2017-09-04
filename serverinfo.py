@@ -33,6 +33,7 @@ else:
 #输出信息
 print("服务器IP：%s") % str(myip)
 print("主端口：%s") % str(readjson.ConfPort)
+print("UUID：%s") % str(readjson.ConfUUID)
 print("加密方式：%s") % str(readjson.ConfSecurity)
 print("传输方式：%s") % str(mystreamnetwork)
 print("%s") % str(mystreamsecurity)

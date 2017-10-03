@@ -10,11 +10,14 @@ echo "1.服务管理"
 echo "2.更改配置"
 echo "3.查看服务端信息"
 echo "4.下载客户端配置文件"
-echo "请输入数字选择功能："
+echo "请输入数字选择功能(按回车键退出)："
 
 while :; do echo
 	read -p "请选择： " choice
 	if [[ ! $choice =~ ^[1-4]$ ]]; then
+        if [[ -z ${choice} ]];then
+            exit 0
+        fi
 		echo "输入错误! 请输入正确的数字!"
 	else
 		break	
@@ -30,6 +33,10 @@ if [[ ${choice} == 1 ]]; then
     while :; do echo
 	    read -p "请选择： " schoice
 	    if [[ ! $schoice =~ ^[1-5]$ ]]; then
+            if [[ -z ${schoice} ]];then
+                bash /usr/local/bin/v2ray
+                exit 0
+            fi
 		    echo "输入错误! 请输入正确的数字!"
 	    else
 		    break
@@ -40,25 +47,29 @@ if [[ ${choice} == 1 ]]; then
         python /usr/local/v2ray.fun/openport.py
         python /usr/local/v2ray.fun/genclient.py
         echo "服务启动成功！"
+        bash /usr/local/bin/v2ray
     fi
     if [[ ${schoice} == 2 ]]; then
         service v2ray stop
         echo "服务停止成功！"
+        bash /usr/local/bin/v2ray
     fi
     if [[ ${schoice} == 3 ]]; then
         service v2ray restart
         python /usr/local/v2ray.fun/openport.py
         python /usr/local/v2ray.fun/genclient.py
         echo "服务已重启！"
+        bash /usr/local/bin/v2ray
     fi
     if [[ ${schoice} == 4 ]]; then
         service v2ray status
-	bash /usr/local/bin/v2ray
+        bash /usr/local/bin/v2ray
     fi
     if [[ ${schoice} == 5 ]]; then
         echo "按Ctrl + C 可以退出日志功能"
         echo ""
         tail -f /var/log/v2ray/access.log
+        bash /usr/local/bin/v2ray
     fi
 fi
 
@@ -74,6 +85,10 @@ if [[ ${choice} == 2 ]]; then
     while :; do echo
 	    read -p "请选择： " changechoice
 	    if [[ ! $changechoice =~ ^[1-4]$ ]]; then
+            if [[ -z ${changechoice} ]];then
+                bash /usr/local/bin/v2ray
+                exit 0
+            fi
 		    echo "输入错误! 请输入正确的数字!"
 	    else
 		    break
@@ -86,6 +101,7 @@ if [[ ${choice} == 2 ]]; then
 	    service v2ray restart
         echo ""
         echo "UUID修改成功！"
+        bash /usr/local/bin/v2ray
     fi
     
     if [[ ${changechoice} == 2 ]]; then
@@ -95,6 +111,7 @@ if [[ ${choice} == 2 ]]; then
 	    service v2ray restart
         echo ""
         echo "端口修改成功！"
+        bash /usr/local/bin/v2ray
     fi
     
     if [[ ${changechoice} == 3 ]]; then
@@ -103,6 +120,7 @@ if [[ ${choice} == 2 ]]; then
 	    service v2ray restart
         echo ""
         echo "加密方式修改成功！"
+        bash /usr/local/bin/v2ray
     fi
     
     if [[ ${changechoice} == 4 ]]; then
@@ -111,6 +129,7 @@ if [[ ${choice} == 2 ]]; then
 	    service v2ray restart
         echo ""
         echo "传输模式修改成功！"
+        bash /usr/local/bin/v2ray
     fi
 fi
 
@@ -125,6 +144,5 @@ if [[ ${choice} == 4 ]]; then
     sz /root/config.json
     echo "保存成功！"
     echo ""
+    bash /usr/local/bin/v2ray
 fi
-
-

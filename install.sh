@@ -32,6 +32,7 @@ fi
 
 #克隆V2ray.fun项目
 cd /usr/local/
+rm -R v2ray.fun
 git clone https://github.com/FunctionClub/v2ray.fun
 
 #安装V2ray主程序

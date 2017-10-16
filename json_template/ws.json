@@ -1,6 +1,7 @@
 {
       "network": "ws",
       "security": "",
+      "tlsSettings": {},
       "tcpSettings": null,
       "kcpSettings": null,
       "wsSettings": {

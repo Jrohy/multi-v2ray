@@ -13,7 +13,7 @@ def get_ip():
 def open_tls():
     print("请将您的域名解析到本VPS的IP地址，否则程序会出错！！")
     print("本机器IP地址为：" + get_ip())
-    inputdomain=str(input("请输入您绑定的域名："))
+    inputdomain=str(raw_input("请输入您绑定的域名："))
     print("")
     print("正在获取SSL证书，请稍等。")
     getssl.getssl(inputdomain)

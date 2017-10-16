@@ -79,12 +79,13 @@ if [[ ${choice} == 2 ]]; then
     echo "2.更改主端口"
     echo "3.更改加密方式"
     echo "4.更改传输方式"
+    echo "5.更改TLS设置"
     echo ""
     echo "请输入数字选择功能："
 
     while :; do echo
 	    read -p "请选择： " changechoice
-	    if [[ ! $changechoice =~ ^[1-4]$ ]]; then
+	    if [[ ! $changechoice =~ ^[1-5]$ ]]; then
             if [[ -z ${changechoice} ]];then
                 bash /usr/local/bin/v2ray
                 exit 0
@@ -129,6 +130,15 @@ if [[ ${choice} == 2 ]]; then
 	    service v2ray restart
         echo ""
         echo "传输模式修改成功！"
+        bash /usr/local/bin/v2ray
+    fi
+    
+    if [[ ${changechoice} == 5 ]]; then
+        python /usr/local/v2ray.fun/changetls.py
+        python /usr/local/v2ray.fun/genclient.py
+	    service v2ray restart
+        echo ""
+        echo "TLS设置修改成功！"
         bash /usr/local/bin/v2ray
     fi
 fi

@@ -21,11 +21,17 @@ clientjsonfile = file("/usr/local/v2ray.fun/json_template/client.json")
 clientconfig = json.load(clientjsonfile)
 
 #使用服务端配置来修改客户端模板
-clientconfig[u"outbound"][u"settings"][u"vnext"][0][u"address"]=str(myip)
 clientconfig[u"outbound"][u"settings"][u"vnext"][0][u"port"]=int(readjson.ConfPort)
 clientconfig[u"outbound"][u"settings"][u"vnext"][0][u"users"][0][u"id"]=str(readjson.ConfUUID)
 clientconfig[u"outbound"][u"settings"][u"vnext"][0][u"users"][0][u"security"]=str(readjson.ConfSecurity)
 clientconfig[u"outbound"][u"streamSettings"]=readjson.ConfStream
-
+if str(readjson.ConfStreamSecurity) == "":
+    clientconfig[u"outbound"][u"settings"][u"vnext"][0][u"address"]=str(myip)
+else:
+    domainfile = file("/usr/local/v2ray.fun/mydomain", "r")
+    content = domainfile.read()
+    clientconfig[u"outbound"][u"settings"][u"vnext"][0][u"address"] = str(content)
+    content.close()
+    clientconfig[u"outbound"][u"streamSettings"][u"security"] = "tls"
 #写入客户端配置文件
 WriteClientJson()

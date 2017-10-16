@@ -31,7 +31,7 @@ else:
     domainfile = file("/usr/local/v2ray.fun/mydomain", "r")
     content = domainfile.read()
     clientconfig[u"outbound"][u"settings"][u"vnext"][0][u"address"] = str(content)
-    content.close()
+    domainfile.close()
     clientconfig[u"outbound"][u"streamSettings"][u"security"] = "tls"
 #写入客户端配置文件
 WriteClientJson()

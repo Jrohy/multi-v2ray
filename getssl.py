@@ -15,7 +15,7 @@ stop_httpd_cmd = "service httpd stop >/dev/null 2>&1"
 
 def getssl(domain):
     crt_file = "/root/.acme.sh/"+domain+"/fullchain.cer"
-    key_file = "/root/.acme.sh/"+domain+".fun/ca.cer"
+    key_file = "/root/.acme.sh/"+domain+"/ca.cer"
     get_ssl_cmd = "bash /root/.acme.sh/acme.sh  --issue -d " +domain +"   --standalone"
 
     #判断是否存在证书

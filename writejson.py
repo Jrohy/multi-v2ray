@@ -75,7 +75,7 @@ def WriteStreamNetwork(network,para):
 def WriteTLS(action,domain):
     if action == "on":
         crt_file = "/root/.acme.sh/" + domain + "/fullchain.cer"
-        key_file = "/root/.acme.sh/" + domain + ".fun/ca.cer"
+        key_file = "/root/.acme.sh/" + domain + "/ca.cer"
         config[u"inbound"][u"streamSettings"][u"security"] = "tls"
         tls_file = file("/usr/local/v2ray.fun/json_template/tlssettings.json")
         tls_settings=json.load(tls_file)

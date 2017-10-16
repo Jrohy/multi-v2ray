@@ -69,4 +69,24 @@ def WriteStreamNetwork(network,para):
         streamfile=file("/usr/local/v2ray.fun/json_template/kcp_wechat.json")
         wechat=json.load(streamfile)
         config[u"inbound"][u"streamSettings"]=wechat
-        Write()  
+        Write()
+
+#更改TLS设置
+def WriteTLS(action,domain):
+    if action == "on":
+        crt_file = "/root/.acme.sh/" + domain + "/fullchain.cer"
+        key_file = "/root/.acme.sh/" + domain + ".fun/ca.cer"
+        config[u"inbound"][u"streamSettings"][u"security"] = "tls"
+        tls_file = file("/usr/local/v2ray.fun/json_template/tlssettings.json")
+        tls_settings=json.load(tls_file)
+        tls_settings[u"certificates"][0][u"certificateFile"] = crt_file
+        tls_settings[u"certificates"][0][u"keyFile"] = key_file
+        config[u"inbound"][u"streamSettings"][u"tlsSettings"] = tls_settings
+        domainfile = file("/usr/local/v2ray.fun/mydomain", "w+")
+        domainfile.writelines(str(domain))
+        domainfile.close()
+        Write()
+    elif action == "off":
+        config[u"inbound"][u"streamSettings"][u"security"] = ""
+        config[u"inbound"][u"streamSettings"][u"tlsSettings"] = {}
+        Write()

@@ -1,6 +1,7 @@
 {
     "network": "kcp",
     "security": "",
+    "tlsSettings": {},
     "tcpSettings": null,
     "kcpSettings": {
       "mtu": 1350,

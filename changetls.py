@@ -34,11 +34,11 @@ print("")
 print("1.开启TLS")
 print("2.关闭TLS")
 
-choice = input("请输入数字选择功能：")
+choice = int(input("请输入数字选择功能："))
 
-if choice == '1':
+if choice == 1:
     open_tls()
-elif choice == '2':
+elif choice == 2:
     close_tls()
 else:
     print("输入错误，请重试！")

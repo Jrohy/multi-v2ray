@@ -70,9 +70,9 @@ else:
         elif(newstreamnetwork=="4"):
             writejson.WriteStreamNetwork("mkcp","none")
         elif(newstreamnetwork=="5"):
-            writejson.WriteStreamNetwork("mkcp","kcp utp")
-        elif(newstreamnetwork=="6"):
             writejson.WriteStreamNetwork("mkcp","kcp srtp")
+        elif(newstreamnetwork=="6"):
+            writejson.WriteStreamNetwork("mkcp","kcp utp")
         elif(newstreamnetwork=="7"):
             writejson.WriteStreamNetwork("mkcp","kcp wechat-video")
     else:

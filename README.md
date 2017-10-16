@@ -49,6 +49,14 @@ V2ray控制脚本，向导式更改端口，加密方式，传输协议，享受
 wget -N --no-check-certificate https://raw.githubusercontent.com/FunctionClub/v2ray.fun/master/install.sh && bash install.sh
 ```
 
+## 更新日志
+
+**2017.9.4**
+第一版通过测试发布。
+
+**2017.10.16**
+新增TLS功能，自动获取证书。
+
 ## 特别说明
 
 有任何问题或者新功能想法欢迎提交 Issue，我会抽空回答。

@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
 import os
 
 start_v2ray_cmd = "service v2ray start >/dev/null 2>&1"

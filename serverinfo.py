@@ -13,9 +13,9 @@ mystreamnetwork=str(readjson.ConfStreamNetwork)
 
 if readjson.ConfStreamNetwork=="kcp" :
     if(readjson.ConfStreamHeader=="utp"):
-        mystreamnetwork="mKCP 伪装 FaceTime通话"
-    elif(readjson.ConfStreamHeader=="srtp"):
         mystreamnetwork="mKCP 伪装 BT下载流量"
+    elif(readjson.ConfStreamHeader=="srtp"):
+        mystreamnetwork="mKCP 伪装 FaceTime通话"
     elif(readjson.ConfStreamHeader=="wechat-video"):
         mystreamnetwork="mKCP 伪装 微信视频流量"
     else:

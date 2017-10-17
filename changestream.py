@@ -23,9 +23,9 @@ def is_number(s):
 #读取配置文件信息
 mystreamnetwork=str(readjson.ConfStreamNetwork)
 if readjson.ConfStreamNetwork=="kcp" :
-    if(readjson.ConfStreamHeader=="kcp utp"):
+    if(readjson.ConfStreamHeader=="kcp srtp"):
         mystreamnetwork="mKCP 伪装 FaceTime通话"
-    elif(readjson.ConfStreamHeader=="kcp srtp"):
+    elif(readjson.ConfStreamHeader=="kcp utp"):
         mystreamnetwork="mKCP 伪装 BT下载流量"
     elif(readjson.ConfStreamHeader=="kcp wechat-video"):
         mystreamnetwork="mKCP 伪装 微信视频流量"
@@ -70,9 +70,9 @@ else:
         elif(newstreamnetwork=="4"):
             writejson.WriteStreamNetwork("mkcp","none")
         elif(newstreamnetwork=="5"):
-            writejson.WriteStreamNetwork("mkcp","kcp utp")
-        elif(newstreamnetwork=="6"):
             writejson.WriteStreamNetwork("mkcp","kcp srtp")
+        elif(newstreamnetwork=="6"):
+            writejson.WriteStreamNetwork("mkcp","kcp utp")
         elif(newstreamnetwork=="7"):
             writejson.WriteStreamNetwork("mkcp","kcp wechat-video")
     else:

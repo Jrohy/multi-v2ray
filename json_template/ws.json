@@ -6,6 +6,9 @@
       "kcpSettings": null,
       "wsSettings": {
         "connectionReuse": true,
-        "path": ""
+        "path": "",
+        "headers": {
+          "host": ""
+        }
       }
     }

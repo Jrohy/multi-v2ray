@@ -32,44 +32,49 @@ def WriteSecurity(mysecurity):
     
 #更改底层传输设置
 def WriteStreamNetwork(network,para):
-    
+    security_backup=config[u"inbound"][u"streamSettings"][u"security"]
+    tls_settings_backup=config[u"inbound"][u"streamSettings"][u"tlsSettings"]
     if (network == "tcp" and para=="none"):
         streamfile=file("/usr/local/v2ray.fun/json_template/tcp.json")
         tcp=json.load(streamfile)
         config[u"inbound"][u"streamSettings"]=tcp
-        Write()
+
     if (network == "tcp" and para != "none"):
         streamfile=file("/usr/local/v2ray.fun/json_template/http.json")
         http=json.load(streamfile)
         http[u"tcpSettings"][u"header"][u"request"][u"headers"][u"Host"]=para
         config[u"inbound"][u"streamSettings"]=http
-        Write()
+        
     if (network == "ws"):
         streamfile=file("/usr/local/v2ray.fun/json_template/ws.json")
         ws=json.load(streamfile)
         config[u"inbound"][u"streamSettings"]=ws
-        Write()
+        config[u"inbound"][u"streamSettings"][u"wsSettings"][u"headers"][u"host"] = para
+
     if (network == "mkcp" and para=="none"):
         streamfile=file("/usr/local/v2ray.fun/json_template/kcp.json")
         kcp=json.load(streamfile)
         config[u"inbound"][u"streamSettings"]=kcp
-        Write()
+        
     if (network == "mkcp" and para=="kcp utp"):
         streamfile=file("/usr/local/v2ray.fun/json_template/kcp_utp.json")
         utp=json.load(streamfile)
         config[u"inbound"][u"streamSettings"]=utp
-        Write()
+        
     if (network == "mkcp" and para=="kcp srtp"):
         streamfile=file("/usr/local/v2ray.fun/json_template/kcp_srtp.json")
         srtp=json.load(streamfile)
         config[u"inbound"][u"streamSettings"]=srtp
-        Write()    
+
         
     if (network == "mkcp" and para=="kcp wechat-video"):
         streamfile=file("/usr/local/v2ray.fun/json_template/kcp_wechat.json")
         wechat=json.load(streamfile)
         config[u"inbound"][u"streamSettings"]=wechat
-        Write()
+    
+    config[u"inbound"][u"streamSettings"][u"security"] = security_backup
+    config[u"inbound"][u"streamSettings"][u"tlsSettings"] = tls_settings_backup
+    Write()
 
 #更改TLS设置
 def WriteTLS(action,domain):

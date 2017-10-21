@@ -5,7 +5,7 @@ import readjson
 import urllib2
 import base64
 #获取本机IP地址
-myip = urllib2.urlopen('https://api.ipify.org').read()
+myip = urllib2.urlopen('http://api.ipify.org').read()
 myip = myip.strip()
 
 #判断传输配置

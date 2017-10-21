@@ -13,7 +13,7 @@ def WriteClientJson():
     openjsonfile.close()
 
 #获取本机IP地址
-myip = urllib2.urlopen('http://members.3322.org/dyndns/getip').read()
+myip = urllib2.urlopen('https://api.ipify.org').read()
 myip = myip.strip()
 
 #加载客户端配置模板

@@ -83,6 +83,11 @@
   "inboundDetour": null,
   "outboundDetour": [
     {
+    "protocol": "freedom",
+    "settings": null,
+    "tag": "direct"
+    },
+    {
       "protocol": "blackhole",
       "settings": null,
       "tag": "blocked"

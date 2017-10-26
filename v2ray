@@ -4,6 +4,8 @@ export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 #Check Root
 [ $(id -u) != "0" ] && { echo "Error: You must be root to run this script"; exit 1; }
 
+echo ""
+
 echo "欢迎使用 V2ray.fun 管理程序 Author:雨落无声"
 echo ""
 echo "1.服务管理"
@@ -80,12 +82,12 @@ if [[ ${choice} == 2 ]]; then
     echo "3.更改加密方式"
     echo "4.更改传输方式"
     echo "5.更改TLS设置"
-    echo ""
+    echo "6.更改广告拦截功能"
     echo "请输入数字选择功能："
 
     while :; do echo
 	    read -p "请选择： " changechoice
-	    if [[ ! $changechoice =~ ^[1-5]$ ]]; then
+	    if [[ ! $changechoice =~ ^[1-6]$ ]]; then
             if [[ -z ${changechoice} ]];then
                 bash /usr/local/bin/v2ray
                 exit 0
@@ -139,6 +141,14 @@ if [[ ${choice} == 2 ]]; then
 	    service v2ray restart
         echo ""
         echo "TLS设置修改成功！"
+        bash /usr/local/bin/v2ray
+    fi
+
+    if [[ ${changechoice} == 6 ]]; then
+        python /usr/local/v2ray.fun/changead.py
+	    service v2ray restart
+        echo ""
+        echo "广告拦截功能设置成功！"
         bash /usr/local/bin/v2ray
     fi
 fi

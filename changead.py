@@ -8,7 +8,7 @@ import writejson
 
 rules = readjson.ConfRouting[u"settings"][u"rules"]
 
-if rules[0][u"outboundTag"] == "direct":
+if rules[1][u"outboundTag"] == "direct":
     if_open_ad_function = "广告拦截功能： 未开启"
 else:
     if_open_ad_function = "广告拦截功能： 开启"

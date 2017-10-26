@@ -24,6 +24,5 @@ choice = raw_input("请选择： ")
 
 if choice == "1":
     writejson.WriteAD("on")
-else:
+elif choice == "2":
     writejson.WriteAD("off")
-    

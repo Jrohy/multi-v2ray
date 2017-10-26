@@ -99,7 +99,7 @@ def WriteTLS(action,domain):
 #更改广告拦截功能
 def WriteAD(action):
     if action == "on":
-        config[u"routing"][u"settings"][u"rules"][1][u"outboundTag"] == "blocked"
+        config[u"routing"][u"settings"][u"rules"][1][u"outboundTag"] = "blocked"
     else:
-        config[u"routing"][u"settings"][u"rules"][1][u"outboundTag"] == "direct"
+        config[u"routing"][u"settings"][u"rules"][1][u"outboundTag"] = "direct"
     Write()

@@ -95,3 +95,11 @@ def WriteTLS(action,domain):
         config[u"inbound"][u"streamSettings"][u"security"] = ""
         config[u"inbound"][u"streamSettings"][u"tlsSettings"] = {}
         Write()
+
+#更改广告拦截功能
+def WriteAD(action):
+    if action == "on":
+        config[u"routing"][u"settings"][u"rules"][0][u"outboundTag"] == "blocked"
+    else:
+        config[u"routing"][u"settings"][u"rules"][0][u"outboundTag"] == "direct"
+    Write()

@@ -159,10 +159,11 @@ if [[ ${choice} == 3 ]]; then
 fi
 
 if [[ ${choice} == 4 ]]; then
-    echo "请选择文件保存位置（此功能仅限Xshell使用）"
-    python /usr/local/v2ray.fun/genclient.py
-    sz /root/config.json
-    echo "保存成功！"
+    python /usr/local/v2ray.fun/genclient.py && echo "保存成功！(/root/config.json)"
+    if [[ ${DISPLAY} != "" ]]; then
+	    echo "请选择文件保存位置（此功能仅限Xshell使用）"
+	    which sz 2>/dev/null && sz /root/config.json
+    fi
     echo ""
     bash /usr/local/bin/v2ray
 fi

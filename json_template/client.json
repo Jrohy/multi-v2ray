@@ -143,6 +143,14 @@
                         "fe80::/10"
                     ],
                     "domain": null
+                },
+                {
+                    "type": "chinaip",
+                    "outboundTag": "direct"
+                },
+                {
+                    "type": "chinasites",
+                    "outboundTag": "direct"
                 }
             ]
         }

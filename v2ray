@@ -160,10 +160,10 @@ fi
 
 if [[ ${choice} == 4 ]]; then
     python /usr/local/v2ray.fun/genclient.py && echo "保存成功！(/root/config.json)"
-    if [[ ${DISPLAY} != "" ]]; then
-	    echo "请选择文件保存位置（此功能仅限Xshell使用）"
-	    which sz 2>/dev/null && sz /root/config.json
+    read -n1 -p  "是否通过sz来传输配置文件（仅限xshell）[y]" ans
+    if [[ ${ans} =~ [yY] ]]; then
+        which sz 2>/dev/null && sz /root/config.json
     fi
-    echo ""
+    echo -e "\n"
     bash /usr/local/bin/v2ray
 fi

@@ -76,3 +76,5 @@ wget -N --no-check-certificate https://raw.githubusercontent.com/tracyone/v2ray.
 ## 感谢
 
 V2ray : [https://v2ray.com](https://v2ray.com)
+
+v2ray.fun的原作者: [YLWS-4617](https://github.com/YLWS-4617)

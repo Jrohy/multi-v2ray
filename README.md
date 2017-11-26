@@ -7,7 +7,7 @@ V2ray控制脚本，向导式更改端口，加密方式，传输协议，享受
 - 自动随机生成 UUID
 - 自助修改端口
 - 快速查看服务器连接信息
-- 一键下载客户端配置文件（**仅限 Xshell**）
+- 一键下载客户端配置文件（通过szrz程序，xshell，secureCRT还有[macOS的iterm2](https://github.com/tracyone/v2ray.fun/wiki/MAC使用RZ、SZ远程上传下载文件都支持)都支持）
 - 自由更改**传输配置**：
   - 常规TCP
   - HTTP头部伪装

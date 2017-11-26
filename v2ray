@@ -15,7 +15,7 @@ echo "4.下载客户端配置文件"
 echo "请输入数字选择功能(按回车键退出)："
 
 while :; do echo
-	read -p "请选择： " choice
+	read -n1 -p "请选择： " choice
 	if [[ ! $choice =~ ^[1-4]$ ]]; then
         if [[ -z ${choice} ]];then
             exit 0
@@ -33,7 +33,7 @@ if [[ ${choice} == 1 ]]; then
     echo "4.运行状态"
     echo "5.运行日志"
     while :; do echo
-	    read -p "请选择： " schoice
+	    read -n1 -p "请选择： " schoice
 	    if [[ ! $schoice =~ ^[1-5]$ ]]; then
             if [[ -z ${schoice} ]];then
                 bash /usr/local/bin/v2ray
@@ -86,7 +86,7 @@ if [[ ${choice} == 2 ]]; then
     echo "请输入数字选择功能："
 
     while :; do echo
-	    read -p "请选择： " changechoice
+	    read -n1 -p "请选择： " changechoice
 	    if [[ ! $changechoice =~ ^[1-6]$ ]]; then
             if [[ -z ${changechoice} ]];then
                 bash /usr/local/bin/v2ray
@@ -160,7 +160,7 @@ fi
 
 if [[ ${choice} == 4 ]]; then
     python /usr/local/v2ray.fun/genclient.py && echo "保存成功！(/root/config.json)"
-    read -n1 -p  "是否通过sz来传输配置文件（仅限xshell）[y]" ans
+    read -n1 -p  "是否通过sz来传输配置文件（仅限xshell）(y/n)" ans
     if [[ ${ans} =~ [yY] ]]; then
         which sz 2>/dev/null && sz /root/config.json
     fi

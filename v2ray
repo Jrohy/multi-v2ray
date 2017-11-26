@@ -22,6 +22,7 @@ while :; do echo
         fi
 		echo "输入错误! 请输入正确的数字!"
 	else
+        echo -e "\n"
 		break	
 	fi
 done
@@ -41,6 +42,7 @@ if [[ ${choice} == 1 ]]; then
             fi
 		    echo "输入错误! 请输入正确的数字!"
 	    else
+            echo -e "\n"
 		    break
 	    fi
     done
@@ -94,6 +96,7 @@ if [[ ${choice} == 2 ]]; then
             fi
 		    echo "输入错误! 请输入正确的数字!"
 	    else
+            echo -e "\n"
 		    break
 	    fi
     done

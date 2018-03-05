@@ -24,7 +24,7 @@ V2ray控制脚本，向导式更改端口，加密方式，传输协议，享受
 - 自动随机生成 UUID
 - 自助修改端口
 - 快速查看服务器连接信息
-- 一键下载客户端配置文件（通过szrz程序，xshell，secureCRT还有[macOS的iterm2](https://github.com/tracyone/v2ray.fun/wiki/MAC使用RZ、SZ远程上传下载文件都支持)都支持）
+- 一键下载客户端配置文件（通过szrz程序，xshell，secureCRT还有[macOS的iterm2](https://github.com/Jrohy/v2ray.fun/wiki/MAC使用RZ、SZ远程上传下载文件都支持)都支持）
 - 自由更改**传输配置**：
   - 常规TCP
   - HTTP头部伪装
@@ -39,17 +39,17 @@ V2ray控制脚本，向导式更改端口，加密方式，传输协议，享受
 ## 安装命令
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/tracyone/v2ray.fun/master/install.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jrohy/v2ray.fun/master/install.sh)"
 ```
 
 ## 升级命令
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/tracyone/v2ray.fun/master/upgrade.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jrohy/v2ray.fun/master/upgrade.sh)"
 ```
 
 ## 卸载命令
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/tracyone/v2ray.fun/master/uninstall.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jrohy/v2ray.fun/master/uninstall.sh)"
 ```
 
 
@@ -89,7 +89,7 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/tracyone/v2ray.fun/maste
 
 有任何问题或者新功能想法欢迎提交 Issue，我会抽空回答。
 
-也可以先查看下本仓库的[wiki](https://github.com/tracyone/v2ray.fun/wiki)
+也可以先查看下本仓库的[wiki](https://github.com/Jrohy/v2ray.fun/wiki)
 
 本程序遵循 GPL v3协议发布，请Fork保留源项目地址，谢谢！
 

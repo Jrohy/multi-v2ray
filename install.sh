@@ -37,7 +37,7 @@ curl  https://get.acme.sh | sh
 #克隆V2ray.fun项目
 cd /usr/local/
 rm -R v2ray.fun
-git clone https://github.com/tracyone/v2ray.fun
+git clone https://github.com/Jrohy/v2ray.fun
 
 #安装V2ray主程序
 bash <(curl -L -s https://install.direct/go.sh)

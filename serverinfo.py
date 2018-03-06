@@ -48,5 +48,6 @@ config[u"port"]=str(readjson.ConfPort)
 config[u"id"]=str(readjson.ConfUUID)
 config[u"aid"]=str(readjson.ConfAlterId)
 config[u"net"]=str(readjson.ConfStreamNetwork)
-config[u"type"]=str(readjson.ConfStreamHeader)
+if readjson.ConfStreamNetwork=="kcp":
+    config[u"type"]=str(readjson.ConfStreamHeader)
 print("vmess://%s") % base64.encodestring(config)

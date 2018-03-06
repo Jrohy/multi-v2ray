@@ -19,6 +19,11 @@ def Write():
 def WriteUUID(myuuid):
     config[u"inbound"][u"settings"][u"clients"][0][u"id"]=str(myuuid)
     Write()
+
+#更改alterId
+def WriteAlterID(alterId):
+    config[u"inbound"][u"settings"][u"clients"][0][u"alterId"]=int(alterId)
+    Write()
     
 #更改端口
 def WritePort(myport):

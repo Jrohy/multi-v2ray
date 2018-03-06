@@ -50,4 +50,6 @@ config[u"aid"]=str(readjson.ConfAlterId)
 config[u"net"]=str(readjson.ConfStreamNetwork)
 if readjson.ConfStreamNetwork=="kcp":
     config[u"type"]=str(readjson.ConfStreamHeader)
-print("vmess://%s") % base64.encodestring(str(config).replace(' ', ''))
+base64Str = base64.encodestring(str(config))
+base64Str = ' '.join(base64Str.split())
+print("vmess://%s") % base64Str

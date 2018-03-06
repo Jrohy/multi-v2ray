@@ -50,6 +50,8 @@ config["aid"]=str(readjson.ConfAlterId)
 config["net"]=str(readjson.ConfStreamNetwork)
 if readjson.ConfStreamNetwork=="kcp":
     config["type"]=str(readjson.ConfStreamHeader)
+if (readjson.ConfStreamSecurity=="tls"):
+    config["tls"]="tls"
 base64Str = base64.encodestring(json.dumps(config))
 base64Str = ''.join(base64Str.split())
 print("vmess://%s") % base64Str

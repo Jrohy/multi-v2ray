@@ -51,5 +51,5 @@ config[u"net"]=str(readjson.ConfStreamNetwork)
 if readjson.ConfStreamNetwork=="kcp":
     config[u"type"]=str(readjson.ConfStreamHeader)
 base64Str = base64.encodestring(str(config))
-base64Str = ' '.join(base64Str.split())
+base64Str = ' '.join(base64Str.split()).replace(' ', '')
 print("vmess://%s") % base64Str

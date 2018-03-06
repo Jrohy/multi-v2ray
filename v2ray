@@ -80,16 +80,17 @@ fi
 if [[ ${choice} == 2 ]]; then
     echo ""
     echo "1.更改UUID"
-    echo "2.更改主端口"
-    echo "3.更改加密方式"
-    echo "4.更改传输方式"
-    echo "5.更改TLS设置"
-    echo "6.更改广告拦截功能"
+    echo "2.更改alterID"
+    echo "3.更改主端口"
+    echo "4.更改加密方式"
+    echo "5.更改传输方式"
+    echo "6.更改TLS设置"
+    echo "7.更改广告拦截功能"
     echo "请输入数字选择功能："
 
     while :; do echo
 	    read -n1 -p "请选择： " changechoice
-	    if [[ ! $changechoice =~ ^[1-6]$ ]]; then
+	    if [[ ! $changechoice =~ ^[1-7]$ ]]; then
             if [[ -z ${changechoice} ]];then
                 bash /usr/local/bin/v2ray
                 exit 0
@@ -109,8 +110,17 @@ if [[ ${choice} == 2 ]]; then
         echo "UUID修改成功！"
         bash /usr/local/bin/v2ray
     fi
-    
+
     if [[ ${changechoice} == 2 ]]; then
+        python /usr/local/v2ray.fun/changealterid.py
+        python /usr/local/v2ray.fun/genclient.py
+        service v2ray restart
+        echo ""
+        echo "alterID修改成功！"
+        bash /usr/local/bin/v2ray
+    fi
+    
+    if [[ ${changechoice} == 3 ]]; then
         python /usr/local/v2ray.fun/changeport.py
         python /usr/local/v2ray.fun/genclient.py
         python /usr/local/v2ray.fun/openport.py
@@ -120,7 +130,7 @@ if [[ ${choice} == 2 ]]; then
         bash /usr/local/bin/v2ray
     fi
     
-    if [[ ${changechoice} == 3 ]]; then
+    if [[ ${changechoice} == 4 ]]; then
         python /usr/local/v2ray.fun/changesecurity.py
         python /usr/local/v2ray.fun/genclient.py
 	    service v2ray restart
@@ -129,7 +139,7 @@ if [[ ${choice} == 2 ]]; then
         bash /usr/local/bin/v2ray
     fi
     
-    if [[ ${changechoice} == 4 ]]; then
+    if [[ ${changechoice} == 5 ]]; then
         python /usr/local/v2ray.fun/changestream.py
         python /usr/local/v2ray.fun/genclient.py
 	    service v2ray restart
@@ -138,7 +148,7 @@ if [[ ${choice} == 2 ]]; then
         bash /usr/local/bin/v2ray
     fi
     
-    if [[ ${changechoice} == 5 ]]; then
+    if [[ ${changechoice} == 6 ]]; then
         python /usr/local/v2ray.fun/changetls.py
         python /usr/local/v2ray.fun/genclient.py
 	    service v2ray restart
@@ -147,7 +157,7 @@ if [[ ${choice} == 2 ]]; then
         bash /usr/local/bin/v2ray
     fi
 
-    if [[ ${changechoice} == 6 ]]; then
+    if [[ ${changechoice} == 7 ]]; then
         python /usr/local/v2ray.fun/changead.py
 	    service v2ray restart
         echo ""

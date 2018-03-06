@@ -50,7 +50,7 @@ rm -rf /etc/v2ray/config.json
 mv /usr/local/v2ray.fun/json_template/server.json /etc/v2ray/config.json
 UUID=$(cat /proc/sys/kernel/random/uuid)
 sed -i "s/cc4f8d5b-967b-4557-a4b6-bde92965bc27/${UUID}/g" /etc/v2ray/config.json
-dport=$(shuf -i 9000-19999 -n 1)
+dport=$(shuf -i 1000-65535 -n 1)
 sed -i "s/999999999/${dport}/g" /etc/v2ray/config.json
 python /usr/local/v2ray.fun/genclient.py
 python /usr/local/v2ray.fun/openport.py

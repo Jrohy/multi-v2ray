@@ -50,6 +50,20 @@ rm -rf /etc/v2ray/config.json
 mv /usr/local/v2ray.fun/json_template/server.json /etc/v2ray/config.json
 UUID=$(cat /proc/sys/kernel/random/uuid)
 sed -i "s/cc4f8d5b-967b-4557-a4b6-bde92965bc27/${UUID}/g" /etc/v2ray/config.json
+
+#获取本机ip
+ip=$(wget -qO- -t1 -T2 ipinfo.io/ip)
+if [[ -z "${ip}" ]]; then
+    ip=$(wget -qO- -t1 -T2 api.ip.sb/ip)
+    if [[ -z "${ip}" ]]; then
+        ip=$(wget -qO- -t1 -T2 members.3322.org/dyndns/getip)
+        if [[ -z "${ip}" ]]; then
+            ip="VPS_IP"
+        fi
+    fi
+fi
+
+sed -i "s/127.0.0.1/${ip}/g" /etc/v2ray/config.json
 dport=$(shuf -i 1000-65535 -n 1)
 sed -i "s/999999999/${dport}/g" /etc/v2ray/config.json
 python /usr/local/v2ray.fun/genclient.py

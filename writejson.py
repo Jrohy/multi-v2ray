@@ -14,6 +14,11 @@ def Write():
     openjsonfile=file("/etc/v2ray/config.json","w+")
     openjsonfile.writelines(myjsondump)
     openjsonfile.close()
+
+#更改IP
+def WriteIP(ip):
+    config[u"inbound"][u"settings"][u"ip"]=str(ip)
+    Write()
     
 #更改UUID
 def WriteUUID(myuuid):

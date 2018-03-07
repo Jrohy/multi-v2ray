@@ -5,9 +5,6 @@ import readjson
 import urllib2
 import base64
 import json
-#获取本机IP地址
-myip = urllib2.urlopen('http://api.ipify.org').read()
-myip = myip.strip()
 
 #判断传输配置
 mystreamnetwork=str(readjson.ConfStreamNetwork)
@@ -32,7 +29,7 @@ else:
     mystreamsecurity="TLS：关闭"
 
 #输出信息
-print("服务器IP：%s") % str(myip)
+print("IP：%s") % str(readjson.ConfIP)
 print("主端口：%s") % str(readjson.ConfPort)
 print("UUID：%s") % str(readjson.ConfUUID)
 print("alter ID: %s") % str(readjson.ConfAlterId)
@@ -43,7 +40,7 @@ print("%s") % str(mystreamsecurity)
 #生成vmess字符串
 jsonfile = file("/usr/local/v2ray.fun/json_template/vmess.json")
 config = json.load(jsonfile)
-config["add"]=str(myip)
+config["add"]=str(readjson.ConfIP)
 config["port"]=str(readjson.ConfPort)
 config["id"]=str(readjson.ConfUUID)
 config["aid"]=str(readjson.ConfAlterId)

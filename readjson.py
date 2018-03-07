@@ -16,6 +16,7 @@ ConfDns=config[u"dns"]
 ConfRouting=config[u"routing"]
 
 #读取传入配置细节部分
+ConfIP=ConfInbound[u"settings"][u"ip"]
 ConfPort=ConfInbound[u"port"]
 ConfUUID=ConfInbound[u"settings"][u"clients"][0][u"id"]
 ConfSecurity=ConfInbound[u"settings"][u"clients"][0][u"security"]

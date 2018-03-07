@@ -36,6 +36,7 @@ print("alter ID: %s") % str(readjson.ConfAlterId)
 print("加密方式：%s") % str(readjson.ConfSecurity)
 print("传输方式：%s") % str(mystreamnetwork)
 print("%s") % str(mystreamsecurity)
+print("\n")
 
 #生成vmess字符串
 jsonfile = file("/usr/local/v2ray.fun/json_template/vmess.json")
@@ -51,4 +52,7 @@ if (readjson.ConfStreamSecurity=="tls"):
     config["tls"]="tls"
 base64Str = base64.encodestring(json.dumps(config))
 base64Str = ''.join(base64Str.split())
+#绿色字体显示
+print("\033[1;33;40m")
 print("vmess://%s") % base64Str
+print("\033[0m")

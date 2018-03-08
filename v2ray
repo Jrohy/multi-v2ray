@@ -10,13 +10,14 @@ echo "欢迎使用 V2ray.fun 管理程序"
 echo ""
 echo "1.服务管理"
 echo "2.更改配置"
-echo "3.查看服务端信息"
-echo "4.下载客户端配置文件"
+echo "3.查看配置"
+echo "4.更新V2Ray"
+echo "5.下载客户端配置文件"
 echo "请输入数字选择功能(按回车键退出)："
 
 while :; do echo
 	read -n1 -p "请选择： " choice
-	if [[ ! $choice =~ ^[1-4]$ ]]; then
+	if [[ ! $choice =~ ^[1-5]$ ]]; then
         if [[ -z ${choice} ]];then
             exit 0
         fi
@@ -172,6 +173,11 @@ if [[ ${choice} == 3 ]]; then
 fi
 
 if [[ ${choice} == 4 ]]; then
+    bash <(curl -L -s https://install.direct/go.sh)
+    bash /usr/local/bin/v2ray
+fi
+
+if [[ ${choice} == 5 ]]; then
     python /usr/local/v2ray.fun/genclient.py && echo "保存成功！(/root/config.json)"
     read -n1 -p  "是否通过sz来传输配置文件(y/n)" ans
     if [[ ${ans} =~ [yY] ]]; then

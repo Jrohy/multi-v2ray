@@ -19,7 +19,6 @@
 V2ray控制脚本，向导式更改端口，加密方式，传输协议，享受V2ray的乐趣~
 
 ## 功能
-
 - 一键 启动 / 停止 / 重启 V2ray 服务端
 - 自动随机生成 UUID
 - 自助修改端口
@@ -59,10 +58,6 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jrohy/v2ray.fun/master/u
 
 ![2](2.png)
 
-![3](3.png)
-
-![4](4.png)
-
 ## 系统要求
 
 - Debian 7 
@@ -78,12 +73,22 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jrohy/v2ray.fun/master/u
 请使用**Xshell**连接服务器，以获得完美的中文支持以及配置文件下载功能。
 
 ## 更新日志
+**2018.3.8**
+优化菜单显示
+升级v2ray.fun保留配置文件
+首次安装默认配置改为mkcp+随机三种伪装type之一, 用于快速部署v2ray
 
-**2017.9.4**
-第一版通过测试发布。
+**2018.3.6**
+增加配置文件vmess字符串生成显示,增加修改alterId的菜单
+
+**2018.3.5**
+第一次安装产生随机端口
 
 **2017.10.16**
 新增TLS功能，自动获取证书。
+
+**2017.9.4**
+第一版通过测试发布。
 
 ## 特别说明
 

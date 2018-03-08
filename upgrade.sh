@@ -16,5 +16,6 @@ chmod +x /usr/local/bin/v2ray
 #更新Vray主程序
 bash <(curl -L -s https://install.direct/go.sh)
 
-clear
+python -c "import sys;sys.path.append('/usr/local/v2ray.fun');import changestream; changestream.ramdomstream()"
+
 echo "脚本已更新！"

@@ -3,7 +3,6 @@
 import readjson
 import writejson
 import v2rayutil
-import random
 
 def writeStreamJson(newstreamnetwork):
 	if(newstreamnetwork=="1"):
@@ -24,9 +23,6 @@ def writeStreamJson(newstreamnetwork):
 	    writejson.WriteStreamNetwork("mkcp","kcp utp")
 	elif(newstreamnetwork=="7"):
 	    writejson.WriteStreamNetwork("mkcp","kcp wechat-video")
-
-def ramdomstream():
-	writeStreamJson(str(random.randint(5,7)))
 
 #读取配置文件信息
 mystreamnetwork=str(readjson.ConfStreamNetwork)

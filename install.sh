@@ -71,7 +71,7 @@ dport=$(shuf -i 1000-65535 -n 1)
 sed -i "s/999999999/${dport}/g" /etc/v2ray/config.json
 
 #产生默认配置mkcp+随机3种伪装类型type
-python /usr/local/v2ray.fun/randomstream.py
+python -c "import sys;sys.path.append('/usr/local/v2ray.fun');import v2rayutil; v2rayutil.randomStream();sys.path.remove('/usr/local/v2ray.fun')"
 
 python /usr/local/v2ray.fun/genclient.py
 python /usr/local/v2ray.fun/openport.py
@@ -79,5 +79,6 @@ python /usr/local/v2ray.fun/openport.py
 service v2ray restart
 
 clear
+
 echo "V2ray.fun 安装成功！"
 echo "输入 v2ray 回车即可使用"

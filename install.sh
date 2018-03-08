@@ -48,6 +48,8 @@ chmod +x /usr/bin/v2ray
 chmod +x /usr/local/bin/v2ray
 rm -rf /etc/v2ray/config.json
 mv /usr/local/v2ray.fun/json_template/server.json /etc/v2ray/config.json
+
+#产生随机uuid
 UUID=$(cat /proc/sys/kernel/random/uuid)
 sed -i "s/cc4f8d5b-967b-4557-a4b6-bde92965bc27/${UUID}/g" /etc/v2ray/config.json
 
@@ -62,14 +64,19 @@ if [[ -z "${ip}" ]]; then
         fi
     fi
 fi
-
 sed -i "s/127.0.0.1/${ip}/g" /etc/v2ray/config.json
+
+#产生随机端口
 dport=$(shuf -i 1000-65535 -n 1)
 sed -i "s/999999999/${dport}/g" /etc/v2ray/config.json
+
+#产生默认配置mkcp+随机3种伪装类型type
+python -c 'import /usr/local/v2ray.fun/changestream; changestream.ramdomstream()'
+
 python /usr/local/v2ray.fun/genclient.py
 python /usr/local/v2ray.fun/openport.py
-service v2ray restart
 
+service v2ray restart
 
 clear
 

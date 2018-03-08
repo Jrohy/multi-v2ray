@@ -52,6 +52,6 @@ if (readjson.ConfStreamSecurity=="tls"):
 base64Str = base64.encodestring(json.dumps(config))
 base64Str = ''.join(base64Str.split())
 #绿色字体显示
-print("\033[1;32m;40m")
+print("\033[1;32m")
 print("vmess://%s") % base64Str
 print("\033[0m")

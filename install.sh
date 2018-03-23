@@ -86,4 +86,4 @@ echo "V2ray配置信息:"
 #安装完后显示v2ray的配置信息，用于快速部署
 python /usr/local/v2ray.fun/serverinfo.py
 
-echo -e "输入 v2ray 回车即可使用\n"
+echo -e "输入 v2ray 回车即可进行服务管理\n"

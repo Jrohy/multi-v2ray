@@ -81,4 +81,9 @@ service v2ray restart
 clear
 
 echo "V2ray.fun 安装成功！"
+
+echo "V2ray配置信息:"
+#安装完后显示v2ray的配置信息，用于快速部署
+python /usr/local/v2ray.fun/serverinfo.py
+
 echo "输入 v2ray 回车即可使用"

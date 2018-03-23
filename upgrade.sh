@@ -17,4 +17,9 @@ chmod +x /usr/local/bin/v2ray
 bash <(curl -L -s https://install.direct/go.sh)
 
 clear
-echo "脚本已更新！"
+
+echo -e "脚本已更新！\n"
+
+echo "V2ray配置信息:"
+#安装完后显示v2ray的配置信息，用于快速部署
+python /usr/local/v2ray.fun/serverinfo.py

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import json
+import urllib2
 
 #打开配置文件
 jsonfile = file("/etc/v2ray/config.json")
@@ -16,7 +17,6 @@ ConfDns=config[u"dns"]
 ConfRouting=config[u"routing"]
 
 #读取传入配置细节部分
-ConfIP=ConfInbound[u"settings"][u"ip"]
 ConfPort=ConfInbound[u"port"]
 ConfUUID=ConfInbound[u"settings"][u"clients"][0][u"id"]
 ConfSecurity=ConfInbound[u"settings"][u"clients"][0][u"security"]
@@ -31,3 +31,11 @@ if ConfStreamNetwork=="kcp" :
         ConfStreamHeader=ConfStreamKcpSettings[u"header"][u'type']
     else:
         ConfStreamHeader="none"
+
+if ConfInbound[u"settings"][u"ip"]==None:
+	#获取本机IP地址
+	myip = urllib2.urlopen('http://api.ipify.org').read()
+	ConfIP = myip.strip()
+else:
+	ConfIP=ConfInbound[u"settings"][u"ip"]
+	

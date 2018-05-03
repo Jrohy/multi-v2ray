@@ -36,6 +36,7 @@ print("alter ID: %s") % str(readjson.ConfAlterId)
 print("加密方式：%s") % str(readjson.ConfSecurity)
 print("传输方式：%s") % str(mystreamnetwork)
 print("%s") % str(mystreamsecurity)
+print("动态端口: %s") % str(readjson.ConfDyp)
 
 #生成vmess字符串
 jsonfile = file("/usr/local/v2ray.fun/json_template/vmess.json")

@@ -38,4 +38,10 @@ if ConfInbound[u"settings"][u"ip"]==None:
 	ConfIP = myip.strip()
 else:
 	ConfIP=ConfInbound[u"settings"][u"ip"]
+
+
+if "detour" in ConfInbound[u"settings"]:
+    ConfDyp="开启"
+else:
+    ConfDyp="关闭"
 	

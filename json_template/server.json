@@ -80,7 +80,24 @@
         "streamSettings": null,
         "mux": null
     },
-    "inboundDetour": null,
+    "inboundDetour":[
+        {
+            "protocol": "vmess",
+            "port": "10000-20000",
+            "tag": "dynamicPort",       
+            "settings": {
+                "default": {
+                    "level": 1,
+                    "alterId": 32
+                }
+            },
+            "allocate": {
+                "strategy": "random",
+                "concurrency": 2,
+                "refresh": 5
+            }
+        }
+    ],
     "outboundDetour": [
         {
             "protocol": "freedom",

@@ -1,0 +1,18 @@
+[
+    {
+        "protocol": "vmess",
+        "port": "10000-20000",
+        "tag": "dynamicPort",       
+        "settings": {
+            "default": {
+                "level": 1,
+                "alterId": 32
+            }
+        },
+        "allocate": {
+            "strategy": "random",
+            "concurrency": 2,
+            "refresh": 5
+        }
+    }
+]

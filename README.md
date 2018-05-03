@@ -23,6 +23,7 @@ V2ray控制脚本，向导式更改端口，加密方式，传输协议，享受
 - 首次安装时产生随机端口，默认传输配置改为mkcp+随机三种伪装type之一;  
   安装完成显示配置信息, 都是用于快速部署
 - 增加修改alterId入口
+- 增加开启动态端口
 - 增加v2ray升级菜单
 
 ## 功能
@@ -69,6 +70,7 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jrohy/v2ray.fun/master/u
 
 - Debian 7 
 - **Debian 8（推荐）**
+- Debian 9 
 - Ubuntu 14 
 - Ubuntu 16 
 - CentOS 7
@@ -80,6 +82,9 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jrohy/v2ray.fun/master/u
 请使用**Xshell**连接服务器，以获得完美的中文支持以及配置文件下载功能。
 
 ## 更新日志
+
+**2018.5.3**
+支持开启动态端口
 
 **2018.3.23**  
 安装完脚本即显示完整的v2ray配置信息,进一步提高v2ray部署速度

@@ -16,13 +16,13 @@ def Write():
     openjsonfile.writelines(myjsondump)
     openjsonfile.close()
 
-def EnDynPort(en):
+def EnDynPort(en, dAlterId=32):
     if en == 1:
         config[u"inbound"][u"settings"].update({u"detour":{u"to":"dynamicPort"}})
         dyn_port=file("/usr/local/v2ray.fun/json_template/dyn_port.json")
         dyn_json=json.load(dyn_port)
         config[u"inboundDetour"]=dyn_json
-        config[u"inboundDetour"][0][u"settings"][u"default"][u"alterId"]=int(readjson.ConfAlterId)
+        config[u"inboundDetour"][0][u"settings"][u"default"][u"alterId"]=int(dAlterId)
     else:
         config[u"inboundDetour"]=[]
         if "detour" in config[u"inbound"][u"settings"]:

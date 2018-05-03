@@ -171,7 +171,6 @@ if [[ ${choice} == 2 ]]; then
         python /usr/local/v2ray.fun/en_dyn_port.py
 	    service v2ray restart
         echo ""
-        echo "更改动态端口成功！"
         bash /usr/local/bin/v2ray
     fi
 fi

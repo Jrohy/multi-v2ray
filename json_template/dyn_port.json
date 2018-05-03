@@ -5,7 +5,6 @@
         "tag": "dynamicPort",       
         "settings": {
             "default": {
-                "level": 1,
                 "alterId": 32
             }
         },

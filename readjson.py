@@ -41,7 +41,7 @@ else:
 
 
 if "detour" in ConfInbound[u"settings"]:
-    ConfDyp="开启"
+    ConfDyp="开启,alterId为 %s" % ConfInboundDetour[0][u"settings"][u"default"][u"alterId"]
 else:
     ConfDyp="关闭"
 	

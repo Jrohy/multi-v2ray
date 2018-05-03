@@ -87,11 +87,12 @@ if [[ ${choice} == 2 ]]; then
     echo "5.更改传输方式"
     echo "6.更改TLS设置"
     echo "7.更改广告拦截功能"
+    echo "8.更改动态端口"
     echo "请输入数字选择功能："
 
     while :; do echo
 	    read -n1 -p "请选择： " changechoice
-	    if [[ ! $changechoice =~ ^[1-7]$ ]]; then
+	    if [[ ! $changechoice =~ ^[1-8]$ ]]; then
             if [[ -z ${changechoice} ]];then
                 bash /usr/local/bin/v2ray
                 exit 0
@@ -163,6 +164,14 @@ if [[ ${choice} == 2 ]]; then
 	    service v2ray restart
         echo ""
         echo "广告拦截功能设置成功！"
+        bash /usr/local/bin/v2ray
+    fi
+
+    if [[ ${changechoice} == 8 ]]; then
+        python /usr/local/v2ray.fun/en_dyn_port.py
+	    service v2ray restart
+        echo ""
+        echo "更改动态端口成功！"
         bash /usr/local/bin/v2ray
     fi
 fi

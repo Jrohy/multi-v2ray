@@ -83,7 +83,7 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jrohy/v2ray.fun/master/u
 
 ## 更新日志
 
-**2018.5.3**
+**2018.5.3** 
 支持开启动态端口
 
 **2018.3.23**  

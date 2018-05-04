@@ -108,7 +108,7 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jrohy/v2ray.fun/master/u
 
 ## 特别说明
 
-有任何问题或者新功能想法欢迎提交 Issue，我会抽空回答。
+有任何问题或者新功能想法欢迎提交 Issue。
 
 本程序遵循 GPL v3协议发布，请Fork保留源项目地址，谢谢！
 

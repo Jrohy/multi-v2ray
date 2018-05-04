@@ -16,6 +16,7 @@ def Write():
     openjsonfile.writelines(myjsondump)
     openjsonfile.close()
 
+#更改动态端口
 def EnDynPort(en, dAlterId=32):
     if en == 1:
         config[u"inbound"][u"settings"].update({u"detour":{u"to":"dynamicPort"}})

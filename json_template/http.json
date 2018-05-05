@@ -2,6 +2,7 @@
     "network": "tcp",
     "security": "",
     "tlsSettings": {},
+    "httpSettings": null,
     "tcpSettings": {
         "connectionReuse": true,
         "header": {

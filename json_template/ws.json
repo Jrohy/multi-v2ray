@@ -4,6 +4,7 @@
       "tlsSettings": {},
       "tcpSettings": null,
       "kcpSettings": null,
+      "httpSettings": null,
       "wsSettings": {
         "connectionReuse": true,
         "path": "",

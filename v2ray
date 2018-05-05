@@ -155,7 +155,7 @@ if [[ ${choice} == 2 ]]; then
         python /usr/local/v2ray.fun/genclient.py
 	    service v2ray restart
         echo ""
-        echo "TLS设置修改成功！"
+        echo "TLS(HTTP/2)设置修改成功！"
         bash /usr/local/bin/v2ray
     fi
 

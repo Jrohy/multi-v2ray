@@ -34,5 +34,6 @@ else:
     domainfile.close()
     clientconfig[u"outbound"][u"streamSettings"][u"security"] = "tls"
     clientconfig[u"outbound"][u"streamSettings"][u"tlsSettings"] = {}
+    clientconfig[u"outbound"][u"streamSettings"][u"httpSettings"] = readjson.ConfStreamHttp2Settings
 #写入客户端配置文件
 WriteClientJson()

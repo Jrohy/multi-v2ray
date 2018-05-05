@@ -85,7 +85,7 @@ if [[ ${choice} == 2 ]]; then
     echo "3.更改主端口"
     echo "4.更改加密方式"
     echo "5.更改传输方式"
-    echo "6.更改TLS设置"
+    echo "6.更改TLS(http2)设置"
     echo "7.更改广告拦截功能"
     echo "8.更改动态端口"
     echo "请输入数字选择功能："

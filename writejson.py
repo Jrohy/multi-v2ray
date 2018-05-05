@@ -31,11 +31,6 @@ def EnDynPort(en, dAlterId=32):
             del config[u"inbound"][u"settings"][u"detour"]
     Write()
 
-
-#更改IP
-def WriteIP(ip):
-    config[u"inbound"][u"settings"][u"ip"]=str(ip)
-    Write()
     
 #更改UUID
 def WriteUUID(myuuid):
@@ -124,6 +119,10 @@ def WriteTLS(action,domain):
         http2_settings[u"path"]=salt
         config[u"inbound"][u"streamSettings"][u"httpSettings"]=http2_settings
 
+        config[u"inbound"][u"streamSettings"][u"network"]="h2"
+
+        config[u"inbound"][u"streamSettings"][u"kcpSettings"]=None
+
         domainfile = file("/usr/local/v2ray.fun/mydomain", "w+")
         domainfile.writelines(str(domain))
         domainfile.close()
@@ -132,6 +131,8 @@ def WriteTLS(action,domain):
         config[u"inbound"][u"streamSettings"][u"security"] = ""
         config[u"inbound"][u"streamSettings"][u"tlsSettings"] = {}
         config[u"inbound"][u"streamSettings"][u"httpSettings"] = None
+        kcp_srtp_file = file("/usr/local/v2ray.fun/json_template/kcp_srtp.json")
+        config[u"inbound"][u"kcpSettings"]=json.load(kcp_srtp_file)
         Write()
 
 #更改广告拦截功能

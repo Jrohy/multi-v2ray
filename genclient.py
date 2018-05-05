@@ -32,6 +32,7 @@ else:
     content = domainfile.read()
     clientconfig[u"outbound"][u"settings"][u"vnext"][0][u"address"] = str(content)
     domainfile.close()
+    clientconfig[u"outbound"][u"streamSettings"][u"network"] = "h2"
     clientconfig[u"outbound"][u"streamSettings"][u"security"] = "tls"
     clientconfig[u"outbound"][u"streamSettings"][u"tlsSettings"] = {}
     clientconfig[u"outbound"][u"streamSettings"][u"httpSettings"] = readjson.ConfStreamHttp2Settings

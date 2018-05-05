@@ -3,6 +3,7 @@
     "security": "",
     "tlsSettings": {},
     "tcpSettings": null,
+    "httpSettings": null,
     "kcpSettings": {
       "mtu": 1350,
       "tti": 50,

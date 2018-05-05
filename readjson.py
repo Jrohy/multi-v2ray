@@ -32,21 +32,23 @@ if ConfStreamNetwork=="kcp" :
         ConfStreamHeader=ConfStreamKcpSettings[u"header"][u'type']
     else:
         ConfStreamHeader="none"
-
-if ConfInbound[u"settings"][u"ip"]==None:
-	#获取本机IP地址
+ 
+if (ConfStreamSecurity=="tls"):
+    domainfile = file("/usr/local/v2ray.fun/mydomain", "r")
+    content = domainfile.read()
+    ConfIP = str(content)
+    domainfile.close()
+else:
+    #获取本机IP地址
 	myip = urllib2.urlopen('http://api.ipify.org').read()
 	ConfIP = myip.strip()
-else:
-	ConfIP=ConfInbound[u"settings"][u"ip"]
-
 
 if "detour" in ConfInbound[u"settings"]:
     ConfDyp="开启,alterId为 %s" % ConfInboundDetour[0][u"settings"][u"default"][u"alterId"]
 else:
     ConfDyp="关闭"
  
-if ConfStreamHttp2Settings != None:
+if ConfStreamSecurity=="tls" and ConfStreamHttp2Settings != None:
     ConfPath=ConfStreamHttp2Settings[u"path"]
 else:
-    ConfPath="none"
+    ConfPath=""

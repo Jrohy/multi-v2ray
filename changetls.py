@@ -18,7 +18,6 @@ def open_tls():
     print("正在获取SSL证书，请稍等。")
     getssl.getssl(inputdomain)
     writejson.WriteTLS("on",inputdomain)
-    writejson.WriteIP(inputdomain)
     print("操作完成！")
 
 def close_tls():

@@ -128,11 +128,9 @@ def WriteTLS(action,domain):
         domainfile.close()
         Write()
     elif action == "off":
-        config[u"inbound"][u"streamSettings"][u"security"] = ""
-        config[u"inbound"][u"streamSettings"][u"tlsSettings"] = {}
-        config[u"inbound"][u"streamSettings"][u"httpSettings"] = None
-        kcp_srtp_file = file("/usr/local/v2ray.fun/json_template/kcp_srtp.json")
-        config[u"inbound"][u"kcpSettings"]=json.load(kcp_srtp_file)
+        streamfile=file("/usr/local/v2ray.fun/json_template/kcp_srtp.json")
+        srtp=json.load(streamfile)
+        config[u"inbound"][u"streamSettings"]=srtp
         Write()
 
 #更改广告拦截功能

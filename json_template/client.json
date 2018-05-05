@@ -37,7 +37,8 @@
         "streamSettings": {
             "security": "",
             "tlsSettings": {},
-            "wsSettings": null, 
+            "wsSettings": null,
+            "httpSettings": null, 
             "network": "tcp", 
             "kcpSettings": null, 
             "tcpSettings": {

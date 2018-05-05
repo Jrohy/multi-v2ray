@@ -23,6 +23,7 @@ ConfSecurity=ConfInbound[u"settings"][u"clients"][0][u"security"]
 ConfAlterId=ConfInbound[u"settings"][u"clients"][0][u"alterId"]
 ConfStream=ConfInbound[u"streamSettings"]
 ConfStreamKcpSettings=ConfStream[u'kcpSettings']
+ConfStreamHttp2Settings=ConfStream[u'httpSettings']
 ConfStreamNetwork=ConfStream[u"network"]
 ConfStreamSecurity=ConfStream[u"security"]
 
@@ -44,4 +45,8 @@ if "detour" in ConfInbound[u"settings"]:
     ConfDyp="开启,alterId为 %s" % ConfInboundDetour[0][u"settings"][u"default"][u"alterId"]
 else:
     ConfDyp="关闭"
-	
+ 
+if ConfStreamHttp2Settings != None:
+    ConfPath=ConfStreamHttp2Settings[u"path"]
+else:
+    ConfPath="none"

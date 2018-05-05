@@ -4,5 +4,6 @@
     "tlsSettings": {},
     "tcpSettings": null,
     "kcpSettings": null,
-    "wsSettings": null
+    "wsSettings": null,
+    "httpSettings": null
 }

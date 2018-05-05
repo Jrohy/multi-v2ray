@@ -22,6 +22,8 @@ elif readjson.ConfStreamNetwork=="http":
     mystreamnetwork="HTTP伪装"
 elif readjson.ConfStreamNetwork=="ws":
     mystreamnetwork="WebSocket"
+elif readjson.ConfStreamNetwork=="h2":
+    mystreamnetwork="HTTP/2"
 
 if (readjson.ConfStreamSecurity=="tls"):
     mystreamsecurity="TLS：开启\n"
@@ -51,6 +53,7 @@ if readjson.ConfStreamNetwork=="kcp":
     config["type"]=str(readjson.ConfStreamHeader)
 if (readjson.ConfStreamSecurity=="tls"):
     config["tls"]="tls"
+    config["host"]=str(readjson.ConfPath)
 base64Str = base64.encodestring(json.dumps(config))
 base64Str = ''.join(base64Str.split())
 #绿色字体显示

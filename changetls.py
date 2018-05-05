@@ -4,6 +4,7 @@ import readjson
 import getssl
 import writejson
 import urllib2
+import socket
 
 def get_ip():
     myip = urllib2.urlopen('http://members.3322.org/dyndns/getip').read()
@@ -12,8 +13,18 @@ def get_ip():
 
 def open_tls():
     print("请将您的域名解析到本VPS的IP地址，否则程序会出错！！")
-    print("本机器IP地址为：" + get_ip())
+    local_ip = get_ip()
+    print("本机器IP地址为：" + local_ip)
     inputdomain=str(raw_input("请输入您绑定的域名："))
+    try:
+        input_ip = socket.gethostbyname(inputdomain)
+    except Exception:
+        print("域名检测错误!!!")
+        return
+    if input_ip != local_ip:
+        print("输入的域名与本机ip不符!!!")
+        return
+
     print("")
     print("正在获取SSL证书，请稍等。")
     getssl.getssl(inputdomain)
@@ -22,7 +33,8 @@ def open_tls():
 
 def close_tls():
     writejson.WriteTLS("off","")
-    print("操作完成！")
+    print("操作完成！\n")
+    print("已重置为 mKCP 伪装 FaceTime通话(srtp)的传输模式")
 
 if (readjson.ConfStreamSecurity=="tls"):
     mystreamsecurity="TLS：开启"

@@ -18,8 +18,8 @@
 # V2ray.fun
 V2ray控制脚本，向导式更改端口，加密方式，传输协议，享受V2ray的乐趣~  
 
-相对[原版](https://github.com/tracyone/v2ray.fun)增加了:
-- 查看配置信息显示vmess字符串
+相对[原版](https://github.com/YLWS-4617)(作者已删库)增加了:
+- 查看配置信息显示vmess字符串(符合v2rayN的分享链接格式)
 - 首次安装时产生随机端口，默认传输配置改为mkcp+随机三种伪装type之一;  
   安装完成显示配置信息, 都是用于快速部署
 - 修改alterId入口

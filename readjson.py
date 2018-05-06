@@ -19,7 +19,6 @@ ConfRouting=config[u"routing"]
 #读取传入配置细节部分
 ConfPort=ConfInbound[u"port"]
 ConfUUID=ConfInbound[u"settings"][u"clients"][0][u"id"]
-ConfSecurity=ConfInbound[u"settings"][u"clients"][0][u"security"]
 ConfAlterId=ConfInbound[u"settings"][u"clients"][0][u"alterId"]
 ConfStream=ConfInbound[u"streamSettings"]
 ConfStreamKcpSettings=ConfStream[u"kcpSettings"]

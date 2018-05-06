@@ -12,14 +12,14 @@ def get_ip():
     return str(myip)
 
 def open_tls():
-    print("请将您的域名解析到本VPS的IP地址，否则程序会出错！！\n")
+    print("\n请将您的域名解析到本VPS的IP地址，否则程序会出错！！\n")
     local_ip = get_ip()
     print("本机器IP地址为：" + local_ip + "\n")
     inputdomain=str(raw_input("请输入您绑定的域名："))
     try:
         input_ip = socket.gethostbyname(inputdomain)
     except Exception:
-        print("域名检测错误!!!")
+        print("\n域名检测错误!!!\n")
         return
     if input_ip != local_ip:
         print("\n输入的域名与本机ip不符!!!\n")
@@ -29,7 +29,7 @@ def open_tls():
     print("正在获取SSL证书，请稍等。")
     getssl.getssl(inputdomain)
     writejson.WriteTLS("on",inputdomain)
-    print("操作完成！")
+    print("\n操作完成！已开启HTTP/2配置\n")
 
 def close_tls():
     writejson.WriteTLS("off","")

@@ -69,6 +69,8 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jrohy/v2ray.fun/master/u
 
 ![2](2.png)
 
+![3](3.png)
+
 ## 系统要求
 
 - Debian 7 

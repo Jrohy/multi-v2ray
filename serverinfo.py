@@ -11,11 +11,11 @@ mystreamnetwork=str(readjson.ConfStreamNetwork)
 
 if readjson.ConfStreamNetwork=="kcp" :
     if(readjson.ConfStreamHeader=="utp"):
-        mystreamnetwork="mKCP 伪装 BT下载流量(utp)"
+        mystreamnetwork="mKCP + utp"
     elif(readjson.ConfStreamHeader=="srtp"):
-        mystreamnetwork="mKCP 伪装 FaceTime通话(srtp)"
+        mystreamnetwork="mKCP + srtp"
     elif(readjson.ConfStreamHeader=="wechat-video"):
-        mystreamnetwork="mKCP 伪装 微信视频流量(wechat-video)"
+        mystreamnetwork="mKCP + wechat-video"
     else:
         mystreamnetwork="mKCP"
 elif readjson.ConfStreamNetwork=="http":
@@ -23,7 +23,7 @@ elif readjson.ConfStreamNetwork=="http":
 elif readjson.ConfStreamNetwork=="ws":
     mystreamnetwork="WebSocket"
 elif readjson.ConfStreamNetwork=="h2":
-    mystreamnetwork="HTTP/2\n" + "伪装Path:%s" % str(readjson.ConfPath)
+    mystreamnetwork="HTTP/2\n" + "伪装Path: %s" % str(readjson.ConfPath)
 
 if (readjson.ConfStreamSecurity=="tls"):
     mystreamsecurity="TLS：开启"
@@ -32,12 +32,12 @@ else:
 
 #输出信息
 print("IP：%s") % str(readjson.ConfIP)
-print("主端口：%s") % str(readjson.ConfPort)
+print("Port：%s") % str(readjson.ConfPort)
 print("UUID：%s") % str(readjson.ConfUUID)
-print("alter ID: %s") % str(readjson.ConfAlterId)
-print("传输方式：%s") % str(mystreamnetwork)
+print("Alter ID: %s") % str(readjson.ConfAlterId)
+print("Network：%s") % str(mystreamnetwork)
 print("%s") % str(mystreamsecurity)
-print("动态端口: %s") % str(readjson.ConfDyp)
+print("DynamicPort: %s") % str(readjson.ConfDyp)
 
 #生成vmess字符串
 jsonfile = file("/usr/local/v2ray.fun/json_template/vmess.json")

@@ -30,6 +30,7 @@ V2ray控制脚本，向导式更改端口，加密方式，传输协议，享受
 ## 功能
 - 一键 启动 / 停止 / 重启 V2ray 服务端
 - 自动随机生成 UUID
+- 开启关闭动态端口
 - 自助修改端口
 - 快速查看服务器连接信息
 - 一键下载客户端配置文件（通过szrz程序，xshell，secureCRT还有[macOS的iterm2](https://github.com/Jrohy/v2ray.fun/wiki/MAC使用RZ、SZ远程上传下载文件都支持)都支持）
@@ -41,7 +42,7 @@ V2ray控制脚本，向导式更改端口，加密方式，传输协议，享受
   - mKCP 伪装 FaceTime通话流量
   - mKCP 伪装 BT下载流量
   - mKCP 伪装 微信视频通话流量
-  - HTTP/2的tls流量(需备域名)
+  - HTTP/2的tls流量(需备域名) 
 
 **WebSocket和HTTP/2不包括Nginx分流，请自行安装Nginx来分流。**
 

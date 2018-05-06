@@ -6,17 +6,12 @@
     },
     "inbound": {
         "port": 999999999,
-        "listen": null,
         "protocol": "vmess",
         "settings": {
-            "auth": null,
-            "udp": true,
-            "ip": "127.0.0.1",
             "clients": [
                 {
                     "id": "cc4f8d5b-967b-4557-a4b6-bde92965bc27",
-                    "alterId": 100,
-                    "security": null
+                    "alterId": 64
                 }
             ]
         },

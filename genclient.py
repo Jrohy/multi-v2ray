@@ -23,7 +23,6 @@ clientconfig = json.load(clientjsonfile)
 #使用服务端配置来修改客户端模板
 clientconfig[u"outbound"][u"settings"][u"vnext"][0][u"port"]=int(readjson.ConfPort)
 clientconfig[u"outbound"][u"settings"][u"vnext"][0][u"users"][0][u"id"]=str(readjson.ConfUUID)
-clientconfig[u"outbound"][u"settings"][u"vnext"][0][u"users"][0][u"security"]=str(readjson.ConfSecurity)
 clientconfig[u"outbound"][u"streamSettings"]=readjson.ConfStream
 if str(readjson.ConfStreamSecurity) == "":
     clientconfig[u"outbound"][u"settings"][u"vnext"][0][u"address"]=str(myip)

@@ -86,7 +86,7 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jrohy/v2ray.fun/master/u
 
 ## 更新日志
 **2018.5.6**  
-支持http/2一键开启关闭
+支持http/2一键开启关闭, 项目本身转为独立项目
 
 **2018.5.3**  
 支持开启动态端口

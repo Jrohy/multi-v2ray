@@ -7,7 +7,7 @@ import urllib2
 import socket
 
 def get_ip():
-    myip = urllib2.urlopen('http://members.3322.org/dyndns/getip').read()
+    myip = urllib2.urlopen('http://api.ipify.org').read()
     myip = myip.strip()
     return str(myip)
 
@@ -36,15 +36,15 @@ def close_tls():
     print("操作完成！\n")
     print("已重置为 mKCP 伪装 FaceTime通话(srtp)的传输模式")
 
-if (readjson.ConfStreamSecurity=="tls"):
-    mystreamsecurity="TLS：开启"
+if (readjson.ConfStreamSecurity=="tls" and readjson.ConfStreamNetwork=="h2"):
+    mystreamsecurity="HTTP/2：开启"
 else:
-    mystreamsecurity="TLS：关闭"
+    mystreamsecurity="HTTP/2：关闭"
 
 print("当前状态：\n" + mystreamsecurity)
 print("")
-print("1.开启TLS")
-print("2.关闭TLS")
+print("1.开启HTTP/2")
+print("2.关闭HTTP/2")
 
 choice = int(input("请输入数字选择功能："))
 

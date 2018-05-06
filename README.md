@@ -120,8 +120,8 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jrohy/v2ray.fun/master/u
 
 ## 感谢
 
-V2ray : [https://v2ray.com](https://v2ray.com)
+V2ray: [https://v2ray.com](https://v2ray.com)
 
-v2ray.fun项目的源fork地址:[tracyone/v2ray.fun](https://github.com/tracyone/v2ray.fun)
+本项目的源fork地址: [tracyone/v2ray.fun](https://github.com/tracyone/v2ray.fun)
 
 v2ray.fun的原作者: [YLWS-4617](https://github.com/YLWS-4617)

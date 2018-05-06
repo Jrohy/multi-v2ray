@@ -13,10 +13,9 @@ echo -e "2.更改配置"
 echo -e "3.查看配置"
 echo -e "4.更新V2Ray"
 echo -e "5.下载客户端配置文件\n"
-echo "请输入数字选择功能(按回车键退出)："
 
 while :; do echo
-	read -n1 -p "请选择： " choice
+	read -n1 -p "请输入数字选择功能(按回车键退出): " choice
 	if [[ ! $choice =~ ^[1-5]$ ]]; then
         if [[ -z ${choice} ]];then
             exit 0

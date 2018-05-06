@@ -19,12 +19,12 @@
 V2ray控制脚本，向导式更改端口，加密方式，传输协议，享受V2ray的乐趣~  
 
 相对[原版](https://github.com/YLWS-4617)(作者已删库)增加了:
-- 查看配置信息显示vmess字符串(符合v2rayN的分享链接格式)
-- 首次安装时产生随机端口，默认传输配置改为mkcp+随机三种伪装type之一;  
-  安装完成显示配置信息, 都是用于快速部署
+- 查看配置信息显示vmess字符串(v2rayN的分享链接格式)
+- 首次安装时产生随机端口，默认配置mkcp + 随机一种(srtp|wechat-video|utp)header伪装;  
+  安装完成显示配置信息;  **脚本跑完即可放心食用！**
 - 修改alterId入口
 - 开启关闭动态端口
-- 支持http/2
+- 支持http/2, 随机生成伪装h2 path
 - v2ray升级菜单
 
 ## 功能
@@ -39,10 +39,10 @@ V2ray控制脚本，向导式更改端口，加密方式，传输协议，享受
   - HTTP头部伪装
   - WebSocket流量
   - 常规mKCP流量
-  - mKCP 伪装 FaceTime通话流量
-  - mKCP 伪装 BT下载流量
-  - mKCP 伪装 微信视频通话流量
-  - HTTP/2的tls流量(需备域名) 
+  - mKCP 伪装 FaceTime通话流量(srtp)
+  - mKCP 伪装 BT下载流量(utp)
+  - mKCP 伪装 微信视频通话流量(wechat-video)
+  - HTTP/2的tls流量(h2)(需备域名) 
 
 **WebSocket和HTTP/2不包括Nginx分流，请自行安装Nginx来分流。**
 

@@ -8,11 +8,11 @@ echo ""
 
 echo "欢迎使用 V2ray.fun 管理程序"
 echo ""
-echo "1.服务管理"
-echo "2.更改配置"
-echo "3.查看配置"
-echo "4.更新V2Ray"
-echo "5.下载客户端配置文件"
+echo -e "1.服务管理\n"
+echo -e "2.更改配置\n"
+echo -e "3.查看配置\n"
+echo -e "4.更新V2Ray\n"
+echo -e "5.下载客户端配置文件\n"
 echo "请输入数字选择功能(按回车键退出)："
 
 while :; do echo
@@ -29,11 +29,11 @@ while :; do echo
 done
 
 if [[ ${choice} == 1 ]]; then
-    echo "1.启动服务"
-    echo "2.停止服务"
-    echo "3.重启服务"
-    echo "4.运行状态"
-    echo "5.运行日志"
+    echo -e "1.启动服务\n"
+    echo -e "2.停止服务\n"
+    echo -e "3.重启服务\n"
+    echo -e "4.运行状态\n"
+    echo -e "5.运行日志\n"
     while :; do echo
 	    read -n1 -p "请选择： " schoice
 	    if [[ ! $schoice =~ ^[1-5]$ ]]; then
@@ -80,15 +80,15 @@ fi
 
 if [[ ${choice} == 2 ]]; then
     echo ""
-    echo "1.更改UUID"
-    echo "2.更改alterID"
-    echo "3.更改主端口"
-    echo "4.更改加密方式"
-    echo "5.更改传输方式"
-    echo "6.更改TLS(http2)设置"
-    echo "7.更改广告拦截功能"
-    echo "8.更改动态端口"
-    echo "请输入数字选择功能："
+    echo -e "1.更改UUID\n"
+    echo -e "2.更改alterID\n"
+    echo -e "3.更改主端口\n"
+    echo -e "4.更改加密方式\n"
+    echo -e "5.更改传输方式\n"
+    echo -e "6.更改TLS(http2)设置\n"
+    echo -e "7.更改广告拦截功能\n"
+    echo -e "8.更改动态端口\n"
+    echo -e "请输入数字选择功能：\n"
 
     while :; do echo
 	    read -n1 -p "请选择： " changechoice

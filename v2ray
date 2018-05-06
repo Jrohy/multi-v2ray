@@ -8,10 +8,10 @@ echo ""
 
 echo "欢迎使用 V2ray.fun 管理程序"
 echo ""
-echo -e "1.服务管理\n"
-echo -e "2.更改配置\n"
-echo -e "3.查看配置\n"
-echo -e "4.更新V2Ray\n"
+echo -e "1.服务管理"
+echo -e "2.更改配置"
+echo -e "3.查看配置"
+echo -e "4.更新V2Ray"
 echo -e "5.下载客户端配置文件\n"
 echo "请输入数字选择功能(按回车键退出)："
 
@@ -29,11 +29,11 @@ while :; do echo
 done
 
 if [[ ${choice} == 1 ]]; then
-    echo -e "1.启动服务\n"
-    echo -e "2.停止服务\n"
-    echo -e "3.重启服务\n"
-    echo -e "4.运行状态\n"
-    echo -e "5.运行日志\n"
+    echo -e "1.启动服务"
+    echo -e "2.停止服务"
+    echo -e "3.重启服务"
+    echo -e "4.运行状态"
+    echo -e "5.运行日志"
     while :; do echo
 	    read -n1 -p "请选择： " schoice
 	    if [[ ! $schoice =~ ^[1-5]$ ]]; then

@@ -37,8 +37,7 @@ if [[ $? -eq 0 ]];then
     echo -e "${OK} 当前系统时间 `date -R`${Font}"
     sleep 1
 else
-    echo -e "${Error} 时间同步失败，可以手动执行命令同步:${Font}"
-    echo -e "${Yellow}ntpdate time.nist.gov${Font}"
+    echo -e "${Error} 时间同步失败，可以手动执行命令同步:${Font}${Yellow}ntpdate time.nist.gov${Font}"
 fi 
 
 #更新Vray主程序

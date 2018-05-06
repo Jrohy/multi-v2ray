@@ -5,7 +5,6 @@ import json
 import readjson
 import random
 import string
-from changetls import open_tls
 
 #打开配置文件
 jsonfile = file("/etc/v2ray/config.json")
@@ -76,6 +75,7 @@ def WriteStreamNetwork(network,para):
         salt = '/' + ''.join(random.sample(string.ascii_letters + string.digits, 8)) + '/'
         config[u"inbound"][u"streamSettings"][u"httpSettings"][u"path"]=salt
         if (security_backup != "tls" or not "certificates" in tls_settings_backup):
+            from changetls import open_tls 
             open_tls()
             return
 

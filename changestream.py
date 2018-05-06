@@ -23,8 +23,8 @@ elif readjson.ConfStreamNetwork=="h2":
     mystreamnetwork="HTTP/2"
 
 #显示当前配置
-print("当前传输方式为：%s") % mystreamnetwork
-
+print ("当前传输方式为：%s") % mystreamnetwork
+print ("")
 #选择新的传输方式
 print ("请选择新的传输方式：")
 print ("1.普通TCP")

@@ -19,6 +19,8 @@ elif readjson.ConfStreamNetwork=="http":
     mystreamnetwork="HTTP伪装"
 elif readjson.ConfStreamNetwork=="ws":
     mystreamnetwork="WebSocket"
+elif readjson.ConfStreamNetwork=="h2":
+    mystreamnetwork="HTTP/2"
 
 #显示当前配置
 print("当前传输方式为：%s") % mystreamnetwork
@@ -32,6 +34,7 @@ print ("4.普通mKCP")
 print ("5.mKCP 伪装 FaceTime通话")
 print ("6.mKCP 伪装 BT下载流量")
 print ("7.mKCP 伪装 微信视频流量")
+print ("8.HTTP/2")
 
 newstreamnetwork=raw_input()
 
@@ -39,7 +42,7 @@ if ( not v2rayutil.is_number(newstreamnetwork)):
     print("请输入数字！")
     exit
 else:
-    if not (newstreamnetwork > 0 and newstreamnetwork<8):
+    if not (newstreamnetwork > 0 and newstreamnetwork<9):
     	v2rayutil.writeStreamJson(newstreamnetwork)
     else:
         print("请输入有效数字！")

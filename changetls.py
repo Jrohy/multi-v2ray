@@ -29,22 +29,21 @@ def open_tls():
     print("正在获取SSL证书，请稍等。")
     getssl.getssl(inputdomain)
     writejson.WriteTLS("on",inputdomain)
-    print("\n操作完成！已开启HTTP/2配置\n")
+    print("\n操作完成！\n")
 
 def close_tls():
     writejson.WriteTLS("off","")
     print("操作完成！\n")
-    print("已重置为 mKCP 伪装 FaceTime通话(srtp)的传输模式")
 
-if (readjson.ConfStreamSecurity=="tls" and readjson.ConfStreamNetwork=="h2"):
-    mystreamsecurity="HTTP/2：开启"
+if (readjson.ConfStreamSecurity=="tls"):
+    mystreamsecurity="TLS：开启"
 else:
-    mystreamsecurity="HTTP/2：关闭"
+    mystreamsecurity="TLS：关闭"
 
 print("当前状态：\n" + mystreamsecurity)
 print("")
-print("1.开启HTTP/2")
-print("2.关闭HTTP/2")
+print("1.开启TLS")
+print("2.关闭TLS")
 
 choice = int(input("请输入数字选择功能："))
 

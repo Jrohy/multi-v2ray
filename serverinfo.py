@@ -23,11 +23,10 @@ elif readjson.ConfStreamNetwork=="http":
 elif readjson.ConfStreamNetwork=="ws":
     mystreamnetwork="WebSocket"
 elif readjson.ConfStreamNetwork=="h2":
-    mystreamnetwork="HTTP/2"
+    mystreamnetwork="HTTP/2\n" + "伪装Path:%s" % str(readjson.ConfPath)
 
 if (readjson.ConfStreamSecurity=="tls"):
-    mystreamsecurity="TLS：开启\n"
-    mystreamsecurity=mystreamsecurity + "伪装Path:%s" % str(readjson.ConfPath)
+    mystreamsecurity="TLS：开启"
 else:
     mystreamsecurity="TLS：关闭"
 

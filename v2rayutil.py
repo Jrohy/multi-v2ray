@@ -39,6 +39,8 @@ def writeStreamJson(newstreamnetwork):
         writejson.WriteStreamNetwork("mkcp","kcp utp")
     elif(newstreamnetwork=="7"):
         writejson.WriteStreamNetwork("mkcp","kcp wechat-video")
+    elif(newstreamnetwork=="8"):
+        writejson.WriteStreamNetwork("h2","none")
 
 
 def randomStream():

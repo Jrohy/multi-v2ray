@@ -12,9 +12,9 @@ def get_ip():
     return str(myip)
 
 def open_tls():
-    print("请将您的域名解析到本VPS的IP地址，否则程序会出错！！")
+    print("请将您的域名解析到本VPS的IP地址，否则程序会出错！！\n")
     local_ip = get_ip()
-    print("本机器IP地址为：" + local_ip)
+    print("本机器IP地址为：" + local_ip + "\n")
     inputdomain=str(raw_input("请输入您绑定的域名："))
     try:
         input_ip = socket.gethostbyname(inputdomain)
@@ -22,7 +22,7 @@ def open_tls():
         print("域名检测错误!!!")
         return
     if input_ip != local_ip:
-        print("输入的域名与本机ip不符!!!")
+        print("\n输入的域名与本机ip不符!!!\n")
         return
 
     print("")

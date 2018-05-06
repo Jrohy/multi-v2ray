@@ -61,7 +61,7 @@ if [[ $? -eq 0 ]];then
     echo -e "${OK} 当前系统时间 `date -R`${Font}"
     sleep 1
 else
-    echo -e "${Error} ${RedBG} 时间同步失败，可以手动执行命令同步:\n${Font}"
+    echo -e "${Error} ${RedBG} 时间同步失败，可以手动执行命令同步:${Font}"
     echo -e "${Yellow}ntpdate time.nist.gov${Font}"
 fi 
 

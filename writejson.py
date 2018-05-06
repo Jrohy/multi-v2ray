@@ -5,6 +5,7 @@ import json
 import readjson
 import random
 import string
+from changetls import open_tls
 
 #打开配置文件
 jsonfile = file("/etc/v2ray/config.json")
@@ -66,7 +67,18 @@ def WriteStreamNetwork(network,para):
         http=json.load(streamfile)
         http[u"tcpSettings"][u"header"][u"request"][u"headers"][u"Host"]=para
         config[u"inbound"][u"streamSettings"]=http
-        
+
+    if (network == "h2"):
+        streamfile=file("/usr/local/v2ray.fun/json_template/http2.json")
+        http2=json.load(streamfile)
+        config[u"inbound"][u"streamSettings"]=http2
+        #随机生成8位的伪装path
+        salt = '/' + ''.join(random.sample(string.ascii_letters + string.digits, 8)) + '/'
+        config[u"inbound"][u"streamSettings"][u"httpSettings"][u"path"]=salt
+        if (security_backup != "tls" or not "certificates" in tls_settings_backup):
+            open_tls()
+            return
+
     if (network == "ws"):
         streamfile=file("/usr/local/v2ray.fun/json_template/ws.json")
         ws=json.load(streamfile)
@@ -101,36 +113,23 @@ def WriteStreamNetwork(network,para):
 #更改TLS设置
 def WriteTLS(action,domain):
     if action == "on":
+        config[u"inbound"][u"streamSettings"][u"security"] = "tls"
+        
         crt_file = "/root/.acme.sh/" + domain +"_ecc"+ "/fullchain.cer"
         key_file = "/root/.acme.sh/" + domain +"_ecc"+ "/"+ domain +".key"
-        
-        config[u"inbound"][u"streamSettings"][u"security"] = "tls"
-
         tls_file = file("/usr/local/v2ray.fun/json_template/tlssettings.json")
         tls_settings=json.load(tls_file)
         tls_settings[u"certificates"][0][u"certificateFile"] = crt_file
         tls_settings[u"certificates"][0][u"keyFile"] = key_file
         config[u"inbound"][u"streamSettings"][u"tlsSettings"] = tls_settings
 
-        http2_file = file("/usr/local/v2ray.fun/json_template/http2.json")
-        http2_settings=json.load(http2_file)
-        #随机生成8位的伪装path
-        salt = '/' + ''.join(random.sample(string.ascii_letters + string.digits, 8)) + '/'
-        http2_settings[u"path"]=salt
-        config[u"inbound"][u"streamSettings"][u"httpSettings"]=http2_settings
-
-        config[u"inbound"][u"streamSettings"][u"network"]="h2"
-
-        config[u"inbound"][u"streamSettings"][u"kcpSettings"]=None
-
         domainfile = file("/usr/local/v2ray.fun/mydomain", "w+")
         domainfile.writelines(str(domain))
         domainfile.close()
         Write()
     elif action == "off":
-        streamfile=file("/usr/local/v2ray.fun/json_template/kcp_srtp.json")
-        srtp=json.load(streamfile)
-        config[u"inbound"][u"streamSettings"]=srtp
+        config[u"inbound"][u"streamSettings"][u"security"] = ""
+        config[u"inbound"][u"streamSettings"][u"tlsSettings"] = {}
         Write()
 
 #更改广告拦截功能

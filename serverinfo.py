@@ -11,11 +11,11 @@ mystreamnetwork=str(readjson.ConfStreamNetwork)
 
 if readjson.ConfStreamNetwork=="kcp" :
     if(readjson.ConfStreamHeader=="utp"):
-        mystreamnetwork="mKCP 伪装 BT下载流量"
+        mystreamnetwork="mKCP 伪装 BT下载流量(utp)"
     elif(readjson.ConfStreamHeader=="srtp"):
-        mystreamnetwork="mKCP 伪装 FaceTime通话"
+        mystreamnetwork="mKCP 伪装 FaceTime通话(srtp)"
     elif(readjson.ConfStreamHeader=="wechat-video"):
-        mystreamnetwork="mKCP 伪装 微信视频流量"
+        mystreamnetwork="mKCP 伪装 微信视频流量(wechat-video)"
     else:
         mystreamnetwork="mKCP"
 elif readjson.ConfStreamNetwork=="http":
@@ -57,6 +57,6 @@ if (readjson.ConfStreamSecurity=="tls"):
 base64Str = base64.encodestring(json.dumps(config))
 base64Str = ''.join(base64Str.split())
 #绿色字体显示
-print("\033[1;32m")
+print("\033[32m")
 print("vmess://%s") % base64Str
 print("\033[0m")

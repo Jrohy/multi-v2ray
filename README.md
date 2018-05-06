@@ -43,7 +43,7 @@ V2ray控制脚本，向导式更改端口，加密方式，传输协议，享受
   - mKCP 伪装 BT下载流量
   - mKCP 伪装 微信视频通话流量
 
-**WebSocket不包括Nginx分流，请自行安装Nginx来分流。**
+**WebSocket和HTTP/2不包括Nginx分流，请自行安装Nginx来分流。**
 
 ## 安装命令
 

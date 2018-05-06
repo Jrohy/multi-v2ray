@@ -128,12 +128,12 @@ def WriteTLS(action,domain):
         domainfile.close()
         Write()
     elif action == "off":
+        if config[u"inbound"][u"streamSettings"][u"network"] == "h2":
+            print("关闭tls同时也会关闭HTTP/2\n")
+            import changestream
         config[u"inbound"][u"streamSettings"][u"security"] = ""
         config[u"inbound"][u"streamSettings"][u"tlsSettings"] = {}
         Write()
-        if config[u"inbound"][u"streamSettings"][u"network"] == "h2":
-            print("关闭tls同时也会关闭HTTP/2")
-            import changestream
 
 #更改广告拦截功能
 def WriteAD(action):

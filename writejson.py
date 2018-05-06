@@ -123,8 +123,6 @@ def WriteTLS(action,domain):
 
         config[u"inbound"][u"streamSettings"][u"kcpSettings"]=None
 
-        config[u"inbound"][u"port"]=443
-
         domainfile = file("/usr/local/v2ray.fun/mydomain", "w+")
         domainfile.writelines(str(domain))
         domainfile.close()

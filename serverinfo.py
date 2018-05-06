@@ -27,7 +27,7 @@ elif readjson.ConfStreamNetwork=="h2":
 
 if (readjson.ConfStreamSecurity=="tls"):
     mystreamsecurity="TLS：开启\n"
-    mystreamsecurity=mystreamsecurity + "伪装域名:%s" % str(readjson.ConfPath)
+    mystreamsecurity=mystreamsecurity + "伪装Path:%s" % str(readjson.ConfPath)
 else:
     mystreamsecurity="TLS：关闭"
 

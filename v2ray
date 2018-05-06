@@ -140,7 +140,7 @@ if [[ ${choice} == 2 ]]; then
     fi
     
     if [[ ${changechoice} == 5 ]]; then
-        python /usr/local/v2ray.fun/changetls.py
+        python -c "import sys;sys.path.append('/usr/local/v2ray.fun');import changetls; changetls.show_tip();sys.path.remove('/usr/local/v2ray.fun')"
         python /usr/local/v2ray.fun/genclient.py
 	    service v2ray restart
         echo ""

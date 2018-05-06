@@ -1,3 +1,11 @@
-{ 
-    "path": "/ray/"
+{
+    "network": "h2",
+    "security": "tls",
+    "tlsSettings": {},
+    "tcpSettings": null,
+    "httpSettings": { 
+        "path": "/ray/"
+    },
+    "kcpSettings": null,
+    "wsSettings": null
 }

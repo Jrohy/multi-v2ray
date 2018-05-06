@@ -83,7 +83,7 @@ if [[ ${choice} == 2 ]]; then
     echo -e "2.更改alterID\n"
     echo -e "3.更改主端口\n"
     echo -e "4.更改传输方式\n"
-    echo -e "5.更改HTTP/2设置\n"
+    echo -e "5.更改TLS设置\n"
     echo -e "6.更改广告拦截功能\n"
     echo -e "7.更改动态端口\n"
     echo -e "请输入数字选择功能：\n"

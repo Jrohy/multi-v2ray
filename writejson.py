@@ -26,7 +26,7 @@ def EnDynPort(en, dAlterId=32):
         config[u"inboundDetour"]=dyn_json
         config[u"inboundDetour"][0][u"settings"][u"default"][u"alterId"]=int(dAlterId)
     else:
-        config[u"inboundDetour"]=[]
+        config[u"inboundDetour"]=None
         if "detour" in config[u"inbound"][u"settings"]:
             del config[u"inbound"][u"settings"][u"detour"]
     Write()

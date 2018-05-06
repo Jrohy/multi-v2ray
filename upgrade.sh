@@ -38,7 +38,7 @@ if [[ $? -eq 0 ]];then
     sleep 1
 else
     echo -e "${Error} ${RedBG} 时间同步失败，可以手动执行命令同步:\n${Font}"
-    echo - "${Yellow}ntpdate time.nist.gov${Font}"
+    echo -e "${Yellow}ntpdate time.nist.gov${Font}"
 fi 
 
 #更新Vray主程序

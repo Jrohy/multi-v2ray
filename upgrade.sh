@@ -15,11 +15,13 @@ OK="${Green}[OK]${Font}"
 Error="${Red}[错误]${Font}"
 
 #重装V2ray.fun
+mv /usr/local/v2ray.fun/mydomain ~
 rm -rf /usr/local/v2ray.fun
 cd /usr/local/
 git clone https://github.com/Jrohy/v2ray.fun
 cd /usr/local/v2ray.fun/
 chmod +x *.py
+mv -f ~/mydomain .
 
 #重装操作菜单
 rm -rf /usr/local/bin/v2ray

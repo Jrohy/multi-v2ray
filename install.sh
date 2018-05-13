@@ -88,7 +88,7 @@ fi
 #设置定时任务
 plan_update
 #安装 acme.sh 以自动获取SSL证书
-curl  https://get.acme.sh | sh
+[[ "${installWay}" == "1" ]] && curl  https://get.acme.sh | sh
 
 #克隆V2ray.fun项目
 [[ "${installWay}" == "0" ]] && mv /usr/local/v2ray.fun/mydomain ~

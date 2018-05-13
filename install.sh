@@ -37,62 +37,77 @@ fi
 
 #安装依赖
 if [[ ${OS} == 'CentOS' ]];then
-	yum install curl wget unzip git ntp ntpdate lrzsz python socat -y
+	yum install curl wget unzip git ntp ntpdate lrzsz python socat crontabs -y
 else
 	apt-get update
-	apt-get install curl unzip git ntp wget ntpdate python socat lrzsz -y
+	apt-get install curl unzip git ntp wget ntpdate python socat lrzsz cron -y
+fi
+
+#判断是安装还是更新, 0:更新，1：全新安装
+if [[ -e "/usr/local/v2ray.fun" ]] && [[ -e "/usr/local/bin/v2ray" ]];then
+    installWay="0"
+else
+    installWay="1"
 fi
 
 #安装 acme.sh 以自动获取SSL证书
-curl  https://get.acme.sh | sh
+[[ "${installWay}" == "1" ]] && curl  https://get.acme.sh | sh
 
 
 #克隆V2ray.fun项目
+[[ "${installWay}" == "0" ]] && mv /usr/local/v2ray.fun/mydomain ~
 cd /usr/local/
-rm -R v2ray.fun
+rm -rf v2ray.fun
 git clone https://github.com/Jrohy/v2ray.fun
+cd v2ray.fun
+[[ "${installWay}" == "0" ]] && mv -f ~/mydomain .
 
 #时间同步
-systemctl stop ntp &>/dev/null
-echo -e "${Info} 正在进行时间同步 ${Font}"
-ntpdate time.nist.gov
-if [[ $? -eq 0 ]];then 
-    echo -e "${OK} 时间同步成功 ${Font}"
-    echo -e "${OK} 当前系统时间 `date -R`${Font}"
-    sleep 1
-else
-    echo -e "${Error} 时间同步失败，可以手动执行命令同步:${Font}${Yellow}ntpdate time.nist.gov${Font}"
-fi 
+if [[ "${installWay}" == "1" ]];then
+    systemctl stop ntp &>/dev/null
+    echo -e "${Info} 正在进行时间同步 ${Font}"
+    ntpdate time.nist.gov
+    if [[ $? -eq 0 ]];then 
+        echo -e "${OK} 时间同步成功 ${Font}"
+        echo -e "${OK} 当前系统时间 `date -R`${Font}"
+        sleep 1
+    else
+        echo -e "${Error} 时间同步失败，可以手动执行命令同步:${Font}${Yellow}ntpdate time.nist.gov${Font}"
+    fi
+fi
 
-#安装V2ray主程序
+#安装/更新V2ray主程序
 bash <(curl -L -s https://install.direct/go.sh)
 
 #配置V2ray初始环境
 cp /usr/local/v2ray.fun/v2ray /usr/local/bin
-chmod +x /usr/bin/v2ray
 chmod +x /usr/local/bin/v2ray
-rm -rf /etc/v2ray/config.json
-cp /usr/local/v2ray.fun/json_template/server.json /etc/v2ray/config.json
 
-#产生随机uuid
-UUID=$(cat /proc/sys/kernel/random/uuid)
-sed -i "s/cc4f8d5b-967b-4557-a4b6-bde92965bc27/${UUID}/g" /etc/v2ray/config.json
+#全新安装的新配置
+if [[ "${installWay}" == "1" ]];then 
+    rm -rf /etc/v2ray/config.json
+    cp /usr/local/v2ray.fun/json_template/server.json /etc/v2ray/config.json
 
-#产生随机端口
-dport=$(shuf -i 1000-65535 -n 1)
-sed -i "s/999999999/${dport}/g" /etc/v2ray/config.json
+    #产生随机uuid
+    UUID=$(cat /proc/sys/kernel/random/uuid)
+    sed -i "s/cc4f8d5b-967b-4557-a4b6-bde92965bc27/${UUID}/g" /etc/v2ray/config.json
 
-#产生默认配置mkcp+随机3种伪装类型type
-python -c "import sys;sys.path.append('/usr/local/v2ray.fun');import v2rayutil; v2rayutil.randomStream();sys.path.remove('/usr/local/v2ray.fun')"
+    #产生随机端口
+    dport=$(shuf -i 1000-65535 -n 1)
+    sed -i "s/999999999/${dport}/g" /etc/v2ray/config.json
 
-python /usr/local/v2ray.fun/genclient.py
-python /usr/local/v2ray.fun/openport.py
+    #产生默认配置mkcp+随机3种伪装类型type
+    python -c "import sys;sys.path.append('/usr/local/v2ray.fun');import v2rayutil; v2rayutil.randomStream();sys.path.remove('/usr/local/v2ray.fun')"
+
+    python /usr/local/v2ray.fun/genclient.py
+    python /usr/local/v2ray.fun/openport.py
+fi
 
 service v2ray restart
 
 clear
 
-echo -e "${OK}V2ray.fun 安装成功！${Font}\n"
+echo -e "${OK}V2ray.fun $([[${installWay} == '1']] && '安装'||'更新')成功！${Font}\n"
 
 echo "V2ray配置信息:"
 #安装完后显示v2ray的配置信息，用于快速部署

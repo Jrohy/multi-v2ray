@@ -36,9 +36,9 @@ plan_update(){
 	crontab crontab.txt
 	sleep 1
 	if [[ "${OS}" == "CentOS" ]];then
-		systemctl restart crond
+        service crond restart
 	else
-		systemctl restart cron
+		service cron restart
 	fi
 	rm -f crontab.txt
 	echo -e "${OK} 成功配置每天北京时间${BeijingUpdateTime}点自动升级V2ray内核任务 ${Font}\n"

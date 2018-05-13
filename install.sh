@@ -112,7 +112,8 @@ service v2ray restart
 
 clear
 
-echo -e "${OK}V2ray.fun $([[ ${installWay} == '1' ]] && '安装'||'更新')成功！${Font}\n"
+[[ ${installWay} == "1" ]] && way="安装" || way="更新"
+echo -e "${OK}V2ray.fun ${way}成功！${Font}\n"
 
 echo "V2ray配置信息:"
 #安装完后显示v2ray的配置信息，用于快速部署

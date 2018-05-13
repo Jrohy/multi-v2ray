@@ -49,17 +49,17 @@ V2ray控制脚本，向导式更改端口，加密方式，传输协议，享受
 ## 安装命令
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jrohy/v2ray.fun/master/install.sh)"
+bash <(curl -sL https://raw.githubusercontent.com/Jrohy/v2ray.fun/master/install.sh)
 ```
 
-## 升级命令
+## 升级命令(保留配置文件，升级失败请全新安装)
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jrohy/v2ray.fun/master/upgrade.sh)"
+bash <(curl -sL https://raw.githubusercontent.com/Jrohy/v2ray.fun/master/install.sh) keep
 ```
 
 ## 卸载命令
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jrohy/v2ray.fun/master/uninstall.sh)"
+bash <(curl -sL https://raw.githubusercontent.com/Jrohy/v2ray.fun/master/uninstall.sh)
 ```
 
 
@@ -87,6 +87,9 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jrohy/v2ray.fun/master/u
 请使用**Xshell**连接服务器，以获得完美的中文支持以及配置文件下载功能。
 
 ## 更新日志
+**2018.5.13**  
+安装和升级脚本合二为一
+
 **2018.5.6**  
 支持http/2一键开启关闭, 项目本身转为独立项目
 

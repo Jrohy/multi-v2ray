@@ -14,6 +14,36 @@ Info="${Green}[信息]${Font}"
 OK="${Green}[OK]${Font}"
 Error="${Red}[错误]${Font}"
 
+#定时任务北京执行时间(0~23)
+BeijingUpdateTime=3
+
+#设置定时升级任务
+plan_update(){
+    #计算北京时间早上3点时VPS的实际时间
+    originTimeZone=$(date -R|awk '{printf"%d",$6}')
+    localTimeZone=${originTimeZone%00}
+    beijingZone=8
+    diffZone=$[$beijingZone-$localTimeZone]
+    localTime=$[$BeijingUpdateTime-$diffZone]
+    if [ $localTime -lt 0 ];then
+        localTime=$[24+$localTime]
+    elif [ $localTime -ge 24 ];then
+        localTime=$[$localTime-24]
+    fi
+	echo -e "${Info} 北京时间${BeijingUpdateTime}点，VPS时间为${localTime}点 ${Font}\n"
+
+	echo "0 ${localTime} * * * bash <(curl -L -s https://install.direct/go.sh) | tee -a /root/v2rayUpdate.log" >> crontab.txt
+	crontab crontab.txt
+	sleep 1
+	if [[ "${OS}" == "CentOS" ]];then
+		systemctl restart crond
+	else
+		systemctl restart cron
+	fi
+	rm -f crontab.txt
+	echo -e "${OK} 成功配置每天北京时间${BeijingUpdateTime}点自动升级V2ray内核任务 ${Font}\n"
+}
+
 #获取操作 action等于keep时为升级操作，配置文件保留
 action=$1
 
@@ -55,8 +85,11 @@ else
     echo -e "${Info}当前以全新形式安装\n"
 fi
 
-#安装 acme.sh 以自动获取SSL证书
-[[ "${installWay}" == "1" ]] && curl  https://get.acme.sh | sh
+if [[ "${installWay}" == "1" ]];then 
+    #设置定时任务
+    plan_update
+    #安装 acme.sh 以自动获取SSL证书
+    curl  https://get.acme.sh | sh
 
 
 #克隆V2ray.fun项目

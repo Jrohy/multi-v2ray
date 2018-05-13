@@ -14,6 +14,9 @@ Info="${Green}[信息]${Font}"
 OK="${Green}[OK]${Font}"
 Error="${Red}[错误]${Font}"
 
+#获取操作 action等于keep时为升级操作，配置文件保留
+action=$1
+
 #检查是否为Root
 [ $(id -u) != "0" ] && { echo "Error: You must be root to run this script"; exit 1; }
 
@@ -43,11 +46,13 @@ else
 	apt-get install curl unzip git ntp wget ntpdate python socat lrzsz cron -y
 fi
 
-#判断是安装还是更新, 0:更新，1：全新安装
-if [[ -e "/usr/local/v2ray.fun" ]] && [[ -e "/usr/local/bin/v2ray" ]];then
+#判断是安装还是更新, 0:更新(保留配置文件)，1：全新安装
+if [[ ! -z $action ]] && [[ $action == "keep" ]];then
     installWay="0"
+    echo -e "${Info}当前以keep保留配置文件形式更新, 若失败请用全新安装\n"
 else
     installWay="1"
+    echo -e "${Info}当前以全新形式安装\n"
 fi
 
 #安装 acme.sh 以自动获取SSL证书
@@ -107,7 +112,7 @@ service v2ray restart
 
 clear
 
-echo -e "${OK}V2ray.fun $([[${installWay} == '1']] && '安装'||'更新')成功！${Font}\n"
+echo -e "${OK}V2ray.fun $([[ ${installWay} == '1' ]] && '安装'||'更新')成功！${Font}\n"
 
 echo "V2ray配置信息:"
 #安装完后显示v2ray的配置信息，用于快速部署

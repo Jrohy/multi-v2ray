@@ -87,6 +87,7 @@ fi
 
 #设置定时任务
 plan_update
+
 #安装 acme.sh 以自动获取SSL证书
 [[ "${installWay}" == "1" ]] && curl  https://get.acme.sh | sh
 

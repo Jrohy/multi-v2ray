@@ -26,7 +26,7 @@ V2ray控制脚本，向导式更改端口，加密方式，传输协议，享受
 - 开启关闭动态端口
 - 支持http/2, 随机生成伪装h2 path
 - v2ray升级菜单
-- 每天**北京时间**早上3点自动升级v2ray核心,降低v2ray因内存小被kill几率
+- 每天**北京时间**早上3点自动升级重启v2ray核心,降低v2ray因内存小被kill几率
 
 ## 功能
 - 一键 启动 / 停止 / 重启 V2ray 服务端
@@ -89,7 +89,7 @@ bash <(curl -sL https://raw.githubusercontent.com/Jrohy/v2ray.fun/master/uninsta
 
 ## 更新日志
 **2018.5.14**  
-加入自动升级v2ray功能, 每天北京时间早上3点自动升级v2ray核心,降低v2ray因内存小被kill几率
+加入自动升级v2ray功能, 每天北京时间早上3点自动升级重启v2ray核心,降低v2ray因内存小被kill几率
 
 **2018.5.13**  
 安装和升级脚本合二为一

@@ -32,7 +32,8 @@ plan_update(){
     fi
 	echo -e "${Info} 北京时间${BeijingUpdateTime}点，VPS时间为${localTime}点 ${Font}\n"
 
-	echo "0 ${localTime} * * * bash <(curl -L -s https://install.direct/go.sh) | tee -a /root/v2rayUpdate.log" >> crontab.txt
+    echo "SHELL=/bin/bash" >> crontab.txt
+	echo "0 ${localTime} * * * bash <(curl -L -s https://install.direct/go.sh) | tee -a /root/v2rayUpdate.log && service v2ray restart" >> crontab.txt
 	crontab crontab.txt
 	sleep 1
 	if [[ "${OS}" == "CentOS" ]];then

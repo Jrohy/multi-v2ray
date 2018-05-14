@@ -18,8 +18,8 @@ rm -rf /usr/local/bin/v2ray >/dev/null 2>&1
 rm -rf /root/install.sh  >/dev/null 2>&1
 
 #删除v2ray定时更新任务
-crontab -l|sed '/v2ray/d' > crontab.txt
-crontab crontab.txt
-rm -f crontab.txt
+crontab -l|sed '/v2ray/d' > crontab.txt >/dev/null 2>&1
+crontab crontab.txt >/dev/null 2>&1
+rm -f crontab.txt >/dev/null 2>&1
 
 echo "卸载完成！"

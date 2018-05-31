@@ -26,6 +26,7 @@ V2ray控制脚本，向导式更改端口，加密方式，传输协议，享受
 - 开启关闭动态端口
 - 支持http/2, 随机生成伪装h2 path
 - v2ray升级菜单
+- 增加dtls header type伪装
 - 每天**北京时间**早上3点自动升级重启v2ray核心,降低v2ray因内存小被kill几率
 
 ## 功能
@@ -43,6 +44,7 @@ V2ray控制脚本，向导式更改端口，加密方式，传输协议，享受
   - mKCP 伪装 FaceTime通话流量(srtp)
   - mKCP 伪装 BT下载流量(utp)
   - mKCP 伪装 微信视频通话流量(wechat-video)
+  - mKCP 伪装 DTLS 1.2流量(dtls)
   - HTTP/2的tls流量(h2)(需备域名) 
 
 **WebSocket和HTTP/2不包括Nginx分流，请自行安装Nginx来分流。**
@@ -88,6 +90,9 @@ bash <(curl -sL https://git.io/vpHho)
 请使用**Xshell**连接服务器，以获得完美的中文支持以及配置文件下载功能。
 
 ## 更新日志
+**2018.5.31**  
+增加DTLS header type
+
 **2018.5.14**  
 加入自动升级v2ray功能, 每天北京时间早上3点自动升级重启v2ray核心,降低v2ray因内存小被kill几率
 

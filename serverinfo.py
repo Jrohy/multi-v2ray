@@ -16,6 +16,8 @@ if readjson.ConfStreamNetwork=="kcp" :
         mystreamnetwork="mKCP + srtp"
     elif(readjson.ConfStreamHeader=="wechat-video"):
         mystreamnetwork="mKCP + wechat-video"
+    elif(readjson.ConfStreamHeader=="dtls"):
+        mystreamnetwork="mKCP + dtls"
     else:
         mystreamnetwork="mKCP"
 elif readjson.ConfStreamNetwork=="http":

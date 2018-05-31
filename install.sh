@@ -96,8 +96,8 @@ curl  https://get.acme.sh | sh
 [[ "${installWay}" == "0" ]] && mv /usr/local/v2ray.fun/mydomain ~
 cd /usr/local/
 rm -rf v2ray.fun
-git clone -b dev https://github.com/Jrohy/v2ray.fun
-# git clone https://github.com/Jrohy/v2ray.fun
+# git clone -b dev https://github.com/Jrohy/v2ray.fun
+git clone https://github.com/Jrohy/v2ray.fun
 cd v2ray.fun
 [[ "${installWay}" == "0" ]] && mv -f ~/mydomain .
 

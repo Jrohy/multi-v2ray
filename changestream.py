@@ -8,11 +8,13 @@ import v2rayutil
 mystreamnetwork=str(readjson.ConfStreamNetwork)
 if readjson.ConfStreamNetwork=="kcp" :
     if(readjson.ConfStreamHeader=="kcp srtp"):
-        mystreamnetwork="mKCP 伪装 FaceTime通话"
+        mystreamnetwork="mKCP + srtp"
     elif(readjson.ConfStreamHeader=="kcp utp"):
-        mystreamnetwork="mKCP 伪装 BT下载流量"
+        mystreamnetwork="mKCP + utp"
     elif(readjson.ConfStreamHeader=="kcp wechat-video"):
-        mystreamnetwork="mKCP 伪装 微信视频流量"
+        mystreamnetwork="mKCP + wechat-video"
+    elif(readjson.ConfStreamHeader=="kcp dtls"):
+        mystreamnetwork="mKCP + dtls"
     else:
         mystreamnetwork="mKCP"
 elif readjson.ConfStreamNetwork=="http":

@@ -34,7 +34,8 @@ print ("4.普通mKCP")
 print ("5.mKCP + srtp")
 print ("6.mKCP + utp")
 print ("7.mKCP + wechat-video")
-print ("8.HTTP/2")
+print ("8.mKCP + dtls")
+print ("9.HTTP/2")
 
 newstreamnetwork=raw_input()
 
@@ -42,7 +43,7 @@ if ( not v2rayutil.is_number(newstreamnetwork)):
     print("请输入数字！")
     exit
 else:
-    if not (newstreamnetwork > 0 and newstreamnetwork<9):
+    if not (newstreamnetwork > 0 and newstreamnetwork < 10):
     	v2rayutil.writeStreamJson(newstreamnetwork)
     else:
         print("请输入有效数字！")

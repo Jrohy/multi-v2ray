@@ -40,6 +40,8 @@ def writeStreamJson(newstreamnetwork):
     elif(newstreamnetwork=="7"):
         writejson.WriteStreamNetwork("mkcp","kcp wechat-video")
     elif(newstreamnetwork=="8"):
+        writejson.WriteStreamNetwork("mkcp","kcp dtls")
+    elif(newstreamnetwork=="9"):
         writejson.WriteStreamNetwork("h2","none")
 
 

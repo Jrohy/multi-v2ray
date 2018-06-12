@@ -9,14 +9,15 @@ echo ""
 echo "欢迎使用 V2ray.fun 管理程序"
 echo ""
 echo -e "1.服务管理"
-echo -e "2.更改配置"
-echo -e "3.查看配置"
-echo -e "4.更新V2Ray"
-echo -e "5.下载客户端配置文件"
+echo -e "2.用户管理"
+echo -e "3.更改配置"
+echo -e "4.查看配置"
+echo -e "5.更新V2Ray"
+echo -e "6.下载客户端配置文件"
 
 while :; do echo
 	read -n1 -p "请输入数字选择功能(按回车键退出): " choice
-	if [[ ! $choice =~ ^[1-5]$ ]]; then
+	if [[ ! $choice =~ ^[1-6]$ ]]; then
         if [[ -z ${choice} ]];then
             exit 0
         fi
@@ -48,8 +49,7 @@ if [[ ${choice} == 1 ]]; then
     done
     if [[ ${schoice} == 1 ]]; then
         service v2ray start
-        python /usr/local/v2ray.fun/openport.py
-        python /usr/local/v2ray.fun/genclient.py
+        python3 /usr/local/v2ray.fun/base_util/open_port.py
         echo "服务启动成功！"
         bash /usr/local/bin/v2ray
     fi
@@ -60,8 +60,7 @@ if [[ ${choice} == 1 ]]; then
     fi
     if [[ ${schoice} == 3 ]]; then
         service v2ray restart
-        python /usr/local/v2ray.fun/openport.py
-        python /usr/local/v2ray.fun/genclient.py
+        python3 /usr/local/v2ray.fun/base_util/open_port.py
         echo "服务已重启！"
         bash /usr/local/bin/v2ray
     fi
@@ -78,6 +77,39 @@ if [[ ${choice} == 1 ]]; then
 fi
 
 if [[ ${choice} == 2 ]]; then
+    echo -e "1.新增用户\n"
+    echo -e "2.新增端口\n"
+    echo -e "3.删除用户\n"
+    while :; do echo
+	    read -n1 -p "请输入数字选择功能： " userChoice
+	    if [[ ! $userChoice =~ ^[1-7]$ ]]; then
+            if [[ -z ${userChoice} ]];then
+                bash /usr/local/bin/v2ray
+                exit 0
+            fi
+		    echo "输入错误! 请输入正确的数字!"
+	    else
+            echo -e "\n"
+		    break
+	    fi
+    done
+
+    if [[ ${userChoice} == 1 ]]; then
+        python3 /usr/local/v2ray.fun/server_info.py
+        python3 /usr/local/v2ray.fun/user_manage/createNewUser.py
+    fi
+    if [[ ${userChoice} == 2 ]]; then
+        python3 /usr/local/v2ray.fun/server_info.py
+        python3 /usr/local/v2ray.fun/user_manage/createNewPort.py
+        python3 /usr/local/v2ray.fun/base_util/open_port.py
+    fi
+    if [[ ${userChoice} == 3 ]]; then
+        python3 /usr/local/v2ray.fun/server_info.py
+        python3 /usr/local/v2ray.fun/user_manage/delUser.py
+    fi
+fi
+
+if [[ ${choice} == 3 ]]; then
     echo ""
     echo -e "1.更改UUID\n"
     echo -e "2.更改alterID\n"
@@ -89,9 +121,9 @@ if [[ ${choice} == 2 ]]; then
     echo -e "请输入数字选择功能：\n"
 
     while :; do echo
-	    read -n1 -p "请选择： " changechoice
-	    if [[ ! $changechoice =~ ^[1-7]$ ]]; then
-            if [[ -z ${changechoice} ]];then
+	    read -n1 -p "请选择： " changeChoice
+	    if [[ ! $changeChoice =~ ^[1-7]$ ]]; then
+            if [[ -z ${changeChoice} ]];then
                 bash /usr/local/bin/v2ray
                 exit 0
             fi
@@ -102,79 +134,74 @@ if [[ ${choice} == 2 ]]; then
 	    fi
     done
     
-    if [[ ${changechoice} == 1 ]]; then
-        python /usr/local/v2ray.fun/changeuuid.py
-        python /usr/local/v2ray.fun/genclient.py
+    if [[ ${changeChoice} == 1 ]]; then
+        python3 /usr/local/v2ray.fun/config_modify/uuid.py
 	    service v2ray restart
         echo ""
         echo "UUID修改成功！"
         bash /usr/local/bin/v2ray
     fi
 
-    if [[ ${changechoice} == 2 ]]; then
-        python /usr/local/v2ray.fun/changealterid.py
-        python /usr/local/v2ray.fun/genclient.py
+    if [[ ${changeChoice} == 2 ]]; then
+        python3 /usr/local/v2ray.fun/config_modify/alterid.py
         service v2ray restart
         echo ""
         echo "alterID修改成功！"
         bash /usr/local/bin/v2ray
     fi
     
-    if [[ ${changechoice} == 3 ]]; then
-        python /usr/local/v2ray.fun/changeport.py
-        python /usr/local/v2ray.fun/genclient.py
-        python /usr/local/v2ray.fun/openport.py
+    if [[ ${changeChoice} == 3 ]]; then
+        python3 /usr/local/v2ray.fun/config_modify/port.py
+        python3 /usr/local/v2ray.fun/base_util/open_port.py
 	    service v2ray restart
         echo ""
         echo "端口修改成功！"
         bash /usr/local/bin/v2ray
     fi
     
-    if [[ ${changechoice} == 4 ]]; then
-        python /usr/local/v2ray.fun/changestream.py
-        python /usr/local/v2ray.fun/genclient.py
+    if [[ ${changeChoice} == 4 ]]; then
+        python3 /usr/local/v2ray.fun/config_modify/stream.py
 	    service v2ray restart
         echo ""
         echo "传输模式修改成功！"
         bash /usr/local/bin/v2ray
     fi
     
-    if [[ ${changechoice} == 5 ]]; then
-        python -c "import sys;sys.path.append('/usr/local/v2ray.fun');import changetls; changetls.show_tip();sys.path.remove('/usr/local/v2ray.fun')"
-        python /usr/local/v2ray.fun/genclient.py
+    if [[ ${changeChoice} == 5 ]]; then
+        python3 -c "import sys;sys.path.append('/usr/local/v2ray.fun');import changetls; changetls.show_tip();sys.path.remove('/usr/local/v2ray.fun')"
 	    service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
     fi
 
-    if [[ ${changechoice} == 6 ]]; then
-        python /usr/local/v2ray.fun/changead.py
+    if [[ ${changeChoice} == 6 ]]; then
+        python3 /usr/local/v2ray.fun/config_modify/ad.py
 	    service v2ray restart
         echo ""
         echo "广告拦截功能设置成功！"
         bash /usr/local/bin/v2ray
     fi
 
-    if [[ ${changechoice} == 7 ]]; then
-        python /usr/local/v2ray.fun/en_dyn_port.py
+    if [[ ${changeChoice} == 7 ]]; then
+        python3 /usr/local/v2ray.fun/config_modify/dyn_port.py
 	    service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
     fi
 fi
 
-if [[ ${choice} == 3 ]]; then
-    python /usr/local/v2ray.fun/serverinfo.py
-    bash /usr/local/bin/v2ray
-fi
-
 if [[ ${choice} == 4 ]]; then
-    bash <(curl -L -s https://install.direct/go.sh)
+    python3 /usr/local/v2ray.fun/server_info.py
     bash /usr/local/bin/v2ray
 fi
 
 if [[ ${choice} == 5 ]]; then
-    python /usr/local/v2ray.fun/genclient.py && echo "保存成功！(/root/config.json)"
+    bash <(curl -L -s https://install.direct/go.sh)
+    bash /usr/local/bin/v2ray
+fi
+
+if [[ ${choice} == 6 ]]; then
+    python3 /usr/local/v2ray.fun/genclient.py && echo "保存成功！(/root/config.json)"
     read -n1 -p  "是否通过sz来传输配置文件(y/n)" ans
     if [[ ${ans} =~ [yY] ]]; then
         which sz 2>/dev/null && sz /root/config.json

@@ -1,27 +1,27 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
-import readjson
-import writejson
+import read_json
+import write_json
 import v2rayutil
 
 #读取配置文件信息
-mystreamnetwork=str(readjson.ConfStreamNetwork)
-if readjson.ConfStreamNetwork=="kcp" :
-    if(readjson.ConfStreamHeader=="kcp srtp"):
+mystreamnetwork=str(read_json.ConfStreamNetwork)
+if read_json.ConfStreamNetwork=="kcp" :
+    if(read_json.ConfStreamHeader=="kcp srtp"):
         mystreamnetwork="mKCP + srtp"
-    elif(readjson.ConfStreamHeader=="kcp utp"):
+    elif(read_json.ConfStreamHeader=="kcp utp"):
         mystreamnetwork="mKCP + utp"
-    elif(readjson.ConfStreamHeader=="kcp wechat-video"):
+    elif(read_json.ConfStreamHeader=="kcp wechat-video"):
         mystreamnetwork="mKCP + wechat-video"
-    elif(readjson.ConfStreamHeader=="kcp dtls"):
+    elif(read_json.ConfStreamHeader=="kcp dtls"):
         mystreamnetwork="mKCP + dtls"
     else:
         mystreamnetwork="mKCP"
-elif readjson.ConfStreamNetwork=="http":
+elif read_json.ConfStreamNetwork=="http":
     mystreamnetwork="HTTP伪装"
-elif readjson.ConfStreamNetwork=="ws":
+elif read_json.ConfStreamNetwork=="ws":
     mystreamnetwork="WebSocket"
-elif readjson.ConfStreamNetwork=="h2":
+elif read_json.ConfStreamNetwork=="h2":
     mystreamnetwork="HTTP/2"
 
 #显示当前配置

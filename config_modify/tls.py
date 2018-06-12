@@ -1,8 +1,8 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
-import readjson
+import read_json
 import getssl
-import writejson
+import write_json
 import urllib2
 import socket
 
@@ -28,15 +28,15 @@ def open_tls():
     print("")
     print("正在获取SSL证书，请稍等。")
     getssl.getssl(inputdomain)
-    writejson.WriteTLS("on",inputdomain)
+    write_json.WriteTLS("on",inputdomain)
     print("\n操作完成！\n")
 
 def close_tls():
-    writejson.WriteTLS("off","")
+    write_json.WriteTLS("off","")
     print("操作完成！\n")
 
 def show_tip():
-    if (readjson.ConfStreamSecurity=="tls"):
+    if (read_json.ConfStreamSecurity=="tls"):
         mystreamsecurity="TLS：开启"
     else:
         mystreamsecurity="TLS：关闭"

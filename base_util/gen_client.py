@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import json
-import readjson
+import read_json
 import urllib2
 
 #写客户端配置文件函数
@@ -21,10 +21,10 @@ clientjsonfile = file("/usr/local/v2ray.fun/json_template/client.json")
 clientconfig = json.load(clientjsonfile)
 
 #使用服务端配置来修改客户端模板
-clientconfig[u"outbound"][u"settings"][u"vnext"][0][u"port"]=int(readjson.ConfPort)
-clientconfig[u"outbound"][u"settings"][u"vnext"][0][u"users"][0][u"id"]=str(readjson.ConfUUID)
-clientconfig[u"outbound"][u"streamSettings"]=readjson.ConfStream
-if str(readjson.ConfStreamSecurity) == "":
+clientconfig[u"outbound"][u"settings"][u"vnext"][0][u"port"]=int(read_json.ConfPort)
+clientconfig[u"outbound"][u"settings"][u"vnext"][0][u"users"][0][u"id"]=str(read_json.ConfUUID)
+clientconfig[u"outbound"][u"streamSettings"]=read_json.ConfStream
+if str(read_json.ConfStreamSecurity) == "":
     clientconfig[u"outbound"][u"settings"][u"vnext"][0][u"address"]=str(myip)
 else:
     domainfile = file("/usr/local/v2ray.fun/mydomain", "r")
@@ -34,6 +34,6 @@ else:
     clientconfig[u"outbound"][u"streamSettings"][u"network"] = "h2"
     clientconfig[u"outbound"][u"streamSettings"][u"security"] = "tls"
     clientconfig[u"outbound"][u"streamSettings"][u"tlsSettings"] = {}
-    clientconfig[u"outbound"][u"streamSettings"][u"httpSettings"] = readjson.ConfStreamHttp2Settings
+    clientconfig[u"outbound"][u"streamSettings"][u"httpSettings"] = read_json.ConfStreamHttp2Settings
 #写入客户端配置文件
 WriteClientJson()

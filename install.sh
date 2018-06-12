@@ -71,10 +71,10 @@ fi
 
 #安装依赖
 if [[ ${OS} == 'CentOS' ]];then
-	yum install curl wget unzip git ntp ntpdate lrzsz python socat crontabs -y
+	yum install curl wget unzip git ntp ntpdate lrzsz python3 socat crontabs -y
 else
 	apt-get update
-	apt-get install curl unzip git ntp wget ntpdate python socat lrzsz cron -y
+	apt-get install curl unzip git ntp wget ntpdate python3 socat lrzsz cron -y
 fi
 
 #判断是安装还是更新, 0:更新(保留配置文件)，1：全新安装
@@ -136,10 +136,10 @@ if [[ "${installWay}" == "1" ]];then
     sed -i "s/999999999/${dport}/g" /etc/v2ray/config.json
 
     #产生默认配置mkcp+随机3种伪装类型type
-    python -c "import sys;sys.path.append('/usr/local/v2ray.fun');import v2rayutil; v2rayutil.randomStream();sys.path.remove('/usr/local/v2ray.fun')"
+    python3 -c "import sys;sys.path.append('/usr/local/v2ray.fun');import v2rayutil; v2rayutil.randomStream();sys.path.remove('/usr/local/v2ray.fun')"
 
-    python /usr/local/v2ray.fun/genclient.py
-    python /usr/local/v2ray.fun/openport.py
+    python3 /usr/local/v2ray.fun/base_util/genclient.py
+    python3 /usr/local/v2ray.fun/base_util/openport.py
 fi
 
 service v2ray restart
@@ -151,6 +151,6 @@ echo -e "${OK}V2ray.fun ${way}成功！${Font}\n"
 
 echo "V2ray配置信息:"
 #安装完后显示v2ray的配置信息，用于快速部署
-python /usr/local/v2ray.fun/serverinfo.py
+python3 /usr/local/v2ray.fun/serverinfo.py
 
 echo -e "输入 v2ray 回车即可进行服务管理\n"

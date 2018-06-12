@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
-import writejson
+import write_json
 import random
 
 #判断是否为数字的函数
@@ -22,27 +22,27 @@ def is_number(s):
 
 def writeStreamJson(newstreamnetwork):
     if(newstreamnetwork=="1"):
-        writejson.WriteStreamNetwork("tcp","none")
+        write_json.WriteStreamNetwork("tcp","none")
     elif(newstreamnetwork=="2"):
         print("请输入你想要为伪装的域名（不不不需要http）：")
         host=raw_input()
-        writejson.WriteStreamNetwork("tcp",str(host))
+        write_json.WriteStreamNetwork("tcp",str(host))
     elif(newstreamnetwork=="3"):
         print("请输入你的服务器绑定域名（不不不需要http）：")
         host=raw_input()
-        writejson.WriteStreamNetwork("ws",str(host))
+        write_json.WriteStreamNetwork("ws",str(host))
     elif(newstreamnetwork=="4"):
-        writejson.WriteStreamNetwork("mkcp","none")
+        write_json.WriteStreamNetwork("mkcp","none")
     elif(newstreamnetwork=="5"):
-        writejson.WriteStreamNetwork("mkcp","kcp srtp")
+        write_json.WriteStreamNetwork("mkcp","kcp srtp")
     elif(newstreamnetwork=="6"):
-        writejson.WriteStreamNetwork("mkcp","kcp utp")
+        write_json.WriteStreamNetwork("mkcp","kcp utp")
     elif(newstreamnetwork=="7"):
-        writejson.WriteStreamNetwork("mkcp","kcp wechat-video")
+        write_json.WriteStreamNetwork("mkcp","kcp wechat-video")
     elif(newstreamnetwork=="8"):
-        writejson.WriteStreamNetwork("mkcp","kcp dtls")
+        write_json.WriteStreamNetwork("mkcp","kcp dtls")
     elif(newstreamnetwork=="9"):
-        writejson.WriteStreamNetwork("h2","none")
+        write_json.WriteStreamNetwork("h2","none")
 
 
 def randomStream():

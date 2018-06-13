@@ -80,9 +80,10 @@ if [[ ${choice} == 2 ]]; then
     echo -e "1.新增用户\n"
     echo -e "2.新增端口\n"
     echo -e "3.删除用户\n"
+    echo -e "4.删除端口\n"
     while :; do echo
 	    read -n1 -p "请输入数字选择功能： " userChoice
-	    if [[ ! $userChoice =~ ^[1-7]$ ]]; then
+	    if [[ ! $userChoice =~ ^[1-4]$ ]]; then
             if [[ -z ${userChoice} ]];then
                 bash /usr/local/bin/v2ray
                 exit 0
@@ -96,16 +97,20 @@ if [[ ${choice} == 2 ]]; then
 
     if [[ ${userChoice} == 1 ]]; then
         python3 /usr/local/v2ray.fun/server_info.py
-        python3 /usr/local/v2ray.fun/user_manage/createNewUser.py
+        python3 /usr/local/v2ray.fun/user_manage/create_new_user.py
     fi
     if [[ ${userChoice} == 2 ]]; then
         python3 /usr/local/v2ray.fun/server_info.py
-        python3 /usr/local/v2ray.fun/user_manage/createNewPort.py
+        python3 /usr/local/v2ray.fun/user_manage/create_new_port.py
         python3 /usr/local/v2ray.fun/base_util/open_port.py
     fi
     if [[ ${userChoice} == 3 ]]; then
         python3 /usr/local/v2ray.fun/server_info.py
-        python3 /usr/local/v2ray.fun/user_manage/delUser.py
+        python3 /usr/local/v2ray.fun/user_manage/del_user.py
+    fi
+    if [[ ${userChoice} == 4 ]]; then
+        python3 /usr/local/v2ray.fun/server_info.py
+        python3 /usr/local/v2ray.fun/user_manage/del_port.py
     fi
 fi
 

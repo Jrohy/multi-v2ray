@@ -3,7 +3,7 @@
 import read_json
 import write_json
 import re
-from base_util import v2ray_util
+import base_util.v2ray_util as util
 
 mul_user_conf = read_json.multiUserConf
 
@@ -19,7 +19,7 @@ if len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= mul_user_conf[-1]
 
     print ("请输入新端口：")
     new_port=input()
-    if (v2ray_util.is_number(new_port)):
+    if (util.is_number(new_port)):
         write_json.write_port(new_port, index_dict)
     else:
         print ("输入错误，请检查是否为数字")

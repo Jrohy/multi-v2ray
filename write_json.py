@@ -6,7 +6,7 @@ import random
 import string
 import uuid
 import read_json
-from base_util import v2ray_util
+import base_util.v2ray_util as util
 
 #打开配置文件
 with open('/etc/v2ray/config.json', 'r') as json_file:
@@ -91,7 +91,7 @@ def write_stream_network(network, para, index_dict):
         salt = '/' + ''.join(random.sample(string.ascii_letters + string.digits, 8)) + '/'
         part_json[u"streamSettings"][u"httpSettings"][u"path"]=salt
         if (security_backup != "tls" or not "certificates" in tls_settings_backup):
-            v2ray_util.change_tls("on", index_dict)
+            util.change_tls("on", index_dict)
             return
 
     if (network == "ws"):

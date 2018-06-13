@@ -224,3 +224,21 @@ def del_user(index):
             del config[u"inboundDetour"][index_dict['detourIndex']][u"settings"][u"clients"][index_dict['clientIndex']]
     write()
 
+#删除组(端口)
+def del_port(group):
+    if group == 'A':
+        print("A组为inbound, 无法删除")
+        return
+    else:
+        multi_user_conf = read_json.multiUserConf
+        for sin_user_conf in multi_user_conf:
+            if sin_user_conf['indexDict']['group'] == group:
+                detour_index=sin_user_conf['indexDict']['detourIndex']
+                break
+
+        del config[u"inboundDetour"][detour_index]
+
+        if len(config[u"inboundDetour"]) == 0:
+            config[u"inboundDetour"] == None
+        write()
+

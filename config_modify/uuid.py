@@ -3,16 +3,19 @@
 import uuid
 import read_json
 import write_json
+from base_util import v2ray_util
 
-print ("当前UUID为：%s") % str(read_json.ConfUUID)
-print ("是否要随机生成一个新的UUID (y/n)：")
-ifgenuuid = raw_input()
+mul_user_conf = read_json.multiUserConf
+choice=input("请输入要改UUID的节点序号:")
 
-if  ifgenuuid=="y":
-    newuuid=uuid.uuid1()
-    print("新的UUID为：%s") % newuuid
-    write_json.WriteUUID(newuuid)
-elif ifgenuuid=="n":
-    print("已取消生成新的UUID,未执行任何操作")
+if v2ray_util.is_number(choice) and choice > 0 and choice <= len(mul_user_conf):
+    print ("当前节点UUID为：%s" % mul_user_conf[choice - 1]['id'])
+    if_gen_uuid=input("是否要随机生成一个新的UUID (y/n)：")
+    if if_gen_uuid=="y":
+        new_uuid = uuid.uuid1()
+        print("新的UUID为：%s" % new_uuid)
+        write_json.write_uuid(new_uuid, mul_user_conf[choice - 1]['indexDict'])
+    else:
+        print("已取消生成新的UUID,未执行任何操作")
 else:
-    print("输入不正确，请输入 y 或 n")
+    print ("输入错误，请检查是否为数字和范围中")

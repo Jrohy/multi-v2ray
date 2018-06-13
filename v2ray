@@ -135,6 +135,7 @@ if [[ ${choice} == 3 ]]; then
     done
     
     if [[ ${changeChoice} == 1 ]]; then
+        python3 /usr/local/v2ray.fun/server_info.py
         python3 /usr/local/v2ray.fun/config_modify/uuid.py
 	    service v2ray restart
         echo ""
@@ -143,6 +144,7 @@ if [[ ${choice} == 3 ]]; then
     fi
 
     if [[ ${changeChoice} == 2 ]]; then
+        python3 /usr/local/v2ray.fun/server_info.py
         python3 /usr/local/v2ray.fun/config_modify/alterid.py
         service v2ray restart
         echo ""
@@ -151,6 +153,7 @@ if [[ ${choice} == 3 ]]; then
     fi
     
     if [[ ${changeChoice} == 3 ]]; then
+        python3 /usr/local/v2ray.fun/server_info.py
         python3 /usr/local/v2ray.fun/config_modify/port.py
         python3 /usr/local/v2ray.fun/base_util/open_port.py
 	    service v2ray restart
@@ -160,6 +163,7 @@ if [[ ${choice} == 3 ]]; then
     fi
     
     if [[ ${changeChoice} == 4 ]]; then
+        python3 /usr/local/v2ray.fun/server_info.py
         python3 /usr/local/v2ray.fun/config_modify/stream.py
 	    service v2ray restart
         echo ""
@@ -168,7 +172,8 @@ if [[ ${choice} == 3 ]]; then
     fi
     
     if [[ ${changeChoice} == 5 ]]; then
-        python3 -c "import sys;sys.path.append('/usr/local/v2ray.fun');import changetls; changetls.show_tip();sys.path.remove('/usr/local/v2ray.fun')"
+        python3 /usr/local/v2ray.fun/server_info.py
+        python3 /usr/local/v2ray.fun/config_modify/tls.py
 	    service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
@@ -201,7 +206,7 @@ if [[ ${choice} == 5 ]]; then
 fi
 
 if [[ ${choice} == 6 ]]; then
-    python3 /usr/local/v2ray.fun/genclient.py && echo "保存成功！(/root/config.json)"
+    python3 /usr/local/v2ray.fun/base_util/gen_client.py && echo "保存成功！(/root/config.json)"
     read -n1 -p  "是否通过sz来传输配置文件(y/n)" ans
     if [[ ${ans} =~ [yY] ]]; then
         which sz 2>/dev/null && sz /root/config.json

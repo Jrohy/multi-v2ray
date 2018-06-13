@@ -122,6 +122,9 @@ bash <(curl -L -s https://install.direct/go.sh)
 cp /usr/local/v2ray.fun/v2ray /usr/local/bin
 chmod +x /usr/local/bin/v2ray
 
+#加入v2ray.fun模块路径
+python3 -c "import sys;sys.path.append('/usr/local/v2ray.fun');"
+
 #全新安装的新配置
 if [[ "${installWay}" == "1" ]];then 
     rm -rf /etc/v2ray/config.json

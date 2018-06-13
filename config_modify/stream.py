@@ -2,51 +2,44 @@
 # -*- coding: utf-8 -*-
 import read_json
 import write_json
-import v2rayutil
+import re
+from base_util import v2ray_util
 
-#读取配置文件信息
-mystreamnetwork=str(read_json.ConfStreamNetwork)
-if read_json.ConfStreamNetwork=="kcp" :
-    if(read_json.ConfStreamHeader=="kcp srtp"):
-        mystreamnetwork="mKCP + srtp"
-    elif(read_json.ConfStreamHeader=="kcp utp"):
-        mystreamnetwork="mKCP + utp"
-    elif(read_json.ConfStreamHeader=="kcp wechat-video"):
-        mystreamnetwork="mKCP + wechat-video"
-    elif(read_json.ConfStreamHeader=="kcp dtls"):
-        mystreamnetwork="mKCP + dtls"
-    else:
-        mystreamnetwork="mKCP"
-elif read_json.ConfStreamNetwork=="http":
-    mystreamnetwork="HTTP伪装"
-elif read_json.ConfStreamNetwork=="ws":
-    mystreamnetwork="WebSocket"
-elif read_json.ConfStreamNetwork=="h2":
-    mystreamnetwork="HTTP/2"
+mul_user_conf = read_json.multiUserConf
 
-#显示当前配置
-print ("当前传输方式为：%s") % mystreamnetwork
-print ("")
-#选择新的传输方式
-print ("请选择新的传输方式：")
-print ("1.普通TCP")
-print ("2.HTTP伪装")
-print ("3.WebSocket流量")
-print ("4.普通mKCP")
-print ("5.mKCP + srtp")
-print ("6.mKCP + utp")
-print ("7.mKCP + wechat-video")
-print ("8.mKCP + dtls")
-print ("9.HTTP/2")
+choice=input("请输入要改传输方式的节点Group字母:")
+choice=choice.upper()
 
-newstreamnetwork=raw_input()
+if len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= mul_user_conf[-1]['indexDict']['group']:
+    for sin_user_conf in mul_user_conf:
+        if sin_user_conf['indexDict']['group'] == choice:
+            index_dict = sin_user_conf['indexDict']
+            print ("当前组的传输方式为：%s" % str(sin_user_conf["net"] + " " + sin_user_conf["type"])) 
+            break
 
-if ( not v2rayutil.is_number(newstreamnetwork)):
-    print("请输入数字！")
-    exit
-else:
-    if not (newstreamnetwork > 0 and newstreamnetwork < 10):
-    	v2rayutil.writeStreamJson(newstreamnetwork)
-    else:
-        print("请输入有效数字！")
+    print ("")
+    #选择新的传输方式
+    print ("请选择新的传输方式：")
+    print ("1.普通TCP")
+    print ("2.HTTP伪装")
+    print ("3.WebSocket流量")
+    print ("4.普通mKCP")
+    print ("5.mKCP + srtp")
+    print ("6.mKCP + utp")
+    print ("7.mKCP + wechat-video")
+    print ("8.mKCP + dtls")
+    print ("9.HTTP/2")
+
+    new_stream_network=input()
+
+    if ( not v2ray_util.is_number(new_stream_network)):
+        print("请输入数字！")
         exit
+    else:
+        if not (new_stream_network > 0 and new_stream_network < 10):
+            v2ray_util.choice_stream(new_stream_network, index_dict)
+        else:
+            print("请输入有效数字！")
+            exit
+else:
+    print("输入有误，请检查是否为字母且范围中")

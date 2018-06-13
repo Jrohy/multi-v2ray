@@ -22,4 +22,7 @@ crontab -l|sed '/SHELL=/d;/v2ray/d' > crontab.txt
 crontab crontab.txt >/dev/null 2>&1
 rm -f crontab.txt >/dev/null 2>&1
 
+#删除v2ray.fun模块路径
+python -c "import sys;sys.path.remove('/usr/local/v2ray.fun')"
+
 echo "卸载完成！"

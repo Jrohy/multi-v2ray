@@ -6,6 +6,7 @@ import random
 import string
 import uuid
 import read_json
+from base_util import v2ray_util
 
 #打开配置文件
 with open('/etc/v2ray/config.json', 'r') as json_file:
@@ -30,7 +31,7 @@ def locate_json(index_dict):
 def en_dyn_port(en, d_alterid=32):
     if en == 1:
         config[u"inbound"][u"settings"].update({u"detour":{u"to":"dynamicPort"}})
-        with open('/usr/local/v2ray.fun/json_template/dyn_port.json', 'r') as dyn_port_file:
+        with open('json_template/dyn_port.json', 'r') as dyn_port_file:
             dyn_json=json.load(dyn_port_file)
         dyn_json[u"settings"][u"default"][u"alterId"]=int(d_alterid)
         if config[u"inboundDetour"] == None:
@@ -72,56 +73,55 @@ def write_stream_network(network, para, index_dict):
     tls_settings_backup = part_json[u"streamSettings"][u"tlsSettings"]
 
     if (network == "tcp" and para == "none"):
-        with open('/usr/local/v2ray.fun/json_template/tcp.json', 'r') as stream_file:
+        with open('json_template/tcp.json', 'r') as stream_file:
             tcp = json.load(stream_file)
         part_json[u"streamSettings"]=tcp
 
     if (network == "tcp" and para != "none"):
-        with open('/usr/local/v2ray.fun/json_template/http.json', 'r') as stream_file:
+        with open('json_template/http.json', 'r') as stream_file:
             http = json.load(stream_file)
         http[u"tcpSettings"][u"header"][u"request"][u"headers"][u"Host"]=para
         part_json[u"streamSettings"]=http
 
     if (network == "h2"):
-        with open('/usr/local/v2ray.fun/json_template/http2.json', 'r') as stream_file:
+        with open('json_template/http2.json', 'r') as stream_file:
             http2 = json.load(stream_file)
         part_json[u"streamSettings"]=http2
         #随机生成8位的伪装path
         salt = '/' + ''.join(random.sample(string.ascii_letters + string.digits, 8)) + '/'
         part_json[u"streamSettings"][u"httpSettings"][u"path"]=salt
         if (security_backup != "tls" or not "certificates" in tls_settings_backup):
-            from changetls import open_tls 
-            open_tls()
+            v2ray_util.change_tls("on", index_dict)
             return
 
     if (network == "ws"):
-        with open('/usr/local/v2ray.fun/json_template/ws.json', 'r') as stream_file:
+        with open('json_template/ws.json', 'r') as stream_file:
             ws = json.load(stream_file)
         part_json[u"streamSettings"]=ws
         part_json[u"streamSettings"][u"wsSettings"][u"headers"][u"host"] = para
 
     if (network == "mkcp" and para=="none"):
-        with open('/usr/local/v2ray.fun/json_template/kcp.json', 'r') as stream_file:
+        with open('json_template/kcp.json', 'r') as stream_file:
             kcp = json.load(stream_file)
         part_json[u"streamSettings"]=kcp
         
     if (network == "mkcp" and para=="kcp utp"):
-        with open('/usr/local/v2ray.fun/json_template/kcp_utp.json', 'r') as stream_file:
+        with open('json_template/kcp_utp.json', 'r') as stream_file:
             utp = json.load(stream_file)
         part_json[u"streamSettings"]=utp
         
     if (network == "mkcp" and para=="kcp srtp"):
-        with open('/usr/local/v2ray.fun/json_template/kcp_srtp.json', 'r') as stream_file:
+        with open('json_template/kcp_srtp.json', 'r') as stream_file:
             srtp = json.load(stream_file)
         part_json[u"streamSettings"]=srtp
         
     if (network == "mkcp" and para=="kcp wechat-video"):
-        with open('/usr/local/v2ray.fun/json_template/kcp_wechat.json', 'r') as stream_file:
+        with open('json_template/kcp_wechat.json', 'r') as stream_file:
             wechat = json.load(stream_file)
         part_json[u"streamSettings"]=wechat
     
     if (network == "mkcp" and para=="kcp dtls"):
-        with open('/usr/local/v2ray.fun/json_template/kcp_dtls.json', 'r') as stream_file:
+        with open('json_template/kcp_dtls.json', 'r') as stream_file:
             dtls = json.load(stream_file)
         part_json[u"streamSettings"]=dtls
     
@@ -148,9 +148,10 @@ def write_tls(action, domain, index_dict):
     elif action == "off":
         if part_json[u"streamSettings"][u"network"] == "h2":
             print("关闭tls同时也会关闭HTTP/2\n")
-            import changestream
-        part_json[u"streamSettings"][u"security"] = ""
-        part_json[u"streamSettings"][u"tlsSettings"] = {}
+            from base_util import random_stream
+        else:
+            part_json[u"streamSettings"][u"security"] = ""
+            part_json[u"streamSettings"][u"tlsSettings"] = {}
         write()
 
 #更改广告拦截功能
@@ -164,9 +165,9 @@ def write_ad(action):
 #创建新的端口(组)
 def create_new_port(newPort):
     print("默认选择kcp utp传输方式创建, 若要其他方式请自行切换")
-    with open('/usr/local/v2ray.fun/json_template/vmess.json', 'r') as vmess_file:
+    with open('json_template/vmess.json', 'r') as vmess_file:
         vmess = json.load(vmess_file)
-    with open('/usr/local/v2ray.fun/json_template/kcp_utp.json', 'r') as stream_file:
+    with open('json_template/kcp_utp.json', 'r') as stream_file:
         utp = json.load(stream_file)
     
     vmess[u"streamSettings"]=utp
@@ -181,7 +182,7 @@ def create_new_port(newPort):
 def create_new_user(group):
     new_uuid = uuid.uuid1()
     print("新建用户uuid为: %s, alterId 为 32") % str(new_uuid)
-    with open('/usr/local/v2ray.fun/json_template/user.json', 'r') as userFile:
+    with open('json_template/user.json', 'r') as userFile:
         user = json.load(userFile)
     user[u"id"]=str(new_uuid)
     multi_user_conf = read_json.multiUserConf

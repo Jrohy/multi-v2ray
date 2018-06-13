@@ -2,13 +2,26 @@
 # -*- coding: utf-8 -*-
 import read_json
 import write_json
-import v2rayutil
+import re
+from base_util import v2ray_util
 
-#主要程序部分
-print ("当前主端口为：%s") % str(read_json.ConfPort)
-print ("请输入新端口：")
-newport=raw_input()
-if (v2rayutil.is_number(newport)):
-    write_json.WritePort(newport)
+mul_user_conf = read_json.multiUserConf
+
+choice=input("请输入要改port的节点Group字母:")
+choice=choice.upper()
+
+if len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= mul_user_conf[-1]['indexDict']['group']:
+    for sin_user_conf in mul_user_conf:
+        if sin_user_conf['indexDict']['group'] == choice:
+            index_dict = sin_user_conf['indexDict']
+            print ("当前组的端口为：%s" % str(sin_user_conf['port'])) 
+            break
+
+    print ("请输入新端口：")
+    new_port=input()
+    if (v2ray_util.is_number(new_port)):
+        write_json.write_port(new_port, index_dict)
+    else:
+        print ("输入错误，请检查是否为数字")
 else:
-    print ("输入错误，请检查是否为数字")
+    print("输入有误，请检查是否为字母且范围中")

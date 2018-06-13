@@ -1,56 +1,29 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 import read_json
-import getssl
 import write_json
-import urllib2
-import socket
+from base_util import v2ray_util
 
-def get_ip():
-    myip = urllib2.urlopen('http://api.ipify.org').read()
-    myip = myip.strip()
-    return str(myip)
-
-def open_tls():
-    print("\n请将您的域名解析到本VPS的IP地址，否则程序会出错！！\n")
-    local_ip = get_ip()
-    print("本机器IP地址为：" + local_ip + "\n")
-    inputdomain=str(raw_input("请输入您绑定的域名："))
-    try:
-        input_ip = socket.gethostbyname(inputdomain)
-    except Exception:
-        print("\n域名检测错误!!!\n")
-        return
-    if input_ip != local_ip:
-        print("\n输入的域名与本机ip不符!!!\n")
-        return
-
-    print("")
-    print("正在获取SSL证书，请稍等。")
-    getssl.getssl(inputdomain)
-    write_json.WriteTLS("on",inputdomain)
-    print("\n操作完成！\n")
-
-def close_tls():
-    write_json.WriteTLS("off","")
-    print("操作完成！\n")
-
-def show_tip():
-    if (read_json.ConfStreamSecurity=="tls"):
+mul_user_conf = read_json.multiUserConf
+choice=input("请输入要改tls的节点序号:")
+if v2ray_util.is_number(choice) and choice > 0 and choice <= len(mul_user_conf):
+    if (mul_user_conf[choice - 1]['port']=="tls"):
         mystreamsecurity="TLS：开启"
     else:
         mystreamsecurity="TLS：关闭"
 
-    print("当前状态：\n" + mystreamsecurity)
+    index_dict = mul_user_conf[choice - 1]['indexDict']
+    print("当前选择节点状态：\n" + mystreamsecurity)
     print("")
     print("1.开启TLS")
     print("2.关闭TLS")
 
-    choice = raw_input("请输入数字选择功能：")
-
+    choice = input("请输入数字选择功能：")
     if choice == "1":
-        open_tls()
+        v2ray_util.change_tls("on", index_dict)
     elif choice == "2":
-        close_tls()
+        v2ray_util.change_tls("off", index_dict)
     else:
         print("输入错误，请重试！")
+else:
+    print ("输入错误，请检查是否为数字和范围中")

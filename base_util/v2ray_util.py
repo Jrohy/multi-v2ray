@@ -4,7 +4,7 @@ import write_json
 import random
 import socket
 import urllib.request
-from base_util import get_ssl
+import get_ssl
 
 #判断是否为数字的函数
 def is_number(s):

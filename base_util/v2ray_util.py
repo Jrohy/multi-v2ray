@@ -1,10 +1,11 @@
-#! /usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import write_json
 import random
 import socket
 import urllib.request
 import base_util.get_ssl
+from base_util import get_ssl
 
 #判断是否为数字的函数
 def is_number(s):

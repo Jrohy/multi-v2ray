@@ -98,19 +98,27 @@ if [[ ${choice} == 2 ]]; then
     if [[ ${userChoice} == 1 ]]; then
         python3 /usr/local/v2ray.fun/server_info.py
         python3 /usr/local/v2ray.fun/user_manage/create_new_user.py
+        echo ""
+        bash /usr/local/bin/v2ray
     fi
     if [[ ${userChoice} == 2 ]]; then
         python3 /usr/local/v2ray.fun/server_info.py
         python3 /usr/local/v2ray.fun/user_manage/create_new_port.py
         python3 /usr/local/v2ray.fun/base_util/open_port.py
+        echo ""
+        bash /usr/local/bin/v2ray
     fi
     if [[ ${userChoice} == 3 ]]; then
         python3 /usr/local/v2ray.fun/server_info.py
         python3 /usr/local/v2ray.fun/user_manage/del_user.py
+        echo ""
+        bash /usr/local/bin/v2ray
     fi
     if [[ ${userChoice} == 4 ]]; then
         python3 /usr/local/v2ray.fun/server_info.py
         python3 /usr/local/v2ray.fun/user_manage/del_port.py
+        echo ""
+        bash /usr/local/bin/v2ray
     fi
 fi
 
@@ -144,7 +152,6 @@ if [[ ${choice} == 3 ]]; then
         python3 /usr/local/v2ray.fun/config_modify/n_uuid.py
 	    service v2ray restart
         echo ""
-        echo "UUID修改成功！"
         bash /usr/local/bin/v2ray
     fi
 
@@ -153,7 +160,6 @@ if [[ ${choice} == 3 ]]; then
         python3 /usr/local/v2ray.fun/config_modify/alterid.py
         service v2ray restart
         echo ""
-        echo "alterID修改成功！"
         bash /usr/local/bin/v2ray
     fi
     
@@ -163,7 +169,6 @@ if [[ ${choice} == 3 ]]; then
         python3 /usr/local/v2ray.fun/base_util/open_port.py
 	    service v2ray restart
         echo ""
-        echo "端口修改成功！"
         bash /usr/local/bin/v2ray
     fi
     
@@ -172,7 +177,6 @@ if [[ ${choice} == 3 ]]; then
         python3 /usr/local/v2ray.fun/config_modify/stream.py
 	    service v2ray restart
         echo ""
-        echo "传输模式修改成功！"
         bash /usr/local/bin/v2ray
     fi
     

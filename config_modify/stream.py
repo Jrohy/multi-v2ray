@@ -31,13 +31,15 @@ if len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= mul_user_conf[-1]
     print ("9.HTTP/2")
 
     new_stream_network=input()
-
-    if ( not v2ray_util.is_number(new_stream_network)):
+    
+    if not v2ray_util.is_number(new_stream_network):
         print("请输入数字！")
         exit
     else:
-        if not (new_stream_network > 0 and new_stream_network < 10):
+        new_stream_network = int(new_stream_network)
+        if new_stream_network > 0 and new_stream_network < 10:
             v2ray_util.choice_stream(new_stream_network, index_dict)
+            print("传输模式修改成功！")
         else:
             print("请输入有效数字！")
             exit

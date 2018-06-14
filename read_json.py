@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 import json
-import base_util.v2ray_util as util
+from base_util import v2ray_util
 
 with open('/etc/v2ray/config.json', 'r') as json_file:
     config = json.load(json_file)
@@ -25,7 +25,7 @@ else:
     conf_Dyp="关闭"
 
 #获取本机IP地址
-conf_ip = util.get_ip()
+conf_ip = v2ray_util.get_ip()
 
 def read_sin_user(part_json, multi_user_conf, index_dict):
     conf_path=""

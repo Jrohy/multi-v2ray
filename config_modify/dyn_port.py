@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import read_json
 import write_json
-import base_util.v2ray_util as util
+from base_util import v2ray_util
 
 print("当前动态端口状态: %s\n") % str(read_json.conf_Dyp)
 
@@ -12,7 +12,7 @@ if dp == 'y' or dp == 'Y':
     newAlterId=input("请为动态端口设置alterID(默认32): ")
     if newAlterId == '':
         newAlterId='32'
-    if (not util.is_number(newAlterId)):
+    if (not v2ray_util.is_number(newAlterId)):
         print ("\n输入错误，请检查是否为数字")
     else:
         write_json.en_dyn_port(1, newAlterId)

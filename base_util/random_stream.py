@@ -1,5 +1,5 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
-import base_util.v2ray_util as util
+from base_util import v2ray_util
 
-util.random_kcp()
+v2ray_util.random_kcp()

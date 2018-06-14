@@ -3,7 +3,7 @@
 import read_json
 import write_json
 import re
-import base_util.v2ray_util as util
+from base_util import v2ray_util
 
 mul_user_conf = read_json.multiUserConf
 
@@ -32,12 +32,12 @@ if len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= mul_user_conf[-1]
 
     new_stream_network=input()
 
-    if ( not util.is_number(new_stream_network)):
+    if ( not v2ray_util.is_number(new_stream_network)):
         print("请输入数字！")
         exit
     else:
         if not (new_stream_network > 0 and new_stream_network < 10):
-            util.choice_stream(new_stream_network, index_dict)
+            v2ray_util.choice_stream(new_stream_network, index_dict)
         else:
             print("请输入有效数字！")
             exit

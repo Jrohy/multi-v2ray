@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import read_json
 import write_json
-from base_util import v2ray_util
+import base_util.v2ray_util
 
 mul_user_conf = read_json.multiUserConf
 choice=input("请输入要删除的user节点序号:")

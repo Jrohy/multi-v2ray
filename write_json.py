@@ -6,7 +6,7 @@ import random
 import string
 import uuid
 import read_json
-from base_util import v2ray_util
+import base_util.v2ray_util
 
 #打开配置文件
 with open('/etc/v2ray/config.json', 'r') as json_file:

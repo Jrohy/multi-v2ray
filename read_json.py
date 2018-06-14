@@ -1,7 +1,7 @@
-#! /usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import json
-import base_util.v2ray_util
+from base_util import v2ray_util
 
 with open('/etc/v2ray/config.json', 'r') as json_file:
     config = json.load(json_file)

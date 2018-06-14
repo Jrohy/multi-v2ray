@@ -1,9 +1,9 @@
-#! /usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import uuid
 import read_json
 import write_json
-import base_util.v2ray_util
+from base_util import v2ray_util
 
 mul_user_conf = read_json.multiUserConf
 choice=input("请输入要改UUID的节点序号:")

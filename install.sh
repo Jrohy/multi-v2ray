@@ -125,6 +125,9 @@ chmod +x /usr/local/bin/v2ray
 #加入v2ray.fun模块搜索路径
 [[ -z $(grep v2ray.fun ~/.bashrc) ]] && echo "export PYTHONPATH=$PYTHONPATH:/usr/local/v2ray.fun" >> ~/.bashrc && source ~/.bashrc
 
+#解决Python3中文显示问题
+[[ -z $(grep PYTHONIOENCODING=utf-8 ~/.bashrc) ]] && echo "export PYTHONIOENCODING=utf-8" >> ~/.bashrc && source ~/.bashrc
+
 #全新安装的新配置
 if [[ "${installWay}" == "1" ]];then 
     rm -rf /etc/v2ray/config.json

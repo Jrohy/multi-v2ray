@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import os
 import json
@@ -6,7 +6,7 @@ import random
 import string
 import uuid
 import read_json
-import base_util.v2ray_util
+from base_util import v2ray_util
 
 #打开配置文件
 with open('/etc/v2ray/config.json', 'r') as json_file:

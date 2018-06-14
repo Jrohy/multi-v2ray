@@ -1,7 +1,7 @@
-#! /usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import write_json
-import base_util.v2ray_util
+from base_util import v2ray_util
 
 new_port=input("请输入新端口：")
 if v2ray_util.is_number(new_port):

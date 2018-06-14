@@ -21,7 +21,8 @@ if len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= mul_user_conf[-1]
     new_port=input()
     if (v2ray_util.is_number(new_port)):
         write_json.write_port(new_port, index_dict)
+        print('端口修改成功！')
     else:
-        print ("输入错误，请检查是否为数字")
+        print("输入错误，请检查是否为数字")
 else:
     print("输入有误，请检查是否为字母且范围中")

@@ -3,7 +3,7 @@
 import os
 import json
 import read_json
-import base_util.v2ray_util as util
+from base_util import v2ray_util
 
 #写客户端配置文件函数
 def write_client_json():
@@ -12,7 +12,7 @@ def write_client_json():
         write_json_file.writelines(my_json_dump)
 
 #获取本机IP地址
-myip = util.get_ip()
+myip = v2ray_util.get_ip()
 
 #加载客户端配置模板
 with open('/usr/local/v2ray.fun/json_template/client.json', 'r') as client_json_file:

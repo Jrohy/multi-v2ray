@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 import read_json
 import write_json
-import base_util.v2ray_util as util
+from base_util import v2ray_util
 
 mul_user_conf = read_json.multiUserConf
 choice=input("请输入要改tls的节点序号:")
-if util.is_number(choice) and choice > 0 and choice <= len(mul_user_conf):
+if v2ray_util.is_number(choice) and choice > 0 and choice <= len(mul_user_conf):
     if (mul_user_conf[choice - 1]['port']=="tls"):
         mystreamsecurity="TLS：开启"
     else:
@@ -20,9 +20,9 @@ if util.is_number(choice) and choice > 0 and choice <= len(mul_user_conf):
 
     choice = input("请输入数字选择功能：")
     if choice == "1":
-        util.change_tls("on", index_dict)
+        v2ray_util.change_tls("on", index_dict)
     elif choice == "2":
-        util.change_tls("off", index_dict)
+        v2ray_util.change_tls("off", index_dict)
     else:
         print("输入错误，请重试！")
 else:

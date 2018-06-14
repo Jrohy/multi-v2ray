@@ -3,7 +3,7 @@
 import read_json
 import write_json
 import re
-from base_util import v2ray_util
+import base_util.v2ray_util
 
 mul_user_conf = read_json.multiUserConf
 

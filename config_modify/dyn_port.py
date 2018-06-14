@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import read_json
 import write_json
-from base_util import v2ray_util
+import base_util.v2ray_util
 
 print("当前动态端口状态: %s\n") % str(read_json.conf_Dyp)
 

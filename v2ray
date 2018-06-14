@@ -141,7 +141,7 @@ if [[ ${choice} == 3 ]]; then
     
     if [[ ${changeChoice} == 1 ]]; then
         python3 /usr/local/v2ray.fun/server_info.py
-        python3 /usr/local/v2ray.fun/config_modify/uuid.py
+        python3 /usr/local/v2ray.fun/config_modify/n_uuid.py
 	    service v2ray restart
         echo ""
         echo "UUID修改成功！"

@@ -29,7 +29,7 @@ user_index=0
 if len(mul_user_conf) > 1:
     import server_info
     choice=input("请输入要生成客户端json的节点序号:")
-    if util.is_number(choice) and choice > 0 and choice <= len(mul_user_conf):
+    if v2ray_util.is_number(choice) and choice > 0 and choice <= len(mul_user_conf):
         user_index = choice - 1
     else:
         print ("输入错误，请检查是否为数字和范围中")

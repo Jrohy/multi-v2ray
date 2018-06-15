@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import json
+import urllib.request
 
 def read_sin_user(part_json, multi_user_conf, index_dict):
     conf_path=""
@@ -81,8 +82,8 @@ else:
     conf_Dyp="关闭"
 
 #获取本机IP地址
-from base_util import v2ray_util
-conf_ip = v2ray_util.get_ip()
+my_ip = urllib.request.urlopen('http://api.ipify.org').read()
+conf_ip = bytes.decode(my_ip)
 
 multiUserConf=[]
 #indexDict存储节点在json的索引，和节点代表的组别

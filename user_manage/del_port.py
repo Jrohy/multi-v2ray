@@ -18,7 +18,7 @@ if len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= mul_user_conf[-1]
     
     schoice = input("是否删除y/n：")
     if schoice == 'y':
-        write_json.del_port(schoice)
+        write_json.del_port(choice)
     else:
         print("撤销删除")
 else:

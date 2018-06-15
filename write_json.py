@@ -176,6 +176,7 @@ def create_new_port(newPort):
     if config[u"inboundDetour"] == None:
         config[u"inboundDetour"]=[]
     config[u"inboundDetour"].append(vmess)
+    print("新增端口组成功!")
     write()
 
 #为某组新建用户
@@ -222,6 +223,7 @@ def del_user(index):
                 config[u"inboundDetour"] == None
         else:
             del config[u"inboundDetour"][index_dict['detourIndex']][u"settings"][u"clients"][index_dict['clientIndex']]
+    print("删除用户成功!")
     write()
 
 #删除组(端口)
@@ -231,6 +233,7 @@ def del_port(group):
         return
     else:
         multi_user_conf = read_json.multiUserConf
+        detour_index = 0
         for sin_user_conf in multi_user_conf:
             if sin_user_conf['indexDict']['group'] == group:
                 detour_index=sin_user_conf['indexDict']['detourIndex']
@@ -240,5 +243,6 @@ def del_port(group):
 
         if len(config[u"inboundDetour"]) == 0:
             config[u"inboundDetour"] == None
+        print("删除端口成功!")
         write()
 

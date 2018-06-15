@@ -16,7 +16,8 @@ if choice > 0 and choice <= len(mul_user_conf):
     print(mul_user_conf[choice - 1])
     schoice = input("是否删除y/n：")
     if schoice == 'y':
-        write_json.del_user(choice)
+        write_json.del_user(choice - 1)
+        print("删除用户成功!")
     else:
         print("撤销删除")
 else:

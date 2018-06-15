@@ -98,6 +98,7 @@ if [[ ${choice} == 2 ]]; then
     if [[ ${userChoice} == 1 ]]; then
         python3 /usr/local/v2ray.fun/server_info.py
         python3 /usr/local/v2ray.fun/user_manage/create_new_user.py
+        service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
     fi
@@ -105,18 +106,21 @@ if [[ ${choice} == 2 ]]; then
         python3 /usr/local/v2ray.fun/server_info.py
         python3 /usr/local/v2ray.fun/user_manage/create_new_port.py
         python3 /usr/local/v2ray.fun/base_util/open_port.py
+        service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
     fi
     if [[ ${userChoice} == 3 ]]; then
         python3 /usr/local/v2ray.fun/server_info.py
         python3 /usr/local/v2ray.fun/user_manage/del_user.py
+        service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
     fi
     if [[ ${userChoice} == 4 ]]; then
         python3 /usr/local/v2ray.fun/server_info.py
         python3 /usr/local/v2ray.fun/user_manage/del_port.py
+        service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
     fi

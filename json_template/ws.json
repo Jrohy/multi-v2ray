@@ -1,15 +1,15 @@
 {
-      "network": "ws",
-      "security": "",
-      "tlsSettings": {},
-      "tcpSettings": null,
-      "kcpSettings": null,
-      "httpSettings": null,
-      "wsSettings": {
-        "connectionReuse": true,
-        "path": "",
-        "headers": {
-          "host": ""
-        }
-      }
+  "network": "ws",
+  "security": "",
+  "tlsSettings": {},
+  "tcpSettings": null,
+  "kcpSettings": null,
+  "httpSettings": null,
+  "wsSettings": {
+    "connectionReuse": true,
+    "path": "",
+    "headers": {
+      "host": ""
     }
+  }
+}

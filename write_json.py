@@ -152,8 +152,11 @@ def write_tls(action, domain, index_dict):
         write()
     elif action == "off":
         if part_json[u"streamSettings"][u"network"] == "h2":
-            print("关闭tls同时也会关闭HTTP/2\n")
-            from base_util import random_stream
+            print("关闭tls同时也会关闭HTTP/2！\n")
+            print("已重置为kcp utp传输方式, 若要其他方式请自行切换")
+            with open('/usr/local/v2ray.fun/json_template/kcp_utp.json', 'r') as stream_file:
+                utp = json.load(stream_file)
+            part_json[u"streamSettings"] = utp
         else:
             part_json[u"streamSettings"][u"security"] = ""
             part_json[u"streamSettings"][u"tlsSettings"] = {}

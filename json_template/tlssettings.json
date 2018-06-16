@@ -1,8 +1,0 @@
-{
-        "certificates": [
-          {
-            "certificateFile": "/etc/v2ray/v2ray.crt",
-            "keyFile": "/etc/v2ray/v2ray.key"
-          }
-        ]
-      }

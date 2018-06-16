@@ -2,30 +2,31 @@
 # -*- coding: utf-8 -*-
 import read_json
 import write_json
+import re
 from base_util import v2ray_util
 
 mul_user_conf = read_json.multiUserConf
 
 length = len(mul_user_conf)
 
-choice = 1
+choice = 'A'
 
 if length > 1:
     import server_info
-    choice=input("请输入要改tls的节点序号数字:")
-    if not v2ray_util.is_number(choice):
-        print("输入错误，请检查是否为数字")
-        exit
-    choice = int(choice)
+    choice=input("请输入要改tls的节点Group字母:")
+    choice=choice.upper()
 
-if length == 1 or (choice > 0 and choice <= len(mul_user_conf)):
-    if (mul_user_conf[choice - 1]['port']=="tls"):
-        mystreamsecurity="TLS：开启"
-    else:
-        mystreamsecurity="TLS：关闭"
+if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= mul_user_conf[-1]['indexDict']['group']):
+    for sin_user_conf in mul_user_conf:
+        if sin_user_conf['indexDict']['group'] == choice:
+            index_dict = sin_user_conf['indexDict']
+            if (sin_user_conf['tls']=="tls"):
+                my_stream_security="TLS：开启"
+            else:
+                my_stream_security="TLS：关闭"
+            break
 
-    index_dict = mul_user_conf[choice - 1]['indexDict']
-    print("当前选择节点状态：\n" + mystreamsecurity)
+    print("当前选择组节点状态：\n" + my_stream_security)
     print("")
     print("1.开启TLS")
     print("2.关闭TLS")

@@ -6,9 +6,11 @@ import urllib.request
 def read_sin_user(part_json, multi_user_conf, index_dict):
     conf_path=""
     conf_host=""
+    conf_Dyp=""
     conf_stream_security=""
     conf_stream_header=""
     global conf_ip
+    global conf_inboundDetour
 
     if "streamSettings" not in part_json:
         return
@@ -19,10 +21,22 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
         number += 1
         index_dict['group'] = chr(number)
 
+    conf_settings = part_json[u"settings"]
     conf_stream = part_json[u"streamSettings"]
     conf_stream_kcp_settings = conf_stream[u"kcpSettings"]
     conf_stream_network = conf_stream[u"network"]
     conf_stream_security = conf_stream[u"security"]
+
+    if "detour" in conf_settings:
+        dyp_AId=""
+        dynamic_port_tag = conf_settings[u"detour"][u"to"]
+        for detour_list in conf_inboundDetour:
+            if "tag" in detour_list and detour_list[u"tag"] == dynamic_port_tag:
+                dyp_AId = detour_list[u"settings"][u"default"][u"alterId"]
+                break
+            conf_Dyp="开启,alterId为 %s" % dyp_AId
+    else:
+        conf_Dyp="关闭"
     
     if conf_stream[u"httpSettings"] != None:
         conf_path = conf_stream[u"httpSettings"][u"path"]
@@ -42,10 +56,10 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
         else:
             conf_stream_header = "none"
 
-    clients=part_json[u"settings"][u"clients"]
+    clients=conf_settings[u"clients"]
     for index,client in enumerate(clients):
         index_dict['clientIndex']=index
-        copyIndexDict = index_dict.copy()
+        copy_index_dict = index_dict.copy()
         sinUserConf={}
         sinUserConf['v']="2"
         sinUserConf['add']=conf_ip
@@ -57,7 +71,8 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
         sinUserConf['path']=conf_path
         sinUserConf['host']=conf_host
         sinUserConf['tls']=conf_stream_security
-        sinUserConf['indexDict']=copyIndexDict
+        sinUserConf['indexDict']=copy_index_dict
+        sinUserConf['dyp']=conf_Dyp
         multi_user_conf.append(sinUserConf)
 
 with open('/etc/v2ray/config.json', 'r') as json_file:
@@ -70,16 +85,6 @@ conf_inboundDetour=config[u"inboundDetour"]
 conf_outboundDetour=config[u"outboundDetour"]
 conf_dns=config[u"dns"]
 conf_routing=config[u"routing"]
-
-if "detour" in conf_inbound[u"settings"]:
-    dyp_AId=""
-    for detour_list in conf_inboundDetour:
-        if "tag" in detour_list and detour_list[u"tag"] == "detour":
-            dyp_AId = detour_list[u"settings"][u"default"][u"alterId"]
-            break
-    conf_Dyp="开启,alterId为 %s" % dyp_AId
-else:
-    conf_Dyp="关闭"
 
 #获取本机IP地址
 my_ip = urllib.request.urlopen('http://api.ipify.org').read()

@@ -27,22 +27,27 @@ def locate_json(index_dict):
     return part_json
 
 #更改动态端口
-def en_dyn_port(en, d_alterid=32):
+def en_dyn_port(en, index_dict, d_alterid=32):
+    part_json = locate_json(index_dict)
     if en == 1:
-        config[u"inbound"][u"settings"].update({u"detour":{u"to":"dynamicPort"}})
+        short_uuid = str(uuid.uuid1())[0:7]
+        dynamic_port_tag = "dynamicPort" + short_uuid
+        part_json[u"settings"].update({u"detour":{u"to":dynamic_port_tag}})
         with open('/usr/local/v2ray.fun/json_template/dyn_port.json', 'r') as dyn_port_file:
             dyn_json=json.load(dyn_port_file)
         dyn_json[u"settings"][u"default"][u"alterId"]=int(d_alterid)
+        dyn_json[u"tag"]=dynamic_port_tag
         if config[u"inboundDetour"] == None:
             config[u"inboundDetour"]=[]
         config[u"inboundDetour"].append(dyn_json)
     else:
+        dynamic_port_tag = part_json[u"settings"][u"detour"][u"to"]
         for detour_list in config[u"inboundDetour"]:
-            if "allocate" in detour_list:
+            if "tag" in detour_list and detour_list[u"tag"] == dynamic_port_tag:
                 del detour_list
                 break
-        if "detour" in config[u"inbound"][u"settings"]:
-            del config[u"inbound"][u"settings"][u"detour"]
+        if "detour" in part_json[u"settings"]:
+            del part_json[u"settings"][u"detour"]
     write()
 
 #更改alterId
@@ -142,7 +147,7 @@ def write_tls(action, domain, index_dict):
         tls_settings[u"certificates"][0][u"keyFile"] = key_file
         part_json[u"streamSettings"][u"tlsSettings"] = tls_settings
 
-        with open('my_domain', 'w') as domain_file:
+        with open('/usr/local/v2ray.fun/my_domain', 'w') as domain_file:
             domain_file.writelines(str(domain))
         write()
     elif action == "off":
@@ -245,4 +250,3 @@ def del_port(group):
             config[u"inboundDetour"] == None
         print("删除端口成功!")
         write()
-

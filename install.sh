@@ -93,13 +93,13 @@ plan_update
 curl  https://get.acme.sh | sh
 
 #克隆V2ray.fun项目
-[[ "${installWay}" == "0" ]] && mv /usr/local/v2ray.fun/mydomain ~
+[[ "${installWay}" == "0" ]] && mv /usr/local/v2ray.fun/my_domain ~
 cd /usr/local/
 rm -rf v2ray.fun
 git clone -b dev https://github.com/Jrohy/v2ray.fun
 # git clone https://github.com/Jrohy/v2ray.fun
 cd v2ray.fun
-[[ "${installWay}" == "0" ]] && mv -f ~/mydomain .
+[[ "${installWay}" == "0" ]] && mv -f ~/my_domain .
 
 #时间同步
 if [[ "${installWay}" == "1" ]];then

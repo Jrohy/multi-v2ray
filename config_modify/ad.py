@@ -1,14 +1,13 @@
-#! /usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
 import os
 import json
-import readjson
-import writejson
+import read_json
+import write_json
 
-rules = readjson.ConfRouting[u"settings"][u"rules"]
+rules = read_json.conf_routing[u"settings"][u"rules"]
 
-if rules[1][u"outboundTag"] == "direct":
+if rules[0][u"outboundTag"] == "direct":
     if_open_ad_function = "广告拦截功能： 未开启"
 else:
     if_open_ad_function = "广告拦截功能： 开启"
@@ -20,9 +19,9 @@ print("")
 print("1. 开启")
 print("2. 关闭")
 
-choice = raw_input("请选择： ")
+choice = input("请选择： ")
 
 if choice == "1":
-    writejson.WriteAD("on")
+    write_json.write_ad("on")
 elif choice == "2":
-    writejson.WriteAD("off")
+    write_json.write_ad("off")

@@ -71,10 +71,10 @@ fi
 
 #安装依赖
 if [[ ${OS} == 'CentOS' ]];then
-	yum install curl wget unzip git ntp ntpdate lrzsz python socat crontabs -y
+	yum install curl wget unzip git ntp ntpdate lrzsz python3 socat crontabs -y
 else
 	apt-get update
-	apt-get install curl unzip git ntp wget ntpdate python socat lrzsz cron -y
+	apt-get install curl unzip git ntp wget ntpdate python3 socat lrzsz cron -y
 fi
 
 #判断是安装还是更新, 0:更新(保留配置文件)，1：全新安装
@@ -93,13 +93,13 @@ plan_update
 curl  https://get.acme.sh | sh
 
 #克隆V2ray.fun项目
-[[ "${installWay}" == "0" ]] && mv /usr/local/v2ray.fun/mydomain ~
+[[ "${installWay}" == "0" ]] && mv /usr/local/v2ray.fun/my_domain ~
 cd /usr/local/
 rm -rf v2ray.fun
 # git clone -b dev https://github.com/Jrohy/v2ray.fun
 git clone https://github.com/Jrohy/v2ray.fun
 cd v2ray.fun
-[[ "${installWay}" == "0" ]] && mv -f ~/mydomain .
+[[ "${installWay}" == "0" ]] && mv -f ~/my_domain .
 
 #时间同步
 if [[ "${installWay}" == "1" ]];then
@@ -122,6 +122,12 @@ bash <(curl -L -s https://install.direct/go.sh)
 cp /usr/local/v2ray.fun/v2ray /usr/local/bin
 chmod +x /usr/local/bin/v2ray
 
+#加入v2ray.fun模块搜索路径
+[[ -z $(grep v2ray.fun ~/.bashrc) ]] && echo "export PYTHONPATH=$PYTHONPATH:/usr/local/v2ray.fun" >> ~/.bashrc && source ~/.bashrc
+
+#解决Python3中文显示问题
+[[ -z $(grep PYTHONIOENCODING=utf-8 ~/.bashrc) ]] && echo "export PYTHONIOENCODING=utf-8" >> ~/.bashrc && source ~/.bashrc
+
 #全新安装的新配置
 if [[ "${installWay}" == "1" ]];then 
     rm -rf /etc/v2ray/config.json
@@ -136,10 +142,10 @@ if [[ "${installWay}" == "1" ]];then
     sed -i "s/999999999/${dport}/g" /etc/v2ray/config.json
 
     #产生默认配置mkcp+随机3种伪装类型type
-    python -c "import sys;sys.path.append('/usr/local/v2ray.fun');import v2rayutil; v2rayutil.randomStream();sys.path.remove('/usr/local/v2ray.fun')"
+    python3 /usr/local/v2ray.fun/base_util/random_stream.py
 
-    python /usr/local/v2ray.fun/genclient.py
-    python /usr/local/v2ray.fun/openport.py
+    python3 /usr/local/v2ray.fun/base_util/gen_client.py
+    python3 /usr/local/v2ray.fun/base_util/open_port.py
 fi
 
 service v2ray restart
@@ -151,6 +157,6 @@ echo -e "${OK}V2ray.fun ${way}成功！${Font}\n"
 
 echo "V2ray配置信息:"
 #安装完后显示v2ray的配置信息，用于快速部署
-python /usr/local/v2ray.fun/serverinfo.py
+python3 /usr/local/v2ray.fun/server_info.py
 
 echo -e "输入 v2ray 回车即可进行服务管理\n"

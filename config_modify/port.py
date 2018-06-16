@@ -7,10 +7,16 @@ from base_util import v2ray_util
 
 mul_user_conf = read_json.multiUserConf
 
-choice=input("请输入要改port的节点Group字母:")
-choice=choice.upper()
+length = len(mul_user_conf)
 
-if len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= mul_user_conf[-1]['indexDict']['group']:
+choice = 'A'
+
+if length > 1:
+    import server_info
+    choice=input("请输入要改port的节点Group字母:")
+    choice=choice.upper()
+
+if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= mul_user_conf[-1]['indexDict']['group']):
     for sin_user_conf in mul_user_conf:
         if sin_user_conf['indexDict']['group'] == choice:
             index_dict = sin_user_conf['indexDict']

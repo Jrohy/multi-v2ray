@@ -18,8 +18,9 @@ if len(read_json.multiUserConf) > 1 or __name__== "__main__":
         print("TLS: %s" % str("关闭" if sin_user_conf["tls"] == "" else "开启"))
         print("DynamicPort: %s" % read_json.conf_Dyp)
 
-        sin_user_conf.pop('indexDict')
-        base64_str = base64.b64encode(bytes(json.dumps(sin_user_conf), 'utf-8'))
+        copy_conf = sin_user_conf.copy()
+        copy_conf.pop('indexDict')
+        base64_str = base64.b64encode(bytes(json.dumps(copy_conf), 'utf-8'))
 
         #绿色字体显示
         print("\033[32m")

@@ -34,7 +34,7 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
             if "tag" in detour_list and detour_list[u"tag"] == dynamic_port_tag:
                 dyp_AId = detour_list[u"settings"][u"default"][u"alterId"]
                 break
-            conf_Dyp="开启,alterId为 %s" % dyp_AId
+        conf_Dyp="开启,alterId为 %s" % dyp_AId
     else:
         conf_Dyp="关闭"
     

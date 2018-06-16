@@ -182,7 +182,7 @@ def create_new_port(newPort):
 #为某组新建用户
 def create_new_user(group):
     new_uuid = uuid.uuid1()
-    print("新建用户uuid为: %s, alterId 为 32" % str(new_uuid))
+    print("新建用户成功! uuid: %s, alterId: 32" % str(new_uuid))
     with open('/usr/local/v2ray.fun/json_template/user.json', 'r') as userFile:
         user = json.load(userFile)
     user[u"id"]=str(new_uuid)

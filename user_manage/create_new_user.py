@@ -6,10 +6,16 @@ import re
 
 mul_user_conf = read_json.multiUserConf
 
-choice=input("请输入要改port的节点Group字母:")
-choice=choice.upper()
+length = len(mul_user_conf)
 
-if len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= mul_user_conf[-1]['indexDict']['group']:
+choice = 'A'
+
+if length > 1:
+    import server_info
+    choice=input("请输入要改port的节点Group字母:")
+    choice=choice.upper()
+
+if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= mul_user_conf[-1]['indexDict']['group']):
     write_json.create_new_user(choice)
 else:
     print("输入有误，请检查是否为字母且范围中")

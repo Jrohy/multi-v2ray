@@ -9,6 +9,7 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
     conf_Dyp=""
     conf_stream_security=""
     conf_stream_header=""
+    tls_domain=""
     global conf_ip
     global conf_inboundDetour
 
@@ -48,7 +49,7 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
     if (conf_stream_security == "tls"):
         with open('/usr/local/v2ray.fun/my_domain', 'r') as domain_file:
             content = domain_file.read()
-            conf_ip = str(content)
+            tls_domain = str(content)
 
     if conf_stream_network == "kcp" :
         if "header" in conf_stream_kcp_settings:
@@ -62,7 +63,7 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
         copy_index_dict = index_dict.copy()
         sinUserConf={}
         sinUserConf['v']="2"
-        sinUserConf['add']=conf_ip
+        sinUserConf['add']=(tls_domain if tls_domain != "" else conf_ip)
         sinUserConf['id']=client[u"id"]
         sinUserConf['aid']=client[u"alterId"]
         sinUserConf['port']=part_json[u"port"]

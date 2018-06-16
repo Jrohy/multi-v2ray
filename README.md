@@ -70,13 +70,13 @@ bash <(curl -sL https://git.io/vpHho)
 
 ## 截图
 
-![1](1.png)
+![1](fun_img/1.png)
 
-![2](2.png)
+![2](fun_img/2.png)
 
-![3](3.png)
+![3](fun_img/3.png)
 
-![4](4.png)
+![4](fun_img/4.png)
 
 ## 系统要求
 

@@ -45,6 +45,9 @@ plan_update(){
 	echo -e "${OK} 成功配置每天北京时间${BeijingUpdateTime}点自动升级V2ray内核任务 ${Font}\n"
 }
 
+#记录最开始运行脚本的路径
+beginPath=$(pwd)
+
 #获取操作 action等于keep时为升级操作，配置文件保留
 action=$1
 
@@ -123,13 +126,10 @@ cp /usr/local/v2ray.fun/v2ray /usr/local/bin
 chmod +x /usr/local/bin/v2ray
 
 #加入v2ray.fun模块搜索路径
-[[ -z $(grep v2ray.fun ~/.bashrc) ]] && echo "export PYTHONPATH=$PYTHONPATH:/usr/local/v2ray.fun" >> ~/.bashrc
+[[ -z $(grep v2ray.fun ~/.bashrc) ]] && echo "export PYTHONPATH=$PYTHONPATH:/usr/local/v2ray.fun" >> ~/.bashrc && source ~/.bashrc
 
 #解决Python3中文显示问题
-[[ -z $(grep PYTHONIOENCODING=utf-8 ~/.bashrc) ]] && echo "export PYTHONIOENCODING=utf-8" >> ~/.bashrc
-
-#生效环境变量
-source ~/.bashrc
+[[ -z $(grep PYTHONIOENCODING=utf-8 ~/.bashrc) ]] && echo "export PYTHONIOENCODING=utf-8" >> ~/.bashrc && source ~/.bashrc
 
 #全新安装的新配置
 if [[ "${installWay}" == "1" ]];then 
@@ -154,6 +154,9 @@ fi
 service v2ray restart
 
 clear
+
+#回到原点
+cd ${beginPath}
 
 [[ ${installWay} == "1" ]] && way="安装" || way="更新"
 echo -e "${OK}V2ray.fun ${way}成功！${Font}\n"

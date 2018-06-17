@@ -71,7 +71,7 @@ fi
 
 #安装依赖
 if [[ ${OS} == 'CentOS' ]];then
-	yum install curl wget unzip git ntp ntpdate lrzsz python3 socat crontabs -y
+	yum install epel-release curl wget unzip git ntp ntpdate python34 lrzsz socat crontabs -y
 else
 	apt-get update
 	apt-get install curl unzip git ntp wget ntpdate python3 socat lrzsz cron -y

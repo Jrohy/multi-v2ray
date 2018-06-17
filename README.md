@@ -81,10 +81,11 @@ source <(curl -sL https://git.io/vpHho)
 ## 系统要求
 
 - Debian 7 
-- **Debian 8（推荐）**
-- Debian 9 
+- Debian 8
+- **Debian 9（推荐）** 
 - Ubuntu 14 
 - Ubuntu 16 
+- Ubuntu 18
 - CentOS 7
 
 **不支持Centos 6**

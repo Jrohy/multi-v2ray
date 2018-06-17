@@ -54,17 +54,17 @@ V2ray多用户控制管理脚本，向导式更改端口，加密方式，传输
 ## 安装命令
 
 ```bash
-bash <(curl -sL https://git.io/vpHpE)
+source <(curl -sL https://git.io/vpHpE)
 ```
 
 ## 升级命令(保留配置文件，升级失败请全新安装)
 ```bash
-bash <(curl -sL https://git.io/vpHpE) keep
+source <(curl -sL https://git.io/vpHpE) keep
 ```
 
 ## 卸载命令
 ```bash
-bash <(curl -sL https://git.io/vpHho)
+source <(curl -sL https://git.io/vpHho)
 ```
 
 

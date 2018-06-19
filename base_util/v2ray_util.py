@@ -64,11 +64,9 @@ def change_tls(yn, index_dict):
     print("\n操作完成！\n")
 
 def get_stats(type, meta_info, door_port, is_reset = False):
-    cd_cmd = "cd /usr/bin/v2ray"
-    os.system(cd_cmd)
     is_reset = "true" if is_reset else "false"
 
-    stats_cmd = "./v2ctl api --server=127.0.0.1:%s StatsService.GetStats 'name: \"%s>>>%s>>>traffic>>>%s\" reset: %s'"
+    stats_cmd = "cd /usr/bin/v2ray && ./v2ctl api --server=127.0.0.1:%s StatsService.GetStats 'name: \"%s>>>%s>>>traffic>>>%s\" reset: %s'"
     type_tag = ("user" if type == 0 else "inbound")
 
     stats_real_cmd = stats_cmd % (str(door_port), type_tag, meta_info, "downlink", is_reset)

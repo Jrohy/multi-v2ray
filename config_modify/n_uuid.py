@@ -3,7 +3,7 @@
 import uuid
 import read_json
 import write_json
-from base_util import v2ray_util
+from base_util import tool_box
 
 mul_user_conf = read_json.multiUserConf
 
@@ -14,7 +14,7 @@ choice = 1
 if length > 1:
     import server_info
     choice=input("请输入要改UUID的节点序号数字:")
-    if not v2ray_util.is_number(choice):
+    if not tool_box.is_number(choice):
         print("输入错误，请检查是否为数字")
         exit
     choice = int(choice)

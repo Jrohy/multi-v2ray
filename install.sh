@@ -74,10 +74,10 @@ fi
 
 #安装依赖
 if [[ ${OS} == 'CentOS' ]];then
-	yum install epel-release curl wget unzip git ntp ntpdate python34 lrzsz socat crontabs -y
+	yum install epel-release curl wget unzip git ntp ntpdate python34 lrzsz socat crontabs lsof -y
 else
 	apt-get update
-	apt-get install curl unzip git ntp wget ntpdate python3 socat lrzsz cron -y
+	apt-get install curl unzip git ntp wget ntpdate python3 socat lrzsz cron lsof -y
 fi
 
 #判断是安装还是更新, 0:更新(保留配置文件)，1：全新安装
@@ -99,8 +99,8 @@ curl  https://get.acme.sh | sh
 [[ "${installWay}" == "0" ]] && mv /usr/local/v2ray.fun/my_domain ~
 cd /usr/local/
 rm -rf v2ray.fun
-# git clone -b dev https://github.com/Jrohy/v2ray.fun
-git clone https://github.com/Jrohy/v2ray.fun
+git clone -b dev https://github.com/Jrohy/v2ray.fun
+# git clone https://github.com/Jrohy/v2ray.fun
 cd v2ray.fun
 [[ "${installWay}" == "0" ]] && mv -f ~/my_domain .
 

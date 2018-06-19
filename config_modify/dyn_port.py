@@ -3,7 +3,7 @@
 import read_json
 import write_json
 import re
-from base_util import v2ray_util
+from base_util import tool_box
 
 mul_user_conf = read_json.multiUserConf
 
@@ -30,7 +30,7 @@ if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= m
         newAlterId=input("请为动态端口设置alterID(默认32): ")
         if newAlterId == '':
             newAlterId='32'
-        if (not v2ray_util.is_number(newAlterId)):
+        if (not tool_box.is_number(newAlterId)):
             print ("\n输入错误，请检查是否为数字")
         else:
             write_json.en_dyn_port(1, index_dict, newAlterId)

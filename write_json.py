@@ -6,6 +6,7 @@ import random
 import string
 import uuid
 import read_json
+from base_util import tool_box
 
 #打开配置文件
 with open('/etc/v2ray/config.json', 'r') as json_file:
@@ -149,7 +150,6 @@ def write_tls(action, domain, index_dict):
 
         with open('/usr/local/v2ray.fun/my_domain', 'w') as domain_file:
             domain_file.writelines(str(domain))
-        write()
     elif action == "off":
         if part_json[u"streamSettings"][u"network"] == "h2":
             print("关闭tls同时也会关闭HTTP/2！\n")
@@ -160,7 +160,7 @@ def write_tls(action, domain, index_dict):
         else:
             part_json[u"streamSettings"][u"security"] = ""
             part_json[u"streamSettings"][u"tlsSettings"] = {}
-        write()
+    write()
 
 #更改广告拦截功能
 def write_ad(action):
@@ -188,11 +188,14 @@ def create_new_port(newPort):
     write()
 
 #为某组新建用户
-def create_new_user(group):
+def create_new_user(group, email=""):
     new_uuid = uuid.uuid1()
-    print("新建用户成功! uuid: %s, alterId: 32" % str(new_uuid))
+    email_info = ""
     with open('/usr/local/v2ray.fun/json_template/user.json', 'r') as userFile:
         user = json.load(userFile)
+    if email != "":
+        user.update({u"email":email})
+        email_info = ", email: " + email
     user[u"id"]=str(new_uuid)
     multi_user_conf = read_json.multiUserConf
     detour_index=0
@@ -204,6 +207,8 @@ def create_new_user(group):
         config[u"inbound"][u"settings"][u"clients"].append(user)
     else:
         config[u"inboundDetour"][detour_index][u"settings"][u"clients"].append(user)
+    
+    print("新建用户成功! uuid: %s, alterId: 32%s" % (str(new_uuid), email_info))
     write()
 
 #删除用户
@@ -253,3 +258,71 @@ def del_port(group):
             config[u"inboundDetour"] == None
         print("删除端口成功!")
         write()
+
+#更改流量统计设置
+def write_stats(action, multi_user_conf):
+    conf_rules = config[u"routing"][u"settings"][u"rules"]
+    if action == "on":
+        with open('/usr/local/v2ray.fun/json_template/stats_settings.json', 'r') as stats_file:
+            stats_json=json.load(stats_file)
+        routing_rules = stats_json[u"routingRules"]
+        del stats_json[u"routingRules"]
+        conf_rules.append(routing_rules)
+
+        dokodemo_door = stats_json[u"dokodemoDoor"]
+        del stats_json[u"dokodemoDoor"]
+        #产生随机dokodemo_door的连接端口
+        while True:
+            random_port = random.randint(1000, 65535)
+            if tool_box.port_is_open(random_port):
+                break
+        dokodemo_door[u"port"] = random_port
+        if config[u"inboundDetour"] == None:
+            config[u"inboundDetour"]=[]
+        config[u"inboundDetour"].append(dokodemo_door)
+
+        config.update(stats_json)
+
+        last_group = "Z"
+        for sin_user_conf in multi_user_conf:
+            index_dict = sin_user_conf["indexDict"]
+            group = index_dict["group"]
+            if last_group == group:
+                continue
+            if group == 'A':
+                config[u"inbound"].update({u"tag":group})
+            else:
+                config[u"inboundDetour"][index_dict["detourIndex"]].update({u"tag":group})
+            last_group = group
+
+    elif action == "off":
+        if "stats" in config:
+            del config[u"stats"]
+        if "api" in config:
+            del config[u"api"]
+        if "policy" in config:
+            del config[u"policy"]
+        if config[u"inboundDetour"]:
+            for index, detour_list in enumerate(config[u"inboundDetour"]):
+                if detour_list[u"protocol"] == "dokodemo-door" and detour_list[u"tag"] == "api":
+                    del config[u"inboundDetour"][index]
+                    break
+
+        for index,rules_list in enumerate(conf_rules):
+            if rules_list[u"outboundTag"] == "api":
+                del conf_rules[index]
+                break
+        
+        if "tag" in config[u"inbound"] and config[u"inbound"][u"tag"] == "A":
+            last_group = "Z"
+            for sin_user_conf in multi_user_conf:
+                index_dict = sin_user_conf["indexDict"]
+                group = index_dict["group"]
+                if last_group == group:
+                    continue
+                if group == 'A':
+                    del config[u"inbound"][u"tag"]
+                else:
+                    del config[u"inboundDetour"][index_dict["detourIndex"]][u"tag"]
+                last_group = group
+    write()

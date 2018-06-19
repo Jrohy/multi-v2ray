@@ -3,6 +3,7 @@
 import read_json
 import write_json
 import re
+from base_util import tool_box
 from base_util import v2ray_util
 
 mul_user_conf = read_json.multiUserConf
@@ -38,7 +39,7 @@ if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= m
 
     new_stream_network=input()
     
-    if not v2ray_util.is_number(new_stream_network):
+    if not tool_box.is_number(new_stream_network):
         print("请输入数字！")
         exit
     else:

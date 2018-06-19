@@ -9,7 +9,9 @@ for index, sin_user_conf in enumerate(read_json.multiUserConf):
     print("%d." % index)
     print("Group: %s" % sin_user_conf["indexDict"]["group"])
     print("IP：%s" % str(sin_user_conf["add"])) 
-    print("Port：%s" % str(sin_user_conf["port"])) 
+    print("Port：%s" % str(sin_user_conf["port"]))
+    if sin_user_conf["email"]:
+        print("Email: %s" % str(sin_user_conf["email"]))
     print("UUID：%s" % str(sin_user_conf["id"])) 
     print("Alter ID: %s" % str(sin_user_conf["aid"]))
     if sin_user_conf["net"] == "h2":
@@ -22,6 +24,7 @@ for index, sin_user_conf in enumerate(read_json.multiUserConf):
     copy_conf = sin_user_conf.copy()
     copy_conf.pop('indexDict')
     copy_conf.pop('dyp')
+    copy_conf.pop('email')
     base64_str = base64.b64encode(bytes(json.dumps(copy_conf), 'utf-8'))
 
     #绿色字体显示

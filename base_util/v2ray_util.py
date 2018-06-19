@@ -3,25 +3,9 @@
 import write_json
 import random
 import socket
-import urllib.request
+import os
 from base_util import get_ssl
-
-#判断是否为数字的函数
-def is_number(s):
-    try:
-        float(s)
-        return True
-    except ValueError:
-        pass
- 
-    try:
-        import unicodedata
-        unicodedata.numeric(s)
-        return True
-    except (TypeError, ValueError):
-        pass
- 
-    return False
+from base_util import tool_box
 
 def choice_stream(new_stream_network, index_dict):
     if(new_stream_network==1):
@@ -55,14 +39,10 @@ def random_kcp(index_dict={'inboundOrDetour': 0, 'detourIndex': 0, 'clientIndex'
     print()
     choice_stream(choice, index_dict)
 
-def get_ip():
-    my_ip = urllib.request.urlopen('http://api.ipify.org').read()
-    return bytes.decode(my_ip)
-
 def change_tls(yn, index_dict):
     if yn == "on":
         print("\n请将您的域名解析到本VPS的IP地址，否则程序会出错！！\n")
-        local_ip = get_ip()
+        local_ip = tool_box.get_ip()
         print("本机器IP地址为：" + local_ip + "\n")
         input_domain=str(input("请输入您绑定的域名："))
         try:
@@ -82,3 +62,19 @@ def change_tls(yn, index_dict):
         write_json.write_tls("off","", index_dict)
         
     print("\n操作完成！\n")
+
+def get_stats(type, meta_info, door_port, is_reset = False):
+    cd_cmd = "cd /usr/bin/v2ray"
+    os.system(cd_cmd)
+    is_reset = "true" if is_reset else "false"
+
+    stats_cmd = "./v2ctl api --server=127.0.0.1:%s StatsService.GetStats 'name: \"%s>>>%s>>>traffic>>>%s\" reset: %s'"
+    type_tag = ("user" if type == 0 else "inbound")
+
+    stats_real_cmd = stats_cmd % (str(door_port), type_tag, meta_info, "downlink", is_reset)
+    downlink_result = os.popen(stats_real_cmd).readlines()
+    print(downlink_result)
+
+    stats_real_cmd = stats_cmd % (str(door_port), type_tag, meta_info, "uplink", is_reset)
+    uplink_result = os.popen(stats_real_cmd).readlines()
+    print(uplink_result)

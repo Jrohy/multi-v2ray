@@ -12,12 +12,13 @@ echo -e "1.服务管理"
 echo -e "2.用户管理"
 echo -e "3.更改配置"
 echo -e "4.查看配置"
-echo -e "5.更新V2Ray"
-echo -e "6.下载客户端配置文件"
+echo -e "5.流量统计"
+echo -e "6.更新V2Ray"
+echo -e "7.下载客户端配置文件"
 
 while :; do echo
 	read -n1 -p "请输入数字选择功能(按回车键退出): " choice
-	if [[ ! $choice =~ ^[1-6]$ ]]; then
+	if [[ ! $choice =~ ^[1-7]$ ]]; then
         if [[ -z ${choice} ]];then
             exit 0
         fi
@@ -205,11 +206,16 @@ if [[ ${choice} == 4 ]]; then
 fi
 
 if [[ ${choice} == 5 ]]; then
-    bash <(curl -L -s https://install.direct/go.sh)
+    python3 /usr/local/v2ray.fun/stats_ctr.py
     bash /usr/local/bin/v2ray
 fi
 
 if [[ ${choice} == 6 ]]; then
+    bash <(curl -L -s https://install.direct/go.sh)
+    bash /usr/local/bin/v2ray
+fi
+
+if [[ ${choice} == 7 ]]; then
     python3 /usr/local/v2ray.fun/base_util/gen_client.py && echo "保存成功！(/root/config.json)"
     read -n1 -p  "是否通过sz来传输配置文件(y/n)" ans
     if [[ ${ans} =~ [yY] ]]; then

@@ -3,7 +3,7 @@
 import os
 import json
 import read_json
-from base_util import v2ray_util
+from base_util import tool_box
 
 #写客户端配置文件函数
 def write_client_json():
@@ -12,7 +12,7 @@ def write_client_json():
         write_json_file.writelines(my_json_dump)
 
 #获取本机IP地址
-myip = v2ray_util.get_ip()
+myip = tool_box.get_ip()
 
 #加载客户端配置模板
 with open('/usr/local/v2ray.fun/json_template/client.json', 'r') as client_json_file:
@@ -29,7 +29,7 @@ user_index=0
 if len(mul_user_conf) > 1:
     import server_info
     choice=input("请输入要生成客户端json的节点序号:")
-    if v2ray_util.is_number(choice) and choice > 0 and choice <= len(mul_user_conf):
+    if tool_box.is_number(choice) and choice > 0 and choice <= len(mul_user_conf):
         user_index = choice - 1
     else:
         print ("输入错误，请检查是否为数字和范围中")

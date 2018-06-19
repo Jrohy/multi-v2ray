@@ -4,6 +4,7 @@ import write_json
 import random
 import socket
 import os
+import re
 from base_util import get_ssl
 from base_util import tool_box
 
@@ -71,8 +72,20 @@ def get_stats(type, meta_info, door_port, is_reset = False):
 
     stats_real_cmd = stats_cmd % (str(door_port), type_tag, meta_info, "downlink", is_reset)
     downlink_result = os.popen(stats_real_cmd).readlines()
-    print(downlink_result)
+    if downlink_result and len(downlink_result) == 5:
+        re_result = re.findall(r"\d+", downlink_result[2])
+        if not re_result:
+            print("当前无流量数据，请使用流量片刻再来查看统计!")
+            return
+        downlink_value = int(re_result[0])
+        print("\033[36m")
+        print("\ndownlink: " + tool_box.bytes_2_human_readable(downlink_value) + "\n")
 
     stats_real_cmd = stats_cmd % (str(door_port), type_tag, meta_info, "uplink", is_reset)
     uplink_result = os.popen(stats_real_cmd).readlines()
-    print(uplink_result)
+    if uplink_result and len(uplink_result) == 5:
+        re_result = re.findall(r"\d+", uplink_result[2])
+        uplink_value = int(re_result[0])
+        print("uplink: " + tool_box.bytes_2_human_readable(uplink_value) + "\n")
+        print("total: " + tool_box.bytes_2_human_readable(downlink_value + uplink_value) + "\n")
+        print("\033[0m")

@@ -60,6 +60,9 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
     clients=conf_settings[u"clients"]
     for index,client in enumerate(clients):
         index_dict['clientIndex']=index
+        email = ""
+        if "email" in client and client[u"email"] != None:
+            email = client[u"email"]
         copy_index_dict = index_dict.copy()
         sinUserConf={}
         sinUserConf['v']="2"
@@ -74,6 +77,7 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
         sinUserConf['tls']=conf_stream_security
         sinUserConf['indexDict']=copy_index_dict
         sinUserConf['dyp']=conf_Dyp
+        sinUserConf['email']=email
         multi_user_conf.append(sinUserConf)
 
 with open('/etc/v2ray/config.json', 'r') as json_file:
@@ -86,6 +90,13 @@ conf_inboundDetour=config[u"inboundDetour"]
 conf_outboundDetour=config[u"outboundDetour"]
 conf_dns=config[u"dns"]
 conf_routing=config[u"routing"]
+
+conf_stats = "开启" if "stats" in config else "关闭"
+
+if conf_stats == "开启":
+    for detour_list in conf_inboundDetour:
+        if "protocol" in detour_list and detour_list[u"protocol"] == "dokodemo-door":
+            conf_door_port = detour_list[u"port"]
 
 #获取本机IP地址
 my_ip = urllib.request.urlopen('http://api.ipify.org').read()

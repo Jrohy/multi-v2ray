@@ -5,15 +5,12 @@ export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 [ $(id -u) != "0" ] && { echo "Error: You must be root to run this script"; exit 1; }
 
 echo ""
-
-echo "欢迎使用 V2ray.fun 管理程序"
-echo ""
-echo -e "1.服务管理"
-echo -e "2.用户管理"
-echo -e "3.更改配置"
-echo -e "4.查看配置"
-echo -e "5.其他设置"
-echo -e "6.更新V2Ray"
+echo -e "\033[36m"
+echo -e "欢迎使用 V2ray.fun 管理程序"
+echo -e "\033[0m"
+echo -e "1.服务管理\t\t 2.用户管理\n"
+echo -e "3.更改配置\t\t 4.查看配置\n"
+echo -e "5.其他设置\t\t 6.更新V2Ray\n"
 echo -e "7.生成客户端配置文件"
 
 while :; do echo
@@ -125,18 +122,19 @@ fi
 
 if [[ ${choice} == 3 ]]; then
     echo ""
-    echo -e "1.更改UUID\n"
-    echo -e "2.更改alterID\n"
-    echo -e "3.更改主端口\n"
-    echo -e "4.更改传输方式\n"
-    echo -e "5.更改TLS设置\n"
-    echo -e "6.更改广告拦截功能\n"
-    echo -e "7.更改动态端口\n"
+    echo -e "1.更改email\n"
+    echo -e "2.更改UUID\n"
+    echo -e "3.更改alterID\n"
+    echo -e "4.更改主端口\n"
+    echo -e "5.更改传输方式\n"
+    echo -e "6.更改TLS设置\n"
+    echo -e "7.更改广告拦截功能\n"
+    echo -e "8.更改动态端口\n"
     echo -e "请输入数字选择功能：\n"
 
     while :; do echo
 	    read -n1 -p "请选择： " changeChoice
-	    if [[ ! $changeChoice =~ ^[1-7]$ ]]; then
+	    if [[ ! $changeChoice =~ ^[1-8]$ ]]; then
             if [[ -z ${changeChoice} ]];then
                 bash /usr/local/bin/v2ray
                 exit 0
@@ -149,20 +147,27 @@ if [[ ${choice} == 3 ]]; then
     done
     
     if [[ ${changeChoice} == 1 ]]; then
-        python3 /usr/local/v2ray.fun/config_modify/n_uuid.py
+        python3 /usr/local/v2ray.fun/config_modify/email.py
 	    service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
     fi
 
     if [[ ${changeChoice} == 2 ]]; then
+        python3 /usr/local/v2ray.fun/config_modify/n_uuid.py
+	    service v2ray restart
+        echo ""
+        bash /usr/local/bin/v2ray
+    fi
+
+    if [[ ${changeChoice} == 3 ]]; then
         python3 /usr/local/v2ray.fun/config_modify/alterid.py
         service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
     fi
     
-    if [[ ${changeChoice} == 3 ]]; then
+    if [[ ${changeChoice} == 4 ]]; then
         python3 /usr/local/v2ray.fun/config_modify/port.py
         python3 /usr/local/v2ray.fun/base_util/open_port.py
 	    service v2ray restart
@@ -170,21 +175,21 @@ if [[ ${choice} == 3 ]]; then
         bash /usr/local/bin/v2ray
     fi
     
-    if [[ ${changeChoice} == 4 ]]; then
+    if [[ ${changeChoice} == 5 ]]; then
         python3 /usr/local/v2ray.fun/config_modify/stream.py
 	    service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
     fi
     
-    if [[ ${changeChoice} == 5 ]]; then
+    if [[ ${changeChoice} == 6 ]]; then
         python3 /usr/local/v2ray.fun/config_modify/tls.py
 	    service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
     fi
 
-    if [[ ${changeChoice} == 6 ]]; then
+    if [[ ${changeChoice} == 7 ]]; then
         python3 /usr/local/v2ray.fun/config_modify/ad.py
 	    service v2ray restart
         echo ""
@@ -192,7 +197,7 @@ if [[ ${choice} == 3 ]]; then
         bash /usr/local/bin/v2ray
     fi
 
-    if [[ ${changeChoice} == 7 ]]; then
+    if [[ ${changeChoice} == 8 ]]; then
         python3 /usr/local/v2ray.fun/config_modify/dyn_port.py
 	    service v2ray restart
         echo ""

@@ -9,6 +9,10 @@ from base_util import tool_box
 
 RESTART_CMD = "service v2ray restart"
 
+FIND_V2RAY_CRONTAB_CMD = "crontab -l|grep v2ray"
+
+DEL_UPDATE_TIMER_CMD = "crontab -l|sed '/SHELL=/d;/v2ray/d' > crontab.txt && crontab crontab.txt >/dev/null 2>&1 && rm -f crontab.txt >/dev/null 2>&1"
+
 mul_user_conf = read_json.multiUserConf
 
 length = len(mul_user_conf)
@@ -27,13 +31,22 @@ while True:
     print("2.关闭流量统计\n")
     print("3.查看流量统计\n")
     print("4.重置流量统计\n")
-    print("tip: 具有有效email节点才会统计\n")
+    print("tip: 具有有效email节点才会统计, 重启v2ray会重置流量统计!!!\n")
 
     choice = input("请输入数字选择功能：")
     if choice == "1":
+        if os.popen(FIND_V2RAY_CRONTAB_CMD).readlines():
+            rchoice = input("开启流量统计会关闭定时更新v2ray服务, 是否继续y/n: ")
+            if rchoice == "y" or rchoice == "Y":
+                #关闭定时更新v2ray服务
+                os.system(DEL_UPDATE_TIMER_CMD)
+            else:
+                print("撤销开启流量统计!!")
+                continue
         write_json.write_stats("on", mul_user_conf)
         os.system(RESTART_CMD)
         print("开启流量统计成功!\n")
+        
     elif choice == "2":
         write_json.write_stats("off", mul_user_conf)
         os.system(RESTART_CMD)

@@ -71,6 +71,16 @@ def write_uuid(my_uuid, index_dict):
     part_json[u"settings"][u"clients"][client_index][u"id"]=str(my_uuid)
     write()
 
+#更改email
+def write_email(email, index_dict):
+    client_index = index_dict['clientIndex']
+    part_json = locate_json(index_dict)
+    if not "email" in part_json[u"settings"][u"clients"][client_index]:
+        part_json[u"settings"][u"clients"][client_index].update({u"email": email})
+    else:
+        part_json[u"settings"][u"clients"][client_index][u"email"]=email
+    write()
+
 #更改底层传输设置
 def write_stream_network(network, para, index_dict):
     part_json = locate_json(index_dict)

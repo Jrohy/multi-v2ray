@@ -8,12 +8,12 @@ echo ""
 
 echo "欢迎使用 V2ray.fun 管理程序"
 echo ""
-echo -e "1.服务管理\n"
-echo -e "2.用户管理\n"
-echo -e "3.更改配置\n"
-echo -e "4.查看配置\n"
-echo -e "5.其他设置\n"
-echo -e "6.更新V2Ray\n"
+echo -e "1.服务管理"
+echo -e "2.用户管理"
+echo -e "3.更改配置"
+echo -e "4.查看配置"
+echo -e "5.其他设置"
+echo -e "6.更新V2Ray"
 echo -e "7.生成客户端配置文件"
 
 while :; do echo

@@ -32,7 +32,9 @@ plan_update(){
     fi
 	echo -e "${Info} 北京时间${BeijingUpdateTime}点，VPS时间为${localTime}点 ${Font}\n"
 
+    oldCrontab=$(crontab -l)
     echo "SHELL=/bin/bash" >> crontab.txt
+    echo "${oldCrontab}" >> crontab.txt
 	echo "0 ${localTime} * * * bash <(curl -L -s https://install.direct/go.sh) | tee -a /root/v2rayUpdate.log && service v2ray restart" >> crontab.txt
 	crontab crontab.txt
 	sleep 1
@@ -74,10 +76,10 @@ fi
 
 #安装依赖
 if [[ ${OS} == 'CentOS' ]];then
-	yum install epel-release curl wget unzip git ntp ntpdate python34 lrzsz socat crontabs lsof -y
+	yum install epel-release curl wget unzip git ntp ntpdate python34 socat crontabs lsof -y
 else
 	apt-get update
-	apt-get install curl unzip git ntp wget ntpdate python3 socat lrzsz cron lsof -y
+	apt-get install curl unzip git ntp wget ntpdate python3 socat cron lsof -y
 fi
 
 #判断是安装还是更新, 0:更新(保留配置文件)，1：全新安装
@@ -90,7 +92,7 @@ else
 fi
 
 #设置定时任务
-plan_update
+[[ -z $(crontab -l|grep v2ray) ]] && plan_update
 
 #安装 acme.sh 以自动获取SSL证书
 curl  https://get.acme.sh | sh

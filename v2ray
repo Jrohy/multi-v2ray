@@ -147,7 +147,7 @@ if [[ ${choice} == 3 ]]; then
     done
     
     if [[ ${changeChoice} == 1 ]]; then
-        python3 /usr/local/v2ray.fun/config_modify/email.py
+        python3 /usr/local/v2ray.fun/config_modify/n_email.py
 	    service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray

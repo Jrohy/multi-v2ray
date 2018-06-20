@@ -267,6 +267,15 @@ def write_stats(action, multi_user_conf):
             stats_json=json.load(stats_file)
         routing_rules = stats_json[u"routingRules"]
         del stats_json[u"routingRules"]
+
+        for index_x, one_rule in enumerate(conf_rules):
+            if "ip" in one_rule:
+                for index_y, one_ip in enumerate(one_rule["ip"]):
+                    if one_ip == "127.0.0.0/8":
+                        del conf_rules[index_x]["ip"][index_y]
+                        break
+                break
+
         conf_rules.append(routing_rules)
 
         dokodemo_door = stats_json[u"dokodemoDoor"]

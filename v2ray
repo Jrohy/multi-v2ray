@@ -8,13 +8,13 @@ echo ""
 
 echo "欢迎使用 V2ray.fun 管理程序"
 echo ""
-echo -e "1.服务管理"
-echo -e "2.用户管理"
-echo -e "3.更改配置"
-echo -e "4.查看配置"
-echo -e "5.流量统计"
-echo -e "6.更新V2Ray"
-echo -e "7.下载客户端配置文件"
+echo -e "1.服务管理\n"
+echo -e "2.用户管理\n"
+echo -e "3.更改配置\n"
+echo -e "4.查看配置\n"
+echo -e "5.其他设置\n"
+echo -e "6.更新V2Ray\n"
+echo -e "7.生成客户端配置文件"
 
 while :; do echo
 	read -n1 -p "请输入数字选择功能(按回车键退出): " choice
@@ -206,8 +206,34 @@ if [[ ${choice} == 4 ]]; then
 fi
 
 if [[ ${choice} == 5 ]]; then
-    python3 /usr/local/v2ray.fun/stats_ctr.py
-    bash /usr/local/bin/v2ray
+    echo -e ""
+    echo -e "1.流量统计\n"
+    echo -e "2.定时更新V2ray\n"
+    echo -e "请输入数字选择功能：\n"
+
+    while :; do echo
+	    read -n1 -p "请选择： " extraChoice
+	    if [[ ! $extraChoice =~ ^[1-2]$ ]]; then
+            if [[ -z ${extraChoice} ]];then
+                bash /usr/local/bin/v2ray
+                exit 0
+            fi
+		    echo "输入错误! 请输入正确的数字!"
+	    else
+            echo -e "\n"
+		    break
+	    fi
+    done
+
+    if [[ ${extraChoice} == 1 ]]; then
+        python3 /usr/local/v2ray.fun/other_setting/stats_ctr.py
+        bash /usr/local/bin/v2ray
+    fi
+
+    if [[ ${extraChoice} == 2 ]]; then
+        bash /usr/local/v2ray.fun/other_setting/update_timer.sh
+        bash /usr/local/bin/v2ray
+    fi
 fi
 
 if [[ ${choice} == 6 ]]; then
@@ -216,11 +242,7 @@ if [[ ${choice} == 6 ]]; then
 fi
 
 if [[ ${choice} == 7 ]]; then
-    python3 /usr/local/v2ray.fun/base_util/gen_client.py && echo "保存成功！(/root/config.json)"
-    read -n1 -p  "是否通过sz来传输配置文件(y/n)" ans
-    if [[ ${ans} =~ [yY] ]]; then
-        which sz 2>/dev/null && sz /root/config.json
-    fi
-    echo -e "\n"
+    python3 /usr/local/v2ray.fun/base_util/gen_client.py
+    echo -e "保存成功！(/root/config.json)\n"
     bash /usr/local/bin/v2ray
 fi

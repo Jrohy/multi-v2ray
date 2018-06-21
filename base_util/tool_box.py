@@ -38,7 +38,7 @@ def is_email(email):
     return re.match(str, email)
 
 #流量bytes转换为kb, mb, gb等单位
-def bytes_2_human_readable(number_of_bytes):
+def bytes_2_human_readable(number_of_bytes, precision=1):
     if number_of_bytes < 0:
         raise ValueError("!!! number_of_bytes can't be smaller than 0 !!!")
  
@@ -63,7 +63,6 @@ def bytes_2_human_readable(number_of_bytes):
         number_of_bytes /= step_to_greater_unit
         unit = 'TB'
  
-    precision = 1
     number_of_bytes = round(number_of_bytes, precision)
  
     return str(number_of_bytes) + ' ' + unit

@@ -79,13 +79,13 @@ def get_stats(type, meta_info, door_port, is_reset = False):
             return
         downlink_value = int(re_result[0])
         print("\033[36m")
-        print("\ndownlink: " + tool_box.bytes_2_human_readable(downlink_value) + "\n")
+        print("\ndownlink: " + tool_box.bytes_2_human_readable(downlink_value, 2) + "\n")
 
     stats_real_cmd = stats_cmd % (str(door_port), type_tag, meta_info, "uplink", is_reset)
     uplink_result = os.popen(stats_real_cmd).readlines()
     if uplink_result and len(uplink_result) == 5:
         re_result = re.findall(r"\d+", uplink_result[2])
         uplink_value = int(re_result[0])
-        print("uplink: " + tool_box.bytes_2_human_readable(uplink_value) + "\n")
-        print("total: " + tool_box.bytes_2_human_readable(downlink_value + uplink_value) + "\n")
+        print("uplink: " + tool_box.bytes_2_human_readable(uplink_value, 2) + "\n")
+        print("total: " + tool_box.bytes_2_human_readable(downlink_value + uplink_value, 2) + "\n")
         print("\033[0m")

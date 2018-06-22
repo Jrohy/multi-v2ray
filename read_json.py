@@ -22,29 +22,29 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
         number += 1
         index_dict['group'] = chr(number)
 
-    conf_settings = part_json[u"settings"]
-    conf_stream = part_json[u"streamSettings"]
-    conf_stream_kcp_settings = conf_stream[u"kcpSettings"]
-    conf_stream_network = conf_stream[u"network"]
-    conf_stream_security = conf_stream[u"security"]
+    conf_settings = part_json["settings"]
+    conf_stream = part_json["streamSettings"]
+    conf_stream_kcp_settings = conf_stream["kcpSettings"]
+    conf_stream_network = conf_stream["network"]
+    conf_stream_security = conf_stream["security"]
 
     if "detour" in conf_settings:
         dyp_AId=""
-        dynamic_port_tag = conf_settings[u"detour"][u"to"]
+        dynamic_port_tag = conf_settings["detour"]["to"]
         for detour_list in conf_inboundDetour:
-            if "tag" in detour_list and detour_list[u"tag"] == dynamic_port_tag:
-                dyp_AId = detour_list[u"settings"][u"default"][u"alterId"]
+            if "tag" in detour_list and detour_list["tag"] == dynamic_port_tag:
+                dyp_AId = detour_list["settings"]["default"]["alterId"]
                 break
         conf_Dyp="开启,alterId为 %s" % dyp_AId
     else:
         conf_Dyp="关闭"
     
-    if conf_stream[u"httpSettings"] != None:
-        conf_path = conf_stream[u"httpSettings"][u"path"]
-    if conf_stream[u"wsSettings"] != None:
-        conf_host = conf_stream[u"wsSettings"][u"headers"][u"host"]
-    if conf_stream[u"tcpSettings"] != None:
-        conf_host = conf_stream[u"tcpSettings"][u"header"][u"request"][u"headers"][u"Host"]
+    if conf_stream["httpSettings"] != None:
+        conf_path = conf_stream["httpSettings"]["path"]
+    if conf_stream["wsSettings"] != None:
+        conf_host = conf_stream["wsSettings"]["headers"]["host"]
+    if conf_stream["tcpSettings"] != None:
+        conf_host = conf_stream["tcpSettings"]["header"]["request"]["headers"]["Host"]
     
     if (conf_stream_security == "tls"):
         with open('/usr/local/v2ray.fun/my_domain', 'r') as domain_file:
@@ -53,23 +53,23 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
 
     if conf_stream_network == "kcp" :
         if "header" in conf_stream_kcp_settings:
-            conf_stream_header = conf_stream_kcp_settings[u"header"][u"type"]
+            conf_stream_header = conf_stream_kcp_settings["header"]["type"]
         else:
             conf_stream_header = "none"
 
-    clients=conf_settings[u"clients"]
+    clients=conf_settings["clients"]
     for index,client in enumerate(clients):
         index_dict['clientIndex']=index
         email = ""
-        if "email" in client and client[u"email"] != None:
-            email = client[u"email"]
+        if "email" in client and client["email"] != None:
+            email = client["email"]
         copy_index_dict = index_dict.copy()
         sinUserConf={}
         sinUserConf['v']="2"
         sinUserConf['add']=(tls_domain if tls_domain != "" else conf_ip)
-        sinUserConf['id']=client[u"id"]
-        sinUserConf['aid']=client[u"alterId"]
-        sinUserConf['port']=part_json[u"port"]
+        sinUserConf['id']=client["id"]
+        sinUserConf['aid']=client["alterId"]
+        sinUserConf['port']=part_json["port"]
         sinUserConf['type']=conf_stream_header
         sinUserConf['net']=conf_stream_network
         sinUserConf['path']=conf_path
@@ -84,19 +84,19 @@ with open('/etc/v2ray/config.json', 'r') as json_file:
     config = json.load(json_file)
 
 #读取配置文件大框架
-conf_inbound=config[u"inbound"]
-conf_outbound=config[u"outbound"]
-conf_inboundDetour=config[u"inboundDetour"]
-conf_outboundDetour=config[u"outboundDetour"]
-conf_dns=config[u"dns"]
-conf_routing=config[u"routing"]
+conf_inbound=config["inbound"]
+conf_outbound=config["outbound"]
+conf_inboundDetour=config["inboundDetour"]
+conf_outboundDetour=config["outboundDetour"]
+conf_dns=config["dns"]
+conf_routing=config["routing"]
 
 conf_stats = "开启" if "stats" in config else "关闭"
 
 if conf_stats == "开启":
     for detour_list in conf_inboundDetour:
-        if "protocol" in detour_list and detour_list[u"protocol"] == "dokodemo-door":
-            conf_door_port = detour_list[u"port"]
+        if "protocol" in detour_list and detour_list["protocol"] == "dokodemo-door":
+            conf_door_port = detour_list["port"]
 
 #获取本机IP地址
 my_ip = urllib.request.urlopen('http://api.ipify.org').read()

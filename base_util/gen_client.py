@@ -48,7 +48,7 @@ else:
     detour_index= index_dict['detourIndex']
     part_json = config[u"inboundDetour"][detour_index]
 
-client_config[u"outbound"][u"settings"][u"vnext"][0][u"port"]=mul_user_conf[user_index]['port']
+client_config[u"outbound"][u"settings"][u"vnext"][0][u"port"]=int(mul_user_conf[user_index]['port'])
 client_config[u"outbound"][u"settings"][u"vnext"][0][u"users"][0][u"id"]=mul_user_conf[user_index]['id']
 client_config[u"outbound"][u"settings"][u"vnext"][0][u"users"][0][u"alterId"]=mul_user_conf[user_index]['aid']
 client_config[u"outbound"][u"streamSettings"]=part_json[u"streamSettings"]

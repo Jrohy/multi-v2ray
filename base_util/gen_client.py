@@ -29,10 +29,16 @@ user_index=0
 if len(mul_user_conf) > 1:
     import server_info
     choice=input("请输入要生成客户端json的节点序号:")
-    if tool_box.is_number(choice) and choice > 0 and choice <= len(mul_user_conf):
-        user_index = choice - 1
+    if tool_box.is_number(choice):
+        choice = int(choice)
+        if choice > 0 and choice <= len(mul_user_conf):
+            user_index = choice - 1
+        else:
+            print ("输入错误，请检查数字是否在范围中")
+            exit
     else:
-        print ("输入错误，请检查是否为数字和范围中")
+        print("输入错误,请检查是否为数字")
+        exit
 
 #使用服务端配置来修改客户端模板
 index_dict=mul_user_conf[user_index]['indexDict']

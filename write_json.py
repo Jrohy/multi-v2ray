@@ -117,7 +117,7 @@ def write_stream_network(network, para, index_dict):
         part_json["streamSettings"]["wsSettings"]["headers"]["host"] = para
 
     if (network == "mkcp" and para=="none"):
-        with open('json_template/kcp.json', 'r') as stream_file:
+        with open('/usr/local/v2ray.fun/json_template/kcp.json', 'r') as stream_file:
             kcp = json.load(stream_file)
         part_json["streamSettings"]=kcp
         

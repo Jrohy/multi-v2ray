@@ -47,8 +47,8 @@ if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= m
         write_json.create_new_user(choice, email=email)
     elif mul_user_conf[user_index]["protocol"] == "socks":
         print("当前组为socks组, 请输入用户密码创建新的socks用户\n")
-        user=input("请输入socks的用户名")
-        password=input("请输入socks的密码")
+        user=input("请输入socks的用户名: ")
+        password=input("请输入socks的密码: ")
         if user == "" or password == "":
             print("socks的用户名或者密码不能为空")
             exit

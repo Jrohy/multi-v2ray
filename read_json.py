@@ -88,7 +88,7 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
 
         multi_user_conf.append(sinUserConf)
 
-with open('test.json', 'r') as json_file:
+with open('/etc/v2ray/config.json', 'r') as json_file:
     config = json.load(json_file)
 
 #读取配置文件大框架

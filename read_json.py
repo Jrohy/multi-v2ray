@@ -57,7 +57,12 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
         else:
             conf_stream_header = "none"
 
-    clients=conf_settings["clients"]
+    protocol = part_json["protocol"]
+    if protocol == "vmess":
+        clients=conf_settings["clients"]
+    elif protocol == "socks":
+        clients=conf_settings["accounts"]
+
     for index,client in enumerate(clients):
         index_dict['clientIndex']=index
         email = ""
@@ -65,19 +70,22 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
             email = client["email"]
         copy_index_dict = index_dict.copy()
         sinUserConf={}
-        sinUserConf['v']="2"
-        sinUserConf['add']=(tls_domain if tls_domain != "" else conf_ip)
-        sinUserConf['id']=client["id"]
-        sinUserConf['aid']=client["alterId"]
+        sinUserConf['protocol']=protocol
         sinUserConf['port']=part_json["port"]
-        sinUserConf['type']=conf_stream_header
-        sinUserConf['net']=conf_stream_network
-        sinUserConf['path']=conf_path
-        sinUserConf['host']=conf_host
+        sinUserConf['add']=(tls_domain if tls_domain != "" else conf_ip)
+        sinUserConf['id']= (client["id"] if protocol == "vmess" else client["pass"])
+        sinUserConf['email']=(email if protocol == "vmess" else client["user"])
         sinUserConf['tls']=conf_stream_security
+        if protocol == "vmess":
+            sinUserConf['v']="2"
+            sinUserConf['aid']=client["alterId"]
+            sinUserConf['type']=conf_stream_header
+            sinUserConf['net']=conf_stream_network
+            sinUserConf['path']=conf_path
+            sinUserConf['host']=conf_host
+            sinUserConf['dyp']=conf_Dyp
         sinUserConf['indexDict']=copy_index_dict
-        sinUserConf['dyp']=conf_Dyp
-        sinUserConf['email']=email
+
         multi_user_conf.append(sinUserConf)
 
 with open('/etc/v2ray/config.json', 'r') as json_file:

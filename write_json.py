@@ -82,23 +82,40 @@ def write_email(email, index_dict):
     write()
 
 #更改底层传输设置
-def write_stream_network(network, para, index_dict):
+def write_stream_network(network, index_dict, **kw):
     part_json = locate_json(index_dict)
     security_backup = part_json["streamSettings"]["security"]
     tls_settings_backup = part_json["streamSettings"]["tlsSettings"]
 
-    if (network == "tcp" and para == "none"):
+    #原来是socks协议改其他协议则会修改protocol和settings
+    if part_json["protocol"] == "socks" and network != "socks":
+        part_json["protocol"] = "vmess"
+        setting = {"clients":[{"id":str(uuid.uuid1()), "alterId": 64}]}
+        part_json["settings"] = setting
+
+    if (network == "tcp" and not kw):
         with open('/usr/local/v2ray.fun/json_template/tcp.json', 'r') as stream_file:
             tcp = json.load(stream_file)
         part_json["streamSettings"]=tcp
 
-    if (network == "tcp" and para != "none"):
+    elif (network == "tcp" and "para" in kw):
         with open('/usr/local/v2ray.fun/json_template/http.json', 'r') as stream_file:
             http = json.load(stream_file)
-        http["tcpSettings"]["header"]["request"]["headers"]["Host"]=para
+        http["tcpSettings"]["header"]["request"]["headers"]["Host"]=kw["para"]
         part_json["streamSettings"]=http
 
-    if (network == "h2"):
+    elif (network == "socks" and "user" in kw and "pass" in kw):
+        with open('/usr/local/v2ray.fun/json_template/socks.json', 'r') as stream_file:
+            socks = json.load(stream_file)
+        with open('/usr/local/v2ray.fun/json_template/tcp.json', 'r') as stream_file:
+            tcp = json.load(stream_file)
+        socks["accounts"][0]["user"]=kw["user"]
+        socks["accounts"][0]["pass"]=kw["pass"]
+        part_json[u"settings"]=socks
+        part_json[u"protocol"]="socks"
+        part_json[u"streamSettings"]=tcp
+
+    elif (network == "h2"):
         with open('/usr/local/v2ray.fun/json_template/http2.json', 'r') as stream_file:
             http2 = json.load(stream_file)
         part_json["streamSettings"]=http2
@@ -110,33 +127,33 @@ def write_stream_network(network, para, index_dict):
             v2ray_util.change_tls("on", index_dict)
             return
 
-    if (network == "ws"):
+    elif (network == "ws" and "para" in kw):
         with open('/usr/local/v2ray.fun/json_template/ws.json', 'r') as stream_file:
             ws = json.load(stream_file)
         part_json["streamSettings"]=ws
-        part_json["streamSettings"]["wsSettings"]["headers"]["host"] = para
+        part_json["streamSettings"]["wsSettings"]["headers"]["host"] = kw["para"]
 
-    if (network == "mkcp" and para=="none"):
+    elif (network == "mkcp" and not kw):
         with open('/usr/local/v2ray.fun/json_template/kcp.json', 'r') as stream_file:
             kcp = json.load(stream_file)
         part_json["streamSettings"]=kcp
         
-    if (network == "mkcp" and para=="kcp utp"):
+    elif (network == "mkcp" and kw["para"]=="kcp utp"):
         with open('/usr/local/v2ray.fun/json_template/kcp_utp.json', 'r') as stream_file:
             utp = json.load(stream_file)
         part_json["streamSettings"]=utp
         
-    if (network == "mkcp" and para=="kcp srtp"):
+    elif (network == "mkcp" and kw["para"]=="kcp srtp"):
         with open('/usr/local/v2ray.fun/json_template/kcp_srtp.json', 'r') as stream_file:
             srtp = json.load(stream_file)
         part_json["streamSettings"]=srtp
         
-    if (network == "mkcp" and para=="kcp wechat-video"):
+    elif (network == "mkcp" and kw["para"]=="kcp wechat-video"):
         with open('/usr/local/v2ray.fun/json_template/kcp_wechat.json', 'r') as stream_file:
             wechat = json.load(stream_file)
         part_json["streamSettings"]=wechat
     
-    if (network == "mkcp" and para=="kcp dtls"):
+    elif (network == "mkcp" and "para" in kw and kw["para"]=="kcp dtls"):
         with open('/usr/local/v2ray.fun/json_template/kcp_dtls.json', 'r') as stream_file:
             dtls = json.load(stream_file)
         part_json["streamSettings"]=dtls
@@ -198,54 +215,63 @@ def create_new_port(newPort):
     write()
 
 #为某组新建用户
-def create_new_user(group, email=""):
-    new_uuid = uuid.uuid1()
-    email_info = ""
-    with open('/usr/local/v2ray.fun/json_template/user.json', 'r') as userFile:
-        user = json.load(userFile)
-    if email != "":
-        user.update({"email":email})
-        email_info = ", email: " + email
-    user["id"]=str(new_uuid)
+def create_new_user(group, **kw):
     multi_user_conf = read_json.multiUserConf
-    detour_index=0
-    for sin_user_conf in multi_user_conf:
+    user_index=0
+    for index, sin_user_conf in enumerate(multi_user_conf):
         if sin_user_conf['indexDict']['group'] == group:
-            detour_index = sin_user_conf['indexDict']['detourIndex']
+            user_index = index
             break
-    if group == "A":
-        config["inbound"]["settings"]["clients"].append(user)
-    else:
-        config["inboundDetour"][detour_index]["settings"]["clients"].append(user)
+
+    part_json = locate_json(multi_user_conf[user_index]["indexDict"])
+
+    if multi_user_conf[user_index]["protocol"] == "vmess":
+        new_uuid = uuid.uuid1()
+        email_info = ""
+        with open('/usr/local/v2ray.fun/json_template/user.json', 'r') as userFile:
+            user = json.load(userFile)
+        if "email" in kw and kw["email"] != "":
+            user.update({"email":kw["email"]})
+            email_info = ", email: " + kw["email"]
+        user["id"]=str(new_uuid)
+
+        part_json["settings"]["clients"].append(user)
     
-    print("新建用户成功! uuid: %s, alterId: 32%s" % (str(new_uuid), email_info))
+        print("新建用户成功! uuid: %s, alterId: 32%s" % (str(new_uuid), email_info))
+
+    elif multi_user_conf[user_index]["protocol"] == "socks" and "user" in kw and "pass" in kw:
+        user = {"user": kw["user"], "pass": kw["pass"]}
+        part_json["settings"]["accounts"].append(user)
+        print("新建Socks5用户成功! user: %s, pass: %s" % (kw["user"], kw["pass"]))
     write()
 
 #删除用户
 def del_user(index):
     multi_user_conf = read_json.multiUserConf
     index_dict = multi_user_conf[index]['indexDict']
-    group = index_dict['group']
+    part_json = locate_json(index_dict)
+    protocol = multi_user_conf[index]['protocol']
 
     #统计当前操作记录所在组的user数量
     count=0
     for sin_user_conf in multi_user_conf:
-        if sin_user_conf['indexDict']['group'] == group:
+        if sin_user_conf['indexDict']['group'] == index_dict['group']:
             count += 1
-    
-    if group == 'A':
-        if count == 1:
+
+    if count == 1:
+        if index_dict['group'] == 'A':
             print("inbound组只有一个用户，无法删除")
-            return
-        del config["inbound"]["settings"]["clients"][index_dict['clientIndex']]
-    else:
-        if count == 1:
+            return    
+        else:
             print("当前inboundDetour组只有一个用户，整个节点组删除")
-            del config["inboundDetour"][index_dict['detourIndex']]
+            del config["inboundDetour"][index_dict["detourIndex"]]
             if len(config["inboundDetour"]) == 0:
                 config["inboundDetour"] == None
-        else:
-            del config["inboundDetour"][index_dict['detourIndex']]["settings"]["clients"][index_dict['clientIndex']]
+    elif protocol == "vmess":
+        del part_json["settings"]["clients"][index_dict['clientIndex']]
+    elif protocol == "socks":
+        del part_json["settings"]["accounts"][index_dict['clientIndex']]
+
     print("删除用户成功!")
     write()
 

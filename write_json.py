@@ -87,6 +87,12 @@ def write_stream_network(network, index_dict, **kw):
     security_backup = part_json["streamSettings"]["security"]
     tls_settings_backup = part_json["streamSettings"]["tlsSettings"]
 
+    #原来是socks协议改其他协议则会修改protocol和settings
+    if part_json["protocol"] == "socks" and network != "socks":
+        part_json["protocol"] = "vmess"
+        setting = {"clients":[{"id":str(uuid.uuid1()), "alterId": 64}]}
+        part_json["settings"] = setting
+
     if (network == "tcp" and not kw):
         with open('/usr/local/v2ray.fun/json_template/tcp.json', 'r') as stream_file:
             tcp = json.load(stream_file)

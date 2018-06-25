@@ -236,6 +236,7 @@ def create_new_user(group, **kw):
     elif multi_user_conf[user_index]["protocol"] == "socks" and "user" in kw and "pass" in kw:
         user = {"user": kw["user"], "pass": kw["pass"]}
         part_json["settings"]["accounts"].append(user)
+        print("新建Socks5用户成功! user: %s, pass: %s" % (kw["user"], kw["pass"]))
     write()
 
 #删除用户

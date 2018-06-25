@@ -10,7 +10,7 @@ for index, sin_user_conf in enumerate(read_json.multiUserConf):
     print("%d." % index)
     print("Group: %s" % sin_user_conf["indexDict"]["group"])
     print("IP：%s" % sin_user_conf["add"]) 
-    print("Port：%d" % sin_user_conf["port"])
+    print("Port：%d" % int(sin_user_conf["port"]))
     if sin_user_conf["email"]:
         if protocol == "vmess":
             print("Email: %s" % sin_user_conf["email"])

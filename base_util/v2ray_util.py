@@ -10,27 +10,35 @@ from base_util import tool_box
 
 def choice_stream(new_stream_network, index_dict):
     if(new_stream_network==1):
-        write_json.write_stream_network("tcp", "none", index_dict)
+        write_json.write_stream_network("tcp", index_dict)
     elif(new_stream_network==2):
         print("请输入你想要为伪装的域名（不不不需要http）：")
         host=input()
-        write_json.write_stream_network("tcp",str(host), index_dict)
+        write_json.write_stream_network("tcp",index_dict, para=host)
     elif(new_stream_network==3):
         print("请输入你的服务器绑定域名（不不不需要http）：")
         host=input()
-        write_json.write_stream_network("ws",str(host), index_dict)
+        write_json.write_stream_network("ws", index_dict, para=host)
     elif(new_stream_network==4):
-        write_json.write_stream_network("mkcp","none", index_dict)
+        write_json.write_stream_network("mkcp", index_dict)
     elif(new_stream_network==5):
-        write_json.write_stream_network("mkcp","kcp srtp", index_dict)
+        write_json.write_stream_network("mkcp", index_dict, para = "kcp srtp")
     elif(new_stream_network==6):
-        write_json.write_stream_network("mkcp","kcp utp",index_dict)
+        write_json.write_stream_network("mkcp", index_dict, para = "kcp utp")
     elif(new_stream_network==7):
-        write_json.write_stream_network("mkcp","kcp wechat-video",index_dict)
+        write_json.write_stream_network("mkcp", index_dict, para = "kcp wechat-video")
     elif(new_stream_network==8):
-        write_json.write_stream_network("mkcp","kcp dtls",index_dict)
+        write_json.write_stream_network("mkcp", index_dict, para = "kcp dtls")
     elif(new_stream_network==9):
-        write_json.write_stream_network("h2","none", index_dict)
+        write_json.write_stream_network("h2", index_dict)
+    elif(new_stream_network==10):
+        user=input("请输入socks的用户名")
+        password=input("请输入socks的密码")
+        if user == "" or password == "":
+            print("socks的用户名或者密码不能为空")
+            exit
+        info = {"user":user, "pass": password}
+        write_json.write_stream_network("socks", index_dict, **info)
 
 #随机一种 (srtp | wechat-video | utp) header伪装, 默认inbound组的主用户
 def random_kcp(index_dict={'inboundOrDetour': 0, 'detourIndex': 0, 'clientIndex': 0, 'group': 'A'}):

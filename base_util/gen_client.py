@@ -14,10 +14,6 @@ def write_client_json():
 #获取本机IP地址
 myip = tool_box.get_ip()
 
-#加载客户端配置模板
-with open('/usr/local/v2ray.fun/json_template/client.json', 'r') as client_json_file:
-    client_config = json.load(client_json_file)
-
 #打开服务器端配置文件
 with open('/etc/v2ray/config.json', 'r') as json_file:
     config = json.load(json_file)
@@ -40,28 +36,40 @@ if len(mul_user_conf) > 1:
         print("输入错误,请检查是否为数字")
         exit
 
-#使用服务端配置来修改客户端模板
-index_dict=mul_user_conf[user_index]['indexDict']
+index_dict = mul_user_conf[user_index]['indexDict']
+
+protocol = mul_user_conf[user_index]['protocol']
+
 if index_dict['inboundOrDetour'] == 0:
-    part_json = config[u"inbound"]
+    part_json = config["inbound"]
 else:
     detour_index= index_dict['detourIndex']
-    part_json = config[u"inboundDetour"][detour_index]
+    part_json = config["inboundDetour"][detour_index]
 
-client_config[u"outbound"][u"settings"][u"vnext"][0][u"port"]=int(mul_user_conf[user_index]['port'])
-client_config[u"outbound"][u"settings"][u"vnext"][0][u"users"][0][u"id"]=mul_user_conf[user_index]['id']
-client_config[u"outbound"][u"settings"][u"vnext"][0][u"users"][0][u"alterId"]=mul_user_conf[user_index]['aid']
-client_config[u"outbound"][u"streamSettings"]=part_json[u"streamSettings"]
+#加载客户端配置模板
+if protocol == "vmess":
+    with open('/usr/local/v2ray.fun/json_template/client.json', 'r') as client_json_file:
+        client_config = json.load(client_json_file)
+    user_json=client_config["outbound"]["settings"]["vnext"][0]
+    user_json["users"][0]["id"]=mul_user_conf[user_index]['id']
+    user_json["users"][0]["alterId"]=mul_user_conf[user_index]['aid']
+elif protocol == "socks":
+    with open('/usr/local/v2ray.fun/json_template/client_socks.json', 'r') as client_json_file:
+        client_config = json.load(client_json_file)
+    user_json=client_config["outbound"]["settings"]["servers"][0]
+    user_json["users"][0]["user"]=mul_user_conf[user_index]['email']
+    user_json["users"][0]["pass"]=mul_user_conf[user_index]['id']
+
+user_json["port"]=int(mul_user_conf[user_index]['port'])
+client_config["outbound"]["streamSettings"]=part_json["streamSettings"]
+
 if mul_user_conf[user_index]['tls']== "":
-    client_config[u"outbound"][u"settings"][u"vnext"][0][u"address"]=str(myip)
+    user_json["address"]=str(myip)
 else:
     with open('/usr/local/v2ray.fun/my_domain', 'r') as domain_file:
         content = domain_file.read()
-    client_config[u"outbound"][u"settings"][u"vnext"][0][u"address"] = str(content)
-    client_config[u"outbound"][u"streamSettings"][u"network"] = mul_user_conf[user_index]['net']
-    client_config[u"outbound"][u"streamSettings"][u"security"] = "tls"
-    client_config[u"outbound"][u"streamSettings"][u"tlsSettings"] = {}
-    client_config[u"outbound"][u"streamSettings"][u"httpSettings"] = part_json[u"streamSettings"][u"httpSettings"]
+    user_json["address"] = str(content)
+    client_config["outbound"]["streamSettings"]["tlsSettings"] = {}
 
 #写入客户端配置文件
 write_client_json()

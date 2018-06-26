@@ -65,24 +65,22 @@ while True:
         else:
             schoice = "A"
 
-        if len(schoice) == 1:
-            door_port = read_json.conf_door_port
-            schoice=schoice.upper()
-            if tool_box.is_number(schoice) :
-                schoice = int(schoice)
-                if schoice > 0 and schoice <= length:
-                    email = mul_user_conf[schoice - 1]["email"]
-                    if email == "":
-                        print("无有效邮箱，无法统计!!!\n")
-                    else:                   
-                        v2ray_util.get_stats(0, email, door_port, is_reset)
-                    continue
-            elif re.match(r'[A-Z]', schoice) and schoice <= mul_user_conf[-1]['indexDict']['group']:
-                v2ray_util.get_stats(1, schoice, door_port, is_reset)
+        door_port = read_json.conf_door_port
+        schoice=schoice.upper()
+        if tool_box.is_number(schoice) :
+            schoice = int(schoice)
+            if schoice > 0 and schoice <= length:
+                email = mul_user_conf[schoice - 1]["email"]
+                if email == "":
+                    print("无有效邮箱，无法统计!!!\n")
+                else:                   
+                    v2ray_util.get_stats(0, email, door_port, is_reset)
                 continue
-            print("输入有误! 请检查是否在范围内\n")
-        else:
-            print("输入有误!\n")  
+        elif re.match(r'[A-Z]', schoice) and schoice <= mul_user_conf[-1]['indexDict']['group']:
+            v2ray_util.get_stats(1, schoice, door_port, is_reset)
+            continue
+        print("输入有误! 请重新输入\n")
+
     else:
         break
 

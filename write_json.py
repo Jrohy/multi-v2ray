@@ -111,9 +111,9 @@ def write_stream_network(network, index_dict, **kw):
             tcp = json.load(stream_file)
         socks["accounts"][0]["user"]=kw["user"]
         socks["accounts"][0]["pass"]=kw["pass"]
-        part_json[u"settings"]=socks
-        part_json[u"protocol"]="socks"
-        part_json[u"streamSettings"]=tcp
+        part_json["settings"]=socks
+        part_json["protocol"]="socks"
+        part_json["streamSettings"]=tcp
 
     elif (network == "h2"):
         with open('/usr/local/v2ray.fun/json_template/http2.json', 'r') as stream_file:

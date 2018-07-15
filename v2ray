@@ -10,7 +10,7 @@ echo -e "欢迎使用 V2ray.fun 管理程序"
 echo -e "\033[0m"
 echo -e "1.服务管理\t\t 2.用户管理\n"
 echo -e "3.更改配置\t\t 4.查看配置\n"
-echo -e "5.其他设置\t\t 6.更新V2Ray\n"
+echo -e "5.其他功能\t\t 6.更新V2Ray\n"
 echo -e "7.生成客户端配置文件"
 
 while :; do echo
@@ -215,11 +215,12 @@ if [[ ${choice} == 5 ]]; then
     echo -e "1.流量统计\n"
     echo -e "2.定时更新V2ray\n"
     echo -e "3.清理v2ray日志\n"
+    echo -e "4.脚本升级\n"
     echo -e "请输入数字选择功能：\n"
 
     while :; do echo
 	    read -n1 -p "请选择： " extraChoice
-	    if [[ ! $extraChoice =~ ^[1-3]$ ]]; then
+	    if [[ ! $extraChoice =~ ^[1-4]$ ]]; then
             if [[ -z ${extraChoice} ]];then
                 bash /usr/local/bin/v2ray
                 exit 0
@@ -245,6 +246,13 @@ if [[ ${choice} == 5 ]]; then
         cat /dev/null > /var/log/v2ray/access.log
         cat /dev/null > /var/log/v2ray/error.log
         echo -e "清理v2ray日志成功!\n"
+        bash /usr/local/bin/v2ray
+    fi
+
+    if [[ ${extraChoice} == 4 ]]; then
+        echo -e "脚本正在以保留配置文件形式升级, 若失败请自行手动全新安装..\n"
+        source <(curl -sL https://git.io/vpHpE) keep
+        echo -e "\n脚本升级成功!!\n"
         bash /usr/local/bin/v2ray
     fi
 fi

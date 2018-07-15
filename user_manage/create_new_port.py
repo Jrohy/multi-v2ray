@@ -9,9 +9,9 @@ new_port=input("产生随机端口%d, 回车直接以该端口新建Group, 否�
 
 if not new_port:
     new_port = random_port
-    
+
 if tool_box.is_number(new_port):
-    print("新端口为: %d" % new_port)
+    print("新端口为: %d \n" % int(new_port))
     write_json.create_new_port(new_port)
 else:
     print ("\n输入错误，请检查是否为数字")

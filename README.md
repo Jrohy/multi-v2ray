@@ -92,6 +92,9 @@ source <(curl -sL https://git.io/vpHho)
 **不支持Centos 6**
 
 ## 更新日志
+**2018.7.15**  
+增加清理日志,更新脚本菜单
+
 **2018.6.26**  
 支持Socks5
 

@@ -131,7 +131,11 @@ def write_stream_network(network, index_dict, **kw):
         with open('/usr/local/v2ray.fun/json_template/ws.json', 'r') as stream_file:
             ws = json.load(stream_file)
         part_json["streamSettings"]=ws
-        part_json["streamSettings"]["wsSettings"]["headers"]["host"] = kw["para"]
+        part_json["streamSettings"]["wsSettings"]["headers"]["Host"] = kw["para"]
+
+        #随机生成8位的伪装path
+        salt = '/' + ''.join(random.sample(string.ascii_letters + string.digits, 8)) + '/'
+        part_json["streamSettings"]["wsSettings"]["path"]=salt
 
     elif (network == "mkcp" and not kw):
         with open('/usr/local/v2ray.fun/json_template/kcp.json', 'r') as stream_file:

@@ -9,7 +9,7 @@
     "connectionReuse": true,
     "path": "",
     "headers": {
-      "host": ""
+      "Host": ""
     }
   }
 }

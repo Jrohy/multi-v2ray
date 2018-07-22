@@ -21,6 +21,8 @@ for index, sin_user_conf in enumerate(read_json.multiUserConf):
         print("Alter ID: %s" % sin_user_conf["aid"])
         if sin_user_conf["net"] == "h2":
             print("Network：%s" % ("HTTP/2  伪装Path: " + sin_user_conf["path"])) 
+        elif sin_user_conf["net"] == "ws":
+            print("Network：%s" % ("WebSocket  伪装Host: " + sin_user_conf["host"] + " 伪装Path: " + sin_user_conf["path"])) 
         else:
             print("Network：%s" % (sin_user_conf["net"] + " " + sin_user_conf["type"])) 
         print("TLS: %s" % ("关闭" if sin_user_conf["tls"] == "" else "开启"))

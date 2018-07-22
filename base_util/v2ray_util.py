@@ -16,7 +16,7 @@ def choice_stream(new_stream_network, index_dict):
         host=input()
         write_json.write_stream_network("tcp",index_dict, para=host)
     elif(new_stream_network==3):
-        print("请输入你的服务器绑定域名（不不不需要http）：")
+        print("请输入你想要为伪装的域名（不不不需要http）：")
         host=input()
         write_json.write_stream_network("ws", index_dict, para=host)
     elif(new_stream_network==4):

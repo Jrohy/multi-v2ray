@@ -42,7 +42,8 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
     if conf_stream["httpSettings"] != None:
         conf_path = conf_stream["httpSettings"]["path"]
     if conf_stream["wsSettings"] != None:
-        conf_host = conf_stream["wsSettings"]["headers"]["host"]
+        conf_host = conf_stream["wsSettings"]["headers"]["Host"]
+        conf_path = conf_stream["wsSettings"]["path"]
     if conf_stream["tcpSettings"] != None:
         conf_host = conf_stream["tcpSettings"]["header"]["request"]["headers"]["Host"]
     

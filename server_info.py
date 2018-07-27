@@ -12,7 +12,7 @@ for index, sin_user_conf in enumerate(read_json.multiUserConf):
     print("IP：%s" % sin_user_conf["add"]) 
     print("Port：%s" % sin_user_conf["port"])
     if sin_user_conf["email"]:
-        if protocol == "vmess":
+        if protocol == "vmess" or protocol == "mtproto":
             print("Email: %s" % sin_user_conf["email"])
         elif protocol == "socks":
             print("User: %s" % sin_user_conf["email"])
@@ -45,6 +45,10 @@ for index, sin_user_conf in enumerate(read_json.multiUserConf):
             share_url = "tg://socks?server=%s&port=%s&user=%s&pass=%s" % (sin_user_conf["add"], sin_user_conf["port"], sin_user_conf["email"], sin_user_conf["id"])
         else:
             share_url = "HTTPS的Socks5不支持tg的分享连接. 请自行配合设置BifrostV等软件使用"
+
+    elif protocol == "mtproto":
+        print("Secret: %s" % sin_user_conf["id"])
+        share_url = "tg://proxy?server=%s&port=%s&secret=%s" % (sin_user_conf["add"], sin_user_conf["port"], sin_user_conf["id"])
 
     #绿色字体显示
     print("\033[32m")

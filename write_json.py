@@ -27,6 +27,14 @@ def locate_json(index_dict):
         part_json = config["inboundDetour"][detour_index]
     return part_json
 
+#设置inbound级别定位json
+def set_locate_json(index_dict, json):
+    if index_dict['inboundOrDetour'] == 0:
+        config["inbound"] = json
+    else:
+        detour_index= index_dict['detourIndex']
+        config["inboundDetour"][detour_index] = json
+
 #更改动态端口
 def en_dyn_port(en, index_dict, d_alterid=32):
     part_json = locate_json(index_dict)
@@ -72,26 +80,49 @@ def write_uuid(my_uuid, index_dict):
     write()
 
 #更改email
-def write_email(email, index_dict):
+def write_email(email, index_dict, protocol):
     client_index = index_dict['clientIndex']
+    client_str = "clients" if protocol == "vmess" else "users"
     part_json = locate_json(index_dict)
-    if not "email" in part_json["settings"]["clients"][client_index]:
-        part_json["settings"]["clients"][client_index].update({"email": email})
+    if not "email" in part_json["settings"][client_str][client_index]:
+        part_json["settings"][client_str][client_index].update({"email": email})
     else:
-        part_json["settings"]["clients"][client_index]["email"]=email
+        part_json["settings"][client_str][client_index]["email"]=email
     write()
 
 #更改底层传输设置
 def write_stream_network(network, index_dict, **kw):
     part_json = locate_json(index_dict)
-    security_backup = part_json["streamSettings"]["security"]
-    tls_settings_backup = part_json["streamSettings"]["tlsSettings"]
+    origin_protocol = part_json["protocol"]
+    if part_json["protocol"] != "mtproto":
+        security_backup = part_json["streamSettings"]["security"]
+        tls_settings_backup = part_json["streamSettings"]["tlsSettings"]
 
-    #原来是socks协议改其他协议则会修改protocol和settings
-    if part_json["protocol"] == "socks" and network != "socks":
-        part_json["protocol"] = "vmess"
-        setting = {"clients":[{"id":str(uuid.uuid1()), "alterId": 64}]}
-        part_json["settings"] = setting
+    #减少mtproto int和out的路由绑定
+    if part_json["protocol"] == "mtproto" and network != "mtproto":
+        rules = config["routing"]["settings"]["rules"]
+        for index, rule in enumerate(rules):
+            if rule["outboundTag"] == "tg-out":
+                if len(rule["inboundTag"]) == 1:
+                    del rules[index]
+                    for out_index, oubound_mtproto in enumerate(config["outboundDetour"]):
+                        if oubound_mtproto["protocol"] == "mtproto":
+                            del config["outboundDetour"][out_index]
+                            break
+                else:
+                    for tag_index, rule_tag in enumerate(rule["inboundTag"]):
+                        if rule_tag == part_json["tag"]:
+                            del rule["inboundTag"][tag_index]
+                            break
+                break
+
+    #原来是socks/mtproto 改成其他协议的
+    if (part_json["protocol"] == "socks" and network != "socks" and network != "mtproto") or (part_json["protocol"] == "mtproto" and network != "mtproto" and network != "socks"):
+        with open('/usr/local/v2ray.fun/json_template/server.json', 'r') as stream_file:
+            vmess = json.load(stream_file)
+        vmess["inbound"]["port"] = part_json["port"]
+        set_locate_json(index_dict, vmess["inbound"])
+        part_json = locate_json(index_dict)
 
     if (network == "tcp" and not kw):
         with open('/usr/local/v2ray.fun/json_template/tcp.json', 'r') as stream_file:
@@ -114,6 +145,39 @@ def write_stream_network(network, index_dict, **kw):
         part_json["settings"]=socks
         part_json["protocol"]="socks"
         part_json["streamSettings"]=tcp
+
+    elif (network == "mtproto"):
+        with open('/usr/local/v2ray.fun/json_template/mtproto.json', 'r') as stream_file:
+            mtproto = json.load(stream_file)
+        mtproto_in = mtproto["mtproto-in"]
+        mtproto_in["port"] = part_json["port"]
+        mtproto_in["tag"] = index_dict["group"]
+        secret = ''.join(random.sample(string.ascii_lowercase + string.digits, 32))
+        mtproto_in["settings"]["users"][0]["secret"] = secret
+        set_locate_json(index_dict, mtproto_in)
+
+        has_outbound = False
+        for outbound in config["outboundDetour"]:
+            if "protocol" in outbound and outbound["protocol"] == "mtproto":
+                has_outbound = True
+                break
+        if not has_outbound:
+            mtproto_out = mtproto["mtproto-out"]
+            config["outboundDetour"].append(mtproto_out)
+        
+        rules = config["routing"]["settings"]["rules"]
+        has_bind = False
+        for rule in rules:
+            if rule["outboundTag"] == "tg-out":
+                has_bind = True
+                inbound_tag_set = set(rule["inboundTag"])
+                inbound_tag_set.add(index_dict["group"])
+                rule["inboundTag"] = list(inbound_tag_set)
+                break
+        if not has_bind:
+            routing_bind = mtproto["routing-bind"]
+            routing_bind["inboundTag"][0] = index_dict["group"]
+            rules.append(routing_bind)
 
     elif (network == "h2"):
         with open('/usr/local/v2ray.fun/json_template/http2.json', 'r') as stream_file:
@@ -162,8 +226,10 @@ def write_stream_network(network, index_dict, **kw):
             dtls = json.load(stream_file)
         part_json["streamSettings"]=dtls
     
-    part_json["streamSettings"]["security"] = security_backup
-    part_json["streamSettings"]["tlsSettings"] = tls_settings_backup
+    if part_json["protocol"] != "mtproto" and origin_protocol != "mtproto":
+        part_json["streamSettings"]["security"] = security_backup
+        part_json["streamSettings"]["tlsSettings"] = tls_settings_backup
+
     write()
 
 #更改TLS设置
@@ -336,7 +402,7 @@ def write_stats(action, multi_user_conf):
         for sin_user_conf in multi_user_conf:
             index_dict = sin_user_conf["indexDict"]
             group = index_dict["group"]
-            if last_group == group:
+            if last_group == group or sin_user_conf["protocol"] == "mtproto":
                 continue
             if group == 'A':
                 config["inbound"].update({"tag":group})
@@ -367,7 +433,7 @@ def write_stats(action, multi_user_conf):
             for sin_user_conf in multi_user_conf:
                 index_dict = sin_user_conf["indexDict"]
                 group = index_dict["group"]
-                if last_group == group:
+                if last_group == group or sin_user_conf["protocol"] == "mtproto":
                     continue
                 if group == 'A':
                     del config["inbound"]["tag"]

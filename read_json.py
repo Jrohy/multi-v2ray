@@ -3,17 +3,33 @@
 import json
 import urllib.request
 
+def dypJudge(conf_settings):
+    conf_Dyp="关闭"
+    if "detour" in conf_settings:
+        dyp_AId=""
+        dynamic_port_tag = conf_settings["detour"]["to"]
+        for detour_list in conf_inboundDetour:
+            if "tag" in detour_list and detour_list["tag"] == dynamic_port_tag:
+                dyp_AId = detour_list["settings"]["default"]["alterId"]
+                break
+        conf_Dyp="开启,alterId为 %s" % dyp_AId
+    return conf_Dyp
+
 def read_sin_user(part_json, multi_user_conf, index_dict):
     conf_path=""
     conf_host=""
     conf_Dyp=""
     conf_stream_security=""
     conf_stream_header=""
+    conf_stream_network=""
+    conf_stream_header=""
     tls_domain=""
     global conf_ip
     global conf_inboundDetour
 
-    if "streamSettings" not in part_json:
+    protocol = part_json["protocol"]
+
+    if "streamSettings" not in part_json and protocol != "mtproto":
         return
     
     #节点组别分组
@@ -23,22 +39,14 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
         index_dict['group'] = chr(number)
 
     conf_settings = part_json["settings"]
-    conf_stream = part_json["streamSettings"]
-    conf_stream_kcp_settings = conf_stream["kcpSettings"]
-    conf_stream_network = conf_stream["network"]
-    conf_stream_security = conf_stream["security"]
+    conf_Dyp=dypJudge(conf_settings)
 
-    if "detour" in conf_settings:
-        dyp_AId=""
-        dynamic_port_tag = conf_settings["detour"]["to"]
-        for detour_list in conf_inboundDetour:
-            if "tag" in detour_list and detour_list["tag"] == dynamic_port_tag:
-                dyp_AId = detour_list["settings"]["default"]["alterId"]
-                break
-        conf_Dyp="开启,alterId为 %s" % dyp_AId
-    else:
-        conf_Dyp="关闭"
-    
+    if protocol == "vmess" or protocol == "socks":
+        conf_stream = part_json["streamSettings"]
+        conf_stream_kcp_settings = conf_stream["kcpSettings"]
+        conf_stream_network = conf_stream["network"]
+        conf_stream_security = conf_stream["security"]
+
     if conf_stream["httpSettings"] != None:
         conf_path = conf_stream["httpSettings"]["path"]
     if conf_stream["wsSettings"] != None:
@@ -58,11 +66,12 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
         else:
             conf_stream_header = "none"
 
-    protocol = part_json["protocol"]
     if protocol == "vmess":
         clients=conf_settings["clients"]
     elif protocol == "socks":
         clients=conf_settings["accounts"]
+    elif protocol == "mtproto":
+        clients=conf_settings["users"]
 
     for index,client in enumerate(clients):
         index_dict['clientIndex']=index
@@ -74,8 +83,7 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
         sinUserConf['protocol']=protocol
         sinUserConf['port']=part_json["port"]
         sinUserConf['add']=(tls_domain if tls_domain != "" else conf_ip)
-        sinUserConf['id']= (client["id"] if protocol == "vmess" else client["pass"])
-        sinUserConf['email']=(email if protocol == "vmess" else client["user"])
+        sinUserConf['email']=(client["user"] if protocol == "socks" else email)
         sinUserConf['tls']=conf_stream_security
         if protocol == "vmess":
             sinUserConf['v']="2"
@@ -85,6 +93,12 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
             sinUserConf['path']=conf_path
             sinUserConf['host']=conf_host
             sinUserConf['dyp']=conf_Dyp
+            sinUserConf['id']=client["id"]
+            sinUserConf['email']=email
+        elif protocol == "socks":
+            sinUserConf['id']=client["pass"]
+        elif protocol == "mtproto":
+            sinUserConf['id']=client["secret"]
         sinUserConf['indexDict']=copy_index_dict
 
         multi_user_conf.append(sinUserConf)

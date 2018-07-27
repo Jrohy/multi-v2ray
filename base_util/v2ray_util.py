@@ -36,7 +36,7 @@ def choice_stream(new_stream_network, index_dict):
         password=input("请输入socks的密码: ")
         if user == "" or password == "":
             print("socks的用户名或者密码不能为空")
-            exit
+            exit()
         info = {"user":user, "pass": password}
         write_json.write_stream_network("socks", index_dict, **info)
     elif(new_stream_network==11):

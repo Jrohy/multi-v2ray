@@ -19,6 +19,7 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
     conf_path=""
     conf_host=""
     conf_Dyp=""
+    conf_stream=""
     conf_stream_security=""
     conf_stream_header=""
     conf_stream_network=""

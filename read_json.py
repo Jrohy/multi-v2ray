@@ -85,6 +85,7 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
         sinUserConf['add']=(tls_domain if tls_domain != "" else conf_ip)
         sinUserConf['email']=(client["user"] if protocol == "socks" else email)
         sinUserConf['tls']=conf_stream_security
+        sinUserConf['dyp']=conf_Dyp
         if protocol == "vmess":
             sinUserConf['v']="2"
             sinUserConf['aid']=client["alterId"]
@@ -92,7 +93,6 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
             sinUserConf['net']=conf_stream_network
             sinUserConf['path']=conf_path
             sinUserConf['host']=conf_host
-            sinUserConf['dyp']=conf_Dyp
             sinUserConf['id']=client["id"]
             sinUserConf['email']=email
         elif protocol == "socks":

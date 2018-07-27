@@ -23,7 +23,8 @@ if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= m
         if sin_user_conf['indexDict']['group'] == choice:
             user_index = index
             break
-    if mul_user_conf[user_index]["protocol"] == "vmess": 
+    protocol = mul_user_conf[user_index]["protocol"]
+    if protocol == "vmess": 
         while True:
             is_duplicate_email=False
 
@@ -45,14 +46,18 @@ if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= m
             if not is_duplicate_email:
                 break
         write_json.create_new_user(choice, email=email)
-    elif mul_user_conf[user_index]["protocol"] == "socks":
+
+    elif protocol == "socks":
         print("当前组为socks组, 请输入用户密码创建新的socks用户\n")
         user=input("请输入socks的用户名: ")
         password=input("请输入socks的密码: ")
         if user == "" or password == "":
             print("socks的用户名或者密码不能为空")
-            exit
+            exit()
         info = {"user":user, "pass": password}
         write_json.create_new_user(choice, **info)
+
+    elif protocol == "mtproto":
+        print("\nV2ray 只支持MTProto协议同一组的第一个用户生效, 所以没必要新增用户!")
 else:
     print("输入有误，请检查是否为字母且范围中")

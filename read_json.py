@@ -19,7 +19,6 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
     conf_path=""
     conf_host=""
     conf_Dyp=""
-    conf_stream=""
     conf_stream_security=""
     conf_stream_header=""
     conf_stream_network=""
@@ -48,24 +47,24 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
         conf_stream_network = conf_stream["network"]
         conf_stream_security = conf_stream["security"]
 
-    if conf_stream["httpSettings"] != None:
-        conf_path = conf_stream["httpSettings"]["path"]
-    if conf_stream["wsSettings"] != None:
-        conf_host = conf_stream["wsSettings"]["headers"]["Host"]
-        conf_path = conf_stream["wsSettings"]["path"]
-    if conf_stream["tcpSettings"] != None:
-        conf_host = conf_stream["tcpSettings"]["header"]["request"]["headers"]["Host"]
-    
-    if (conf_stream_security == "tls"):
-        with open('/usr/local/v2ray.fun/my_domain', 'r') as domain_file:
-            content = domain_file.read()
-            tls_domain = str(content)
+        if conf_stream["httpSettings"] != None:
+            conf_path = conf_stream["httpSettings"]["path"]
+        if conf_stream["wsSettings"] != None:
+            conf_host = conf_stream["wsSettings"]["headers"]["Host"]
+            conf_path = conf_stream["wsSettings"]["path"]
+        if conf_stream["tcpSettings"] != None:
+            conf_host = conf_stream["tcpSettings"]["header"]["request"]["headers"]["Host"]
+        
+        if (conf_stream_security == "tls"):
+            with open('/usr/local/v2ray.fun/my_domain', 'r') as domain_file:
+                content = domain_file.read()
+                tls_domain = str(content)
 
-    if conf_stream_network == "kcp" :
-        if "header" in conf_stream_kcp_settings:
-            conf_stream_header = conf_stream_kcp_settings["header"]["type"]
-        else:
-            conf_stream_header = "none"
+        if conf_stream_network == "kcp" :
+            if "header" in conf_stream_kcp_settings:
+                conf_stream_header = conf_stream_kcp_settings["header"]["type"]
+            else:
+                conf_stream_header = "none"
 
     if protocol == "vmess":
         clients=conf_settings["clients"]

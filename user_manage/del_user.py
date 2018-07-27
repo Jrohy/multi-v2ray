@@ -15,7 +15,7 @@ if length > 1:
     choice=input("请输入要删除的user节点序号数字:")
     if not tool_box.is_number(choice):
         print("输入错误，请检查是否为数字")
-        exit
+        exit()
     choice = int(choice)
 
 if length==1 or (choice > 0 and choice <= len(mul_user_conf)):

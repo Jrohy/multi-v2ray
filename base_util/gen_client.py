@@ -59,6 +59,9 @@ elif protocol == "socks":
     user_json=client_config["outbound"]["settings"]["servers"][0]
     user_json["users"][0]["user"]=mul_user_conf[user_index]['email']
     user_json["users"][0]["pass"]=mul_user_conf[user_index]['id']
+elif protocol == "mtproto":
+    print("\nMTProto协议只支持Telegram通信, 所以无法生成配置文件!\n")
+    exit()
 
 user_json["port"]=int(mul_user_conf[user_index]['port'])
 client_config["outbound"]["streamSettings"]=part_json["streamSettings"]

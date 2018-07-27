@@ -11,8 +11,6 @@ stop_nginx_cmd = "service nginx stop >/dev/null 2>&1"
 start_httpd_cmd = "service httpd start >/dev/null 2>&1"
 stop_httpd_cmd = "service httpd stop >/dev/null 2>&1"
 
-
-
 def getssl(domain):
     crt_file = "/root/.acme.sh/"+domain+"_ecc"+"/fullchain.cer"
     key_file = "/root/.acme.sh/"+domain+"_ecc"+"/"+domain+".key"

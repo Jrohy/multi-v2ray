@@ -15,15 +15,18 @@ if length > 1:
     choice=input("请输入要改alterId的节点序号数字:")
     if not tool_box.is_number(choice):
         print("输入错误，请检查是否为数字")
-        exit
+        exit()
     choice = int(choice)
 
 if length == 1 or (choice > 0 and choice <= length):
-    new_alterid=input("请输入新的alterID: ")
-    if (tool_box.is_number(new_alterid)):
-        write_json.write_alterid(new_alterid, mul_user_conf[choice - 1]['indexDict'])
-        print("alterID修改成功！")
+    if mul_user_conf[choice - 1]["protocol"] == "vmess":
+        new_alterid=input("请输入新的alterID: ")
+        if (tool_box.is_number(new_alterid)):
+                write_json.write_alterid(new_alterid, mul_user_conf[choice - 1]['indexDict'])
+                print("alterID修改成功！")
+        else:
+            print ("输入错误，请检查是否为数字")
     else:
-        print ("输入错误，请检查是否为数字")
+        print("只有vmess协议才能修改alterId!")
 else:
     print ("输入错误，请检查是否符合范围中")

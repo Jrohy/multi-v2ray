@@ -31,10 +31,10 @@ if len(mul_user_conf) > 1:
             user_index = choice - 1
         else:
             print ("输入错误，请检查数字是否在范围中")
-            exit
+            exit()
     else:
         print("输入错误,请检查是否为数字")
-        exit
+        exit()
 
 index_dict = mul_user_conf[user_index]['indexDict']
 

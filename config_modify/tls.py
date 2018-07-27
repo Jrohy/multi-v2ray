@@ -21,8 +21,8 @@ if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= m
         if sin_user_conf['indexDict']['group'] == choice:
             index_dict = sin_user_conf['indexDict']
             if sin_user_conf["protocol"] == "mtproto":
-                print("v2ray MTProto协议不支持https!!!")
-                exit
+                print("\nv2ray MTProto协议不支持https!!!\n")
+                exit()
             if (sin_user_conf['tls']=="tls"):
                 my_stream_security="TLS：开启"
             else:

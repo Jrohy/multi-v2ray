@@ -51,7 +51,6 @@ if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= m
     
     if not tool_box.is_number(new_stream_network):
         print("请输入数字！")
-        exit
     else:
         new_stream_network = int(new_stream_network)
         if new_stream_network > 0 and new_stream_network < 12:
@@ -61,6 +60,5 @@ if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= m
             print("传输模式修改成功！")
         else:
             print("请输入有效数字！")
-            exit
 else:
     print("输入有误，请检查是否为字母且范围中")

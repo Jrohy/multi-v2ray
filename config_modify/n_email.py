@@ -15,13 +15,13 @@ if length > 1:
     choice=input("请输入要改email的节点序号数字:")
     if not tool_box.is_number(choice):
         print("输入错误，请检查是否为数字")
-        exit
+        exit()
     choice = int(choice)
 
 if length == 1 or (choice > 0 and choice <= len(mul_user_conf)):
     if mul_user_conf[choice - 1]["protocol"] == "socks":
         print("Socks5节点 不支持写入email!")
-        exit
+        exit()
     print ("当前节点email为：%s" % mul_user_conf[choice - 1]['email'])
     email = ""
     while True:

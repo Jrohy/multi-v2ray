@@ -152,7 +152,8 @@ def write_stream_network(network, index_dict, **kw):
         mtproto_in = mtproto["mtproto-in"]
         mtproto_in["port"] = part_json["port"]
         mtproto_in["tag"] = index_dict["group"]
-        secret = ''.join(random.sample(string.ascii_lowercase + string.digits, 32))
+        salt = "abcdef" + string.digits
+        secret = ''.join([random.choice(salt) for _ in range(32)])
         mtproto_in["settings"]["users"][0]["secret"] = secret
         set_locate_json(index_dict, mtproto_in)
 

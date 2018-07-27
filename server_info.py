@@ -26,7 +26,6 @@ for index, sin_user_conf in enumerate(read_json.multiUserConf):
         else:
             print("Network：%s" % (sin_user_conf["net"] + " " + sin_user_conf["type"])) 
         print("TLS: %s" % ("关闭" if sin_user_conf["tls"] == "" else "开启"))
-        print("DynamicPort: %s" % sin_user_conf["dyp"])
 
         copy_conf = sin_user_conf.copy()
         copy_conf.pop('indexDict')
@@ -49,6 +48,7 @@ for index, sin_user_conf in enumerate(read_json.multiUserConf):
     elif protocol == "mtproto":
         print("Secret: %s" % sin_user_conf["id"])
         share_url = "tg://proxy?server=%s&port=%s&secret=%s" % (sin_user_conf["add"], sin_user_conf["port"], sin_user_conf["id"])
+    print("DynamicPort: %s" % sin_user_conf["dyp"])
 
     #绿色字体显示
     print("\033[32m")

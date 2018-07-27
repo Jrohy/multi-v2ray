@@ -35,6 +35,24 @@ def set_locate_json(index_dict, json):
         detour_index= index_dict['detourIndex']
         config["inboundDetour"][detour_index] = json
 
+#减少mtproto int和out的路由绑定
+def del_mtproto_routing(part_json):
+    rules = config["routing"]["settings"]["rules"]
+    for index, rule in enumerate(rules):
+        if rule["outboundTag"] == "tg-out":
+            if len(rule["inboundTag"]) == 1:
+                del rules[index]
+                for out_index, oubound_mtproto in enumerate(config["outboundDetour"]):
+                    if oubound_mtproto["protocol"] == "mtproto":
+                        del config["outboundDetour"][out_index]
+                        break
+            else:
+                for tag_index, rule_tag in enumerate(rule["inboundTag"]):
+                    if rule_tag == part_json["tag"]:
+                        del rule["inboundTag"][tag_index]
+                        break
+            break
+
 #更改动态端口
 def en_dyn_port(en, index_dict, d_alterid=32):
     part_json = locate_json(index_dict)
@@ -51,9 +69,9 @@ def en_dyn_port(en, index_dict, d_alterid=32):
         config["inboundDetour"].append(dyn_json)
     else:
         dynamic_port_tag = part_json["settings"]["detour"]["to"]
-        for detour_list in config["inboundDetour"]:
+        for index, detour_list in enumerate(config["inboundDetour"]):
             if "tag" in detour_list and detour_list["tag"] == dynamic_port_tag:
-                del detour_list
+                del config["inboundDetour"][index]
                 break
         if "detour" in part_json["settings"]:
             del part_json["settings"]["detour"]
@@ -100,21 +118,7 @@ def write_stream_network(network, index_dict, **kw):
 
     #减少mtproto int和out的路由绑定
     if part_json["protocol"] == "mtproto" and network != "mtproto":
-        rules = config["routing"]["settings"]["rules"]
-        for index, rule in enumerate(rules):
-            if rule["outboundTag"] == "tg-out":
-                if len(rule["inboundTag"]) == 1:
-                    del rules[index]
-                    for out_index, oubound_mtproto in enumerate(config["outboundDetour"]):
-                        if oubound_mtproto["protocol"] == "mtproto":
-                            del config["outboundDetour"][out_index]
-                            break
-                else:
-                    for tag_index, rule_tag in enumerate(rule["inboundTag"]):
-                        if rule_tag == part_json["tag"]:
-                            del rule["inboundTag"][tag_index]
-                            break
-                break
+        del_mtproto_routing(part_json)
 
     #原来是socks/mtproto 改成其他协议的
     if (part_json["protocol"] == "socks" and network != "socks" and network != "mtproto") or (part_json["protocol"] == "mtproto" and network != "mtproto" and network != "socks"):
@@ -334,6 +338,8 @@ def del_user(index):
             print("inbound组只有一个用户，无法删除")
             return    
         else:
+            if protocol == "mtproto":
+                del_mtproto_routing(part_json)
             print("当前inboundDetour组只有一个用户，整个节点组删除")
             del config["inboundDetour"][index_dict["detourIndex"]]
             if len(config["inboundDetour"]) == 0:
@@ -357,6 +363,10 @@ def del_port(group):
         for sin_user_conf in multi_user_conf:
             if sin_user_conf['indexDict']['group'] == group:
                 detour_index=sin_user_conf['indexDict']['detourIndex']
+                if sin_user_conf["protocol"] == "mtproto":
+                    index_dict=sin_user_conf['indexDict']
+                    part_json = locate_json(index_dict)
+                    del_mtproto_routing(part_json)
                 break
 
         del config["inboundDetour"][detour_index]

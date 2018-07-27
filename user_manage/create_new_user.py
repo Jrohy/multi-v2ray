@@ -58,6 +58,6 @@ if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= m
         write_json.create_new_user(choice, **info)
 
     elif protocol == "mtproto":
-        print("\nV2ray 只支持MTProto协议同一组的第一个用户生效, 所以没必要新增用户!")
+        print("\n当前选择的组为MTProto协议, V2ray只支持该协议同组的第一个用户生效, 所以没必要新增用户!")
 else:
     print("输入有误，请检查是否为字母且范围中")

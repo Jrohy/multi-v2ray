@@ -25,7 +25,7 @@ V2ray多用户控制管理脚本，向导式更改端口，加密方式，传输
   安装完成显示配置信息;  **脚本跑完即可放心食用！**
 - 每天**北京时间**早上3点自动升级重启v2ray核心,降低v2ray因内存小被kill几率。可关闭开启此功能。
 - 查看配置信息显示vmess字符串(v2rayN的分享链接格式)
-- 生成**Telegram**的socks5分享链接(http), 支持socks5 + tls组合
+- 生成**Telegram**的socks5/MTProto分享链接, 支持socks5 + tls组合
 - 支持http/2, 随机生成伪装h2 path
 - 开启关闭动态端口
 
@@ -46,11 +46,9 @@ V2ray多用户控制管理脚本，向导式更改端口，加密方式，传输
   - mKCP 伪装 DTLS 1.2流量(dtls)
   - HTTP/2的tls流量(h2)(需备域名) 
   - Socks5
+  - MTProto
 
 **WebSocket和HTTP/2不包括Nginx分流，请自行安装Nginx来分流。**
-
-
-
 
 ## 安装命令
 
@@ -92,6 +90,9 @@ source <(curl -sL https://git.io/vpHho)
 **不支持Centos 6**
 
 ## 更新日志
+**2018.7.28**  
+支持MTProto
+
 **2018.7.15**  
 增加清理日志,更新脚本菜单
 

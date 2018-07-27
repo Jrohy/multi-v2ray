@@ -1,0 +1,20 @@
+{
+    "mtproto-in": {
+        "tag": "tg-in",
+        "port": 5829,
+        "protocol": "mtproto",
+        "settings": {
+            "users": [{"secret": "b0cbcef5a486d9636472ac27f8e11a9d"}]
+        }
+    },
+    "mtproto-out":  {
+        "tag": "tg-out",
+        "protocol": "mtproto",
+        "settings": {}
+    },
+    "routing-bind": {
+        "type": "field",
+        "inboundTag": ["tg-in"],
+        "outboundTag": "tg-out"
+    }
+}

@@ -18,6 +18,7 @@ if length > 1:
     choice=choice.upper()
 
 if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= mul_user_conf[-1]['indexDict']['group']):
+    temp_user_conf=""
     for sin_user_conf in mul_user_conf:
         if sin_user_conf['indexDict']['group'] == choice:
             index_dict = sin_user_conf['indexDict']
@@ -25,7 +26,10 @@ if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= m
                 local_stream = sin_user_conf["net"] + " " + sin_user_conf["type"]
             elif sin_user_conf["protocol"] == "socks":
                 local_stream="Socks5"
+            elif sin_user_conf["protocol"] == "mtproto":
+                local_stream="MTProto"
             print ("当前组的传输方式为：%s" % local_stream) 
+            temp_user_conf = sin_user_conf
             break
 
     print ("")
@@ -41,6 +45,7 @@ if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= m
     print ("8.mKCP + dtls")
     print ("9.HTTP/2")
     print ("10.Socks5")
+    print ("11.MTProto")
 
     new_stream_network=input()
     
@@ -49,7 +54,9 @@ if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= m
         exit
     else:
         new_stream_network = int(new_stream_network)
-        if new_stream_network > 0 and new_stream_network < 11:
+        if new_stream_network > 0 and new_stream_network < 12:
+            if new_stream_network == 11 and temp_user_conf["tls"] == "tls":
+                print("v2ray MTProto不支持https, 关闭tls成功!")
             v2ray_util.choice_stream(new_stream_network, index_dict)
             print("传输模式修改成功！")
         else:

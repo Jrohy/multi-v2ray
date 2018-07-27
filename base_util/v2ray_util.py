@@ -39,6 +39,8 @@ def choice_stream(new_stream_network, index_dict):
             exit
         info = {"user":user, "pass": password}
         write_json.write_stream_network("socks", index_dict, **info)
+    elif(new_stream_network==11):
+        write_json.write_stream_network("mtproto", index_dict)
 
 #随机一种 (srtp | wechat-video | utp) header伪装, 默认inbound组的主用户
 def random_kcp(index_dict={'inboundOrDetour': 0, 'detourIndex': 0, 'clientIndex': 0, 'group': 'A'}):

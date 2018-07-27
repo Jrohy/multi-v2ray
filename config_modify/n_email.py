@@ -19,6 +19,9 @@ if length > 1:
     choice = int(choice)
 
 if length == 1 or (choice > 0 and choice <= len(mul_user_conf)):
+    if mul_user_conf[choice - 1]["protocol"] == "socks":
+        print("Socks5节点 不支持写入email!")
+        exit
     print ("当前节点email为：%s" % mul_user_conf[choice - 1]['email'])
     email = ""
     while True:
@@ -40,7 +43,7 @@ if length == 1 or (choice > 0 and choice <= len(mul_user_conf)):
         if not is_duplicate_email:
             break
     if email != "":
-        write_json.write_email(email, mul_user_conf[choice - 1]['indexDict'])
+        write_json.write_email(email, mul_user_conf[choice - 1]['indexDict'], mul_user_conf[choice - 1]["protocol"])
         print("修改email成功!")
 else:
     print ("输入错误，请检查是否符合范围中")

@@ -60,7 +60,7 @@ def en_dyn_port(en, index_dict, d_alterid=32):
         short_uuid = str(uuid.uuid1())[0:7]
         dynamic_port_tag = "dynamicPort" + short_uuid
         part_json["settings"].update({"detour":{"to":dynamic_port_tag}})
-        with open('/usr/local/v2ray.fun/json_template/dyn_port.json', 'r') as dyn_port_file:
+        with open('/usr/local/multi-v2ray/json_template/dyn_port.json', 'r') as dyn_port_file:
             dyn_json=json.load(dyn_port_file)
         dyn_json["settings"]["default"]["alterId"]=int(d_alterid)
         dyn_json["tag"]=dynamic_port_tag
@@ -122,27 +122,27 @@ def write_stream_network(network, index_dict, **kw):
 
     #原来是socks/mtproto 改成其他协议的
     if (part_json["protocol"] == "socks" and network != "socks" and network != "mtproto") or (part_json["protocol"] == "mtproto" and network != "mtproto" and network != "socks"):
-        with open('/usr/local/v2ray.fun/json_template/server.json', 'r') as stream_file:
+        with open('/usr/local/multi-v2ray/json_template/server.json', 'r') as stream_file:
             vmess = json.load(stream_file)
         vmess["inbound"]["port"] = part_json["port"]
         set_locate_json(index_dict, vmess["inbound"])
         part_json = locate_json(index_dict)
 
     if (network == "tcp" and not kw):
-        with open('/usr/local/v2ray.fun/json_template/tcp.json', 'r') as stream_file:
+        with open('/usr/local/multi-v2ray/json_template/tcp.json', 'r') as stream_file:
             tcp = json.load(stream_file)
         part_json["streamSettings"]=tcp
 
     elif (network == "tcp" and "para" in kw):
-        with open('/usr/local/v2ray.fun/json_template/http.json', 'r') as stream_file:
+        with open('/usr/local/multi-v2ray/json_template/http.json', 'r') as stream_file:
             http = json.load(stream_file)
         http["tcpSettings"]["header"]["request"]["headers"]["Host"]=kw["para"]
         part_json["streamSettings"]=http
 
     elif (network == "socks" and "user" in kw and "pass" in kw):
-        with open('/usr/local/v2ray.fun/json_template/socks.json', 'r') as stream_file:
+        with open('/usr/local/multi-v2ray/json_template/socks.json', 'r') as stream_file:
             socks = json.load(stream_file)
-        with open('/usr/local/v2ray.fun/json_template/tcp.json', 'r') as stream_file:
+        with open('/usr/local/multi-v2ray/json_template/tcp.json', 'r') as stream_file:
             tcp = json.load(stream_file)
         socks["accounts"][0]["user"]=kw["user"]
         socks["accounts"][0]["pass"]=kw["pass"]
@@ -151,7 +151,7 @@ def write_stream_network(network, index_dict, **kw):
         part_json["streamSettings"]=tcp
 
     elif (network == "mtproto"):
-        with open('/usr/local/v2ray.fun/json_template/mtproto.json', 'r') as stream_file:
+        with open('/usr/local/multi-v2ray/json_template/mtproto.json', 'r') as stream_file:
             mtproto = json.load(stream_file)
         mtproto_in = mtproto["mtproto-in"]
         mtproto_in["port"] = part_json["port"]
@@ -185,7 +185,7 @@ def write_stream_network(network, index_dict, **kw):
             rules.append(routing_bind)
 
     elif (network == "h2"):
-        with open('/usr/local/v2ray.fun/json_template/http2.json', 'r') as stream_file:
+        with open('/usr/local/multi-v2ray/json_template/http2.json', 'r') as stream_file:
             http2 = json.load(stream_file)
         part_json["streamSettings"]=http2
         #随机生成8位的伪装path
@@ -197,7 +197,7 @@ def write_stream_network(network, index_dict, **kw):
             return
 
     elif (network == "ws" and "para" in kw):
-        with open('/usr/local/v2ray.fun/json_template/ws.json', 'r') as stream_file:
+        with open('/usr/local/multi-v2ray/json_template/ws.json', 'r') as stream_file:
             ws = json.load(stream_file)
         part_json["streamSettings"]=ws
         part_json["streamSettings"]["wsSettings"]["headers"]["Host"] = kw["para"]
@@ -207,27 +207,27 @@ def write_stream_network(network, index_dict, **kw):
         part_json["streamSettings"]["wsSettings"]["path"]=salt
 
     elif (network == "mkcp" and not kw):
-        with open('/usr/local/v2ray.fun/json_template/kcp.json', 'r') as stream_file:
+        with open('/usr/local/multi-v2ray/json_template/kcp.json', 'r') as stream_file:
             kcp = json.load(stream_file)
         part_json["streamSettings"]=kcp
         
     elif (network == "mkcp" and kw["para"]=="kcp utp"):
-        with open('/usr/local/v2ray.fun/json_template/kcp_utp.json', 'r') as stream_file:
+        with open('/usr/local/multi-v2ray/json_template/kcp_utp.json', 'r') as stream_file:
             utp = json.load(stream_file)
         part_json["streamSettings"]=utp
         
     elif (network == "mkcp" and kw["para"]=="kcp srtp"):
-        with open('/usr/local/v2ray.fun/json_template/kcp_srtp.json', 'r') as stream_file:
+        with open('/usr/local/multi-v2ray/json_template/kcp_srtp.json', 'r') as stream_file:
             srtp = json.load(stream_file)
         part_json["streamSettings"]=srtp
         
     elif (network == "mkcp" and kw["para"]=="kcp wechat-video"):
-        with open('/usr/local/v2ray.fun/json_template/kcp_wechat.json', 'r') as stream_file:
+        with open('/usr/local/multi-v2ray/json_template/kcp_wechat.json', 'r') as stream_file:
             wechat = json.load(stream_file)
         part_json["streamSettings"]=wechat
     
     elif (network == "mkcp" and "para" in kw and kw["para"]=="kcp dtls"):
-        with open('/usr/local/v2ray.fun/json_template/kcp_dtls.json', 'r') as stream_file:
+        with open('/usr/local/multi-v2ray/json_template/kcp_dtls.json', 'r') as stream_file:
             dtls = json.load(stream_file)
         part_json["streamSettings"]=dtls
     
@@ -244,19 +244,19 @@ def write_tls(action, domain, index_dict):
         part_json["streamSettings"]["security"] = "tls"
         crt_file = "/root/.acme.sh/" + domain +"_ecc"+ "/fullchain.cer"
         key_file = "/root/.acme.sh/" + domain +"_ecc"+ "/"+ domain +".key"
-        with open('/usr/local/v2ray.fun/json_template/tls_settings.json', 'r') as tls_file:
+        with open('/usr/local/multi-v2ray/json_template/tls_settings.json', 'r') as tls_file:
             tls_settings=json.load(tls_file)
         tls_settings["certificates"][0]["certificateFile"] = crt_file
         tls_settings["certificates"][0]["keyFile"] = key_file
         part_json["streamSettings"]["tlsSettings"] = tls_settings
 
-        with open('/usr/local/v2ray.fun/my_domain', 'w') as domain_file:
+        with open('/usr/local/multi-v2ray/my_domain', 'w') as domain_file:
             domain_file.writelines(str(domain))
     elif action == "off":
         if part_json["streamSettings"]["network"] == "h2":
             print("关闭tls同时也会关闭HTTP/2！\n")
             print("已重置为kcp utp传输方式, 若要其他方式请自行切换")
-            with open('/usr/local/v2ray.fun/json_template/kcp_utp.json', 'r') as stream_file:
+            with open('/usr/local/multi-v2ray/json_template/kcp_utp.json', 'r') as stream_file:
                 utp = json.load(stream_file)
             part_json["streamSettings"] = utp
         else:
@@ -275,9 +275,9 @@ def write_ad(action):
 #创建新的端口(组)
 def create_new_port(newPort):
     print("默认选择kcp utp传输方式创建, 若要其他方式请自行切换")
-    with open('/usr/local/v2ray.fun/json_template/vmess.json', 'r') as vmess_file:
+    with open('/usr/local/multi-v2ray/json_template/vmess.json', 'r') as vmess_file:
         vmess = json.load(vmess_file)
-    with open('/usr/local/v2ray.fun/json_template/kcp_utp.json', 'r') as stream_file:
+    with open('/usr/local/multi-v2ray/json_template/kcp_utp.json', 'r') as stream_file:
         utp = json.load(stream_file)
     
     vmess["streamSettings"]=utp
@@ -303,7 +303,7 @@ def create_new_user(group, **kw):
     if multi_user_conf[user_index]["protocol"] == "vmess":
         new_uuid = uuid.uuid1()
         email_info = ""
-        with open('/usr/local/v2ray.fun/json_template/user.json', 'r') as userFile:
+        with open('/usr/local/multi-v2ray/json_template/user.json', 'r') as userFile:
             user = json.load(userFile)
         if "email" in kw and kw["email"] != "":
             user.update({"email":kw["email"]})
@@ -380,7 +380,7 @@ def del_port(group):
 def write_stats(action, multi_user_conf):
     conf_rules = config["routing"]["settings"]["rules"]
     if action == "on":
-        with open('/usr/local/v2ray.fun/json_template/stats_settings.json', 'r') as stats_file:
+        with open('/usr/local/multi-v2ray/json_template/stats_settings.json', 'r') as stats_file:
             stats_json=json.load(stats_file)
         routing_rules = stats_json["routingRules"]
         del stats_json["routingRules"]

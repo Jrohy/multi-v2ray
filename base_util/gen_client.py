@@ -48,13 +48,13 @@ else:
 
 #加载客户端配置模板
 if protocol == "vmess":
-    with open('/usr/local/v2ray.fun/json_template/client.json', 'r') as client_json_file:
+    with open('/usr/local/multi-v2ray/json_template/client.json', 'r') as client_json_file:
         client_config = json.load(client_json_file)
     user_json=client_config["outbound"]["settings"]["vnext"][0]
     user_json["users"][0]["id"]=mul_user_conf[user_index]['id']
     user_json["users"][0]["alterId"]=mul_user_conf[user_index]['aid']
 elif protocol == "socks":
-    with open('/usr/local/v2ray.fun/json_template/client_socks.json', 'r') as client_json_file:
+    with open('/usr/local/multi-v2ray/json_template/client_socks.json', 'r') as client_json_file:
         client_config = json.load(client_json_file)
     user_json=client_config["outbound"]["settings"]["servers"][0]
     user_json["users"][0]["user"]=mul_user_conf[user_index]['email']
@@ -69,7 +69,7 @@ client_config["outbound"]["streamSettings"]=part_json["streamSettings"]
 if mul_user_conf[user_index]['tls']== "":
     user_json["address"]=str(myip)
 else:
-    with open('/usr/local/v2ray.fun/my_domain', 'r') as domain_file:
+    with open('/usr/local/multi-v2ray/my_domain', 'r') as domain_file:
         content = domain_file.read()
     user_json["address"] = str(content)
     client_config["outbound"]["streamSettings"]["tlsSettings"] = {}

@@ -97,13 +97,13 @@ fi
 #安装 acme.sh 以自动获取SSL证书
 curl  https://get.acme.sh | sh
 
-#克隆V2ray.fun项目
-[[ "${installWay}" == "0" ]] && mv /usr/local/v2ray.fun/my_domain ~
+#克隆multi-v2ray项目
+[[ "${installWay}" == "0" ]] && mv /usr/local/multi-v2ray/my_domain ~
 cd /usr/local/
-rm -rf v2ray.fun
-# git clone -b dev https://github.com/Jrohy/v2ray.fun
-git clone https://github.com/Jrohy/v2ray.fun
-cd v2ray.fun
+rm -rf multi-v2ray
+# git clone -b dev https://github.com/Jrohy/multi-v2ray
+git clone https://github.com/Jrohy/multi-v2ray
+cd multi-v2ray
 [[ "${installWay}" == "0" ]] && mv -f ~/my_domain .
 
 #时间同步
@@ -124,11 +124,11 @@ fi
 bash <(curl -L -s https://install.direct/go.sh)
 
 #配置V2ray初始环境
-cp /usr/local/v2ray.fun/v2ray /usr/local/bin
+cp /usr/local/multi-v2ray/v2ray /usr/local/bin
 chmod +x /usr/local/bin/v2ray
 
-#加入v2ray.fun模块搜索路径
-[[ -z $(grep v2ray.fun ~/.bashrc) ]] && echo "export PYTHONPATH=$PYTHONPATH:/usr/local/v2ray.fun" >> ~/.bashrc && source ~/.bashrc
+#加入multi-v2ray模块搜索路径
+[[ -z $(grep multi-v2ray ~/.bashrc) ]] && echo "export PYTHONPATH=$PYTHONPATH:/usr/local/multi-v2ray" >> ~/.bashrc && source ~/.bashrc
 
 #解决Python3中文显示问题
 [[ -z $(grep PYTHONIOENCODING=utf-8 ~/.bashrc) ]] && echo "export PYTHONIOENCODING=utf-8" >> ~/.bashrc && source ~/.bashrc
@@ -136,7 +136,7 @@ chmod +x /usr/local/bin/v2ray
 #全新安装的新配置
 if [[ "${installWay}" == "1" ]];then 
     rm -rf /etc/v2ray/config.json
-    cp /usr/local/v2ray.fun/json_template/server.json /etc/v2ray/config.json
+    cp /usr/local/multi-v2ray/json_template/server.json /etc/v2ray/config.json
 
     #产生随机uuid
     UUID=$(cat /proc/sys/kernel/random/uuid)
@@ -147,10 +147,10 @@ if [[ "${installWay}" == "1" ]];then
     sed -i "s/999999999/${dport}/g" /etc/v2ray/config.json
 
     #产生默认配置mkcp+随机3种伪装类型type
-    python3 /usr/local/v2ray.fun/base_util/random_stream.py
+    python3 /usr/local/multi-v2ray/base_util/random_stream.py
 
-    python3 /usr/local/v2ray.fun/base_util/gen_client.py
-    python3 /usr/local/v2ray.fun/base_util/open_port.py
+    python3 /usr/local/multi-v2ray/base_util/gen_client.py
+    python3 /usr/local/multi-v2ray/base_util/open_port.py
 fi
 
 service v2ray restart
@@ -161,10 +161,10 @@ clear
 cd ${beginPath}
 
 [[ ${installWay} == "1" ]] && way="安装" || way="更新"
-echo -e "${OK}V2ray.fun ${way}成功！${Font}\n"
+echo -e "${OK}multi-v2ray ${way}成功！${Font}\n"
 
 echo "V2ray配置信息:"
 #安装完后显示v2ray的配置信息，用于快速部署
-python3 /usr/local/v2ray.fun/server_info.py
+python3 /usr/local/multi-v2ray/server_info.py
 
 echo -e "输入 v2ray 回车即可进行服务管理\n"

@@ -7,6 +7,7 @@
     * [安装命令](#安装命令)
     * [升级命令](#升级命令)
     * [卸载命令](#卸载命令)
+    * [命令行参数](#命令行参数)
     * [截图](#截图)
     * [系统要求](#系统要求)
     * [更新日志](#更新日志)
@@ -28,10 +29,12 @@ V2ray多用户控制管理脚本，向导式更改端口，加密方式，传输
 - 生成**Telegram**的socks5/MTProto分享链接, 支持socks5 + tls组合
 - 支持http/2, 随机生成伪装h2 path
 - 开启关闭动态端口
+- 支持程序和**命令行参数**管理
 
 ## 功能
 - 一键 启动 / 停止 / 重启 V2ray 服务端
 - 流量统计
+- 命令行模式管理v2ray
 - 支持多用户， 多端口管理
 - 开启关闭动态端口
 - 快速查看服务器连接信息, 常规配置修改
@@ -66,6 +69,25 @@ source <(curl -sL https://git.io/fNgqx) -k
 source <(curl -sL https://git.io/fNgqx) --remove
 ```
 
+## 命令行参数
+```bash
+   v2ray -h                   查看帮助
+   v2ray start                启动 V2Ray
+   v2ray stop                 停止 V2Ray
+   v2ray restart              重启 V2Ray
+   v2ray status               查看 V2Ray 运行状态
+   v2ray update               更新 V2Ray
+   v2ray update.sh            更新 multi-v2ray脚本
+   v2ray add                  新增mkcp + 随机一种 (srtp | wechat-video | utp) header伪装的端口(Group)
+   v2ray add [wechat|utp|srtp|dtls|socks5|mtproto]     新增一种协议的组，端口随机,如 v2ray add utp 为新增utp协议
+   v2ray del                  删除端口组
+   v2ray info                 查看配置
+   v2ray port                 修改端口
+   v2ray tls                  修改tls
+   v2ray stream               修改传输协议
+   v2ray stats                流量统计
+   v2ray clean                清理日志
+```
 
 ## 截图
 
@@ -91,9 +113,12 @@ source <(curl -sL https://git.io/fNgqx) --remove
 
 ## 更新日志
 **2018.7.28**  
-支持MTProto  
 项目改名为multi-v2ray  
-重构安装脚本,仅留一个multi-v2ray.sh, 支持指令
+重构安装脚本, 仅留一个multi-v2ray.sh, 支持指令  
+管理程序v2ray支持命令行参数
+
+**2018.7.27**  
+支持MTProto
 
 **2018.7.15**  
 增加清理日志,更新脚本菜单

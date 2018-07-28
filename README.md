@@ -53,17 +53,17 @@ V2ray多用户控制管理脚本，向导式更改端口，加密方式，传输
 ## 安装命令
 
 ```bash
-source <(curl -sL https://git.io/fNgvb)
+source <(curl -sL https://git.io/fNgqx)
 ```
 
 ## 升级命令(保留配置文件，升级失败请全新安装)
 ```bash
-source <(curl -sL https://git.io/fNgvb) keep
+source <(curl -sL https://git.io/fNgqx) -k
 ```
 
 ## 卸载命令
 ```bash
-source <(curl -sL https://git.io/fNgvA)
+source <(curl -sL https://git.io/fNgqx) --remove
 ```
 
 
@@ -92,7 +92,8 @@ source <(curl -sL https://git.io/fNgvA)
 ## 更新日志
 **2018.7.28**  
 支持MTProto  
-项目改名为multi-v2ray
+项目改名为multi-v2ray  
+重构安装脚本,仅留一个multi-v2ray.sh, 支持指令
 
 **2018.7.15**  
 增加清理日志,更新脚本菜单

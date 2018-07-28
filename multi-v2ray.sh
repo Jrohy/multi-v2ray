@@ -15,7 +15,7 @@ DEV_MODE=""
 
 HELP=""
 
-REMOVE= ""
+REMOVE=""
 
 #######color code########
 RED="31m"      # Error message
@@ -23,14 +23,43 @@ GREEN="32m"    # Success message
 YELLOW="33m"   # Warning message
 BLUE="36m"     # Info message
 
-##########################
 colorEcho(){
     COLOR=$1
     echo -e "\033[${COLOR}${@:2}\033[0m"
 }
 
+#######get params#########
+while [[ $# > 0 ]];do
+    key="$1"
+    case $key in
+        --remove)
+        REMOVE="1"
+        ;;
+        -h|--help)
+        HELP="1"
+        ;;
+        -k|--keep)
+        INSTARLL_WAY="1"
+        colorEcho ${BLUE} "当前以keep保留配置文件形式更新, 若失败请用全新安装\n"
+        ;;
+        -c|--code)
+        INSTARLL_WAY="2"
+        colorEcho ${BLUE} "当前仅更新multi-v2ray源码\n"
+        ;;
+        -d|--dev)
+        DEV_MODE="1"
+        colorEcho ${BLUE} "当前为开发模式, 用dev分支来更新\n"
+        ;;
+        *)
+                # unknown option
+        ;;
+    esac
+    shift # past argument or value
+done
+#############################
+
 help(){
-    echo "./install.sh [-h|--help] [-k|--keep] [-d|--dev][-c|--code][--remove]"
+    echo "source multi-v2ray.sh [-h|--help] [-k|--keep] [-d|--dev][-c|--code][--remove]"
     echo "  -h, --help           Show help"
     echo "  -k, --keep           keep the v2ray config.json to update"
     echo "  -d, --dev            update from dev branch"
@@ -38,36 +67,6 @@ help(){
     echo "      --remove         remove v2ray && multi-v2ray"
     echo "                       no params to new install"
     return 0
-}
-
-getParams() {
-    while [[ $# > 0 ]];do
-        key="$1"
-        case $key in
-            --remove)
-            REMOVE="1"
-            ;;
-            -h|--help)
-            HELP="1"
-            ;;
-            -k|--keep)
-            INSTARLL_WAY="1"
-            colorEcho ${BLUE} "当前以keep保留配置文件形式更新, 若失败请用全新安装\n"
-            ;;
-            -c|--code)
-            INSTARLL_WAY="2"
-            colorEcho ${BLUE} "当前仅更新multi-v2ray源码\n"
-            ;;
-            -d|--dev)
-            DEV_MODE="1"
-            colorEcho ${BLUE} "当前为开发模式\n"
-            ;;
-            *)
-                    # unknown option
-            ;;
-        esac
-        shift # past argument or value
-    done
 }
 
 removeV2Ray() {
@@ -174,21 +173,21 @@ updateProject() {
     cd /usr/local/
     #v2ray.fun目录存在的情况
     [[ -e v2ray.fun ]] && mv v2ray.fun/my_domain ~ && rm -rf v2ray.fun
+    
     if [[ -e multi-v2ray && -e multi-v2ray/.git ]];then
-        
+        cd multi-v2ray
+
         if [[ "$DEV_MODE" == "1" ]];then
             git checkout dev
         else 
             git checkout master
         fi
 
-        cd multi-v2ray
         git reset --hard && git pull
     else
         [[ "$DEV_MODE" == "1" ]] && BRANCH="dev" || BRANCH="master" 
         git clone -b $BRANCH https://github.com/Jrohy/multi-v2ray
     fi
-    cd multi-v2ray
     [[ "${INSTARLL_WAY}" != "0" ]] && mv -f ~/my_domain .
 
     #安装/更新V2ray主程序
@@ -263,15 +262,13 @@ installFinish() {
 
 main() {
 
-    getParams
+    [[ ${HELP} == "1" ]] && help && return
 
-    [[ "$HELP" == "1" ]] && help && return
-
-    [[ "$REMOVE" == "1" ]] && removeV2Ray && return
+    [[ ${REMOVE} == "1" ]] && removeV2Ray && return
 
     [[ ${INSTARLL_WAY} == "0" ]] && colorEcho ${BLUE} "当前为全新安装\n"
 
-    if [[ "${INSTARLL_WAY}" != "2" ]];then 
+    if [[ ${INSTARLL_WAY} != "2" ]];then 
         checkSys
 
         installDependent

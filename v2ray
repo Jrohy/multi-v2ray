@@ -1,5 +1,4 @@
 #!/bin/bash
-export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
 #Check Root
 [ $(id -u) != "0" ] && { echo "Error: You must be root to run this script"; exit 1; }
@@ -251,7 +250,7 @@ if [[ ${choice} == 5 ]]; then
 
     if [[ ${extraChoice} == 4 ]]; then
         echo -e "脚本正在以保留配置文件形式升级, 若失败请自行手动全新安装..\n"
-        source <(curl -sL https://git.io/vpHpE) keep
+        source <(curl -sL https://git.io/fNgqx) -k
         echo -e "\n脚本升级成功!!\n"
         bash /usr/local/bin/v2ray
     fi

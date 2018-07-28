@@ -116,7 +116,8 @@ source <(curl -sL https://git.io/fNgqx) --remove
 **2018.7.28**  
 项目改名为multi-v2ray  
 重构安装脚本, 仅留一个multi-v2ray.sh, 支持指令  
-管理程序v2ray支持命令行参数
+管理程序v2ray支持命令行参数  
+增加wiki
 
 **2018.7.27**  
 支持MTProto

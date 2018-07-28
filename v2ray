@@ -1,71 +1,178 @@
 #!/bin/bash
 
+#######color code########
+RED="31m"      # Error message
+GREEN="32m"    # Success message
+YELLOW="33m"   # Warning message
+BLUE="36m"     # Info message
+
+colorEcho(){
+    COLOR=$1
+    echo -e "\033[${COLOR}${@:2}\033[0m"
+}
+
+cleanLog() {
+    cat /dev/null > /var/log/v2ray/access.log
+    cat /dev/null > /var/log/v2ray/error.log
+    echo -e "清理v2ray日志成功!\n"
+}
+
 #Check Root
-[ $(id -u) != "0" ] && { echo "Error: You must be root to run this script"; exit 1; }
+[ $(id -u) != "0" ] && { colorEcho ${RED} "Error: You must be root to run this script"; exit 1; }
+
+help(){
+    echo "v2ray [-h|--help] [options]"
+    echo "  -h, --help           查看帮助"
+    echo "  start                启动 V2Ray"
+    echo "  stop                 停止 V2Ray"
+    echo "  restart              重启 V2Ray"
+    echo "  status               查看 V2Ray 运行状态"
+    echo "  update               更新 V2Ray"
+    echo "  update.sh            更新 multi-v2ray脚本"
+    echo "  add                  新增mkcp + 随机一种 (srtp | wechat-video | utp) header伪装的端口(Group)"
+    echo "  add [wechat|utp|srtp|dtls|socks5|mtproto]     新增一种协议的组，端口随机,如 v2ray add utp 为新增utp协议"
+    echo "  del                  删除端口组"
+    echo "  info                 查看配置"
+    echo "  port                 修改端口"
+    echo "  tls                  修改tls"
+    echo "  stream               修改传输协议"
+    echo "  stats                流量统计"
+    echo "  clean                清理日志"
+    echo "  更多功能 请输入 v2ray 回车进入服务管理程序"
+    return 0
+}
+
+PARAMS_NUM = $#
+
+#######get params#########
+while [[ $# > 0 ]];do
+    key="$1"
+    case $key in
+        -h|--help)
+        help
+        ;;
+        start)
+        service v2ray restart
+        ;;
+        stop)
+        service v2ray stop
+        ;;
+        restart)
+        service v2ray restart
+        ;;
+        status)
+        service v2ray status
+        ;;
+        update)
+        bash <(curl -L -s https://install.direct/go.sh)
+        ;;
+        update.sh)
+        source <(curl -sL https://git.io/fNgqx) -k
+        ;;
+        info)
+        python3 /usr/local/multi-v2ray/server_info.py
+        ;;
+        port)
+        python3 /usr/local/multi-v2ray/config_modify/port.py
+        python3 /usr/local/multi-v2ray/base_util/open_port.py
+	    service v2ray restart
+        ;;
+        tls)
+        python3 /usr/local/multi-v2ray/config_modify/tls.py
+	    service v2ray restart
+        ;;
+        stream)
+        python3 /usr/local/multi-v2ray/config_modify/stream.py
+	    service v2ray restart
+        stats)
+        python3 /usr/local/multi-v2ray/other_setting/stats_ctr.py
+        ;;
+        clean)
+        cleanLog
+        ;;
+        del)
+        python3 /usr/local/multi-v2ray/user_manage/del_port.py
+        service v2ray restart
+        ;;
+        add)
+        EXTRA="$2"
+        python3 /usr/local/multi-v2ray/user_manage/create_new_port.py $EXTRA
+        python3 /usr/local/multi-v2ray/base_util/open_port.py
+        service v2ray restart
+        shift
+        ;;
+        *)
+                # unknown option
+        ;;
+    esac
+    shift # past argument or value
+done
+#############################
+
+##有参数输入操作一波后就结束
+[[ $PARAMS_NUM > 0 ]] && return 0
 
 echo ""
-echo -e "\033[36m"
-echo -e "欢迎使用 multi-v2ray 管理程序"
-echo -e "\033[0m"
-echo -e "1.服务管理\t\t 2.用户管理\n"
-echo -e "3.更改配置\t\t 4.查看配置\n"
-echo -e "5.其他功能\t\t 6.更新V2Ray\n"
+colorEcho ${BLUE} "欢迎使用 multi-v2ray 管理程序"
+echo -e "1.服务管理           2.用户管理\n"
+echo -e "3.更改配置           4.查看配置\n"
+echo -e "5.其他功能           6.更新V2Ray\n"
 echo -e "7.生成客户端配置文件"
 
 while :; do echo
-	read -n1 -p "请输入数字选择功能(按回车键退出): " choice
-	if [[ ! $choice =~ ^[1-7]$ ]]; then
-        if [[ -z ${choice} ]];then
+	read -n1 -p "请输入数字选择功能(按回车键退出): " CHOICE
+	if [[ ! $CHOICE =~ ^[1-7]$ ]]; then
+        if [[ -z ${CHOICE} ]];then
             exit 0
         fi
-		echo "输入错误! 请输入正确的数字!"
+		colorEcho ${RED} "输入错误! 请输入正确的数字!"
 	else
         echo -e "\n"
 		break	
 	fi
 done
 
-if [[ ${choice} == 1 ]]; then
+if [[ ${CHOICE} == 1 ]]; then
     echo -e "1.启动服务"
     echo -e "2.停止服务"
     echo -e "3.重启服务"
     echo -e "4.运行状态"
     echo -e "5.运行日志"
     while :; do echo
-	    read -n1 -p "请选择： " schoice
-	    if [[ ! $schoice =~ ^[1-5]$ ]]; then
-            if [[ -z ${schoice} ]];then
+	    read -n1 -p "请选择： " SERVICE_CHOICE
+	    if [[ ! $SERVICE_CHOICE =~ ^[1-5]$ ]]; then
+            if [[ -z ${SERVICE_CHOICE} ]];then
                 bash /usr/local/bin/v2ray
                 exit 0
             fi
-		    echo "输入错误! 请输入正确的数字!"
+		    colorEcho ${RED} "输入错误! 请输入正确的数字!"
 	    else
             echo -e "\n"
 		    break
 	    fi
     done
-    if [[ ${schoice} == 1 ]]; then
+    if [[ ${SERVICE_CHOICE} == 1 ]]; then
         service v2ray start
         python3 /usr/local/multi-v2ray/base_util/open_port.py
         echo "服务启动成功！"
         bash /usr/local/bin/v2ray
     fi
-    if [[ ${schoice} == 2 ]]; then
+    if [[ ${SERVICE_CHOICE} == 2 ]]; then
         service v2ray stop
         echo "服务停止成功！"
         bash /usr/local/bin/v2ray
     fi
-    if [[ ${schoice} == 3 ]]; then
+    if [[ ${SERVICE_CHOICE} == 3 ]]; then
         service v2ray restart
         python3 /usr/local/multi-v2ray/base_util/open_port.py
         echo "服务已重启！"
         bash /usr/local/bin/v2ray
     fi
-    if [[ ${schoice} == 4 ]]; then
+    if [[ ${SERVICE_CHOICE} == 4 ]]; then
         service v2ray status
         bash /usr/local/bin/v2ray
     fi
-    if [[ ${schoice} == 5 ]]; then
+    if [[ ${SERVICE_CHOICE} == 5 ]]; then
         echo "按Ctrl + C 可以退出日志功能"
         echo ""
         tail -f /var/log/v2ray/access.log
@@ -73,45 +180,45 @@ if [[ ${choice} == 1 ]]; then
     fi
 fi
 
-if [[ ${choice} == 2 ]]; then
+if [[ ${CHOICE} == 2 ]]; then
     echo -e "1.新增用户\n"
     echo -e "2.新增端口\n"
     echo -e "3.删除用户\n"
     echo -e "4.删除端口\n"
     while :; do echo
-	    read -n1 -p "请输入数字选择功能： " userChoice
-	    if [[ ! $userChoice =~ ^[1-4]$ ]]; then
-            if [[ -z ${userChoice} ]];then
+	    read -n1 -p "请输入数字选择功能： " USER_CHOICE
+	    if [[ ! $USER_CHOICE =~ ^[1-4]$ ]]; then
+            if [[ -z ${USER_CHOICE} ]];then
                 bash /usr/local/bin/v2ray
                 exit 0
             fi
-		    echo "输入错误! 请输入正确的数字!"
+		    colorEcho ${RED} "输入错误! 请输入正确的数字!"
 	    else
             echo -e "\n"
 		    break
 	    fi
     done
 
-    if [[ ${userChoice} == 1 ]]; then
+    if [[ ${USER_CHOICE} == 1 ]]; then
         python3 /usr/local/multi-v2ray/user_manage/create_new_user.py
         service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
     fi
-    if [[ ${userChoice} == 2 ]]; then
+    if [[ ${USER_CHOICE} == 2 ]]; then
         python3 /usr/local/multi-v2ray/user_manage/create_new_port.py
         python3 /usr/local/multi-v2ray/base_util/open_port.py
         service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
     fi
-    if [[ ${userChoice} == 3 ]]; then
+    if [[ ${USER_CHOICE} == 3 ]]; then
         python3 /usr/local/multi-v2ray/user_manage/del_user.py
         service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
     fi
-    if [[ ${userChoice} == 4 ]]; then
+    if [[ ${USER_CHOICE} == 4 ]]; then
         python3 /usr/local/multi-v2ray/user_manage/del_port.py
         service v2ray restart
         echo ""
@@ -119,7 +226,7 @@ if [[ ${choice} == 2 ]]; then
     fi
 fi
 
-if [[ ${choice} == 3 ]]; then
+if [[ ${CHOICE} == 3 ]]; then
     echo ""
     echo -e "1.更改email\n"
     echo -e "2.更改UUID\n"
@@ -132,41 +239,41 @@ if [[ ${choice} == 3 ]]; then
     echo -e "请输入数字选择功能：\n"
 
     while :; do echo
-	    read -n1 -p "请选择： " changeChoice
-	    if [[ ! $changeChoice =~ ^[1-8]$ ]]; then
-            if [[ -z ${changeChoice} ]];then
+	    read -n1 -p "请选择： " CONFIG_CHOICE
+	    if [[ ! $CONFIG_CHOICE =~ ^[1-8]$ ]]; then
+            if [[ -z ${CONFIG_CHOICE} ]];then
                 bash /usr/local/bin/v2ray
                 exit 0
             fi
-		    echo "输入错误! 请输入正确的数字!"
+		    colorEcho ${RED} "输入错误! 请输入正确的数字!"
 	    else
             echo -e "\n"
 		    break
 	    fi
     done
     
-    if [[ ${changeChoice} == 1 ]]; then
+    if [[ ${CONFIG_CHOICE} == 1 ]]; then
         python3 /usr/local/multi-v2ray/config_modify/n_email.py
 	    service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
     fi
 
-    if [[ ${changeChoice} == 2 ]]; then
+    if [[ ${CONFIG_CHOICE} == 2 ]]; then
         python3 /usr/local/multi-v2ray/config_modify/n_uuid.py
 	    service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
     fi
 
-    if [[ ${changeChoice} == 3 ]]; then
+    if [[ ${CONFIG_CHOICE} == 3 ]]; then
         python3 /usr/local/multi-v2ray/config_modify/alterid.py
         service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
     fi
     
-    if [[ ${changeChoice} == 4 ]]; then
+    if [[ ${CONFIG_CHOICE} == 4 ]]; then
         python3 /usr/local/multi-v2ray/config_modify/port.py
         python3 /usr/local/multi-v2ray/base_util/open_port.py
 	    service v2ray restart
@@ -174,21 +281,21 @@ if [[ ${choice} == 3 ]]; then
         bash /usr/local/bin/v2ray
     fi
     
-    if [[ ${changeChoice} == 5 ]]; then
+    if [[ ${CONFIG_CHOICE} == 5 ]]; then
         python3 /usr/local/multi-v2ray/config_modify/stream.py
 	    service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
     fi
     
-    if [[ ${changeChoice} == 6 ]]; then
+    if [[ ${CONFIG_CHOICE} == 6 ]]; then
         python3 /usr/local/multi-v2ray/config_modify/tls.py
 	    service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
     fi
 
-    if [[ ${changeChoice} == 7 ]]; then
+    if [[ ${CONFIG_CHOICE} == 7 ]]; then
         python3 /usr/local/multi-v2ray/config_modify/ad.py
 	    service v2ray restart
         echo ""
@@ -196,7 +303,7 @@ if [[ ${choice} == 3 ]]; then
         bash /usr/local/bin/v2ray
     fi
 
-    if [[ ${changeChoice} == 8 ]]; then
+    if [[ ${CONFIG_CHOICE} == 8 ]]; then
         python3 /usr/local/multi-v2ray/config_modify/dyn_port.py
 	    service v2ray restart
         echo ""
@@ -204,12 +311,12 @@ if [[ ${choice} == 3 ]]; then
     fi
 fi
 
-if [[ ${choice} == 4 ]]; then
+if [[ ${CHOICE} == 4 ]]; then
     python3 /usr/local/multi-v2ray/server_info.py
     bash /usr/local/bin/v2ray
 fi
 
-if [[ ${choice} == 5 ]]; then
+if [[ ${CHOICE} == 5 ]]; then
     echo -e ""
     echo -e "1.流量统计\n"
     echo -e "2.定时更新V2ray\n"
@@ -218,37 +325,35 @@ if [[ ${choice} == 5 ]]; then
     echo -e "请输入数字选择功能：\n"
 
     while :; do echo
-	    read -n1 -p "请选择： " extraChoice
-	    if [[ ! $extraChoice =~ ^[1-4]$ ]]; then
-            if [[ -z ${extraChoice} ]];then
+	    read -n1 -p "请选择： " EXTRA_CHOICE
+	    if [[ ! $EXTRA_CHOICE =~ ^[1-4]$ ]]; then
+            if [[ -z ${EXTRA_CHOICE} ]];then
                 bash /usr/local/bin/v2ray
                 exit 0
             fi
-		    echo "输入错误! 请输入正确的数字!"
+		    colorEcho ${RED} "输入错误! 请输入正确的数字!"
 	    else
             echo -e "\n"
 		    break
 	    fi
     done
 
-    if [[ ${extraChoice} == 1 ]]; then
+    if [[ ${EXTRA_CHOICE} == 1 ]]; then
         python3 /usr/local/multi-v2ray/other_setting/stats_ctr.py
         bash /usr/local/bin/v2ray
     fi
 
-    if [[ ${extraChoice} == 2 ]]; then
+    if [[ ${EXTRA_CHOICE} == 2 ]]; then
         bash /usr/local/multi-v2ray/other_setting/update_timer.sh
         bash /usr/local/bin/v2ray
     fi
 
-    if [[ ${extraChoice} == 3 ]]; then
-        cat /dev/null > /var/log/v2ray/access.log
-        cat /dev/null > /var/log/v2ray/error.log
-        echo -e "清理v2ray日志成功!\n"
+    if [[ ${EXTRA_CHOICE} == 3 ]]; then
+        cleanLog
         bash /usr/local/bin/v2ray
     fi
 
-    if [[ ${extraChoice} == 4 ]]; then
+    if [[ ${EXTRA_CHOICE} == 4 ]]; then
         echo -e "脚本正在以保留配置文件形式升级, 若失败请自行手动全新安装..\n"
         source <(curl -sL https://git.io/fNgqx) -k
         echo -e "\n脚本升级成功!!\n"
@@ -256,12 +361,12 @@ if [[ ${choice} == 5 ]]; then
     fi
 fi
 
-if [[ ${choice} == 6 ]]; then
+if [[ ${CHOICE} == 6 ]]; then
     bash <(curl -L -s https://install.direct/go.sh)
     bash /usr/local/bin/v2ray
 fi
 
-if [[ ${choice} == 7 ]]; then
+if [[ ${CHOICE} == 7 ]]; then
     python3 /usr/local/multi-v2ray/base_util/gen_client.py
     bash /usr/local/bin/v2ray
 fi

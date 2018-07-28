@@ -98,8 +98,10 @@ fi
 curl  https://get.acme.sh | sh
 
 #克隆multi-v2ray项目
-[[ "${installWay}" == "0" ]] && mv /usr/local/multi-v2ray/my_domain ~
+[[ "${installWay}" == "0" ]] && mv /usr/local/multi-v2ray/my_domain ~ &>/dev/null
 cd /usr/local/
+#v2ray.fun目录存在的情况
+[[ -e v2ray.fun ]] && mv v2ray.fun/my_domain ~ && rm -rf v2ray.fun
 rm -rf multi-v2ray
 # git clone -b dev https://github.com/Jrohy/multi-v2ray
 git clone https://github.com/Jrohy/multi-v2ray

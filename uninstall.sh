@@ -24,8 +24,8 @@ rm -rf /var/log/v2ray/  >/dev/null 2>&1
 rm -rf /lib/systemd/system/v2ray.service  >/dev/null 2>&1
 rm -rf /etc/init.d/v2ray  >/dev/null 2>&1
 
-#卸载V2ray.Fun
-rm -rf /usr/local/v2ray.fun >/dev/null 2>&1
+#卸载multi-v2ray
+rm -rf /usr/local/multi-v2ray >/dev/null 2>&1
 rm -rf /usr/local/bin/v2ray >/dev/null 2>&1
 rm -rf /root/install.sh  >/dev/null 2>&1
 
@@ -40,8 +40,8 @@ else
     service cron restart >/dev/null 2>&1
 fi
 
-#删除v2ray.fun模块搜索路径
-sed -i '/v2ray.fun/d' ~/.bashrc
+#删除multi-v2ray模块搜索路径
+sed -i '/multi-v2ray/d' ~/.bashrc
 source ~/.bashrc
 
 echo "卸载完成！"

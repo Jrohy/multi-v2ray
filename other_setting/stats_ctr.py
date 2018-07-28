@@ -59,7 +59,7 @@ while True:
             continue
         
         if length > 1:
-            os.system("python3 /usr/local/v2ray.fun/server_info.py")
+            os.system("python3 /usr/local/multi-v2ray/server_info.py")
 
             schoice = input("请输入所需要%s流量的组别(字母)或者序号(数字)" % action_info)
         else:

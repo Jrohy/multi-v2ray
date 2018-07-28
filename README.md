@@ -80,7 +80,7 @@ source <(curl -sL https://git.io/fNgqx) --remove
    v2ray update               更新 V2Ray
    v2ray update.sh            更新 multi-v2ray脚本
    v2ray add                  新增mkcp + 随机一种 (srtp | wechat-video | utp) header伪装的端口(Group)
-   v2ray add [wechat|utp|srtp|dtls|socks5|mtproto]     新增一种协议的组，端口随机,如 v2ray add utp 为新增utp协议
+   v2ray add [wechat|utp|srtp|dtls|socks|mtproto]     新增一种协议的组，端口随机,如 v2ray add utp 为新增utp协议
    v2ray del                  删除端口组
    v2ray info                 查看配置
    v2ray port                 修改端口

@@ -264,6 +264,5 @@ fi
 
 if [[ ${choice} == 7 ]]; then
     python3 /usr/local/v2ray.fun/base_util/gen_client.py
-    echo -e "保存成功！(/root/config.json)\n"
     bash /usr/local/bin/v2ray
 fi

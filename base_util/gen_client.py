@@ -76,3 +76,5 @@ else:
 
 #写入客户端配置文件
 write_client_json()
+
+print("保存成功！(/root/config.json)\n")

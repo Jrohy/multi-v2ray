@@ -56,7 +56,7 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
             conf_host = conf_stream["tcpSettings"]["header"]["request"]["headers"]["Host"]
         
         if (conf_stream_security == "tls"):
-            with open('/usr/local/v2ray.fun/my_domain', 'r') as domain_file:
+            with open('/usr/local/multi-v2ray/my_domain', 'r') as domain_file:
                 content = domain_file.read()
                 tls_domain = str(content)
 

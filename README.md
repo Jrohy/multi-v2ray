@@ -1,7 +1,7 @@
 
 <!-- vim-markdown-toc GFM -->
 
-* [V2ray.fun](#v2rayfun)
+* [multi-v2ray](#multi-v2ray)
     * [特色](#特色)
     * [功能](#功能)
     * [安装命令](#安装命令)
@@ -15,7 +15,7 @@
 
 <!-- vim-markdown-toc -->
 
-# V2ray.fun
+# multi-v2ray
 V2ray多用户控制管理脚本，向导式更改端口，加密方式，传输协议，享受V2ray的乐趣~  
 
 ## 特色
@@ -53,17 +53,17 @@ V2ray多用户控制管理脚本，向导式更改端口，加密方式，传输
 ## 安装命令
 
 ```bash
-source <(curl -sL https://git.io/vpHpE)
+source <(curl -sL https://git.io/fNgvb)
 ```
 
 ## 升级命令(保留配置文件，升级失败请全新安装)
 ```bash
-source <(curl -sL https://git.io/vpHpE) keep
+source <(curl -sL https://git.io/fNgvb) keep
 ```
 
 ## 卸载命令
 ```bash
-source <(curl -sL https://git.io/vpHho)
+source <(curl -sL https://git.io/fNgvA)
 ```
 
 
@@ -92,6 +92,7 @@ source <(curl -sL https://git.io/vpHho)
 ## 更新日志
 **2018.7.28**  
 支持MTProto
+项目改名为multi-v2ray
 
 **2018.7.15**  
 增加清理日志,更新脚本菜单
@@ -153,6 +154,4 @@ source <(curl -sL https://git.io/vpHho)
 
 V2ray: [https://v2ray.com](https://v2ray.com)
 
-本项目的源fork地址: [tracyone/v2ray.fun](https://github.com/tracyone/v2ray.fun)
-
-v2ray.fun的原作者: [YLWS-4617](https://github.com/YLWS-4617)
+雨落无声的v2ray.fun: [YLWS-4617](https://github.com/YLWS-4617)

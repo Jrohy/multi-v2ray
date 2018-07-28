@@ -76,6 +76,7 @@ source <(curl -sL https://git.io/fNgqx) --remove
    v2ray stop                 停止 V2Ray
    v2ray restart              重启 V2Ray
    v2ray status               查看 V2Ray 运行状态
+   v2ray log                  查看 V2Ray 运行日志
    v2ray update               更新 V2Ray
    v2ray update.sh            更新 multi-v2ray脚本
    v2ray add                  新增mkcp + 随机一种 (srtp | wechat-video | utp) header伪装的端口(Group)

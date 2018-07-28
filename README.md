@@ -91,7 +91,7 @@ source <(curl -sL https://git.io/fNgvA)
 
 ## 更新日志
 **2018.7.28**  
-支持MTProto
+支持MTProto  
 项目改名为multi-v2ray
 
 **2018.7.15**  

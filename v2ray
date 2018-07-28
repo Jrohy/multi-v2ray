@@ -14,7 +14,7 @@ colorEcho(){
 cleanLog() {
     cat /dev/null > /var/log/v2ray/access.log
     cat /dev/null > /var/log/v2ray/error.log
-    echo -e "清理v2ray日志成功!\n"
+    colorEcho ${GREEN} "清理v2ray日志成功!\n"
 }
 
 #Check Root
@@ -42,7 +42,7 @@ help(){
     return 0
 }
 
-PARAMS_NUM = $#
+PARAMS_NUM=$#
 
 #######get params#########
 while [[ $# > 0 ]];do
@@ -52,13 +52,16 @@ while [[ $# > 0 ]];do
         help
         ;;
         start)
-        service v2ray restart
+        service v2ray start
+        colorEcho ${GREEN} "v2ray启动成功!"
         ;;
         stop)
         service v2ray stop
+        colorEcho ${GREEN} "v2ray已停止!"
         ;;
         restart)
         service v2ray restart
+        colorEcho ${GREEN} "v2ray重启成功!"
         ;;
         status)
         service v2ray status
@@ -84,6 +87,7 @@ while [[ $# > 0 ]];do
         stream)
         python3 /usr/local/multi-v2ray/config_modify/stream.py
 	    service v2ray restart
+        ;;
         stats)
         python3 /usr/local/multi-v2ray/other_setting/stats_ctr.py
         ;;
@@ -102,7 +106,7 @@ while [[ $# > 0 ]];do
         shift
         ;;
         *)
-                # unknown option
+        colorEcho ${YELLOW} "传参有误! 输入-h 或者--help查看帮助"  # unknown option
         ;;
     esac
     shift # past argument or value
@@ -110,10 +114,11 @@ done
 #############################
 
 ##有参数输入操作一波后就结束
-[[ $PARAMS_NUM > 0 ]] && return 0
+[[ $PARAMS_NUM > 0 ]] && exit
 
 echo ""
 colorEcho ${BLUE} "欢迎使用 multi-v2ray 管理程序"
+echo -e ""
 echo -e "1.服务管理           2.用户管理\n"
 echo -e "3.更改配置           4.查看配置\n"
 echo -e "5.其他功能           6.更新V2Ray\n"

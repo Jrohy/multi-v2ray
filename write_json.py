@@ -273,14 +273,17 @@ def write_ad(action):
     write()
 
 #创建新的端口(组)
-def create_new_port(newPort):
-    print("默认选择kcp utp传输方式创建, 若要其他方式请自行切换")
+def create_new_port(newPort, protocol, **kw):
+    origin_protocol=protocol
+    # 如果源协议是mtproto和socks,则先新增utp的组，再修改
+    if origin_protocol == "mtproto" or origin_protocol == "socks":
+        protocol = "utp"
     with open('/usr/local/multi-v2ray/json_template/vmess.json', 'r') as vmess_file:
         vmess = json.load(vmess_file)
-    with open('/usr/local/multi-v2ray/json_template/kcp_utp.json', 'r') as stream_file:
-        utp = json.load(stream_file)
+    with open('/usr/local/multi-v2ray/json_template/kcp_%s.json' % protocol, 'r') as stream_file:
+        stream = json.load(stream_file)
     
-    vmess["streamSettings"]=utp
+    vmess["streamSettings"]=stream
     vmess["port"]=newPort
     vmess["settings"]["clients"][0]["id"]=str(uuid.uuid1())
     if config["inboundDetour"] == None:
@@ -288,6 +291,13 @@ def create_new_port(newPort):
     config["inboundDetour"].append(vmess)
     print("新增端口组成功!")
     write()
+
+    # 真正修改为mtproto或socks协议
+    if origin_protocol == "mtproto" or origin_protocol == "socks":
+        #重新读过配置文件
+        from importlib import reload
+        reload(read_json)
+        write_stream_network(origin_protocol, read_json.multiUserConf[-1]["indexDict"], **kw)
 
 #为某组新建用户
 def create_new_user(group, **kw):

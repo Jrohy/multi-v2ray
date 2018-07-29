@@ -26,7 +26,7 @@ if length == 1 or (choice > 0 and choice <= len(mul_user_conf)):
     email = ""
     while True:
         is_duplicate_email=False
-        email = input("请输入新的email地址")
+        email = input("请输入新的email地址: ")
         if email == "":
             break
         if not tool_box.is_email(email):

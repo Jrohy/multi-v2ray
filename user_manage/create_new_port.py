@@ -18,7 +18,7 @@ if len(sys.argv) > 1:
             protocol=input_arg
             break
     if not is_correct:
-        print("输入的参数无效!")
+        print("输入的参数无效! 输入-h 或者--help查看帮助")
         exit()
     if protocol == "socks":
         user=input("请输入socks的用户名: ")

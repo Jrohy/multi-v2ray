@@ -97,31 +97,49 @@ def write_uuid(my_uuid, index_dict):
     part_json["settings"]["clients"][client_index]["id"]=str(my_uuid)
     write()
 
+#更改ss密码
+def write_ss_password(new_password, index_dict):
+    part_json = locate_json(index_dict)
+    part_json["settings"]["password"]=str(new_password)
+    write()
+
+#更改ss method
+def write_ss_method(new_method, index_dict):
+    part_json = locate_json(index_dict)
+    part_json["settings"]["method"]=str(new_method)
+    write()
+
 #更改email
 def write_email(email, index_dict, protocol):
-    client_index = index_dict['clientIndex']
-    client_str = "clients" if protocol == "vmess" else "users"
     part_json = locate_json(index_dict)
-    if not "email" in part_json["settings"][client_str][client_index]:
-        part_json["settings"][client_str][client_index].update({"email": email})
+    if protocol == "shadowsocks":
+        if "email" in part_json["settings"]:
+            part_json["settings"].update({"email": email})
+        else:
+            part_json["settings"]["email"]=email
     else:
-        part_json["settings"][client_str][client_index]["email"]=email
+        client_index = index_dict['clientIndex']
+        client_str = "clients" if protocol == "vmess" else "users"
+        if not "email" in part_json["settings"][client_str][client_index]:
+            part_json["settings"][client_str][client_index].update({"email": email})
+        else:
+            part_json["settings"][client_str][client_index]["email"]=email
     write()
 
 #更改底层传输设置
 def write_stream_network(network, index_dict, **kw):
     part_json = locate_json(index_dict)
     origin_protocol = part_json["protocol"]
-    if part_json["protocol"] != "mtproto":
+    if origin_protocol != "mtproto" and origin_protocol != "shadowsocks":
         security_backup = part_json["streamSettings"]["security"]
         tls_settings_backup = part_json["streamSettings"]["tlsSettings"]
 
-    #减少mtproto int和out的路由绑定
-    if part_json["protocol"] == "mtproto" and network != "mtproto":
+    #mtproto换成其他协议时, 减少mtproto int和out的路由绑定
+    if origin_protocol == "mtproto" and network != "mtproto":
         del_mtproto_routing(part_json)
 
-    #原来是socks/mtproto 改成其他协议的
-    if (part_json["protocol"] == "socks" and network != "socks" and network != "mtproto") or (part_json["protocol"] == "mtproto" and network != "mtproto" and network != "socks"):
+    #原来是socks/mtproto/shadowsocks协议 则先切换为标准的inbound
+    if origin_protocol == "mtproto" or origin_protocol == "socks" or origin_protocol == "shadowsocks":
         with open('/usr/local/multi-v2ray/json_template/server.json', 'r') as stream_file:
             vmess = json.load(stream_file)
         vmess["inbound"]["port"] = part_json["port"]
@@ -149,6 +167,14 @@ def write_stream_network(network, index_dict, **kw):
         part_json["settings"]=socks
         part_json["protocol"]="socks"
         part_json["streamSettings"]=tcp
+
+    elif (network == "shadowsocks" and "password" in kw and "method" in kw):
+        with open('/usr/local/multi-v2ray/json_template/ss.json', 'r') as stream_file:
+            ss = json.load(stream_file)
+        ss["port"] = part_json["port"]
+        ss["settings"]["method"] = kw["method"]
+        ss["settings"]["password"] = kw["password"]
+        set_locate_json(index_dict, ss)
 
     elif (network == "mtproto"):
         with open('/usr/local/multi-v2ray/json_template/mtproto.json', 'r') as stream_file:
@@ -231,7 +257,7 @@ def write_stream_network(network, index_dict, **kw):
             dtls = json.load(stream_file)
         part_json["streamSettings"]=dtls
     
-    if part_json["protocol"] != "mtproto" and origin_protocol != "mtproto":
+    if network != "mtproto" and origin_protocol != "mtproto" and network != "shadowsocks":
         part_json["streamSettings"]["security"] = security_backup
         part_json["streamSettings"]["tlsSettings"] = tls_settings_backup
 
@@ -275,8 +301,8 @@ def write_ad(action):
 #创建新的端口(组)
 def create_new_port(newPort, protocol, **kw):
     origin_protocol=protocol
-    # 如果源协议是mtproto和socks,则先新增utp的组，再修改
-    if origin_protocol == "mtproto" or origin_protocol == "socks":
+    # 如果源协议是mtproto|socks|shadowsocks, 则先新增utp的组，再修改
+    if origin_protocol == "mtproto" or origin_protocol == "socks" or origin_protocol == "shadowsocks":
         protocol = "utp"
     with open('/usr/local/multi-v2ray/json_template/vmess.json', 'r') as vmess_file:
         vmess = json.load(vmess_file)
@@ -292,8 +318,8 @@ def create_new_port(newPort, protocol, **kw):
     print("新增端口组成功!")
     write()
 
-    # 真正修改为mtproto或socks协议
-    if origin_protocol == "mtproto" or origin_protocol == "socks":
+    # 真正修改为mtproto|socks|shadowsocks协议
+    if origin_protocol == "mtproto" or origin_protocol == "socks" or origin_protocol == "shadowsocks":
         #重新读过配置文件
         from importlib import reload
         reload(read_json)

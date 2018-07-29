@@ -28,6 +28,8 @@ if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= m
                 local_stream="Socks5"
             elif sin_user_conf["protocol"] == "mtproto":
                 local_stream="MTProto"
+            elif sin_user_conf["protocol"] == "shadowsocks":
+                local_stream="Shadowsocks"
             print ("当前组的传输方式为：%s" % local_stream) 
             temp_user_conf = sin_user_conf
             break
@@ -46,6 +48,7 @@ if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= m
     print ("9.HTTP/2")
     print ("10.Socks5")
     print ("11.MTProto")
+    print ("12.Shadowsocks")
 
     new_stream_network=input()
     
@@ -53,9 +56,9 @@ if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= m
         print("请输入数字！")
     else:
         new_stream_network = int(new_stream_network)
-        if new_stream_network > 0 and new_stream_network < 12:
-            if new_stream_network == 11 and temp_user_conf["tls"] == "tls":
-                print("v2ray MTProto不支持https, 关闭tls成功!")
+        if new_stream_network > 0 and new_stream_network < 13:
+            if (new_stream_network == 11 or new_stream_network == 12) and temp_user_conf["tls"] == "tls":
+                print("v2ray MTProto/Shadowsocks不支持https, 关闭tls成功!")
             v2ray_util.choice_stream(new_stream_network, index_dict)
             print("传输模式修改成功！")
         else:

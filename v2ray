@@ -31,7 +31,7 @@ help(){
     echo "  update               更新 V2Ray"
     echo "  update.sh            更新 multi-v2ray脚本"
     echo "  add                  新增mkcp + 随机一种 (srtp | wechat-video | utp) header伪装的端口(Group)"
-    echo "  add [wechat|utp|srtp|dtls|socks|mtproto]     新增一种协议的组，端口随机,如 v2ray add utp 为新增utp协议"
+    echo "  add [wechat|utp|srtp|dtls|socks|mtproto|ss]     新增一种协议的组，端口随机,如 v2ray add utp 为新增utp协议"
     echo "  del                  删除端口组"
     echo "  info                 查看配置"
     echo "  port                 修改端口"
@@ -246,11 +246,13 @@ if [[ ${CHOICE} == 3 ]]; then
     echo -e "6.更改TLS设置\n"
     echo -e "7.更改广告拦截功能\n"
     echo -e "8.更改动态端口\n"
+    echo -e "9.更改Shadowsocks加密方式"
+    echo -e "10.更改Shadowsocks密码"
     echo -e "请输入数字选择功能：\n"
 
     while :; do echo
 	    read -n1 -p "请选择： " CONFIG_CHOICE
-	    if [[ ! $CONFIG_CHOICE =~ ^[1-8]$ ]]; then
+	    if [[ ! $CONFIG_CHOICE =~ ^[1-10]$ ]]; then
             if [[ -z ${CONFIG_CHOICE} ]];then
                 bash /usr/local/bin/v2ray
                 exit 0
@@ -315,6 +317,20 @@ if [[ ${CHOICE} == 3 ]]; then
 
     if [[ ${CONFIG_CHOICE} == 8 ]]; then
         python3 /usr/local/multi-v2ray/config_modify/dyn_port.py
+	    service v2ray restart
+        echo ""
+        bash /usr/local/bin/v2ray
+    fi
+
+    if [[ ${CONFIG_CHOICE} == 9 ]]; then
+        python3 /usr/local/multi-v2ray/config_modify/ss.py method
+	    service v2ray restart
+        echo ""
+        bash /usr/local/bin/v2ray
+    fi
+
+    if [[ ${CONFIG_CHOICE} == 10 ]]; then
+        python3 /usr/local/multi-v2ray/config_modify/ss.py password
 	    service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray

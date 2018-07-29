@@ -54,15 +54,6 @@
                 "response": null
             },
             "tag": "direct"
-        },
-        {
-            "protocol": "blackhole",
-            "settings": {
-                "response": {
-                    "type": "http"
-                }
-            },
-            "tag": "blockout"
         }
     ],
     "dns": {

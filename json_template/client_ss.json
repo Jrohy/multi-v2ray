@@ -17,35 +17,19 @@
         "streamSettings": null
     },
     "outbound": {
-        "protocol": "socks",
+        "protocol": "shadowsocks",
         "settings": {
-            "servers": [
-                {
-                    "address": "123.ocm",
-                    "port": 1234,
-                    "users": [
-                        {
-                            "user": "hello",
-                            "pass": "3.1415"
-                        }
-                    ]
-                }
-            ]
-        },
-        "streamSettings": {
-            "security": "",
-            "tlsSettings": {},
-            "wsSettings": null,
-            "httpSettings": null, 
-            "network": "tcp", 
-            "kcpSettings": null, 
-            "tcpSettings": null
-           },
-        "mux": {
-            "enabled": true
+          "servers": [
+              {
+                "address": "serveraddr.com", 
+                "method": "aes-128-gcm", 
+                "ota": false, 
+                "password": "sspasswd", 
+                "port": 1024  
+              }
+          ]
         }
     },
-    "inboundDetour": null,
     "outboundDetour": [
         {
             "protocol": "freedom",

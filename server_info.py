@@ -12,7 +12,7 @@ for index, sin_user_conf in enumerate(read_json.multiUserConf):
     print("IP：%s" % sin_user_conf["add"]) 
     print("Port：%s" % sin_user_conf["port"])
     if sin_user_conf["email"]:
-        if protocol == "vmess" or protocol == "mtproto":
+        if protocol == "vmess" or protocol == "mtproto" or protocol == "shadowsocks":
             print("Email: %s" % sin_user_conf["email"])
         elif protocol == "socks":
             print("User: %s" % sin_user_conf["email"])
@@ -48,6 +48,15 @@ for index, sin_user_conf in enumerate(read_json.multiUserConf):
     elif protocol == "mtproto":
         print("Secret: %s" % sin_user_conf["id"])
         share_url = "tg://proxy?server=%s&port=%s&secret=%s" % (sin_user_conf["add"], sin_user_conf["port"], sin_user_conf["id"])
+
+    elif protocol == "shadowsocks":
+        print("Method: %s" % sin_user_conf["method"])
+        print("Password: %s" % sin_user_conf["id"])
+        ss_origin_url = "%s:%s@%s:%s" % (sin_user_conf["method"], sin_user_conf["id"], sin_user_conf["add"], sin_user_conf["port"])
+
+        base64_str = base64.b64encode(bytes(ss_origin_url, 'utf-8'))
+        share_url = "ss://" + bytes.decode(base64_str)
+
     print("DynamicPort: %s" % sin_user_conf["dyp"])
 
     #绿色字体显示

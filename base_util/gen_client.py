@@ -59,12 +59,20 @@ elif protocol == "socks":
     user_json=client_config["outbound"]["settings"]["servers"][0]
     user_json["users"][0]["user"]=mul_user_conf[user_index]['email']
     user_json["users"][0]["pass"]=mul_user_conf[user_index]['id']
+elif protocol == "shadowsocks":
+    with open('/usr/local/multi-v2ray/json_template/client_ss.json', 'r') as client_json_file:
+        client_config = json.load(client_json_file)
+    user_json=client_config["outbound"]["settings"]["servers"][0]
+    user_json["method"]=mul_user_conf[user_index]['method']
+    user_json["password"]=mul_user_conf[user_index]['id']
 elif protocol == "mtproto":
     print("\nMTProto协议只支持Telegram通信, 所以无法生成配置文件!\n")
     exit()
 
 user_json["port"]=int(mul_user_conf[user_index]['port'])
-client_config["outbound"]["streamSettings"]=part_json["streamSettings"]
+
+if protocol != "shadowsocks":
+    client_config["outbound"]["streamSettings"]=part_json["streamSettings"]
 
 if mul_user_conf[user_index]['tls']== "":
     user_json["address"]=str(myip)

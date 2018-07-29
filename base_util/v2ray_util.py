@@ -5,8 +5,31 @@ import random
 import socket
 import os
 import re
+import string
 from base_util import get_ssl
 from base_util import tool_box
+
+def get_ss_method():
+    ss_method = ("aes-256-cfb", "aes-128-cfb", "chacha20", "chacha20-ietf", "aes-256-gcm", "aes-128-gcm", "chacha20-poly1305")
+    print ("")
+    #选择新的加密方式
+    print ("请选择shadowsocks的加密方式：")
+    for index, method in enumerate(ss_method):
+        print ("%d.%s" % (index + 1, method))
+    choice=input()
+    if choice < 0 or choice > len(ss_method):
+        print("输入错误，请检查是否符合范围中")
+        exit()
+    else:
+        return ss_method[choice - 1]
+
+def get_ss_password():
+    random_pass = ''.join(random.sample(string.ascii_letters + string.digits, 16))
+    new_pass =input("产生随机密码 %s , 回车直接使用该密码, 否则输入自定义密码: " % random_pass)
+
+    if not new_pass:
+        new_pass = random_pass
+    return new_pass
 
 def choice_stream(new_stream_network, index_dict):
     if(new_stream_network==1):
@@ -41,6 +64,11 @@ def choice_stream(new_stream_network, index_dict):
         write_json.write_stream_network("socks", index_dict, **info)
     elif(new_stream_network==11):
         write_json.write_stream_network("mtproto", index_dict)
+    elif(new_stream_network==12):
+        method = get_ss_method()
+        password = get_ss_password()
+        info = {"method": method, "password": password}
+        write_json.write_stream_network("shadowsocks", index_dict, **info)
 
 #随机一种 (srtp | wechat-video | utp) header伪装, 默认inbound组的主用户
 def random_kcp(index_dict={'inboundOrDetour': 0, 'detourIndex': 0, 'clientIndex': 0, 'group': 'A'}):

@@ -50,6 +50,7 @@ V2ray多用户管理脚本，向导式管理[新增|删除|修改]传输协议�
   - HTTP/2的tls流量(h2)(需备域名) 
   - Socks5
   - MTProto
+  - Shadowsocks
 
 **WebSocket和HTTP/2不包括Nginx分流，请自行安装Nginx来分流。**
 
@@ -80,7 +81,7 @@ source <(curl -sL https://git.io/fNgqx) --remove
    v2ray update               更新 V2Ray
    v2ray update.sh            更新 multi-v2ray脚本
    v2ray add                  新增mkcp + 随机一种 (srtp | wechat-video | utp) header伪装的端口(Group)
-   v2ray add [wechat|utp|srtp|dtls|socks|mtproto]     新增一种协议的组，端口随机,如 v2ray add utp 为新增utp协议
+   v2ray add [wechat|utp|srtp|dtls|socks|mtproto|ss]     新增一种协议的组，端口随机,如 v2ray add utp 为新增utp协议
    v2ray del                  删除端口组
    v2ray info                 查看配置
    v2ray port                 修改端口
@@ -114,6 +115,9 @@ source <(curl -sL https://git.io/fNgqx) --remove
 **不支持Centos 6**
 
 ## 更新日志
+**2018.7.29**  
+支持Shadowsocks
+
 **2018.7.28**  
 项目改名为multi-v2ray  
 重构安装脚本, 仅留一个multi-v2ray.sh, 支持指令  

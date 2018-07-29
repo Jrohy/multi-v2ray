@@ -29,7 +29,7 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
 
     protocol = part_json["protocol"]
 
-    if "streamSettings" not in part_json and protocol != "mtproto":
+    if "streamSettings" not in part_json and protocol != "mtproto" and protocol != "shadowsocks":
         return
     
     #节点组别分组
@@ -66,7 +66,24 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
             else:
                 conf_stream_header = "none"
 
-    if protocol == "vmess":
+    if protocol == "shadowsocks":
+        sinUserConf={}
+        sinUserConf['protocol']=protocol
+        sinUserConf['port']=part_json["port"]
+        sinUserConf['add']=(tls_domain if tls_domain != "" else conf_ip)
+        email=""
+        if "email" in conf_settings and conf_settings["email"]:
+            email = conf_settings["email"]
+        sinUserConf['email']=email
+        sinUserConf['tls']=conf_stream_security
+        sinUserConf['dyp']=conf_Dyp
+        sinUserConf['id']=conf_settings["password"]
+        sinUserConf['method']=conf_settings["method"]
+        sinUserConf['indexDict']=index_dict.copy()
+        multi_user_conf.append(sinUserConf)
+        return
+
+    elif protocol == "vmess":
         clients=conf_settings["clients"]
     elif protocol == "socks":
         clients=conf_settings["accounts"]
@@ -78,7 +95,6 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
         email = ""
         if "email" in client and client["email"] != None:
             email = client["email"]
-        copy_index_dict = index_dict.copy()
         sinUserConf={}
         sinUserConf['protocol']=protocol
         sinUserConf['port']=part_json["port"]
@@ -99,7 +115,7 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
             sinUserConf['id']=client["pass"]
         elif protocol == "mtproto":
             sinUserConf['id']=client["secret"]
-        sinUserConf['indexDict']=copy_index_dict
+        sinUserConf['indexDict']=index_dict.copy()
 
         multi_user_conf.append(sinUserConf)
 

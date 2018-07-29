@@ -31,6 +31,6 @@ if length == 1 or (choice > 0 and choice <= len(mul_user_conf)):
         else:
             print("已取消生成新的UUID,未执行任何操作")
     else:
-        print("只有vmess协议才能修改alterId!")
+        print("只有vmess协议才能修改uuid!")
 else:
     print ("输入错误，请检查是否符合范围中")

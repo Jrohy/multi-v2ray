@@ -24,7 +24,7 @@ choice = 'A'
 
 if length > 1:
     import server_info
-    choice=input("请输入要改shadowsocks加密方式/密码的节点Group字母:")
+    choice=input("请输入要改shadowsocks %s 的节点Group字母:" % ss_modify)
     choice=choice.upper()
 
 if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= mul_user_conf[-1]['indexDict']['group']):

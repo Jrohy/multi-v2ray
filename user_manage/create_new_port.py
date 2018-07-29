@@ -3,23 +3,19 @@
 import write_json
 import random
 import sys
+from base_util import v2ray_util
 from base_util import tool_box
 
 protocol=""
 info=dict()
 
 if len(sys.argv) > 1:
-    correct_protocol=("dtls", "wechat", "utp", "srtp", "mtproto", "socks")
-    is_correct = False
-    input_arg = sys.argv[1]
-    for s in correct_protocol:
-        if s == input_arg:
-            is_correct = True
-            protocol=input_arg
-            break
-    if not is_correct:
+    correct_protocol=("dtls", "wechat", "utp", "srtp", "mtproto", "socks","ss")
+    protocol = sys.argv[1]
+    if protocol not in correct_protocol:
         print("输入的参数无效! 输入-h 或者--help查看帮助")
         exit()
+
     if protocol == "socks":
         user=input("请输入socks的用户名: ")
         password=input("请输入socks的密码: ")
@@ -27,6 +23,10 @@ if len(sys.argv) > 1:
             print("socks的用户名或者密码不能为空")
             exit()
         info = {"user":user, "pass": password}
+    elif protocol == "ss":
+        method = v2ray_util.get_ss_method()
+        password = v2ray_util.get_ss_password()
+        info = {"method": method, "password": password}
 else:
     salt_protocol=["dtls", "wechat", "utp", "srtp"]
     random.shuffle(salt_protocol)

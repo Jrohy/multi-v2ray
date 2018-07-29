@@ -1,0 +1,9 @@
+  {
+    "port": 1024,
+    "protocol": "shadowsocks",
+    "settings": {
+      "method": "aes-128-gcm",
+      "password": "password",
+      "network":"tcp, udp"
+    }
+  }

@@ -20,8 +20,8 @@ if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= m
     for sin_user_conf in mul_user_conf:
         if sin_user_conf['indexDict']['group'] == choice:
             index_dict = sin_user_conf['indexDict']
-            if sin_user_conf["protocol"] == "mtproto":
-                print("\nv2ray MTProto协议不支持https!!!\n")
+            if sin_user_conf["protocol"] == "mtproto" or sin_user_conf["protocol"] == "shadowsocks":
+                print("\nv2ray MTProto/Shadowsocks协议不支持https!!!\n")
                 exit()
             if (sin_user_conf['tls']=="tls"):
                 my_stream_security="TLS：开启"

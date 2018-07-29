@@ -17,6 +17,7 @@ def get_ss_method():
     for index, method in enumerate(ss_method):
         print ("%d.%s" % (index + 1, method))
     choice=input()
+    choice = int(choice)
     if choice < 0 or choice > len(ss_method):
         print("输入错误，请检查是否符合范围中")
         exit()

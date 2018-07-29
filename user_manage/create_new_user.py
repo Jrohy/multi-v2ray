@@ -59,5 +59,8 @@ if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= m
 
     elif protocol == "mtproto":
         print("\n当前选择的组为MTProto协议, V2ray只支持该协议同组的第一个用户生效, 所以没必要新增用户!")
+
+    elif protocol == "shadowsocks":
+        print("\n当前选择的组为Shadowsocks协议, V2ray只支持ss协议一个用户一个端口, 想多用户请新增端口!")
 else:
     print("输入有误，请检查是否为字母且范围中")

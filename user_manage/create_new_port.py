@@ -24,6 +24,7 @@ if len(sys.argv) > 1:
             exit()
         info = {"user":user, "pass": password}
     elif protocol == "ss":
+        protocol = "shadowsocks"
         method = v2ray_util.get_ss_method()
         password = v2ray_util.get_ss_password()
         info = {"method": method, "password": password}

@@ -257,7 +257,7 @@ def write_stream_network(network, index_dict, **kw):
             dtls = json.load(stream_file)
         part_json["streamSettings"]=dtls
     
-    if network != "mtproto" and origin_protocol != "mtproto" and network != "shadowsocks":
+    if network != "mtproto" and origin_protocol != "mtproto" and network != "shadowsocks" and origin_protocol != "shadowsocks":
         part_json["streamSettings"]["security"] = security_backup
         part_json["streamSettings"]["tlsSettings"] = tls_settings_backup
 

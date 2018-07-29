@@ -89,6 +89,7 @@ source <(curl -sL https://git.io/fNgqx) --remove
    v2ray stats                流量统计
    v2ray clean                清理日志
 ```
+更多命令行参数请参考 [multi-v2ray wiki](https://github.com/Jrohy/multi-v2ray/wiki)
 
 ## 截图
 

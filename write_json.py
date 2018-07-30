@@ -419,6 +419,7 @@ def write_stats(action, multi_user_conf):
         with open('/usr/local/multi-v2ray/json_template/stats_settings.json', 'r') as stats_file:
             stats_json=json.load(stats_file)
         routing_rules = stats_json["routingRules"]
+        del stats_json["routingRules"]
 
         #去除旧版json 存在的 127.0.0.0/8 会导致流量统计不可用
         for index_x, one_rule in enumerate(conf_rules):
@@ -432,6 +433,7 @@ def write_stats(action, multi_user_conf):
         conf_rules.append(routing_rules)
 
         dokodemo_door = stats_json["dokodemoDoor"]
+        del stats_json["dokodemoDoor"]
         #产生随机dokodemo_door的连接端口
         while True:
             random_port = random.randint(1000, 65535)
@@ -443,9 +445,7 @@ def write_stats(action, multi_user_conf):
         config["inboundDetour"].append(dokodemo_door)
 
         #加入流量统计三件套
-        config.update(stats_json["stats"])
-        config.update(stats_json["api"])
-        config.update(stats_json["policy"])
+        config.update(stats_json)
 
         # 为各个组节点打上tag, 以便流量统计
         last_group = "Z"

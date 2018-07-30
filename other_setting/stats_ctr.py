@@ -74,10 +74,14 @@ while True:
                 if email == "":
                     print("无有效邮箱，无法统计!!!\n")
                 else:                   
-                    v2ray_util.get_stats(0, email, door_port, is_reset)
+                    stats_result = v2ray_util.get_stats(0, email, door_port, is_reset)
+                    if stats_result:
+                        v2ray_util.print_stats(stats_result)
                 continue
         elif re.match(r'[A-Z]', schoice) and schoice <= mul_user_conf[-1]['indexDict']['group']:
-            v2ray_util.get_stats(1, schoice, door_port, is_reset)
+            stats_result = v2ray_util.get_stats(1, schoice, door_port, is_reset)
+            if stats_result:
+                v2ray_util.print_stats(stats_result)
             continue
         print("输入有误! 请重新输入\n")
 

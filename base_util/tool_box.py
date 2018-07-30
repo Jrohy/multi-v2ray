@@ -26,11 +26,11 @@ def get_ip():
     my_ip = urllib.request.urlopen('http://api.ipify.org').read()
     return bytes.decode(my_ip)
 
-#判断端口是否开启
-def port_is_open(port):
+#判断端口是否占用
+def port_is_use(port):
     cmd = "lsof -i:" + str(port)
     result = os.popen(cmd).readlines()
-    return result == []
+    return result != []
 
 #判断是否是邮箱格式
 def is_email(email):

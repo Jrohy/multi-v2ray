@@ -461,23 +461,7 @@ def write_stats(action, multi_user_conf):
             last_group = group
 
     elif action == "off":
-        if "stats" in config:
-            del config["stats"]
-        if "api" in config:
-            del config["api"]
-        if "policy" in config:
-            del config["policy"]
-        if config["inboundDetour"]:
-            for index, detour_list in enumerate(config["inboundDetour"]):
-                if detour_list["protocol"] == "dokodemo-door" and detour_list["tag"] == "api":
-                    del config["inboundDetour"][index]
-                    break
-
-        for index,rules_list in enumerate(conf_rules):
-            if rules_list["outboundTag"] == "api":
-                del conf_rules[index]
-                break
-        
+        # 删除用于统计流量的tag标签
         if "tag" in config["inbound"] and config["inbound"]["tag"] == "A":
             last_group = "Z"
             for sin_user_conf in multi_user_conf:
@@ -490,4 +474,22 @@ def write_stats(action, multi_user_conf):
                 else:
                     del config["inboundDetour"][index_dict["detourIndex"]]["tag"]
                 last_group = group
+
+        if "stats" in config:
+            del config["stats"]
+        if "api" in config:
+            del config["api"]
+        if "policy" in config:
+            del config["policy"]
+
+        for index,rules_list in enumerate(conf_rules):
+            if rules_list["outboundTag"] == "api":
+                del conf_rules[index]
+                break
+
+        if config["inboundDetour"]:
+            for index, detour_list in enumerate(config["inboundDetour"]):
+                if detour_list["protocol"] == "dokodemo-door" and detour_list["tag"] == "api":
+                    del config["inboundDetour"][index]
+                    break
     write()

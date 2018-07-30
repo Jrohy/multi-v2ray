@@ -105,6 +105,8 @@ def change_tls(yn, index_dict):
 
 def get_stats(type, meta_info, door_port, is_reset = False):
     is_reset = "true" if is_reset else "false"
+    downlink_value = 0
+    uplink_value = 0
 
     stats_cmd = "cd /usr/bin/v2ray && ./v2ctl api --server=127.0.0.1:%s StatsService.GetStats 'name: \"%s>>>%s>>>traffic>>>%s\" reset: %s'"
     type_tag = ("user" if type == 0 else "inbound")
@@ -117,14 +119,18 @@ def get_stats(type, meta_info, door_port, is_reset = False):
             print("当前无流量数据，请使用流量片刻再来查看统计!")
             return
         downlink_value = int(re_result[0])
-        print("\033[36m")
-        print("\ndownlink: " + tool_box.bytes_2_human_readable(downlink_value, 2) + "\n")
 
     stats_real_cmd = stats_cmd % (str(door_port), type_tag, meta_info, "uplink", is_reset)
     uplink_result = os.popen(stats_real_cmd).readlines()
     if uplink_result and len(uplink_result) == 5:
         re_result = re.findall(r"\d+", uplink_result[2])
         uplink_value = int(re_result[0])
-        print("uplink: " + tool_box.bytes_2_human_readable(uplink_value, 2) + "\n")
-        print("total: " + tool_box.bytes_2_human_readable(downlink_value + uplink_value, 2) + "\n")
-        print("\033[0m")
+    
+    return downlink_value, uplink_value
+
+def print_stats(stats_info):
+    print("\033[36m")
+    print("\ndownlink: " + tool_box.bytes_2_human_readable(stats_info[0], 2) + "\n")
+    print("uplink: " + tool_box.bytes_2_human_readable(stats_info[1], 2) + "\n")
+    print("total: " + tool_box.bytes_2_human_readable(stats_info[0] + stats_info[1], 2) + "\n")
+    print("\033[0m")

@@ -131,7 +131,8 @@ checkSys() {
 #安装依赖
 installDependent(){
     if [[ ${OS} == 'CentOS' ]];then
-        yum install epel-release curl wget unzip git ntp ntpdate python34 socat crontabs lsof -y
+        yum install epel-release curl wget unzip git ntp ntpdate socat crontabs lsof -y
+        yum install python34 -y
     else
         apt-get update
         apt-get install curl unzip git ntp wget ntpdate python3 socat cron lsof -y

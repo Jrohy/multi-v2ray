@@ -264,12 +264,10 @@ def write_stream_network(network, index_dict, **kw):
     write()
 
 #更改TLS设置
-def write_tls(action, domain, index_dict):
+def write_tls(action, index_dict, *, crt_file=None, key_file=None, domain=None):
     part_json = locate_json(index_dict)
     if action == "on":
         part_json["streamSettings"]["security"] = "tls"
-        crt_file = "/root/.acme.sh/" + domain +"_ecc"+ "/fullchain.cer"
-        key_file = "/root/.acme.sh/" + domain +"_ecc"+ "/"+ domain +".key"
         with open('/usr/local/multi-v2ray/json_template/tls_settings.json', 'r') as tls_file:
             tls_settings=json.load(tls_file)
         tls_settings["certificates"][0]["certificateFile"] = crt_file

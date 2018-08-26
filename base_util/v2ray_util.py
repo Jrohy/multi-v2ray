@@ -81,25 +81,47 @@ def random_kcp(index_dict={'inboundOrDetour': 0, 'detourIndex': 0, 'clientIndex'
 
 def change_tls(yn, index_dict):
     if yn == "on":
-        print("\n请将您的域名解析到本VPS的IP地址，否则程序会出错！！\n")
-        local_ip = tool_box.get_ip()
-        print("本机器IP地址为：" + local_ip + "\n")
-        input_domain=str(input("请输入您绑定的域名："))
-        try:
-            input_ip = socket.gethostbyname(input_domain)
-        except Exception:
-            print("\n域名检测错误!!!\n")
-            return
-        if input_ip != local_ip:
-            print("\n输入的域名与本机ip不符!!!\n")
-            return
-
         print("")
-        print("正在获取SSL证书，请稍等。")
-        get_ssl.getssl(input_domain)
-        write_json.write_tls("on",input_domain, index_dict)
+        print("1. Let’s Encrypt 生成证书(准备域名)")
+        print("2. 自定义已存在的其他路径的证书(准备证书文件路径)\n")
+        choice=input("请选择使用证书方式: ")
+        if choice == "1":
+            print("\n请将您的域名解析到本VPS的IP地址，否则程序会出错！！\n")
+            local_ip = tool_box.get_ip()
+            print("本机器IP地址为：" + local_ip + "\n")
+            input_domain=input("请输入您绑定的域名：")
+            try:
+                input_ip = socket.gethostbyname(input_domain)
+            except Exception:
+                print("\n域名检测错误!!!\n")
+                return
+            if input_ip != local_ip:
+                print("\n输入的域名与本机ip不符!!!\n")
+                return
+
+            print("")
+            print("正在获取SSL证书，请稍等。。。")
+            get_ssl.gen_cert(input_domain)
+            crt_file = "/root/.acme.sh/" + input_domain +"_ecc"+ "/fullchain.cer"
+            key_file = "/root/.acme.sh/" + input_domain +"_ecc"+ "/"+ input_domain +".key"
+            write_json.write_tls("on",index_dict, crt_file=crt_file, key_file=key_file, domain=input_domain)
+        elif choice == "2":
+            crt_file = input("请输入证书cert文件路径: ")
+            key_file = input("请输入证书key文件路径: ")
+            if not os.path.exists(crt_file) or not os.path.exists(key_file):
+                print("证书crt文件或者key文件指定路径不存在!\n")
+                return
+            domain = tool_box.get_domain_by_crt_file(crt_file)
+            if not domain:
+                print("证书文件有误!\n")
+                return
+            write_json.write_tls("on",index_dict, crt_file=crt_file, key_file=key_file, domain=domain)
+        else:
+            print("输入有误!\n")
+            return
+        
     elif yn == "off":
-        write_json.write_tls("off","", index_dict)
+        write_json.write_tls("off", index_dict)
         
     print("\n操作完成！\n")
 

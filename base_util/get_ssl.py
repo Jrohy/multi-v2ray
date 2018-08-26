@@ -11,7 +11,10 @@ stop_nginx_cmd = "service nginx stop >/dev/null 2>&1"
 start_httpd_cmd = "service httpd start >/dev/null 2>&1"
 stop_httpd_cmd = "service httpd stop >/dev/null 2>&1"
 
-def getssl(domain):
+def gen_cert(domain):
+    if not os.path.exists("/root/.acme.sh/acme.sh"):
+        os.system("curl https://get.acme.sh | sh")
+
     crt_file = "/root/.acme.sh/"+domain+"_ecc"+"/fullchain.cer"
     key_file = "/root/.acme.sh/"+domain+"_ecc"+"/"+domain+".key"
     get_ssl_cmd = "bash /root/.acme.sh/acme.sh  --issue -d " +domain +"   --standalone  --keylength ec-256"

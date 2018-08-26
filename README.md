@@ -115,6 +115,10 @@ source <(curl -sL https://git.io/fNgqx) --remove
 **不支持Centos 6**
 
 ## 更新日志
+**2018.8.26**  
+脚本加入pip安装  
+tls设置支持自定义证书路径
+
 **2018.7.29**  
 支持Shadowsocks
 

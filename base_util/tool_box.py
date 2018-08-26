@@ -3,9 +3,12 @@
 import urllib.request
 import os
 import re
+from OpenSSL import crypto
 
-#判断是否为数字的函数
 def is_number(s):
+    """
+    判断是否为数字的函数
+    """
     try:
         float(s)
         return True
@@ -21,24 +24,42 @@ def is_number(s):
  
     return False
 
-#获取本地ip
 def get_ip():
+    """
+    获取本地ip
+    """
     my_ip = urllib.request.urlopen('http://api.ipify.org').read()
     return bytes.decode(my_ip)
 
-#判断端口是否占用
 def port_is_use(port):
+    """
+    判断端口是否占用
+    """
     cmd = "lsof -i:" + str(port)
     result = os.popen(cmd).readlines()
     return result != []
 
-#判断是否是邮箱格式
 def is_email(email):
+    """
+    判断是否是邮箱格式
+    """
     str=r'^[\w\.]+@[\w]+\.[\w]+$'
     return re.match(str, email)
 
-#流量bytes转换为kb, mb, gb等单位
+def get_domain_by_crt_file(crt_path):
+    """
+    通过证书文件获取域名, 证书文件有误或不存在则返回空
+    """
+    try:
+        cert = crypto.load_certificate(crypto.FILETYPE_PEM, open(crt_path).read())
+    except:
+        return
+    return cert.get_subject().CN
+
 def bytes_2_human_readable(number_of_bytes, precision=1):
+    """
+    流量bytes转换为kb, mb, gb等单位
+    """
     if number_of_bytes < 0:
         raise ValueError("!!! number_of_bytes can't be smaller than 0 !!!")
  

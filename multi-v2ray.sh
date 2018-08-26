@@ -141,6 +141,7 @@ installDependent(){
     # 安装最新版pip
     curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
     python3 get-pip.py
+    rm -f get-pip.py
 
     # 安装 pip依赖
     pip install pyopenssl

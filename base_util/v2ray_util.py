@@ -75,7 +75,7 @@ def choice_stream(new_stream_network, index_dict):
 def random_kcp(index_dict={'inboundOrDetour': 0, 'detourIndex': 0, 'clientIndex': 0, 'group': 'A'}):
     kcp_list=('mKCP + srtp', 'mKCP + utp', 'mKCP + wechat-video', 'mKCP + dtls')
     choice = random.randint(5,8)
-    print("随机一种 (srtp | wechat-video | utp | dtls) header伪装, 当前生成 %s" % kcp_list[choice - 5])
+    print("随机一种 (srtp | wechat-video | utp | dtls) header伪装, 当前生成 %s \n" % kcp_list[choice - 5])
     print()
     choice_stream(choice, index_dict)
 

@@ -137,6 +137,13 @@ installDependent(){
         apt-get update
         apt-get install curl unzip git ntp wget ntpdate python3 socat cron lsof -y
     fi
+
+    # 安装最新版pip
+    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+    python3 get-pip.py
+
+    # 安装 pip依赖
+    pip install pyopenssl
 }
 
 #设置定时升级任务
@@ -281,8 +288,6 @@ main() {
         #设置定时任务
         [[ -z $(crontab -l|grep v2ray) ]] && planUpdate
 
-        #安装 acme.sh 以自动获取SSL证书
-        curl  https://get.acme.sh | sh
     fi
 
     updateProject

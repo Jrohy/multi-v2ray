@@ -47,6 +47,7 @@ V2ray多用户管理脚本，向导式管理[新增|删除|修改]传输协议�
   - mKCP 伪装 BT下载流量(utp)
   - mKCP 伪装 微信视频通话流量(wechat-video)
   - mKCP 伪装 DTLS 1.2流量(dtls)
+  - mKCP 伪装 WireGuard流量(wireguard)
   - HTTP/2的tls流量(h2)(需备域名) 
   - Socks5
   - MTProto
@@ -81,7 +82,7 @@ source <(curl -sL https://git.io/fNgqx) --remove
    v2ray update               更新 V2Ray
    v2ray update.sh            更新 multi-v2ray脚本
    v2ray add                  新增mkcp + 随机一种 (srtp | wechat-video | utp) header伪装的端口(Group)
-   v2ray add [wechat|utp|srtp|dtls|socks|mtproto|ss]     新增一种协议的组，端口随机,如 v2ray add utp 为新增utp协议
+   v2ray add [wechat|utp|srtp|dtls|wireguard|socks|mtproto|ss]     新增一种协议的组，端口随机,如 v2ray add utp 为新增utp协议
    v2ray del                  删除端口组
    v2ray info                 查看配置
    v2ray port                 修改端口
@@ -115,6 +116,9 @@ source <(curl -sL https://git.io/fNgqx) --remove
 **不支持Centos 6**
 
 ## 更新日志
+**2018.9.1**  
+增加 WireGuard header type
+
 **2018.8.26**  
 脚本加入pip安装  
 tls设置支持自定义证书路径

@@ -34,21 +34,12 @@ if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= m
             temp_user_conf = sin_user_conf
             break
 
+    stream_type = ("普通TCP", "HTTP伪装", "WebSocket流量", "普通mKCP", "mKCP + srtp", "mKCP + utp", "mKCP + wechat-video",
+                   "mKCP + dtls", "mKCP + wireguard", "HTTP/2", "Socks5", "MTProto", "Shadowsocks")
     print ("")
     #选择新的传输方式
-    print ("请选择新的传输方式：")
-    print ("1.普通TCP")
-    print ("2.HTTP伪装")
-    print ("3.WebSocket流量")
-    print ("4.普通mKCP")
-    print ("5.mKCP + srtp")
-    print ("6.mKCP + utp")
-    print ("7.mKCP + wechat-video")
-    print ("8.mKCP + dtls")
-    print ("9.HTTP/2")
-    print ("10.Socks5")
-    print ("11.MTProto")
-    print ("12.Shadowsocks")
+    for index, type_str in enumerate(stream_type):
+        print("%d.%s" % (index + 1, type_str))
 
     new_stream_network=input()
     
@@ -56,8 +47,8 @@ if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= m
         print("请输入数字！")
     else:
         new_stream_network = int(new_stream_network)
-        if new_stream_network > 0 and new_stream_network < 13:
-            if (new_stream_network == 11 or new_stream_network == 12) and temp_user_conf["tls"] == "tls":
+        if new_stream_network > 0 and new_stream_network < len(stream_type):
+            if (stream_type[new_stream_network - 1] == "MTProto" or stream_type[new_stream_network - 1] == "Shadowsocks") and temp_user_conf["tls"] == "tls":
                 print("v2ray MTProto/Shadowsocks不支持https, 关闭tls成功!")
             v2ray_util.choice_stream(new_stream_network, index_dict)
             print("传输模式修改成功！")

@@ -10,7 +10,7 @@ protocol=""
 info=dict()
 
 if len(sys.argv) > 1:
-    correct_protocol=("dtls", "wechat", "utp", "srtp", "mtproto", "socks","ss")
+    correct_protocol=("wireguard", "dtls", "wechat", "utp", "srtp", "mtproto", "socks","ss")
     protocol = sys.argv[1]
     if protocol not in correct_protocol:
         print("输入的参数无效! 输入-h 或者--help查看帮助")

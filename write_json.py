@@ -257,6 +257,11 @@ def write_stream_network(network, index_dict, **kw):
             dtls = json.load(stream_file)
         part_json["streamSettings"]=dtls
     
+    elif (network == "mkcp" and "para" in kw and kw["para"]=="kcp wireguard"):
+        with open('/usr/local/multi-v2ray/json_template/kcp_wireguard.json', 'r') as stream_file:
+            wireguard = json.load(stream_file)
+        part_json["streamSettings"]=wireguard
+    
     if network != "mtproto" and origin_protocol != "mtproto" and network != "shadowsocks" and origin_protocol != "shadowsocks":
         part_json["streamSettings"]["security"] = security_backup
         part_json["streamSettings"]["tlsSettings"] = tls_settings_backup

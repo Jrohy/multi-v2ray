@@ -47,12 +47,12 @@ if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= m
         print("请输入数字！")
     else:
         new_stream_network = int(new_stream_network)
-        if new_stream_network > 0 and new_stream_network < len(stream_type):
+        if new_stream_network > 0 and new_stream_network <= len(stream_type):
             if (stream_type[new_stream_network - 1] == "MTProto" or stream_type[new_stream_network - 1] == "Shadowsocks") and temp_user_conf["tls"] == "tls":
                 print("v2ray MTProto/Shadowsocks不支持https, 关闭tls成功!")
             v2ray_util.choice_stream(new_stream_network, index_dict)
             print("传输模式修改成功！")
         else:
-            print("请输入有效数字！")
+            print("请输入符合范围的数字！")
 else:
     print("输入有误，请检查是否为字母且范围中")

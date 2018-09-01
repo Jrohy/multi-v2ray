@@ -54,8 +54,10 @@ def choice_stream(new_stream_network, index_dict):
     elif(new_stream_network==8):
         write_json.write_stream_network("mkcp", index_dict, para = "kcp dtls")
     elif(new_stream_network==9):
-        write_json.write_stream_network("h2", index_dict)
+        write_json.write_stream_network("mkcp", index_dict, para = "kcp wireguard")
     elif(new_stream_network==10):
+        write_json.write_stream_network("h2", index_dict)
+    elif(new_stream_network==11):
         user=input("请输入socks的用户名: ")
         password=input("请输入socks的密码: ")
         if user == "" or password == "":
@@ -63,9 +65,9 @@ def choice_stream(new_stream_network, index_dict):
             exit()
         info = {"user":user, "pass": password}
         write_json.write_stream_network("socks", index_dict, **info)
-    elif(new_stream_network==11):
-        write_json.write_stream_network("mtproto", index_dict)
     elif(new_stream_network==12):
+        write_json.write_stream_network("mtproto", index_dict)
+    elif(new_stream_network==13):
         method = get_ss_method()
         password = get_ss_password()
         info = {"method": method, "password": password}

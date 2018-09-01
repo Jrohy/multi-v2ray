@@ -104,6 +104,7 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
         sinUserConf['dyp']=conf_Dyp
         if protocol == "vmess":
             sinUserConf['v']="2"
+            sinUserConf['ps']=""
             sinUserConf['aid']=client["alterId"]
             sinUserConf['type']=conf_stream_header
             sinUserConf['net']=conf_stream_network

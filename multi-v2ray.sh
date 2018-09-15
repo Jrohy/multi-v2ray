@@ -199,6 +199,10 @@ updateProject() {
     fi
     [[ "${INSTARLL_WAY}" != "0" ]] && mv -f ~/my_domain .
 
+    #更新v2ray bash_completion脚本
+    cp -f /usr/local/multi-v2ray/v2ray.bash /etc/bash_completion.d/
+    source /etc/bash_completion.d/v2ray.bash
+    
     #安装/更新V2ray主程序
     bash <(curl -L -s https://install.direct/go.sh)
 }

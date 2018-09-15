@@ -96,8 +96,8 @@ removeV2Ray() {
         service cron restart >/dev/null 2>&1
     fi
 
-    #删除multi-v2ray模块搜索路径
-    sed -i '/multi-v2ray/d' ~/.bashrc
+    #删除multi-v2ray环境变量
+    sed -i '/v2ray/d' ~/.bashrc
     source ~/.bashrc
 
     colorEcho ${GREEN} "卸载完成！"
@@ -231,6 +231,9 @@ profileInit() {
 
     #加入multi-v2ray模块搜索路径
     [[ -z $(grep multi-v2ray ~/.bashrc) ]] && echo "export PYTHONPATH=$PYTHONPATH:/usr/local/multi-v2ray" >> ~/.bashrc && source ~/.bashrc
+
+    # 加入v2ray tab补全环境变量
+    [[ -z $(grep v2ray.bash ~/.bashrc) ]] && echo "source /etc/bash_completion.d/v2ray.bash" >> ~/.bashrc && source ~/.bashrc
 
     #解决Python3中文显示问题
     [[ -z $(grep PYTHONIOENCODING=utf-8 ~/.bashrc) ]] && echo "export PYTHONIOENCODING=utf-8" >> ~/.bashrc && source ~/.bashrc

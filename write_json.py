@@ -293,6 +293,23 @@ def write_tls(action, index_dict, *, crt_file=None, key_file=None, domain=None):
             part_json["streamSettings"]["tlsSettings"] = {}
     write()
 
+#更改TFO设置
+def write_tfo(action, index_dict):
+    part_json = locate_json(index_dict)
+    if action == "del":
+        if "sockopt" in part_json["streamSettings"]:
+            del part_json["streamSettings"]["sockopt"]
+    else:
+        sockoptDict = {"mark":0, "tcpFastOpen": False}
+        if action == "on":
+            sockoptDict['tcpFastOpen'] = True
+        if "sockopt" in part_json["streamSettings"]:
+            part_json["streamSettings"]["sockopt"] = sockoptDict
+        else:
+            part_json["streamSettings"].update({"sockopt":sockoptDict})
+    write()
+    print("修改TFO成功!")
+
 #更改广告拦截功能
 def write_ad(action):
     if action == "on":

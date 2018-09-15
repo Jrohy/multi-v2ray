@@ -47,6 +47,14 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
         conf_stream_network = conf_stream["network"]
         conf_stream_security = conf_stream["security"]
 
+        conf_stream_tfo = None
+        if "sockopt" in conf_stream:
+            if "tcpFastOpen" in conf_stream["sockopt"]:
+                if conf_stream["sockopt"]["tcpFastOpen"]:
+                    conf_stream_tfo = "开启"
+                else:
+                    conf_stream_tfo = "关闭"
+
         if conf_stream["httpSettings"] != None:
             conf_path = conf_stream["httpSettings"]["path"]
         if conf_stream["wsSettings"] != None:
@@ -102,6 +110,7 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
         sinUserConf['email']=(client["user"] if protocol == "socks" else email)
         sinUserConf['tls']=conf_stream_security
         sinUserConf['dyp']=conf_Dyp
+        sinUserConf['tcpFastOpen']=conf_stream_tfo
         if protocol == "vmess":
             sinUserConf['v']="2"
             sinUserConf['ps']=""

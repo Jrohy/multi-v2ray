@@ -25,7 +25,9 @@ if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= m
                 exit()
             break
 
-    print("当前选择组节点tfo状态：{}\n".format("开启" if sin_user_conf["tcpFastOpen"] else "关闭"))
+    tfo_status = sin_user_conf["tcpFastOpen"] if sin_user_conf["tcpFastOpen"] else "未设置"
+    
+    print("当前选择组tcpFastOpen状态：{}".format(tfo_status))
     print("")
     print("1.开启TFO(强制开启)")
     print("2.关闭TFO(强制关闭)")

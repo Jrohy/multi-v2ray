@@ -32,6 +32,7 @@ for index, sin_user_conf in enumerate(read_json.multiUserConf):
         copy_conf.pop('dyp')
         copy_conf.pop('email')
         copy_conf.pop('protocol')
+        copy_conf.pop('tcpFastOpen')
         base64_str = base64.b64encode(bytes(json.dumps(copy_conf), 'utf-8'))
 
         share_url = "vmess://" + bytes.decode(base64_str)
@@ -57,6 +58,8 @@ for index, sin_user_conf in enumerate(read_json.multiUserConf):
         base64_str = base64.b64encode(bytes(ss_origin_url, 'utf-8'))
         share_url = "ss://" + bytes.decode(base64_str)
 
+    if sin_user_conf["tcpFastOpen"] != None:
+        print("TcpFastOpen: %s" % sin_user_conf["tcpFastOpen"])
     print("DynamicPort: %s" % sin_user_conf["dyp"])
 
     #绿色字体显示

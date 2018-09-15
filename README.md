@@ -28,6 +28,7 @@ V2ray多用户管理脚本，向导式管理[新增|删除|修改]传输协议�
 - 查看配置信息显示vmess字符串(v2rayN的分享链接格式)
 - 生成**Telegram**的socks5/MTProto分享链接, 支持socks5 + tls组合
 - 支持http/2, 随机生成伪装h2 path
+- 开启关闭tcpFastOpen
 - 开启关闭动态端口
 - 支持程序和**命令行参数**管理控制
 
@@ -37,6 +38,7 @@ V2ray多用户管理脚本，向导式管理[新增|删除|修改]传输协议�
 - 命令行模式管理v2ray
 - 支持多用户， 多端口管理
 - 开启关闭动态端口
+- 开启关闭tcpFastOpen
 - 快速查看服务器连接信息, 常规配置修改
 - 自由更改**传输配置**：
   - 常规TCP
@@ -88,6 +90,7 @@ source <(curl -sL https://git.io/fNgqx) --remove
    v2ray info                 查看配置
    v2ray port                 修改端口
    v2ray tls                  修改tls
+   v2ray tfo                  修改tcpFastOpen
    v2ray stream               修改传输协议
    v2ray stats                流量统计
    v2ray clean                清理日志
@@ -118,6 +121,7 @@ source <(curl -sL https://git.io/fNgqx) --remove
 
 ## 更新日志
 **2018.9.15**  
+tcpFastOpen的配置    
 命令行参数加入Tab补全
 
 **2018.9.1**  

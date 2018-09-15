@@ -71,7 +71,8 @@ source <(curl -sL https://git.io/fNgqx) -k
 source <(curl -sL https://git.io/fNgqx) --remove
 ```
 
-## 命令行参数
+## 命令行参数  
+所有命令行参数支持**Tab**补全  
 ```bash
    v2ray -h                   查看帮助
    v2ray start                启动 V2Ray
@@ -116,6 +117,9 @@ source <(curl -sL https://git.io/fNgqx) --remove
 **不支持Centos 6**
 
 ## 更新日志
+**2018.9.15**  
+命令行参数加入Tab补全
+
 **2018.9.1**  
 增加 WireGuard header type
 

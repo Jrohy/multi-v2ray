@@ -24,6 +24,7 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
     conf_stream_network=""
     conf_stream_header=""
     tls_domain=""
+    conf_stream_tfo = None
     global conf_ip
     global conf_inboundDetour
 
@@ -47,7 +48,6 @@ def read_sin_user(part_json, multi_user_conf, index_dict):
         conf_stream_network = conf_stream["network"]
         conf_stream_security = conf_stream["security"]
 
-        conf_stream_tfo = None
         if "sockopt" in conf_stream:
             if "tcpFastOpen" in conf_stream["sockopt"]:
                 if conf_stream["sockopt"]["tcpFastOpen"]:

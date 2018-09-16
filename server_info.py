@@ -58,7 +58,7 @@ for index, sin_user_conf in enumerate(read_json.multiUserConf):
         base64_str = base64.b64encode(bytes(ss_origin_url, 'utf-8'))
         share_url = "ss://" + bytes.decode(base64_str)
 
-    if sin_user_conf.has_key("tcpFastOpen") and sin_user_conf["tcpFastOpen"] != None:
+    if "tcpFastOpen" in sin_user_conf and sin_user_conf["tcpFastOpen"] != None:
         print("TcpFastOpen: %s" % sin_user_conf["tcpFastOpen"])
     print("DynamicPort: %s" % sin_user_conf["dyp"])
 

@@ -140,7 +140,8 @@ installDependent(){
     fi
 
     # 安装 pip依赖
-    python3 -m pip install pyopenssl
+    python3 <(curl -sL https://bootstrap.pypa.io/get-pip.py)
+    pip3 install pyopenssl
 }
 
 #设置定时升级任务

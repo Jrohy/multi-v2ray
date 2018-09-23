@@ -132,19 +132,15 @@ checkSys() {
 installDependent(){
     if [[ ${OS} == 'CentOS' ]];then
         yum install epel-release curl wget unzip git ntp ntpdate socat crontabs lsof -y
-        yum install python34 -y
+        [[ -z $(rpm -qa|grep python3) ]] && yum install python34 -y
     else
         apt-get update
-        apt-get install curl unzip git ntp wget ntpdate python3 socat cron lsof -y
+        apt-get install curl unzip git ntp wget ntpdate socat cron lsof -y
+        [[ -z $(dpkg -l|grep python3) ]] && apt-get install python3 -y
     fi
 
-    # 安装最新版pip
-    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-    python3 get-pip.py
-    rm -f get-pip.py
-
     # 安装 pip依赖
-    pip install pyopenssl
+    python3 -m pip install pyopenssl
 }
 
 #设置定时升级任务

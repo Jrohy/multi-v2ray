@@ -79,11 +79,12 @@ while [[ $# > 0 ]];do
         source <(curl -sL https://git.io/fNgqx) -k
         ;;
         info)
-        python3 /usr/local/multi-v2ray/server_info.py
+        python3 -c "from loader import Loader; print(loader.profile);"
         ;;
         port)
         python3 /usr/local/multi-v2ray/config_modify/port.py
-        python3 /usr/local/multi-v2ray/base_util/open_port.py
+        python3 -c "from utils import open_port; open_port();"
+
 	    service v2ray restart
         ;;
         tls)
@@ -111,7 +112,7 @@ while [[ $# > 0 ]];do
         add)
         EXTRA="$2"
         python3 /usr/local/multi-v2ray/user_manage/create_new_port.py $EXTRA
-        python3 /usr/local/multi-v2ray/base_util/open_port.py
+        python3 -c "from utils import open_port; open_port();"
         service v2ray restart
         shift
         ;;
@@ -168,7 +169,7 @@ if [[ ${CHOICE} == 1 ]]; then
     done
     if [[ ${SERVICE_CHOICE} == 1 ]]; then
         service v2ray start
-        python3 /usr/local/multi-v2ray/base_util/open_port.py
+        python3 -c "from utils import open_port; open_port();"
         echo "服务启动成功！"
         bash /usr/local/bin/v2ray
     fi
@@ -179,7 +180,7 @@ if [[ ${CHOICE} == 1 ]]; then
     fi
     if [[ ${SERVICE_CHOICE} == 3 ]]; then
         service v2ray restart
-        python3 /usr/local/multi-v2ray/base_util/open_port.py
+        python3 -c "from utils import open_port; open_port();"
         echo "服务已重启！"
         bash /usr/local/bin/v2ray
     fi
@@ -222,7 +223,7 @@ if [[ ${CHOICE} == 2 ]]; then
     fi
     if [[ ${USER_CHOICE} == 2 ]]; then
         python3 /usr/local/multi-v2ray/user_manage/create_new_port.py
-        python3 /usr/local/multi-v2ray/base_util/open_port.py
+        python3 -c "from utils import open_port; open_port();"
         service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
@@ -292,7 +293,7 @@ if [[ ${CHOICE} == 3 ]]; then
     
     if [[ ${CONFIG_CHOICE} == 4 ]]; then
         python3 /usr/local/multi-v2ray/config_modify/port.py
-        python3 /usr/local/multi-v2ray/base_util/open_port.py
+        python3 -c "from utils import open_port; open_port();"
 	    service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
@@ -350,7 +351,7 @@ if [[ ${CHOICE} == 3 ]]; then
 fi
 
 if [[ ${CHOICE} == 4 ]]; then
-    python3 /usr/local/multi-v2ray/server_info.py
+    python3 -c "from loader import Loader; print(loader.profile);"
     bash /usr/local/bin/v2ray
 fi
 
@@ -405,6 +406,6 @@ if [[ ${CHOICE} == 6 ]]; then
 fi
 
 if [[ ${CHOICE} == 7 ]]; then
-    python3 /usr/local/multi-v2ray/base_util/gen_client.py
+    python3 /usr/local/multi-v2ray/client.py
     bash /usr/local/bin/v2ray
 fi

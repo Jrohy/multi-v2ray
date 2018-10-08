@@ -1,66 +1,57 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import read_json
-import write_json
-import re
-from base_util import tool_box
+from utils import is_email
+from group import Vmess, Socks, Mtproto, SS
+from writer import GroupWriter, NodeWriter
+from selector import GroupSelector
 
-mul_user_conf = read_json.multiUserConf
+gs = GroupSelector('user数量')
+group = gs.group
+group_list = gs.group_list
 
-length = len(mul_user_conf)
-
-choice = 'A'
-
-if length > 1:
-    import server_info
-    choice=input("请输入要创建user的节点Group字母:")
-    choice=choice.upper()
-
-if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= mul_user_conf[-1]['indexDict']['group']):
+if group == None:
+    exit(-1)
+else:
     email = ""
-    user_index=0
-    for index, sin_user_conf in enumerate(mul_user_conf):
-        if sin_user_conf['indexDict']['group'] == choice:
-            user_index = index
-            break
-    protocol = mul_user_conf[user_index]["protocol"]
-    if protocol == "vmess": 
+    if type(group.node_list[0]) == Vmess: 
         while True:
             is_duplicate_email=False
 
-            email = input("是否输入email来新建用户, 回车直接跳过")
+            email = input("是否输入email来新建用户, 回车直接跳过: ")
             if email == "":
                 break
-            if not tool_box.is_email(email):
+            if not is_email(email):
                 print("不是合格的email格式，请重新输入")
                 continue
             
-            for sin_user_conf in mul_user_conf:
-                if sin_user_conf["email"] == "":
-                    continue
-                elif sin_user_conf["email"] == email:
-                    print("已经有重复的email, 请重新输入")
-                    is_duplicate_email = True
-                    break
-            
+            for loop_group in group_list:
+                for node in loop_group.node_list:
+                    if node.user_info == None or node.user_info == '':
+                        continue
+                    elif node.user_info == email:
+                        print("已经有重复的email, 请重新输入")
+                        is_duplicate_email = True
+                        break              
             if not is_duplicate_email:
                 break
-        write_json.create_new_user(choice, email=email)
 
-    elif protocol == "socks":
+        nw = NodeWriter(group.tag, group.index)
+        info = {'email': email}
+        nw.create_new_user(**info)
+
+    elif type(group.node_list[0]) == Socks:
         print("当前组为socks组, 请输入用户密码创建新的socks用户\n")
-        user=input("请输入socks的用户名: ")
-        password=input("请输入socks的密码: ")
+        user = input("请输入socks的用户名: ")
+        password = input("请输入socks的密码: ")
         if user == "" or password == "":
             print("socks的用户名或者密码不能为空")
-            exit()
+            exit(-1)
         info = {"user":user, "pass": password}
-        write_json.create_new_user(choice, **info)
+        nw = NodeWriter(group.tag, group.index)
+        nw.create_new_user(**info)
 
-    elif protocol == "mtproto":
+    elif type(group.node_list[0]) == Mtproto:
         print("\n当前选择的组为MTProto协议, V2ray只支持该协议同组的第一个用户生效, 所以没必要新增用户!")
 
-    elif protocol == "shadowsocks":
+    elif type(group.node_list[0]) == SS:
         print("\n当前选择的组为Shadowsocks协议, V2ray只支持ss协议一个用户一个端口, 想多用户请新增端口!")
-else:
-    print("输入有误，请检查是否为字母且范围中")

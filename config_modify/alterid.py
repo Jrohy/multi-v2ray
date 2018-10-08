@@ -1,32 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import read_json
-import write_json
-from base_util import tool_box
+from group import Vmess
+from writer import ClientWriter
+from selector import ClientSelector
 
-mul_user_conf = read_json.multiUserConf
+cs = ClientSelector('修改alterId')
+client_index = cs.client_index
+group = cs.group
 
-length = len(mul_user_conf)
-
-choice = 1
-
-if length > 1:
-    import server_info
-    choice=input("请输入要改alterId的节点序号数字:")
-    if not tool_box.is_number(choice):
-        print("输入错误，请检查是否为数字")
-        exit()
-    choice = int(choice)
-
-if length == 1 or (choice > 0 and choice <= length):
-    if mul_user_conf[choice - 1]["protocol"] == "vmess":
-        new_alterid=input("请输入新的alterID: ")
-        if (tool_box.is_number(new_alterid)):
-                write_json.write_alterid(new_alterid, mul_user_conf[choice - 1]['indexDict'])
-                print("alterID修改成功！")
+if group == None:
+    exit(-1)
+else:
+    if type(group.node_list[client_index]) == Vmess:
+        print("当前节点alterID: {}".format(group.node_list[client_index].alter_id))
+        new_alterid = input("请输入新的alterID: ")
+        if (new_alterid.isnumeric()):
+            cw = ClientWriter(group.tag, group.index, client_index)
+            cw.write_aid(int(new_alterid))
+            print("alterID修改成功！")
         else:
             print ("输入错误，请检查是否为数字")
     else:
         print("只有vmess协议才能修改alterId!")
-else:
-    print ("输入错误，请检查是否符合范围中")

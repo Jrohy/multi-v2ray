@@ -3,7 +3,35 @@
 import urllib.request
 import os
 import re
+from enum import Enum, unique
 from OpenSSL import crypto
+
+@unique
+class Color(Enum):
+    """
+    终端显示颜色 枚举类
+    """
+   # 显示格式: \033[显示方式;前景色;背景色m
+    # 只写一个字段表示前景色,背景色默认
+    RED = '\033[31m'       # 红色
+    GREEN = '\033[32m'     # 绿色
+    YELLOW = '\033[33m'    # 黄色
+    BLUE = '\033[34m'      # 蓝色
+    FUCHSIA = '\033[35m'   # 紫红色
+    CYAN = '\033[36m'      # 青蓝色
+    WHITE = '\033[37m'     # 白色
+    #: no color
+    RESET = '\033[0m'      # 终端默认颜色
+
+def color_str(color: Color, str: str) -> str:
+    """
+    返回有色字符串
+    """
+    return '{}{}{}'.format(
+        color.value,
+        str,
+        Color.RESET.value
+    )
 
 def is_number(s):
     """
@@ -87,3 +115,33 @@ def bytes_2_human_readable(number_of_bytes, precision=1):
     number_of_bytes = round(number_of_bytes, precision)
  
     return str(number_of_bytes) + ' ' + unit
+
+def gen_cert(domain):
+    service_name = ["v2ray", "nginx", "httpd", "apache2"]
+    start_cmd = "service {} start >/dev/null 2>&1"
+    stop_cmd = "service {} stop >/dev/null 2>&1"
+
+    if not os.path.exists("/root/.acme.sh/acme.sh"):
+        os.system("curl https://get.acme.sh | sh")
+
+    get_ssl_cmd = "bash /root/.acme.sh/acme.sh  --issue -d " + domain + "   --standalone  --keylength ec-256"
+
+    for name in service_name:
+        os.system(stop_cmd.format(name))
+    os.system(get_ssl_cmd)
+    for name in service_name:
+        os.system(start_cmd.format(name))
+
+def open_port():
+
+    from loader import Loader
+
+    group_list = Loader().profile.group_list
+
+    port_set = set([group.port for group in group_list])
+
+    for port in port_set:
+        cmd1="iptables -I INPUT -m state --state NEW -m tcp -p tcp --dport " + str(port) +" -j ACCEPT"
+        cmd2="iptables -I INPUT -m state --state NEW -m udp -p udp --dport " + str(port) +" -j ACCEPT"
+        os.system(cmd1)
+        os.system(cmd2)

@@ -1,58 +1,85 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import read_json
-import write_json
-import re
-from base_util import tool_box
-from base_util import v2ray_util
+import random
 
-mul_user_conf = read_json.multiUserConf
+from ss import SSFactory
+from writer import StreamWriter, StreamType
+from selector import GroupSelector
+from group import Mtproto, SS
 
-length = len(mul_user_conf)
+class StreamModifier:
+    def __init__(self, group_tag='A', group_index=-1):
+        self.stream_type = [
+            (StreamType.TCP, "普通TCP"), 
+            (StreamType.TCP_HOST, "HTTP伪装"), 
+            (StreamType.WS, "WebSocket流量"), 
+            (StreamType.KCP, "普通mKCP"), 
+            (StreamType.KCP_SRTP, "mKCP + srtp"), 
+            (StreamType.KCP_UTP, "mKCP + utp"), 
+            (StreamType.KCP_WECHAT, "mKCP + wechat-video"),
+            (StreamType.KCP_DTLS, "mKCP + dtls"), 
+            (StreamType.KCP_WG, "mKCP + wireguard"), 
+            (StreamType.H2, "HTTP/2"), 
+            (StreamType.SOCKS, "Socks5"), 
+            (StreamType.MTPROTO, "MTProto"), 
+            (StreamType.SS, "Shadowsocks")
+        ]
+        self.group_tag = group_tag
+        self.group_index = group_index
 
-choice = 'A'
+    def select(self, index):
+        sw = StreamWriter(self.group_tag, self.group_index, self.stream_type[index][0])
+        kw = {}
+        if index == 0 or (index >= 3 and index < 9) or index == 11:
+            pass
+        elif index == 1 or index == 2:
+            host = input("请输入你想要为伪装的域名（不不不需要http）：")
+            kw['host'] = host
+        elif index == 9:
+            pass
+        elif index == 10:
+            user = input("请输入socks的用户名: ")
+            password = input("请输入socks的密码: ")
+            if user == "" or password == "":
+                print("socks的用户名或者密码不能为空")
+                exit(-1)
+            kw = {'user': user, 'pass': password}
+        elif index == 12:
+            sf = SSFactory()
+            kw = {"method": sf.get_method(), "password": sf.get_password()}
+        sw.write(**kw)
 
-if length > 1:
-    import server_info
-    choice=input("请输入要改传输方式的节点Group字母:")
-    choice=choice.upper()
+    def random_kcp(self):
+        kcp_list = ('mKCP + srtp', 'mKCP + utp', 'mKCP + wechat-video', 'mKCP + dtls')
+        choice = random.randint(4, 7)
+        print("随机一种 (srtp | wechat-video | utp | dtls) header伪装, 当前生成 {} \n".format(kcp_list[choice - 4]))
+        self.select(choice)
 
-if length == 1 or (len(choice)==1 and re.match(r'[A-Z]', choice) and choice <= mul_user_conf[-1]['indexDict']['group']):
-    temp_user_conf=""
-    for sin_user_conf in mul_user_conf:
-        if sin_user_conf['indexDict']['group'] == choice:
-            index_dict = sin_user_conf['indexDict']
-            if sin_user_conf["protocol"] == "vmess":
-                local_stream = sin_user_conf["net"] + " " + sin_user_conf["type"]
-            elif sin_user_conf["protocol"] == "socks":
-                local_stream="Socks5"
-            elif sin_user_conf["protocol"] == "mtproto":
-                local_stream="MTProto"
-            elif sin_user_conf["protocol"] == "shadowsocks":
-                local_stream="Shadowsocks"
-            print ("当前组的传输方式为：%s" % local_stream) 
-            temp_user_conf = sin_user_conf
-            break
+if __name__ == '__main__':
 
-    stream_type = ("普通TCP", "HTTP伪装", "WebSocket流量", "普通mKCP", "mKCP + srtp", "mKCP + utp", "mKCP + wechat-video",
-                   "mKCP + dtls", "mKCP + wireguard", "HTTP/2", "Socks5", "MTProto", "Shadowsocks")
-    print ("")
-    #选择新的传输方式
-    for index, type_str in enumerate(stream_type):
-        print("%d.%s" % (index + 1, type_str))
+    gs = GroupSelector('修改传输方式')
+    group = gs.group
 
-    new_stream_network=input()
-    
-    if not tool_box.is_number(new_stream_network):
-        print("请输入数字！")
+    if group == None:
+        exit(-1)
     else:
-        new_stream_network = int(new_stream_network)
-        if new_stream_network > 0 and new_stream_network <= len(stream_type):
-            if (stream_type[new_stream_network - 1] == "MTProto" or stream_type[new_stream_network - 1] == "Shadowsocks") and temp_user_conf["tls"] == "tls":
-                print("v2ray MTProto/Shadowsocks不支持https, 关闭tls成功!")
-            v2ray_util.choice_stream(new_stream_network, index_dict)
-            print("传输模式修改成功！")
+        sm = StreamModifier(group.tag, group.index)
+
+        print("当前组的传输方式为：{}".format(group.node_list[0].stream()))
+        print ("")
+        for index, stream_type in enumerate(sm.stream_type):
+            print("{0}.{1}".format(index + 1, stream_type[1]))
+
+        choice = input()
+
+        if not choice.isdecimal():
+            print("请输入数字！")
         else:
-            print("请输入符合范围的数字！")
-else:
-    print("输入有误，请检查是否为字母且范围中")
+            choice = int(choice)
+            if choice > 0 and choice <= len(sm.stream_type):
+                if (sm.stream_type[choice - 1][1] == "MTProto" or sm.stream_type[choice - 1][1] == "Shadowsocks") and group.tls == 'tls':
+                    print("v2ray MTProto/Shadowsocks不支持https, 关闭tls成功!")
+                sm.select(choice - 1)
+                print("传输模式修改成功！")
+            else:
+                print("请输入符合范围的数字！")

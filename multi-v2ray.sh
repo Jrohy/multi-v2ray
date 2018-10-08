@@ -250,9 +250,10 @@ profileInit() {
 
         #产生默认配置mkcp+随机3种伪装类型type
         python3 /usr/local/multi-v2ray/base_util/random_stream.py
+        python3 -c "from config_modify import stream; StreamModifier().random_kcp();"
 
-        python3 /usr/local/multi-v2ray/base_util/gen_client.py
-        python3 /usr/local/multi-v2ray/base_util/open_port.py
+        python3 /usr/local/multi-v2ray/client.py
+        python3 -c "from utils import open_port; open_port();"
     fi
 }
 
@@ -267,7 +268,7 @@ installFinish() {
 
     echo "V2ray配置信息:"
     #安装完后显示v2ray的配置信息，用于快速部署
-    python3 /usr/local/multi-v2ray/server_info.py
+    python3 -c "from loader import Loader; print(loader.profile);"
 
     echo -e "输入 v2ray 回车即可进行服务管理\n"
 }

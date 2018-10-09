@@ -150,7 +150,8 @@ Group: {self.tag}
 IP: {color_ip}
 Port: {self.port}
 TLS: {tls}
-{node}{tfo}{dyp}
+{node}{tfo}
+{dyp}
 {link}
             '''.format(self=self, color_ip=color_str(Color.FUCHSIA, self.ip), node=node,tfo=tfo,dyp=dyp,tls=tls, link=node.link(self.ip, self.port, self.tls))
         return result

@@ -18,7 +18,7 @@ HELP=""
 REMOVE=""
 
 #centos 临时取消别名
-[ -f /etc/redhat-release ] && unalias cp && unalias rm && unalias mv
+[ -f /etc/redhat-release ] && unalias -a
 
 #######color code########
 RED="31m"      # Error message

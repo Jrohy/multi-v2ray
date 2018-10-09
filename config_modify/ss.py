@@ -52,7 +52,7 @@ if __name__ == '__main__':
 
     if group == None:
         exit(-1)
-    elif type(group.node_list[0]) == SS:
+    elif type(group.node_list[0]) != SS:
         print("\n当前选择组不是Shadowsocks协议!\n")
         exit(-1)
     else:

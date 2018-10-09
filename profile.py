@@ -125,9 +125,9 @@ class Profile:
             config = json.load(json_file)
 
         #读取配置文件大框架
-        conf_inbound=config["inbound"]
-        conf_inboundDetour=config["inboundDetour"]
-        conf_routing=config["routing"]
+        conf_inbound = config["inbound"]
+        conf_inboundDetour = config["inboundDetour"]
+        conf_routing = config["routing"]
 
         self.ad = True if conf_routing["settings"]["rules"][0]["outboundTag"] == "blocked" else False
 
@@ -145,7 +145,8 @@ class Profile:
         local_ip = bytes.decode(my_ip)
 
         json_part_list = [conf_inbound]
-        json_part_list.extend([x for x in conf_inboundDetour])
+        if conf_inboundDetour:
+            json_part_list.extend([x for x in conf_inboundDetour])
 
         group_ascii = 64  # before 'A' ascii code
         for index, json_part in enumerate(json_part_list):

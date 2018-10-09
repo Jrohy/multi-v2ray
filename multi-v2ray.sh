@@ -17,11 +17,6 @@ HELP=""
 
 REMOVE=""
 
-# 临时取消别名
-unalias cp
-unalias rm
-unalias mv
-
 #######color code########
 RED="31m"      # Error message
 GREEN="32m"    # Success message
@@ -131,6 +126,9 @@ checkSys() {
             colorEcho ${RED} "Not support OS, Please reinstall OS and retry!"
             exit 1
     fi
+
+    # centos临时取消别名
+    [[ ${OS} == 'CentOS' ]] && unalias cp && unalias rm && unalias mv
 }
 
 #安装依赖

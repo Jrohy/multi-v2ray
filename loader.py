@@ -20,7 +20,7 @@ class Loader:
                     raise ValueError
             else:
                 raise FileNotFoundError
-        except (ValueError, FileNotFoundError):
+        except Exception:
             self.profile = Profile()
             self.save_profile()
 

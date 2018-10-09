@@ -8,7 +8,7 @@ from group import Vmess, Socks, SS, Mtproto
 from selector import ClientSelector
 
 class ClientWriter:
-    def __init__(self, group, client_index, write_path='/root/config.json', config_path='/etc/v2ray/config.json', template_path='json_template'):
+    def __init__(self, group, client_index, write_path='/root/config.json', config_path='/etc/v2ray/config.json', template_path='/usr/local/multi-v2ray/json_template'):
         with open(config_path, 'r') as json_file:
             self.config = json.load(json_file)
         self.write_path = write_path

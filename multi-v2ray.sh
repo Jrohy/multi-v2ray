@@ -17,9 +17,8 @@ HELP=""
 
 REMOVE=""
 
-unalias cp 
-unalias rm
-unalias mv
+#centos 临时取消别名
+[ -f /etc/redhat-release ] && unalias cp && unalias rm && unalias mv
 
 #######color code########
 RED="31m"      # Error message
@@ -121,18 +120,15 @@ checkSys() {
 
     #检查系统信息
     if [ -f /etc/redhat-release ];then
-            OS='CentOS'
-        elif [ ! -z "`cat /etc/issue | grep bian`" ];then
-            OS='Debian'
-        elif [ ! -z "`cat /etc/issue | grep Ubuntu`" ];then
-            OS='Ubuntu'
-        else
-            colorEcho ${RED} "Not support OS, Please reinstall OS and retry!"
-            exit 1
+        OS='CentOS'
+    elif [ ! -z "`cat /etc/issue | grep bian`" ];then
+        OS='Debian'
+    elif [ ! -z "`cat /etc/issue | grep Ubuntu`" ];then
+        OS='Ubuntu'
+    else
+        colorEcho ${RED} "Not support OS, Please reinstall OS and retry!"
+        exit 1
     fi
-
-    # centos临时取消别名
-    [[ ${OS} == 'CentOS' ]] && unalias cp && unalias rm && unalias mv
 }
 
 #安装依赖

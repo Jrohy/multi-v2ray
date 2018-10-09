@@ -6,7 +6,7 @@ import pickle
 from profile import Profile
 
 class Loader:
-    def __init__(self, path='multi-v2ray.dat'):
+    def __init__(self, path='/usr/local/multi-v2ray/multi-v2ray.dat'):
         self.path = path
         self.profile=None
         self.load_profile()

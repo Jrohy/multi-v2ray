@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 import random
 
-from ss import SSFactory
 from writer import StreamWriter, StreamType
 from selector import GroupSelector
 from group import Mtproto, SS
+
+from config_modify.ss import SSFactory
 
 class StreamModifier:
     def __init__(self, group_tag='A', group_index=-1):

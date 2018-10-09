@@ -5,7 +5,7 @@ import re
 
 from loader import Loader
 from writer import GlobalWriter
-from utils import bytes_2_human_readable
+from utils import bytes_2_human_readable, color_str, Color
 
 class StatsFactory:
     def __init__(self, door_port):
@@ -35,11 +35,15 @@ class StatsFactory:
             self.uplink_value = int(re_result[0])
 
     def print_stats(self):
-        print("\033[36m")
-        print("\ndownlink: " + bytes_2_human_readable(self.downlink_value, 2) + "\n")
-        print("uplink: " + bytes_2_human_readable(self.uplink_value, 2) + "\n")
-        print("total: " + bytes_2_human_readable(self.downlink_value + self.uplink_value, 2) + "\n")
-        print("\033[0m")
+        print('''
+downlink: {0}  
+uplink: {1} 
+total: {2}
+        '''.format(color_str(Color.CYAN, bytes_2_human_readable(self.downlink_value, 2)),
+        color_str(Color.CYAN, bytes_2_human_readable(self.uplink_value, 2)),
+        color_str(Color.CYAN, bytes_2_human_readable(self.downlink_value + self.uplink_value, 2)))
+        )
+
 
 if __name__ == '__main__':
 
@@ -94,7 +98,7 @@ if __name__ == '__main__':
             
             if len(group_list) > 1:
                 print(profile)
-                schoice = input("请输入所需要{}流量的组别(字母)或者序号(数字)".format(action_info))
+                schoice = input("请输入所需要{}流量的组别(字母)或者序号(数字): ".format(action_info))
             else:
                 schoice = "A"
 

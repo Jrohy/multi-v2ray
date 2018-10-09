@@ -115,6 +115,7 @@ Network: {network}
             "v": "2",
             "ps": "",
             "add": ip,
+            "port": port,
             "aid": self.alter_id,
             "type": self.header,
             "net": self.network,

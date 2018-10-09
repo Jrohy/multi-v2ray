@@ -17,6 +17,11 @@ HELP=""
 
 REMOVE=""
 
+# 临时取消别名
+unalias cp
+unalias rm
+unalias mv
+
 #######color code########
 RED="31m"      # Error message
 GREEN="32m"    # Success message

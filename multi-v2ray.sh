@@ -249,7 +249,6 @@ profileInit() {
         sed -i "s/999999999/${D_PORT}/g" /etc/v2ray/config.json
 
         #产生默认配置mkcp+随机3种伪装类型type
-        python3 /usr/local/multi-v2ray/base_util/random_stream.py
         python3 -c "from config_modify import stream; stream.StreamModifier().random_kcp();"
 
         python3 /usr/local/multi-v2ray/client.py

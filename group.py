@@ -145,7 +145,7 @@ class Group:
         dyp = "DynamicPort: {}".format(self.dyp) if self.dyp.status else ""
         node = self.node_list[index]
         result = '''
-{node.user_number}
+{node.user_number}.
 Group: {self.tag}
 IP: {color_ip}
 Port: {self.port}
@@ -163,7 +163,7 @@ TLS: {tls}
         result = ""
         for node in self.node_list:
             temp = '''
-{node.user_number}
+{node.user_number}.
 Group: {self.tag}
 IP: {color_ip}
 Port: {self.port}

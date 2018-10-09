@@ -120,6 +120,10 @@ source <(curl -sL https://git.io/fNgqx) --remove
 **不支持Centos 6**
 
 ## 更新日志
+**2018.10.9**  
+面向对象 来重构代码  
+加入json文件缓存(利用序列化实现)
+
 **2018.9.15**  
 tcpFastOpen的配置    
 命令行参数加入Tab补全

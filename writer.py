@@ -38,6 +38,18 @@ def clean_mtproto_tag(config, group_index):
                     break
         break
 
+def stream_list():
+    return [
+        ("wireguard", StreamType.KCP_WG), 
+        ("dtls", StreamType.KCP_DTLS), 
+        ("wechat", StreamType.KCP_WECHAT), 
+        ("utp", StreamType.KCP_UTP), 
+        ("srtp", StreamType.KCP_SRTP), 
+        ("mtproto", StreamType.MTPROTO), 
+        ("socks", StreamType.SOCKS),
+        ("ss", StreamType.SS)
+    ]
+
 @unique
 class StreamType(Enum):
     TCP = 'tcp'

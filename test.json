@@ -1,0 +1,151 @@
+{
+ "outboundDetour": [
+  {
+   "protocol": "blackhole",
+   "tag": "blocked",
+   "settings": null
+  },
+  {
+   "protocol": "mtproto",
+   "tag": "tg-out",
+   "settings": {}
+  }
+ ],
+ "dns": null,
+ "outbound": {
+  "protocol": "freedom",
+  "streamSettings": null,
+  "mux": null,
+  "tag": null,
+  "settings": null
+ },
+ "routing": {
+  "settings": {
+   "domainStrategy": null,
+   "rules": [
+    {
+     "domain": null,
+     "port": null,
+     "outboundTag": "blocked",
+     "type": "field",
+     "ip": [
+      "0.0.0.0/8",
+      "10.0.0.0/8",
+      "100.64.0.0/10",
+      "169.254.0.0/16",
+      "172.16.0.0/12",
+      "192.0.0.0/24",
+      "192.0.2.0/24",
+      "192.168.0.0/16",
+      "198.18.0.0/15",
+      "198.51.100.0/24",
+      "203.0.113.0/24",
+      "::1/128",
+      "fc00::/7",
+      "fe80::/10"
+     ]
+    },
+    {
+     "outboundTag": "tg-out",
+     "type": "field",
+     "inboundTag": [
+      "tg-in"
+     ]
+    }
+   ]
+  },
+  "strategy": "rules"
+ },
+ "log": {
+  "loglevel": "info",
+  "error": "/var/log/v2ray/error.log",
+  "access": "/var/log/v2ray/access.log"
+ },
+ "inbound": {
+  "protocol": "vmess",
+  "port": 2043,
+  "streamSettings": {
+   "tlsSettings": {},
+   "kcpSettings": {
+    "downlinkCapacity": 100,
+    "tti": 50,
+    "readBufferSize": 2,
+    "header": {
+     "response": null,
+     "type": "wechat-video",
+     "request": null
+    },
+    "congestion": false,
+    "mtu": 1350,
+    "uplinkCapacity": 100,
+    "writeBufferSize": 2
+   },
+   "sockopt": {
+    "tcpFastOpen": true,
+    "mark": 0
+   },
+   "tcpSettings": null,
+   "httpSettings": null,
+   "security": "",
+   "network": "kcp",
+   "wsSettings": null
+  },
+  "settings": {
+   "clients": [
+    {
+     "id": "3eb8f958-53ab-452a-98f3-d5db9756282f",
+     "alterId": 64
+    }
+   ]
+  }
+ },
+ "inboundDetour": [
+  {
+   "protocol": "mtproto",
+   "port": 443,
+   "tag": "tg-in",
+   "settings": {
+    "users": [
+     {
+      "secret": "be9ef76c327a1b9ac75b24650178bb82"
+     }
+    ]
+   }
+  },
+  {
+   "protocol": "socks",
+   "port": 55816,
+   "streamSettings": {
+    "tlsSettings": {},
+    "kcpSettings": null,
+    "tcpSettings": null,
+    "httpSettings": null,
+    "security": "",
+    "wsSettings": null,
+    "network": "tcp"
+   },
+   "settings": {
+    "userLevel": 0,
+    "ip": "127.0.0.1",
+    "timeout": 0,
+    "udp": true,
+    "auth": "password",
+    "accounts": [
+     {
+      "pass": "abc@1234",
+      "user": "Jrohy"
+     }
+    ]
+   }
+  },
+  {
+   "protocol": "shadowsocks",
+   "port": 2468,
+   "settings": {
+    "password": "F7uPj6DC3gAJ4VfZ",
+    "network": "tcp, udp",
+    "method": "aes-256-gcm"
+   }
+  }
+ ]
+}

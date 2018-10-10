@@ -136,6 +136,7 @@ class Group:
         self.tfo = tfo
         self.tls = tls
         self.dyp = dyp
+        self.protocol = None
         # -1 为A组, 0 ~ .. 为inboundDetour 里面的对应坐标
         self.index = index
 

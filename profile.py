@@ -67,6 +67,7 @@ def parse_group(part_json, group_index):
         email = conf_settings["email"] if 'email' in conf_settings else ''
         ss = SS(user_number, conf_settings["password"], conf_settings["method"], email)
         group.node_list.append(ss)
+        group.protocol = ss.__class__.__name__
         return group
     elif protocol == "vmess":
         clients=conf_settings["clients"]
@@ -89,7 +90,10 @@ def parse_group(part_json, group_index):
 
         elif protocol == "mtproto":
             node = Mtproto(user_number, client["secret"], user_info=email)
-        
+            
+        if not group.protocol:
+            group.protocol = node.__class__.__name__
+
         group.node_list.append(node)
     return group
 

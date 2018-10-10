@@ -3,7 +3,7 @@
 import random
 import sys
 
-from config_modify import ss
+from config_modify.ss import SSFactory
 from writer import NodeWriter, StreamType
 
 info = dict()
@@ -37,7 +37,7 @@ if len(sys.argv) > 1:
             exit(-1)
         info = {"user":user, "pass": password}
     elif protocol == StreamType.SS:
-        sf = ss.SSFactory()
+        sf = SSFactory()
         info = {"method": sf.get_method(), "password": sf.get_password()}
 else:
     salt_protocol = [StreamType.KCP_DTLS, StreamType.KCP_WECHAT, StreamType.KCP_UTP, StreamType.KCP_SRTP]

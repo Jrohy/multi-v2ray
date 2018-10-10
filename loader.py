@@ -6,9 +6,10 @@ import pickle
 from profile import Profile
 
 class Loader:
-    def __init__(self, path='/usr/local/multi-v2ray/multi-v2ray.dat'):
+    def __init__(self, path='/usr/local/multi-v2ray/multi-v2ray.dat', config_path=None):
+        self.config_path = config_path
         self.path = path
-        self.profile=None
+        self.profile = None
         self.load_profile()
 
     def load_profile(self):
@@ -21,7 +22,10 @@ class Loader:
             else:
                 raise FileNotFoundError
         except Exception:
-            self.profile = Profile()
+            if self.config_path:
+                self.profile = Profile(self.config_path)
+            else:
+                self.profile = Profile()
             self.save_profile()
 
     def save_profile(self):

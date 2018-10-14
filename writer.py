@@ -67,7 +67,9 @@ class StreamType(Enum):
     KCP_WG = 'kcp_wg'
 
 class Writer:
-    def __init__(self, group_tag='A', group_index=-1, path='/etc/v2ray/config.json', template_path='/usr/local/multi-v2ray/json_template'):
+    # TODO
+    # def __init__(self, group_tag='A', group_index=-1, path='/etc/v2ray/config.json', template_path='/usr/local/multi-v2ray/json_template'):
+    def __init__(self, group_tag='A', group_index=-1, path='test.json', template_path='json_template'):
         self.group_tag = group_tag
         self.group_index = group_index
         self.path = path

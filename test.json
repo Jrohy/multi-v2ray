@@ -63,7 +63,7 @@
  },
  "inbound": {
   "protocol": "vmess",
-  "port": 2043,
+  "port": 2333,
   "streamSettings": {
    "tlsSettings": {},
    "kcpSettings": {
@@ -93,7 +93,7 @@
   "settings": {
    "clients": [
     {
-     "id": "3eb8f958-53ab-452a-98f3-d5db9756282f",
+     "id": "abcdefghi-fdsf123",
      "alterId": 64
     }
    ]
@@ -136,15 +136,6 @@
       "user": "Jrohy"
      }
     ]
-   }
-  },
-  {
-   "protocol": "shadowsocks",
-   "port": 2468,
-   "settings": {
-    "password": "F7uPj6DC3gAJ4VfZ",
-    "network": "tcp, udp",
-    "method": "aes-256-gcm"
    }
   }
  ]

@@ -7,96 +7,6 @@ import urllib.request
 
 from group import Dyport, SS, Socks, Vmess,Mtproto, Group
 
-conf_inboundDetour = ""
-
-local_ip = ""
-
-user_number = 0
-
-def parse_dyp(conf_settings):
-    dyp = Dyport()
-    if "detour" in conf_settings:
-        dynamic_port_tag = conf_settings["detour"]["to"]
-        for detour_list in conf_inboundDetour:
-            if "tag" in detour_list and detour_list["tag"] == dynamic_port_tag:
-                dyp.aid = detour_list["settings"]["default"]["alterId"]
-                dyp.status = True
-                break
-    return dyp
-
-def parse_group(part_json, group_index):
-    header, tfo, tls, path, host, conf_ip = None, None, "", "", "", local_ip
-
-    global user_number
-    
-    protocol = part_json["protocol"]
-
-    if protocol == 'dokodemo-door' or 'allocate' in part_json:
-        return
-
-    conf_settings = part_json["settings"]
-
-    dyp = parse_dyp(conf_settings)
-
-    if protocol == "vmess" or protocol == "socks":
-        conf_stream = part_json["streamSettings"]
-        tls = conf_stream["security"]
-
-        if "sockopt" in conf_stream and "tcpFastOpen" in conf_stream["sockopt"]:
-           tfo = "开启" if conf_stream["sockopt"]["tcpFastOpen"] else "关闭"
-
-        if conf_stream["httpSettings"] != None:
-            path = conf_stream["httpSettings"]["path"]
-        elif conf_stream["wsSettings"] != None:
-            host = conf_stream["wsSettings"]["headers"]["Host"]
-            path = conf_stream["wsSettings"]["path"]
-        elif conf_stream["tcpSettings"] != None:
-            host = conf_stream["tcpSettings"]["header"]["request"]["headers"]["Host"]
-
-        if (tls == "tls"):
-            with open('/usr/local/multi-v2ray/my_domain', 'r') as domain_file:
-                conf_ip = str(domain_file.read())
-
-        if conf_stream["network"] == "kcp" and "header" in conf_stream["kcpSettings"]:
-            header = conf_stream["kcpSettings"]["header"]["type"]
-    
-    group = Group(conf_ip, part_json["port"], tls=tls, tfo=tfo, dyp=dyp, index=group_index)
-
-    if protocol == "shadowsocks":
-        user_number = user_number + 1
-        email = conf_settings["email"] if 'email' in conf_settings else ''
-        ss = SS(user_number, conf_settings["password"], conf_settings["method"], email)
-        group.node_list.append(ss)
-        group.protocol = ss.__class__.__name__
-        return group
-    elif protocol == "vmess":
-        clients=conf_settings["clients"]
-    elif protocol == "socks":
-        clients=conf_settings["accounts"]
-    elif protocol == "mtproto":
-        clients=conf_settings["users"]
-
-    for client in clients:
-        email, node = "", None
-        user_number = user_number + 1
-        if "email" in client and client["email"] != None:
-            email = client["email"]
-
-        if protocol == "vmess":
-            node = Vmess(client["id"], client["alterId"], conf_stream["network"], user_number, path=path, host=host, header=header, email=email)
-
-        elif protocol == "socks":
-            node = Socks(user_number, client["pass"], user_info=client["user"])
-
-        elif protocol == "mtproto":
-            node = Mtproto(user_number, client["secret"], user_info=email)
-            
-        if not group.protocol:
-            group.protocol = node.__class__.__name__
-
-        group.node_list.append(node)
-    return group
-
 class Stats:
     def __init__(self, status=False, door_port=0):
         self.status = status
@@ -111,6 +21,7 @@ class Profile:
         self.ad = None
         self.group_list = []
         self.stats = None
+        self.user_number = 0
         self.modify_time = os.path.getmtime(path)
         self.read_json()
 
@@ -122,21 +33,19 @@ class Profile:
         return result
 
     def read_json(self):
-        global local_ip
-        global conf_inboundDetour
 
         with open(self.path, 'r') as json_file:
-            config = json.load(json_file)
+            self.config = json.load(json_file)
 
         #读取配置文件大框架
-        conf_inbound = config["inbound"]
-        conf_inboundDetour = config["inboundDetour"]
-        conf_routing = config["routing"]
+        conf_inbound = self.config["inbound"]
+        conf_inboundDetour = self.config["inboundDetour"]
+        conf_routing = self.config["routing"]
 
         self.ad = True if conf_routing["settings"]["rules"][0]["outboundTag"] == "blocked" else False
 
         stats = Stats()
-        if "stats" in config:
+        if "stats" in self.config:
             stats.status = True
             for detour_list in conf_inboundDetour:
                 if "protocol" in detour_list and detour_list["protocol"] == "dokodemo-door":
@@ -154,8 +63,92 @@ class Profile:
 
         group_ascii = 64  # before 'A' ascii code
         for index, json_part in enumerate(json_part_list):
-            group = parse_group(json_part, index - 1)
+            group = self.parse_group(json_part, index - 1, local_ip)
             if group != None:
                 group_ascii = group_ascii + 1
                 group.tag = chr(group_ascii)
                 self.group_list.append(group)
+        
+        del self.config
+
+    def parse_group(self, part_json, group_index, local_ip):
+        header, tfo, tls, path, host, conf_ip = None, None, "", "", "", local_ip
+        
+        protocol = part_json["protocol"]
+
+        if protocol == 'dokodemo-door' or 'allocate' in part_json:
+            return
+
+        conf_settings = part_json["settings"]
+
+        dyp = self.parse_dyp(conf_settings)
+
+        if protocol == "vmess" or protocol == "socks":
+            conf_stream = part_json["streamSettings"]
+            tls = conf_stream["security"]
+
+            if "sockopt" in conf_stream and "tcpFastOpen" in conf_stream["sockopt"]:
+                tfo = "开启" if conf_stream["sockopt"]["tcpFastOpen"] else "关闭"
+
+            if conf_stream["httpSettings"] != None:
+                path = conf_stream["httpSettings"]["path"]
+            elif conf_stream["wsSettings"] != None:
+                host = conf_stream["wsSettings"]["headers"]["Host"]
+                path = conf_stream["wsSettings"]["path"]
+            elif conf_stream["tcpSettings"] != None:
+                host = conf_stream["tcpSettings"]["header"]["request"]["headers"]["Host"]
+
+            if (tls == "tls"):
+                with open('/usr/local/multi-v2ray/my_domain', 'r') as domain_file:
+                    conf_ip = str(domain_file.read())
+
+            if conf_stream["network"] == "kcp" and "header" in conf_stream["kcpSettings"]:
+                header = conf_stream["kcpSettings"]["header"]["type"]
+        
+        group = Group(conf_ip, part_json["port"], tls=tls, tfo=tfo, dyp=dyp, index=group_index)
+
+        if protocol == "shadowsocks":
+            self.user_number = self.user_number + 1
+            email = conf_settings["email"] if 'email' in conf_settings else ''
+            ss = SS(self.user_number, conf_settings["password"], conf_settings["method"], email)
+            group.node_list.append(ss)
+            group.protocol = ss.__class__.__name__
+            return group
+        elif protocol == "vmess":
+            clients=conf_settings["clients"]
+        elif protocol == "socks":
+            clients=conf_settings["accounts"]
+        elif protocol == "mtproto":
+            clients=conf_settings["users"]
+
+        for client in clients:
+            email, node = "", None
+            self.user_number = self.user_number + 1
+            if "email" in client and client["email"] != None:
+                email = client["email"]
+
+            if protocol == "vmess":
+                node = Vmess(client["id"], client["alterId"], conf_stream["network"], self.user_number, path=path, host=host, header=header, email=email)
+
+            elif protocol == "socks":
+                node = Socks(self.user_number, client["pass"], user_info=client["user"])
+
+            elif protocol == "mtproto":
+                node = Mtproto(self.user_number, client["secret"], user_info=email)
+                
+            if not group.protocol:
+                group.protocol = node.__class__.__name__
+
+            group.node_list.append(node)
+        return group
+
+    def parse_dyp(self, conf_settings):
+        dyp = Dyport()
+        if "detour" in conf_settings:
+            dynamic_port_tag = conf_settings["detour"]["to"]
+            for detour_list in self.config["inboundDetour"]:
+                if "tag" in detour_list and detour_list["tag"] == dynamic_port_tag:
+                    dyp.aid = detour_list["settings"]["default"]["alterId"]
+                    dyp.status = True
+                    break
+        return dyp

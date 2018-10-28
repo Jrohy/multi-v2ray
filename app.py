@@ -34,9 +34,11 @@ def node_list():
 
 @app.route('/user/<group_tag>', methods = ['POST'])
 def add_user(group_tag):
-    json_request = json.loads(request.get_data())
-    kw = json_request['data']
-    success, msg = True, "add user success!!!"
+    request_data = request.get_data()
+    success, msg, kw = True, "add user success!!!", dict()
+    if request_data:
+        json_request = json.loads(request.get_data())
+        kw = json_request['data']
     try:
         loader.load_profile()
         group_list = loader.profile.group_list
@@ -64,9 +66,11 @@ def del_user(client_index):
 
 @app.route('/group/<stream_type>', methods = ['POST'])
 def add_group(stream_type):
+    kw = dict()
     json_request = json.loads(request.get_data())
     port = int(json_request['port'])
-    kw = json_request['data']
+    if "data" in json_request:
+        kw = json_request['data']
     success, msg = True, "add group success!!!"
     try:
         from writer import stream_list

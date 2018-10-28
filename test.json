@@ -26,7 +26,7 @@
     {
      "domain": null,
      "port": null,
-     "outboundTag": "blocked",
+     "outboundTag": "direct",
      "type": "field",
      "ip": [
       "0.0.0.0/8",
@@ -49,6 +49,7 @@
      "outboundTag": "tg-out",
      "type": "field",
      "inboundTag": [
+      "D",
       "tg-in"
      ]
     }
@@ -63,7 +64,7 @@
  },
  "inbound": {
   "protocol": "vmess",
-  "port": 2333,
+  "port": 135,
   "streamSettings": {
    "tlsSettings": {},
    "kcpSettings": {
@@ -93,8 +94,12 @@
   "settings": {
    "clients": [
     {
-     "id": "abcdefghi-fdsf123",
-     "alterId": 64
+     "alterId": 32,
+     "id": "f50cf2f4-d2e5-11e8-9d54-74d02bc1d815"
+    },
+    {
+     "alterId": 32,
+     "id": "jfdsgdfsf"
     }
    ]
   }
@@ -134,6 +139,18 @@
      {
       "pass": "abc@1234",
       "user": "Jrohy"
+     }
+    ]
+   }
+  },
+  {
+   "tag": "D",
+   "port": 7820,
+   "protocol": "mtproto",
+   "settings": {
+    "users": [
+     {
+      "secret": "3a1cbd6b13d9c63ee52b4ccbe78d88b0"
      }
     ]
    }

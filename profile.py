@@ -6,7 +6,7 @@ import os
 import urllib.request
 
 from config import Config
-from group import SS, Socks, Vmess,Mtproto, Group
+from group import SS, Socks, Vmess,Mtproto, Group, Dyport
 
 class Stats:
     def __init__(self, status=False, door_port=0):
@@ -65,8 +65,7 @@ class Profile:
         del self.config
 
     def parse_group(self, part_json, group_index, local_ip):
-        end_port, header, tfo, tls, path, host, conf_ip = None, None, None, "", "", "", local_ip
-        port_strategy = "always"
+        dyp, end_port, header, tfo, tls, path, host, conf_ip = Dyport(), None, None, None, "", "", "", local_ip
         
         protocol = part_json["protocol"]
 
@@ -81,9 +80,14 @@ class Profile:
             port, end_port = port_info
         else:
             port = port_info[0]
-        
-        if "allocate" in part_json:
-            port_strategy = part_json["allocate"]["strategy"]
+
+        if "detour" in conf_settings:
+            dynamic_port_tag = conf_settings["detour"]["to"]
+            for inbound in self.config["inbounds"]:
+                if "tag" in inbound and inbound["tag"] == dynamic_port_tag:
+                    dyp.aid = inbound["settings"]["default"]["alterId"]
+                    dyp.status = True
+                    break
 
         if protocol == "vmess" or protocol == "socks":
             conf_stream = part_json["streamSettings"]
@@ -101,13 +105,12 @@ class Profile:
                 host = conf_stream["tcpSettings"]["header"]["request"]["headers"]["Host"]
 
             if (tls == "tls"):
-                with open(Config().get_data('domain'), 'r') as domain_file:
-                    conf_ip = str(domain_file.read())
+                conf_ip = Config().get_data('domain')
 
             if conf_stream["network"] == "kcp" and "header" in conf_stream["kcpSettings"]:
                 header = conf_stream["kcpSettings"]["header"]["type"]
         
-        group = Group(conf_ip, port,  end_port=end_port, port_strategy=port_strategy, tls=tls, tfo=tfo, index=group_index)
+        group = Group(conf_ip, port,  end_port=end_port, tls=tls, tfo=tfo, dyp=dyp, index=group_index)
 
         if protocol == "shadowsocks":
             self.user_number = self.user_number + 1

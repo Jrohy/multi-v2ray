@@ -242,16 +242,8 @@ class GroupWriter(Writer):
     def __init__(self, group_tag, group_index):
         super(GroupWriter, self).__init__(group_tag, group_index)
 
-    def write_port(self, port, port_strategy):
+    def write_port(self, port):
         self.part_json["port"] = str(port) if str(port).find("-") > 0 else int(port)
-        if "allocate" not in self.part_json:
-            self.part_json["allocate"] =  {
-                "strategy": port_strategy,
-                "refresh": 5,
-                "concurrency": 3
-            }
-        else:
-            self.part_json["allocate"]["strategy"] = port_strategy
         self.save()
 
     def write_ss_password(self, new_password):
@@ -269,6 +261,25 @@ class GroupWriter(Writer):
             self.part_json["settings"]["email"] = email
         self.save()
 
+    def write_dyp(self, status = False, aid = '32'):
+        if status:
+            short_uuid = str(uuid.uuid1())[0:7]
+            dynamic_port_tag = "dynamicPort" + short_uuid
+            self.part_json["settings"].update({"detour":{"to":dynamic_port_tag}})
+            dyn_json = self.load_template('dyn_port.json')
+            dyn_json["settings"]["default"]["alterId"] = int(aid)
+            dyn_json["tag"] = dynamic_port_tag
+            self.config["inbounds"].append(dyn_json)
+        else:
+            dynamic_port_tag = self.part_json["settings"]["detour"]["to"]
+            for index, inbound in enumerate(self.config["inbounds"]):
+                if "tag" in inbound and inbound["tag"] == dynamic_port_tag:
+                    del self.config["inbounds"][index]
+                    break
+            if "detour" in self.part_json["settings"]:
+                del self.part_json["settings"]["detour"]
+        self.save()
+
     def write_tls(self, status = False, *, crt_file=None, key_file=None, domain=None):
         if status:
             tls_settings = {"certificates": [
@@ -279,9 +290,7 @@ class GroupWriter(Writer):
             ]}
             self.part_json["streamSettings"]["security"] = "tls"
             self.part_json["streamSettings"]["tlsSettings"] = tls_settings
-
-            with open(self.multi_config.get_data('domain'), 'w') as domain_file:
-                domain_file.writelines(str(domain))
+            Config().set_data("domain", domain)
         else:
             if self.part_json["streamSettings"]["network"] == StreamType.H2.value:
                 print("关闭tls同时也会关闭HTTP/2！\n")

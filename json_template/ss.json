@@ -5,10 +5,5 @@
     "method": "aes-128-gcm",
     "password": "password",
     "network":"tcp, udp"
-  },
-  "allocate": {
-    "strategy": "always",
-    "refresh": 5,
-    "concurrency": 3
   }
 }

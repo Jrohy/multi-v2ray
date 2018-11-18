@@ -24,11 +24,6 @@
       "network": "",
       "kcpSettings": null,
       "tcpSettings": null
-    },
-    "allocate": {
-      "strategy": "always",
-      "refresh": 5,
-      "concurrency": 3
     }
   }
   ],

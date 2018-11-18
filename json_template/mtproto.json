@@ -5,11 +5,6 @@
     "protocol": "mtproto",
     "settings": {
       "users": [{"secret": "b0cbcef5a486d9636472ac27f8e11a9d"}]
-    },
-    "allocate": {
-      "strategy": "always",
-      "refresh": 5,
-      "concurrency": 3
     }
   },
   "mtproto-out":  {

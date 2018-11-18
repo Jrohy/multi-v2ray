@@ -52,18 +52,17 @@ class ClientWriter:
             print("\nMTProto协议只支持Telegram通信, 所以无法生成配置文件!\n")
             exit(-1)
 
-        user_json["port"] = self.group.port
+        user_json["port"] = int(self.group.port)
 
         if type(self.node) != SS:
             self.client_config["outbounds"][0]["streamSettings"] = self.config["inbounds"][group.index]["streamSettings"]
 
-        if group.tls == '':
-            user_json["address"] = str(get_ip())
-        else:
-            with open(self.config_factory.get_data("domain"), 'r') as domain_file:
-                content = domain_file.read()
+        if group.tls == 'tls':
+            content = self.config_factory.get_data("domain")
             user_json["address"] = str(content)
             self.client_config["outbounds"][0]["streamSettings"]["tlsSettings"] = {}
+        else:
+            user_json["address"] = str(get_ip())
 
     def write(self):
         '''

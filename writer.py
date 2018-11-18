@@ -7,6 +7,7 @@ import string
 import uuid
 from enum import Enum, unique
 
+from config import Config
 from utils import port_is_use
 from loader import Loader
 from group import Mtproto, Vmess, Socks
@@ -15,21 +16,18 @@ def clean_mtproto_tag(config, group_index):
     '''
     清理mtproto 协议减少时无用的tag
     '''
-    rules = config["routing"]["settings"]["rules"]
+    rules = config["routing"]["rules"]
 
-    if group_index == -1:
-        tag = config["inbound"]["tag"]
-    else:
-        tag = config["inboundDetour"][group_index]["tag"]
+    tag = config["inbounds"][group_index]["tag"]
 
     for index, rule in enumerate(rules):
         if rule["outboundTag"] != "tg-out":
             continue
         if len(rule["inboundTag"]) == 1:
             del rules[index]
-            for out_index, oubound_mtproto in enumerate(config["outboundDetour"]):
+            for out_index, oubound_mtproto in enumerate(config["outbounds"]):
                 if oubound_mtproto["protocol"] == "mtproto":
-                    del config["outboundDetour"][out_index]
+                    del config["outbounds"][out_index]
                     break
         else:
             for tag_index, rule_tag in enumerate(rule["inboundTag"]):
@@ -67,19 +65,19 @@ class StreamType(Enum):
     KCP_WG = 'kcp_wg'
 
 class Writer:
-    def __init__(self, group_tag='A', group_index=-1, path='/etc/v2ray/config.json', template_path='/usr/local/multi-v2ray/json_template'):
-        self.group_tag = group_tag
+    def __init__(self, group_tag = 'A', group_index=0):
+        self.multi_config = Config()
         self.group_index = group_index
-        self.path = path
-        self.template_path = template_path
-        self.config = self.load(path)
-        self.part_json = None
+        self.group_tag = group_tag
+        self.path = self.multi_config.get_path('config_path')
+        self.template_path = self.multi_config.get_path('template_path')
+        self.config = self.load(self.path)
+        self.part_json = self.config["inbounds"][self.group_index]
 
     def load(self, path):
         '''
         load v2ray profile
         '''
-        #打开配置文件
         with open(path, 'r') as json_file:
             config = json.load(json_file)
         return config
@@ -96,50 +94,36 @@ class Writer:
         '''
         save v2ray config.json
         '''
-        if self.part_json:
-            if self.group_tag == 'A':
-                self.config["inbound"] = self.part_json
-            else:
-                self.config["inboundDetour"][self.group_index] = self.part_json
-
-        json_dump=json.dumps(self.config, indent=1)
+        json_dump=json.dumps(self.config, indent=2)
         with open(self.path, 'w') as writer:
             writer.writelines(json_dump)
-
-    def locate_json(self):
-        '''
-        inbound级别定位json
-        '''
-        if self.group_tag == 'A':
-            self.part_json = self.config["inbound"]
-        else:
-            self.part_json = self.config["inboundDetour"][self.group_index]
 
 class StreamWriter(Writer):
     def __init__(self, group_tag, group_index, stream_type=None):
         super(StreamWriter, self).__init__(group_tag, group_index)
         self.stream_type = stream_type
-        self.locate_json()
     
     def to_mtproto(self, template_json):
         mtproto_in = template_json["mtproto-in"]
         mtproto_in["port"] = self.part_json["port"]
         mtproto_in["tag"] = self.group_tag
+        if "allocate" in self.part_json:
+            mtproto_in["allocate"] = self.part_json["allocate"]
         salt = "abcdef" + string.digits
         secret = ''.join([random.choice(salt) for _ in range(32)])
         mtproto_in["settings"]["users"][0]["secret"] = secret
         self.part_json = mtproto_in
 
         has_outbound = False
-        for outbound in self.config["outboundDetour"]:
+        for outbound in self.config["outbounds"]:
             if "protocol" in outbound and outbound["protocol"] == "mtproto":
                 has_outbound = True
                 break
         if not has_outbound:
             mtproto_out = template_json["mtproto-out"]
-            self.config["outboundDetour"].append(mtproto_out)
+            self.config["outbounds"].append(mtproto_out)
         
-        rules = self.config["routing"]["settings"]["rules"]
+        rules = self.config["routing"]["rules"]
         has_bind = False
         for rule in rules:
             if rule["outboundTag"] == "tg-out":
@@ -168,13 +152,14 @@ class StreamWriter(Writer):
         #mtproto换成其他协议时, 减少mtproto int和out的路由绑定
         if origin_protocol == StreamType.MTPROTO and origin_protocol != self.stream_type:
             clean_mtproto_tag(self.config, self.group_index)
-            self.locate_json()
 
         #原来是socks/mtproto/shadowsocks协议 则先切换为标准的inbound
         if origin_protocol == StreamType.MTPROTO or origin_protocol == StreamType.SOCKS or origin_protocol == StreamType.SS:
             vmess = self.load_template('server.json')
-            vmess["inbound"]["port"] = self.part_json["port"]
-            self.part_json = vmess["inbound"]
+            vmess["inbounds"][0]["port"] = self.part_json["port"]
+            if "allocate" in self.part_json:
+                vmess["inbounds"][0]["allocate"] = self.part_json["allocate"]
+            self.part_json = vmess["inbounds"][0]
 
         if self.stream_type == StreamType.KCP:
             self.part_json["streamSettings"] = self.load_template('kcp.json')
@@ -213,11 +198,13 @@ class StreamWriter(Writer):
             socks["accounts"][0]["pass"] = kw["pass"]
             self.part_json["settings"] = socks
             self.part_json["protocol"] = "socks"
-            self.part_json["streamSettings"]=tcp
+            self.part_json["streamSettings"] = tcp
 
         elif self.stream_type == StreamType.SS:
             ss = self.load_template('ss.json')
             ss["port"] = self.part_json["port"]
+            if "allocate" in self.part_json:
+                ss["allocate"] = self.part_json["allocate"]
             ss["settings"]["method"] = kw["method"]
             ss["settings"]["password"] = kw["password"]
             self.part_json = ss
@@ -227,13 +214,13 @@ class StreamWriter(Writer):
             salt = '/' + ''.join(random.sample(string.ascii_letters + string.digits, 8)) + '/'
             ws["wsSettings"]["path"] = salt
             ws["wsSettings"]["headers"]["Host"] = kw['host']
-            self.part_json["streamSettings"]=ws
+            self.part_json["streamSettings"] = ws
 
         elif self.stream_type == StreamType.H2:
             http2 = self.load_template('http2.json')
             salt = '/' + ''.join(random.sample(string.ascii_letters + string.digits, 8)) + '/'
-            http2["httpSettings"]["path"]=salt
-            self.part_json["streamSettings"]=http2
+            http2["httpSettings"]["path"] = salt
+            self.part_json["streamSettings"] = http2
 
             # http2 tls的设置
             if security_backup != "tls" or not "certificates" in tls_settings_backup:
@@ -248,15 +235,23 @@ class StreamWriter(Writer):
             self.part_json["streamSettings"]["security"] = security_backup
             self.part_json["streamSettings"]["tlsSettings"] = tls_settings_backup
 
+        self.config["inbounds"][self.group_index] = self.part_json
         self.save()
 
 class GroupWriter(Writer):
     def __init__(self, group_tag, group_index):
         super(GroupWriter, self).__init__(group_tag, group_index)
-        self.locate_json()
 
-    def write_port(self, new_port):
-        self.part_json["port"] = int(new_port)
+    def write_port(self, port, port_strategy):
+        self.part_json["port"] = str(port) if str(port).find("-") > 0 else int(port)
+        if "allocate" not in self.part_json:
+            self.part_json["allocate"] =  {
+                "strategy": port_strategy,
+                "refresh": 5,
+                "concurrency": 3
+            }
+        else:
+            self.part_json["allocate"]["strategy"] = port_strategy
         self.save()
 
     def write_ss_password(self, new_password):
@@ -274,36 +269,18 @@ class GroupWriter(Writer):
             self.part_json["settings"]["email"] = email
         self.save()
 
-    def write_dyp(self, status = False, aid = '32'):
-        if status:
-            short_uuid = str(uuid.uuid1())[0:7]
-            dynamic_port_tag = "dynamicPort" + short_uuid
-            self.part_json["settings"].update({"detour":{"to":dynamic_port_tag}})
-            dyn_json = self.load_template('dyn_port.json')
-            dyn_json["settings"]["default"]["alterId"] = int(aid)
-            dyn_json["tag"] = dynamic_port_tag
-            if self.config["inboundDetour"] == None:
-                self.config["inboundDetour"] = []
-            self.config["inboundDetour"].append(dyn_json)
-        else:
-            dynamic_port_tag = self.part_json["settings"]["detour"]["to"]
-            for index, detour_list in enumerate(self.config["inboundDetour"]):
-                if "tag" in detour_list and detour_list["tag"] == dynamic_port_tag:
-                    del self.config["inboundDetour"][index]
-                    break
-            if "detour" in self.part_json["settings"]:
-                del self.part_json["settings"]["detour"]
-        self.save()
-
     def write_tls(self, status = False, *, crt_file=None, key_file=None, domain=None):
         if status:
-            tls_settings = self.load_template('tls_settings.json')
-            tls_settings["certificates"][0]["certificateFile"] = crt_file
-            tls_settings["certificates"][0]["keyFile"] = key_file
+            tls_settings = {"certificates": [
+                {
+                "certificateFile": crt_file,
+                "keyFile": key_file
+                }
+            ]}
             self.part_json["streamSettings"]["security"] = "tls"
             self.part_json["streamSettings"]["tlsSettings"] = tls_settings
 
-            with open('/usr/local/multi-v2ray/my_domain', 'w') as domain_file:
+            with open(self.multi_config.get_data('domain'), 'w') as domain_file:
                 domain_file.writelines(str(domain))
         else:
             if self.part_json["streamSettings"]["network"] == StreamType.H2.value:
@@ -311,7 +288,7 @@ class GroupWriter(Writer):
                 print("已重置为kcp utp传输方式, 若要其他方式请自行切换")
                 self.part_json["streamSettings"] = self.load_template('kcp_utp.json')
             else:
-                self.part_json["streamSettings"]["security"] = ""
+                self.part_json["streamSettings"]["security"] = "none"
                 self.part_json["streamSettings"]["tlsSettings"] = {}
         self.save()
 
@@ -330,10 +307,9 @@ class GroupWriter(Writer):
         self.save()
 
 class ClientWriter(Writer):
-    def __init__(self, group_tag = 'A', group_index=-1, client_index = 0):
+    def __init__(self, group_tag = 'A', group_index = 0, client_index = 0):
         super(ClientWriter, self).__init__(group_tag, group_index)
         self.client_index = client_index
-        self.locate_json()
         self.client_str = "clients" if self.part_json["protocol"] == "vmess" else "users"
 
     def write_aid(self, aid = 32):
@@ -357,18 +333,11 @@ class GlobalWriter(Writer):
         super(GlobalWriter, self).__init__()
         self.group_list = group_list
 
-    def write_ad(self, status = False):
-        if status:
-            self.config["routing"]["settings"]["rules"][0]["outboundTag"] = "blocked"
-        else:
-            self.config["routing"]["settings"]["rules"][0]["outboundTag"] = "direct"
-        self.save()
-
     def write_stats(self, status = False):
         '''
         更改流量统计设置
         '''
-        conf_rules = self.config["routing"]["settings"]["rules"]
+        conf_rules = self.config["routing"]["rules"]
         if status:
             stats_json = self.load_template('stats_settings.json')
             routing_rules = stats_json["routingRules"]
@@ -390,16 +359,14 @@ class GlobalWriter(Writer):
                 if not port_is_use(random_port):
                     break
             dokodemo_door["port"] = random_port
-            if self.config["inboundDetour"] == None:
-                self.config["inboundDetour"]=[]
 
             has_door = False
-            for detour_list in self.config["inboundDetour"]:
-                if detour_list["protocol"] == "dokodemo-door" and detour_list["tag"] == "api":
+            for inbound_list in self.config["inbounds"]:
+                if inbound_list["protocol"] == "dokodemo-door" and inbound_list["tag"] == "api":
                     has_door = True 
                     break
             if not has_door:
-                self.config["inboundDetour"].append(dokodemo_door)
+                self.config["inbounds"].append(dokodemo_door)
 
             #加入流量统计三件套
             self.config.update(stats_json)
@@ -408,20 +375,14 @@ class GlobalWriter(Writer):
             for group in self.group_list:
                 if type(group) == Mtproto:
                     continue
-                if group.tag == 'A':
-                    self.config["inbound"].update({"tag":group.tag})
-                else:
-                    self.config["inboundDetour"][group.index].update({"tag": group.tag})
+                self.config["inbounds"][group.index].update({"tag": group.tag})
         else:
             # 删除用于统计流量的tag标签
-            if "tag" in self.config["inbound"] and self.config["inbound"]["tag"] == "A":
-                for group in self.group_list:
-                    if type(group) == Mtproto:
-                        continue
-                    if group.tag == 'A':
-                        del self.config["inbound"]["tag"]
-                    else:
-                        del self.config["inboundDetour"][group.index]["tag"]
+            for index, inbound in enumerate(self.config["inbounds"]):
+                if inbound["protocol"] == "dokodemo-door" and inbound["tag"] == "api":
+                    del self.config["inbounds"][index]
+                elif "tag" in inbound:
+                    del self.config["inbounds"][index]["tag"]
 
             if "stats" in self.config:
                 del self.config["stats"]
@@ -433,23 +394,16 @@ class GlobalWriter(Writer):
             for index,rules_list in enumerate(conf_rules):
                 if rules_list["outboundTag"] == "api":
                     del conf_rules[index]
-
-            if self.config["inboundDetour"]:
-                for index, detour_list in enumerate(self.config["inboundDetour"]):
-                    if detour_list["protocol"] == "dokodemo-door" and detour_list["tag"] == "api":
-                        del self.config["inboundDetour"][index]
         self.save()
 
 class NodeWriter(Writer):
     def create_new_port(self, newPort, protocol, **kw):
         # init new inbound
         server = self.load_template('server.json')
-        new_inbound = server["inbound"]
+        new_inbound = server["inbounds"][0]
         new_inbound["port"] = int(newPort)
         new_inbound["settings"]["clients"][0]["id"] = str(uuid.uuid1())
-        if self.config["inboundDetour"] == None:
-            self.config["inboundDetour"]=[]
-        self.config["inboundDetour"].append(new_inbound)
+        self.config["inbounds"].append(new_inbound)
         print("新增端口组成功!")
         self.save()
 
@@ -462,7 +416,6 @@ class NodeWriter(Writer):
         '''
         初始化时需传入group_tag, group_index参数, 自动调用父构造器来初始化
         '''
-        self.locate_json()
         if self.part_json['protocol'] == 'socks':
             user = {"user": kw["user"], "pass": kw["pass"]}
             self.part_json["settings"]["accounts"].append(user)
@@ -471,7 +424,10 @@ class NodeWriter(Writer):
         elif self.part_json['protocol'] == 'vmess' :
             new_uuid = uuid.uuid1()
             email_info = ""
-            user = self.load_template('user.json')
+            user = {
+                "alterId": 32,
+                "id": "ae1bc6ce-e575-4ee2-85f1-350a0aa506cb"
+            }
             if "email" in kw and kw["email"] != "":
                 user.update({"email":kw["email"]})
                 email_info = ", email: " + kw["email"]
@@ -484,35 +440,19 @@ class NodeWriter(Writer):
     def del_user(self, group, client_index):
         node = group.node_list[0]
         if len(group.node_list) == 1:
-            if group.tag == 'A':
-                print("inbound组只有一个用户，无法删除")
-                return 
-            else:
-                if type(node) == Mtproto:
-                    clean_mtproto_tag(self.config, group.index)
-                print("当前inboundDetour组只有一个用户，整个节点组删除")
-                del self.config["inboundDetour"][group.index]
-                if len(self.config["inboundDetour"]) == 0:
-                    self.config["inboundDetour"] == None
+            if type(node) == Mtproto:
+                clean_mtproto_tag(self.config, group.index)
+            del self.config["inbounds"][group.index]
         elif type(node) == Vmess or type(node) == Socks:
             client_str = 'clients' if type(node) == Vmess else 'accounts'
-            if group.tag == 'A':
-                del self.config["inbound"]["settings"][client_str][client_index]
-            else:
-                del self.config["inboundDetour"][group.index]["settings"][client_str][client_index]
+            del self.config["inbounds"][group.index]["settings"][client_str][client_index]
 
         print("删除用户成功!")
         self.save()
 
     def del_port(self, group):
-        if group.tag == 'A':
-            print("A组为inbound, 无法删除")
-            return
-        else:
-            if type(group.node_list[0]) == Mtproto:
-                clean_mtproto_tag(self.config, group.index)
-            del self.config["inboundDetour"][group.index]
-            if len(self.config["inboundDetour"]) == 0:
-                self.config["inboundDetour"] == None
-            print("删除端口成功!")
-            self.save()
+        if type(group.node_list[0]) == Mtproto:
+            clean_mtproto_tag(self.config, group.index)
+        del self.config["inbounds"][group.index]
+        print("删除端口成功!")
+        self.save()

@@ -9,15 +9,18 @@ BEIJING_UPDATE_TIME=3
 BEGIN_PATH=$(pwd)
 
 #安装方式0: 全新安装, 1:保留配置更新 , 2:仅更新multi-v2ray源码
-INSTARLL_WAY="0"
+INSTARLL_WAY=0
 
-DEV_MODE=""
+#定义操作变量, 0为否, 1为是
+DEV_MODE=0
 
-HELP=""
+HELP=0
 
-REMOVE=""
+REMOVE=0
 
-#centos 临时取消别名
+APP_PATH="/usr/local/multi-v2ray"
+
+#Centos 临时取消别名
 [ -f /etc/redhat-release ] && unalias -a
 
 #######color code########
@@ -36,21 +39,21 @@ while [[ $# > 0 ]];do
     key="$1"
     case $key in
         --remove)
-        REMOVE="1"
+        REMOVE=1
         ;;
         -h|--help)
-        HELP="1"
+        HELP=1
         ;;
         -k|--keep)
-        INSTARLL_WAY="1"
+        INSTARLL_WAY=1
         colorEcho ${BLUE} "当前以keep保留配置文件形式更新, 若失败请用全新安装\n"
         ;;
         -c|--code)
-        INSTARLL_WAY="2"
+        INSTARLL_WAY=2
         colorEcho ${BLUE} "当前仅更新multi-v2ray源码\n"
         ;;
         -d|--dev)
-        DEV_MODE="1"
+        DEV_MODE=1
         colorEcho ${BLUE} "当前为开发模式, 用dev分支来更新\n"
         ;;
         *)
@@ -85,7 +88,8 @@ removeV2Ray() {
     rm -rf /etc/init.d/v2ray  >/dev/null 2>&1
 
     #卸载multi-v2ray
-    rm -rf /usr/local/multi-v2ray >/dev/null 2>&1
+    rm -rf $APP_PATH >/dev/null 2>&1
+    rm -rf /etc/bash_completion.d/v2ray.bash >/dev/null 2>&1
     rm -rf /usr/local/bin/v2ray >/dev/null 2>&1
 
     #删除v2ray定时更新任务
@@ -93,7 +97,7 @@ removeV2Ray() {
     crontab crontab.txt >/dev/null 2>&1
     rm -f crontab.txt >/dev/null 2>&1
 
-    if [[ "${OS}" == "CentOS" ]];then
+    if [[ ${OS} == "CentOS" ]];then
         service crond restart >/dev/null 2>&1
     else
         service cron restart >/dev/null 2>&1
@@ -168,7 +172,7 @@ planUpdate(){
 	echo "0 ${LOCAL_TIME} * * * bash <(curl -L -s https://install.direct/go.sh) | tee -a /root/v2rayUpdate.log && service v2ray restart" >> crontab.txt
 	crontab crontab.txt
 	sleep 1
-	if [[ "${OS}" == "CentOS" ]];then
+	if [[ ${OS} == "CentOS" ]];then
         service crond restart
 	else
 		service cron restart
@@ -178,29 +182,34 @@ planUpdate(){
 }
 
 updateProject() {
-    [[ "${INSTARLL_WAY}" != "0" ]] && mv /usr/local/multi-v2ray/my_domain ~ &>/dev/null
+    if [[ ${INSTARLL_WAY} != 0 && -e $APP_PATH/my_domain ]];then
+        mv $APP_PATH/my_domain ~ &>/dev/null
+    fi
+
     cd /usr/local/
-    #v2ray.fun目录存在的情况
-    [[ -e v2ray.fun ]] && mv v2ray.fun/my_domain ~ && rm -rf v2ray.fun
-    
     if [[ -e multi-v2ray && -e multi-v2ray/.git ]];then
         cd multi-v2ray
 
-        if [[ "$DEV_MODE" == "1" ]];then
+        if [[ $DEV_MODE == 1 ]];then
             git checkout dev
         else 
             git checkout master
         fi
 
-        git reset --hard && git pull
+        git reset --hard && git clean -d -f && git pull
     else
-        [[ "$DEV_MODE" == "1" ]] && BRANCH="dev" || BRANCH="master" 
+        [[ $DEV_MODE == 1 ]] && BRANCH="dev" || BRANCH="master" 
         git clone -b $BRANCH https://github.com/Jrohy/multi-v2ray
     fi
-    [[ "${INSTARLL_WAY}" != "0" ]] && mv -f ~/my_domain .
+
+    if [[ ${INSTARLL_WAY} != 0 && -e ~/my_domain ]];then
+        local DOMAIN=$(cat ~/my_domain | awk 'NR==1')
+        sed -i "s/^domain.*/domain=${DOMAIN}/g" $APP_PATH/multi-v2ray.conf
+        rm -f ~/my_domain
+    fi
 
     #更新v2ray bash_completion脚本
-    cp -f /usr/local/multi-v2ray/v2ray.bash /etc/bash_completion.d/
+    cp -f $APP_PATH/v2ray.bash /etc/bash_completion.d/
     source /etc/bash_completion.d/v2ray.bash
     
     #安装/更新V2ray主程序
@@ -209,7 +218,7 @@ updateProject() {
 
 #时间同步
 timeSync() {
-    if [[ "${INSTARLL_WAY}" == "0" ]];then
+    if [[ ${INSTARLL_WAY} == 0 ]];then
         systemctl stop ntp &>/dev/null
         echo -e "${Info} 正在进行时间同步 ${Font}"
         ntpdate time.nist.gov
@@ -226,11 +235,11 @@ timeSync() {
 
 profileInit() {
     #配置V2ray初始环境
-    cp /usr/local/multi-v2ray/v2ray /usr/local/bin
+    cp $APP_PATH/v2ray /usr/local/bin
     chmod +x /usr/local/bin/v2ray
 
     #加入multi-v2ray模块搜索路径
-    [[ -z $(grep multi-v2ray ~/.bashrc) ]] && echo "export PYTHONPATH=$PYTHONPATH:/usr/local/multi-v2ray" >> ~/.bashrc && source ~/.bashrc
+    [[ -z $(grep multi-v2ray ~/.bashrc) ]] && echo "export PYTHONPATH=$PYTHONPATH:$APP_PATH" >> ~/.bashrc && source ~/.bashrc
 
     # 加入v2ray tab补全环境变量
     [[ -z $(grep v2ray.bash ~/.bashrc) ]] && echo "source /etc/bash_completion.d/v2ray.bash" >> ~/.bashrc && source ~/.bashrc
@@ -239,9 +248,9 @@ profileInit() {
     [[ -z $(grep PYTHONIOENCODING=utf-8 ~/.bashrc) ]] && echo "export PYTHONIOENCODING=utf-8" >> ~/.bashrc && source ~/.bashrc
 
     #全新安装的新配置
-    if [[ "${INSTARLL_WAY}" == "0" ]];then 
+    if [[ ${INSTARLL_WAY} == 0 ]];then 
         rm -rf /etc/v2ray/config.json
-        cp /usr/local/multi-v2ray/json_template/server.json /etc/v2ray/config.json
+        cp $APP_PATH/json_template/server.json /etc/v2ray/config.json
 
         #产生随机uuid
         UUID=$(cat /proc/sys/kernel/random/uuid)
@@ -254,8 +263,10 @@ profileInit() {
         #产生默认配置mkcp+随机3种伪装类型type
         python3 -c "from config_modify import stream; stream.StreamModifier().random_kcp();"
 
-        python3 /usr/local/multi-v2ray/client.py
+        python3 $APP_PATH/client.py
         python3 -c "from utils import open_port; open_port();"
+    else
+        python3 $APP_PATH/converter.py
     fi
 }
 
@@ -263,7 +274,7 @@ installFinish() {
     #回到原点
     cd ${BEGIN_PATH}
 
-    [[ ${INSTARLL_WAY} == "0" ]] && way="安装" || way="更新"
+    [[ ${INSTARLL_WAY} == 0 ]] && way="安装" || way="更新"
     colorEcho  ${GREEN} "multi-v2ray ${way}成功！\n"
 
     clear
@@ -278,13 +289,13 @@ installFinish() {
 
 main() {
 
-    [[ ${HELP} == "1" ]] && help && return
+    [[ ${HELP} == 1 ]] && help && return
 
-    [[ ${REMOVE} == "1" ]] && removeV2Ray && return
+    [[ ${REMOVE} == 1 ]] && removeV2Ray && return
 
-    [[ ${INSTARLL_WAY} == "0" ]] && colorEcho ${BLUE} "当前为全新安装\n"
+    [[ ${INSTARLL_WAY} == 0 ]] && colorEcho ${BLUE} "当前为全新安装\n"
 
-    if [[ ${INSTARLL_WAY} != "2" ]];then 
+    if [[ ${INSTARLL_WAY} != 2 ]];then 
         checkSys
 
         installDependent

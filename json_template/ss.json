@@ -1,9 +1,14 @@
-  {
-    "port": 1024,
-    "protocol": "shadowsocks",
-    "settings": {
-      "method": "aes-128-gcm",
-      "password": "password",
-      "network":"tcp, udp"
-    }
+{
+  "port": 1024,
+  "protocol": "shadowsocks",
+  "settings": {
+    "method": "aes-128-gcm",
+    "password": "password",
+    "network":"tcp, udp"
+  },
+  "allocate": {
+    "strategy": "always",
+    "refresh": 5,
+    "concurrency": 3
   }
+}

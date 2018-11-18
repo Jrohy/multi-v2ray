@@ -70,7 +70,7 @@ class Profile:
         
         protocol = part_json["protocol"]
 
-        if protocol == 'dokodemo-door':
+        if protocol == 'dokodemo-door' or (protocol == "vmess" and "streamSettings" not in part_json):
             return
 
         conf_settings = part_json["settings"]

@@ -46,16 +46,16 @@ class ClientSelector(Selector):
 class GroupSelector(Selector):
     def __init__(self, action):
         super(GroupSelector, self).__init__(action)
-        self.list_size = len(self.group_list)
         self.group = self.group_list[0]
-        if self.list_size > 1:
+        if len(self.group_list) > 1:
             self.select_group()          
 
     def select_group(self):
         print(self.profile)
-        choice = input("请输入要{}的节点Group字母: ".format(self.action)).upper()
-        if len(choice) != 1 or not choice.isalpha() or choice > self.group_list[-1].tag:
-            print(color_str(Color.RED, '输入有误，请检查是否为字母且范围中'))
+        choice = input("请输入要{}的节点Group字母: ".format(self.action))
+        group_list = [x for x in self.group_list if x.tag == choice]
+        if len(group_list) == 0:
+            print(color_str(Color.RED, '输入有误，请检查 {} Group是否存在'.format(choice)))
             self.group = None
         else:
-            self.group = [x for x in self.group_list if x.tag == choice][0]
+            self.group = group_list[0]

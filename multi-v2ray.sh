@@ -182,9 +182,9 @@ planUpdate(){
 }
 
 updateProject() {
-    if [[ ${INSTARLL_WAY} != 0 && -e $APP_PATH/my_domain ]];then
-        mv $APP_PATH/my_domain ~ &>/dev/null
-    fi
+    [[ ${INSTARLL_WAY} != 0 && -e $APP_PATH/my_domain ]] && mv $APP_PATH/my_domain ~
+
+    [[ -e $APP_PATH/multi-v2ray.conf ]] && mv $APP_PATH/multi-v2ray.conf ~
 
     cd /usr/local/
     if [[ -e multi-v2ray && -e multi-v2ray/.git ]];then
@@ -207,6 +207,8 @@ updateProject() {
         sed -i "s/^domain.*/domain=${DOMAIN}/g" $APP_PATH/multi-v2ray.conf
         rm -f ~/my_domain
     fi
+
+    [[ -e ~/multi-v2ray.conf ]] && mv -f ~/multi-v2ray.conf $APP_PATH/
 
     #更新v2ray bash_completion脚本
     cp -f $APP_PATH/v2ray.bash /etc/bash_completion.d/

@@ -6,6 +6,8 @@ GREEN="32m"    # Success message
 YELLOW="33m"   # Warning message
 BLUE="36m"     # Info message
 
+APP_PATH="/usr/local/multi-v2ray"
+
 colorEcho(){
     COLOR=$1
     echo -e "\033[${COLOR}${@:2}\033[0m"
@@ -82,36 +84,36 @@ while [[ $# > 0 ]];do
         python3 -c "from loader import Loader; print(Loader().profile);"
         ;;
         port)
-        python3 /usr/local/multi-v2ray/config_modify/port.py
+        python3 $APP_PATH/config_modify/port.py
         python3 -c "from utils import open_port; open_port();"
 
 	    service v2ray restart
         ;;
         tls)
-        python3 /usr/local/multi-v2ray/config_modify/tls.py
+        python3 $APP_PATH/config_modify/tls.py
 	    service v2ray restart
         ;;
         tfo)
-        python3 /usr/local/multi-v2ray/config_modify/tfo.py
+        python3 $APP_PATH/config_modify/tfo.py
 	    service v2ray restart
         ;;
         stream)
-        python3 /usr/local/multi-v2ray/config_modify/stream.py
+        python3 $APP_PATH/config_modify/stream.py
 	    service v2ray restart
         ;;
         stats)
-        python3 /usr/local/multi-v2ray/other_setting/stats_ctr.py
+        python3 $APP_PATH/other_setting/stats_ctr.py
         ;;
         clean)
         cleanLog
         ;;
         del)
-        python3 /usr/local/multi-v2ray/user_manage/del_port.py
+        python3 $APP_PATH/user_manage/del_port.py
         service v2ray restart
         ;;
         add)
         EXTRA="$2"
-        python3 /usr/local/multi-v2ray/user_manage/create_new_port.py $EXTRA
+        python3 $APP_PATH/user_manage/create_new_port.py $EXTRA
         python3 -c "from utils import open_port; open_port();"
         service v2ray restart
         shift
@@ -172,23 +174,23 @@ if [[ ${CHOICE} == 1 ]]; then
         python3 -c "from utils import open_port; open_port();"
         echo "服务启动成功！"
         bash /usr/local/bin/v2ray
-    fi
-    if [[ ${SERVICE_CHOICE} == 2 ]]; then
+
+    elif [[ ${SERVICE_CHOICE} == 2 ]]; then
         service v2ray stop
         echo "服务停止成功！"
         bash /usr/local/bin/v2ray
-    fi
-    if [[ ${SERVICE_CHOICE} == 3 ]]; then
+
+    elif [[ ${SERVICE_CHOICE} == 3 ]]; then
         service v2ray restart
         python3 -c "from utils import open_port; open_port();"
         echo "服务已重启！"
         bash /usr/local/bin/v2ray
-    fi
-    if [[ ${SERVICE_CHOICE} == 4 ]]; then
+
+    elif [[ ${SERVICE_CHOICE} == 4 ]]; then
         service v2ray status
         bash /usr/local/bin/v2ray
-    fi
-    if [[ ${SERVICE_CHOICE} == 5 ]]; then
+
+    elif [[ ${SERVICE_CHOICE} == 5 ]]; then
         echo "按Ctrl + C 可以退出日志功能"
         echo ""
         tail -f /var/log/v2ray/access.log
@@ -216,26 +218,26 @@ if [[ ${CHOICE} == 2 ]]; then
     done
 
     if [[ ${USER_CHOICE} == 1 ]]; then
-        python3 /usr/local/multi-v2ray/user_manage/create_new_user.py
+        python3 $APP_PATH/user_manage/create_new_user.py
         service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
-    fi
-    if [[ ${USER_CHOICE} == 2 ]]; then
-        python3 /usr/local/multi-v2ray/user_manage/create_new_port.py
+
+    elif [[ ${USER_CHOICE} == 2 ]]; then
+        python3 $APP_PATH/user_manage/create_new_port.py
         python3 -c "from utils import open_port; open_port();"
         service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
-    fi
-    if [[ ${USER_CHOICE} == 3 ]]; then
-        python3 /usr/local/multi-v2ray/user_manage/del_user.py
+
+    elif [[ ${USER_CHOICE} == 3 ]]; then
+        python3 $APP_PATH/user_manage/del_user.py
         service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
-    fi
-    if [[ ${USER_CHOICE} == 4 ]]; then
-        python3 /usr/local/multi-v2ray/user_manage/del_port.py
+
+    elif [[ ${USER_CHOICE} == 4 ]]; then
+        python3 $APP_PATH/user_manage/del_port.py
         service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
@@ -251,14 +253,12 @@ if [[ ${CHOICE} == 3 ]]; then
     echo -e "5.更改传输方式\n"
     echo -e "6.更改TLS设置\n"
     echo -e "7.更改tcpFastOpen设置\n"
-    echo -e "8.更改广告拦截功能\n"
-    echo -e "9.更改动态端口\n"
-    echo -e "10.更改Shadowsocks加密方式\n"
-    echo -e "11.更改Shadowsocks密码\n"
+    echo -e "8.更改Shadowsocks加密方式\n"
+    echo -e "9.更改Shadowsocks密码\n"
 
     while :; do echo
-	    read -p "请输入数字选择功能： " CONFIG_CHOICE
-	    if [[ ! $CONFIG_CHOICE =~ (^[1-9]$|10|11) ]]; then
+	    read -n1 -p "请输入数字选择功能： " CONFIG_CHOICE
+	    if [[ ! $CONFIG_CHOICE =~ ^[1-9]$ ]]; then
             if [[ -z ${CONFIG_CHOICE} ]];then
                 bash /usr/local/bin/v2ray
                 exit 0
@@ -271,79 +271,56 @@ if [[ ${CHOICE} == 3 ]]; then
     done
     
     if [[ ${CONFIG_CHOICE} == 1 ]]; then
-        python3 /usr/local/multi-v2ray/config_modify/n_email.py
+        python3 $APP_PATH/config_modify/n_email.py
 	    service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
-    fi
 
-    if [[ ${CONFIG_CHOICE} == 2 ]]; then
-        python3 /usr/local/multi-v2ray/config_modify/n_uuid.py
+    elif [[ ${CONFIG_CHOICE} == 2 ]]; then
+        python3 $APP_PATH/config_modify/n_uuid.py
 	    service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
-    fi
 
-    if [[ ${CONFIG_CHOICE} == 3 ]]; then
-        python3 /usr/local/multi-v2ray/config_modify/alterid.py
+    elif [[ ${CONFIG_CHOICE} == 3 ]]; then
+        python3 $APP_PATH/config_modify/alterid.py
         service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
-    fi
     
-    if [[ ${CONFIG_CHOICE} == 4 ]]; then
-        python3 /usr/local/multi-v2ray/config_modify/port.py
+    elif [[ ${CONFIG_CHOICE} == 4 ]]; then
+        python3 $APP_PATH/config_modify/port.py
         python3 -c "from utils import open_port; open_port();"
 	    service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
-    fi
     
-    if [[ ${CONFIG_CHOICE} == 5 ]]; then
-        python3 /usr/local/multi-v2ray/config_modify/stream.py
+    elif [[ ${CONFIG_CHOICE} == 5 ]]; then
+        python3 $APP_PATH/config_modify/stream.py
 	    service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
-    fi
     
-    if [[ ${CONFIG_CHOICE} == 6 ]]; then
-        python3 /usr/local/multi-v2ray/config_modify/tls.py
+    elif [[ ${CONFIG_CHOICE} == 6 ]]; then
+        python3 $APP_PATH/config_modify/tls.py
 	    service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
-    fi
 
-    if [[ ${CONFIG_CHOICE} == 7 ]]; then
-        python3 /usr/local/multi-v2ray/config_modify/tfo.py
+    elif [[ ${CONFIG_CHOICE} == 7 ]]; then
+        python3 $APP_PATH/config_modify/tfo.py
 	    service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
-    fi
 
-    if [[ ${CONFIG_CHOICE} == 8 ]]; then
-        python3 /usr/local/multi-v2ray/config_modify/ad.py
-	    service v2ray restart
-        echo ""
-        echo "广告拦截功能设置成功！"
-        bash /usr/local/bin/v2ray
-    fi
-
-    if [[ ${CONFIG_CHOICE} == 9 ]]; then
-        python3 /usr/local/multi-v2ray/config_modify/dyn_port.py
+    elif [[ ${CONFIG_CHOICE} == 8 ]]; then
+        python3 $APP_PATH/config_modify/ss.py method
 	    service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
-    fi
 
-    if [[ ${CONFIG_CHOICE} == 10 ]]; then
-        python3 /usr/local/multi-v2ray/config_modify/ss.py method
-	    service v2ray restart
-        echo ""
-        bash /usr/local/bin/v2ray
-    fi
-
-    if [[ ${CONFIG_CHOICE} == 11 ]]; then
-        python3 /usr/local/multi-v2ray/config_modify/ss.py password
+    elif [[ ${CONFIG_CHOICE} == 9 ]]; then
+        python3 $APP_PATH/config_modify/ss.py password
 	    service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
@@ -378,21 +355,18 @@ if [[ ${CHOICE} == 5 ]]; then
     done
 
     if [[ ${EXTRA_CHOICE} == 1 ]]; then
-        python3 /usr/local/multi-v2ray/other_setting/stats_ctr.py
+        python3 $APP_PATH/other_setting/stats_ctr.py
         bash /usr/local/bin/v2ray
-    fi
 
-    if [[ ${EXTRA_CHOICE} == 2 ]]; then
-        bash /usr/local/multi-v2ray/other_setting/update_timer.sh
+    elif [[ ${EXTRA_CHOICE} == 2 ]]; then
+        bash $APP_PATH/other_setting/update_timer.sh
         bash /usr/local/bin/v2ray
-    fi
 
-    if [[ ${EXTRA_CHOICE} == 3 ]]; then
+    elif [[ ${EXTRA_CHOICE} == 3 ]]; then
         cleanLog
         bash /usr/local/bin/v2ray
-    fi
 
-    if [[ ${EXTRA_CHOICE} == 4 ]]; then
+    elif [[ ${EXTRA_CHOICE} == 4 ]]; then
         echo -e "脚本正在以保留配置文件形式升级, 若失败请自行手动全新安装..\n"
         source <(curl -sL https://git.io/fNgqx) -k
         echo -e "\n脚本升级成功!!\n"
@@ -406,6 +380,6 @@ if [[ ${CHOICE} == 6 ]]; then
 fi
 
 if [[ ${CHOICE} == 7 ]]; then
-    python3 /usr/local/multi-v2ray/client.py
+    python3 $APP_PATH/client.py
     bash /usr/local/bin/v2ray
 fi

@@ -5,7 +5,8 @@ import time
 import os
 import urllib.request
 
-from group import Dyport, SS, Socks, Vmess,Mtproto, Group
+from config import Config
+from group import SS, Socks, Vmess,Mtproto, Group
 
 class Stats:
     def __init__(self, status=False, door_port=0):
@@ -16,20 +17,19 @@ class Stats:
         return "开启" if self.status else "关闭"
 
 class Profile:
-    def __init__(self, path='/etc/v2ray/config.json'):
-        self.path = path
-        self.ad = None
+    def __init__(self):
+        self.path = Config().get_path('config_path')
         self.group_list = []
         self.stats = None
         self.user_number = 0
-        self.modify_time = os.path.getmtime(path)
+        self.modify_time = os.path.getmtime(self.path)
         self.read_json()
 
     def __str__(self):
         result = ""
         for group in self.group_list:
             result = "{}{}".format(result, group)
-        result = result + "Tip: 同一Group的节点传输方式,端口,TLS,动态端口等设置相同\n"
+        result = result + "Tip: 同一Group的节点传输方式,端口配置,TLS等设置相同\n"
         return result
 
     def read_json(self):
@@ -38,18 +38,15 @@ class Profile:
             self.config = json.load(json_file)
 
         #读取配置文件大框架
-        conf_inbound = self.config["inbound"]
-        conf_inboundDetour = self.config["inboundDetour"]
-        conf_routing = self.config["routing"]
-
-        self.ad = True if conf_routing["settings"]["rules"][0]["outboundTag"] == "blocked" else False
+        conf_inbounds = self.config["inbounds"]
 
         stats = Stats()
         if "stats" in self.config:
             stats.status = True
-            for detour_list in conf_inboundDetour:
-                if "protocol" in detour_list and detour_list["protocol"] == "dokodemo-door":
-                    stats.door_port = detour_list["port"]
+            for inbound in conf_inbounds:
+                if "protocol" in inbound and inbound["protocol"] == "dokodemo-door":
+                    stats.door_port = inbound["port"]
+                    break
         
         self.stats = stats
 
@@ -57,13 +54,9 @@ class Profile:
         my_ip = urllib.request.urlopen('http://api.ipify.org').read()
         local_ip = bytes.decode(my_ip)
 
-        json_part_list = [conf_inbound]
-        if conf_inboundDetour:
-            json_part_list.extend([x for x in conf_inboundDetour])
-
         group_ascii = 64  # before 'A' ascii code
-        for index, json_part in enumerate(json_part_list):
-            group = self.parse_group(json_part, index - 1, local_ip)
+        for index, json_part in enumerate(conf_inbounds):
+            group = self.parse_group(json_part, index, local_ip)
             if group != None:
                 group_ascii = group_ascii + 1
                 group.tag = chr(group_ascii)
@@ -72,16 +65,25 @@ class Profile:
         del self.config
 
     def parse_group(self, part_json, group_index, local_ip):
-        header, tfo, tls, path, host, conf_ip = None, None, "", "", "", local_ip
+        end_port, header, tfo, tls, path, host, conf_ip = None, None, None, "", "", "", local_ip
+        port_strategy = "always"
         
         protocol = part_json["protocol"]
 
-        if protocol == 'dokodemo-door' or 'allocate' in part_json:
+        if protocol == 'dokodemo-door':
             return
 
         conf_settings = part_json["settings"]
 
-        dyp = self.parse_dyp(conf_settings)
+        port_info = str(part_json["port"]).split("-", 2)
+
+        if len(port_info) == 2:
+            port, end_port = port_info
+        else:
+            port = port_info[0]
+        
+        if "allocate" in part_json:
+            port_strategy = part_json["allocate"]["strategy"]
 
         if protocol == "vmess" or protocol == "socks":
             conf_stream = part_json["streamSettings"]
@@ -99,13 +101,13 @@ class Profile:
                 host = conf_stream["tcpSettings"]["header"]["request"]["headers"]["Host"]
 
             if (tls == "tls"):
-                with open('/usr/local/multi-v2ray/my_domain', 'r') as domain_file:
+                with open(Config().get_data('domain'), 'r') as domain_file:
                     conf_ip = str(domain_file.read())
 
             if conf_stream["network"] == "kcp" and "header" in conf_stream["kcpSettings"]:
                 header = conf_stream["kcpSettings"]["header"]["type"]
         
-        group = Group(conf_ip, part_json["port"], tls=tls, tfo=tfo, dyp=dyp, index=group_index)
+        group = Group(conf_ip, port,  end_port=end_port, port_strategy=port_strategy, tls=tls, tfo=tfo, index=group_index)
 
         if protocol == "shadowsocks":
             self.user_number = self.user_number + 1
@@ -141,14 +143,3 @@ class Profile:
 
             group.node_list.append(node)
         return group
-
-    def parse_dyp(self, conf_settings):
-        dyp = Dyport()
-        if "detour" in conf_settings:
-            dynamic_port_tag = conf_settings["detour"]["to"]
-            for detour_list in self.config["inboundDetour"]:
-                if "tag" in detour_list and detour_list["tag"] == dynamic_port_tag:
-                    dyp.aid = detour_list["settings"]["default"]["alterId"]
-                    dyp.status = True
-                    break
-        return dyp

@@ -1,37 +1,37 @@
 {
-    "stats": {},
-    "api": {
-        "services": [
-            "StatsService"
-        ],
-        "tag": "api"
+  "stats": {},
+  "api": {
+    "services": [
+      "StatsService"
+    ],
+    "tag": "api"
+  },
+  "policy": {
+    "levels": {
+      "0": {
+        "statsUserDownlink": true,
+        "statsUserUplink": true
+      }
     },
-    "policy": {
-        "levels": {
-            "0": {
-                "statsUserDownlink": true,
-                "statsUserUplink": true
-            }
-        },
-        "system": {
-            "statsInboundUplink": true,
-            "statsInboundDownlink": true
-        }
-    },
-    "routingRules": {
-            "inboundTag": [
-                "api"
-            ],
-            "outboundTag": "api",
-            "type": "field"
-    },
-    "dokodemoDoor": {
-        "listen": "127.0.0.1",
-        "port": 10085,
-        "protocol": "dokodemo-door",
-        "settings": {
-            "address": "127.0.0.1"
-        },
-        "tag": "api"
+    "system": {
+      "statsInboundUplink": true,
+      "statsInboundDownlink": true
     }
+  },
+  "routingRules": {
+    "inboundTag": [
+      "api"
+    ],
+    "outboundTag": "api",
+    "type": "field"
+  },
+  "dokodemoDoor": {
+    "listen": "127.0.0.1",
+    "port": 10085,
+    "protocol": "dokodemo-door",
+    "settings": {
+      "address": "127.0.0.1"
+    },
+    "tag": "api"
+  }
 }

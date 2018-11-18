@@ -220,14 +220,14 @@ class StreamWriter(Writer):
             http2 = self.load_template('http2.json')
             salt = '/' + ''.join(random.sample(string.ascii_letters + string.digits, 8)) + '/'
             http2["httpSettings"]["path"] = salt
-            self.part_json["streamSettings"] = http2
+            self.config["inbounds"][self.group_index]["streamSettings"] = http2
+            self.save()
 
             # http2 tls的设置
             if security_backup != "tls" or not "certificates" in tls_settings_backup:
                 from config_modify import tls
                 tm = tls.TLSModifier(self.group_tag, self.group_index)
                 tm.turn_on()
-                self.save()
                 return
 
         if (self.stream_type != StreamType.MTPROTO and origin_protocol != StreamType.MTPROTO 

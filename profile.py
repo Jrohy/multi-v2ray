@@ -21,6 +21,7 @@ class Profile:
         self.path = Config().get_path('config_path')
         self.group_list = []
         self.stats = None
+        self.ban_bt = False
         self.user_number = 0
         self.modify_time = os.path.getmtime(self.path)
         self.read_json()
@@ -39,6 +40,7 @@ class Profile:
 
         #读取配置文件大框架
         conf_inbounds = self.config["inbounds"]
+        conf_rules = self.config["routing"]["rules"]
 
         stats = Stats()
         if "stats" in self.config:
@@ -47,8 +49,11 @@ class Profile:
                 if "protocol" in inbound and inbound["protocol"] == "dokodemo-door":
                     stats.door_port = inbound["port"]
                     break
-        
         self.stats = stats
+
+        for rule in conf_rules:
+            if "protocol" in rule and "bittorrent" in rule["protocol"]:
+                self.ban_bt = True
 
         #获取本机IP地址
         my_ip = urllib.request.urlopen('http://api.ipify.org').read()

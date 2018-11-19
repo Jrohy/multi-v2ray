@@ -128,51 +128,54 @@ Network: {network}
         return color_str(Color.GREEN, "vmess://{}".format(bytes.decode(base64.b64encode(bytes(json_data, 'utf-8')))))
 
 class Group:
-    def __init__(self, ip, port, *, tls="", tfo=None, dyp=Dyport(), index=-1, tag='A'):
+    def __init__(self, ip, port, *, end_port=None, tfo=None, tls="none", dyp=Dyport(), index=0, tag='A'):
         self.ip = ip
         self.port = port
+        self.end_port = end_port
         self.tag = tag
         self.node_list = []
         self.tfo = tfo
         self.tls = tls
         self.dyp = dyp
-        # -1 为A组, 0 ~ .. 为inboundDetour 里面的对应坐标
+        self.protocol = None
         self.index = index
 
     def show_node(self, index):
-        tls = "开启"if self.tls else "关闭"
+        tls = "开启" if self.tls == "tls" else "关闭"
         tfo = "TcpFastOpen: {}".format(self.tfo) if self.tfo != None else ""
         dyp = "DynamicPort: {}".format(self.dyp) if self.dyp.status else ""
+        port_way = "-{}".format(self.end_port) if self.end_port else ""
         node = self.node_list[index]
         result = '''
 {node.user_number}.
 Group: {self.tag}
 IP: {color_ip}
-Port: {self.port}
+Port: {self.port}{port_way}
 TLS: {tls}
 {node}{tfo}
 {dyp}
 {link}
-            '''.format(self=self, color_ip=color_str(Color.FUCHSIA, self.ip), node=node,tfo=tfo,dyp=dyp,tls=tls, link=node.link(self.ip, self.port, self.tls))
+            '''.format(self=self, color_ip=color_str(Color.FUCHSIA, self.ip), port_way=port_way, node=node,tfo=tfo, dyp=dyp,tls=tls, link=node.link(self.ip, int(self.port), self.tls))
         return result
 
     # print一个实例打印的字符串
     def __str__(self):
-        tls = "开启"if self.tls else "关闭"
+        tls = "开启" if self.tls == "tls" else "关闭"
         tfo = "TcpFastOpen: {}".format(self.tfo) if self.tfo != None else ""
         dyp = "DynamicPort: {}".format(self.dyp) if self.dyp.status else ""
+        port_way = "-{}".format(self.end_port) if self.end_port else ""
         result = ""
         for node in self.node_list:
             temp = '''
 {node.user_number}.
 Group: {self.tag}
 IP: {color_ip}
-Port: {self.port}
+Port: {self.port}{port_way}
 TLS: {tls}
 {node}{tfo}
 {dyp}
-            '''.format(self=self, color_ip=color_str(Color.FUCHSIA, self.ip), node=node,tfo=tfo,dyp=dyp,tls=tls)
-            result = "{0}{1}\n\n{2}\n\n".format(result, temp.strip(), node.link(self.ip, self.port, self.tls))
+            '''.format(self=self, color_ip=color_str(Color.FUCHSIA, self.ip), node=node,tfo=tfo,dyp=dyp,tls=tls, port_way=port_way)
+            result = "{0}{1}\n\n{2}\n\n".format(result, temp.strip(), node.link(self.ip, int(self.port), self.tls))
         return result
 
     # 直接调用实例和打印一个实例显示的字符串一样

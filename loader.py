@@ -3,12 +3,15 @@
 import os
 import pickle
 
+from config import Config
 from profile import Profile
 
 class Loader:
-    def __init__(self, path='/usr/local/multi-v2ray/multi-v2ray.dat'):
-        self.path = path
-        self.profile=None
+    def __init__(self):
+        config = Config()
+        self.config_path = config.get_path("config_path")
+        self.path = config.get_path("data_path")
+        self.profile = None
         self.load_profile()
 
     def load_profile(self):

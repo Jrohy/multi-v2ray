@@ -71,7 +71,7 @@ def is_email(email):
     """
     判断是否是邮箱格式
     """
-    str=r'^[\w\.]+@[\w]+\.[\w]+$'
+    str=r'^[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}$'
     return re.match(str, email)
 
 def get_domain_by_crt_file(crt_path):

@@ -368,6 +368,8 @@ if [[ ${CHOICE} == 5 ]]; then
 
     elif [[ ${EXTRA_CHOICE} == 2 ]]; then
         python3 $APP_PATH/global_setting/ban_bt.py
+        service v2ray restart
+        echo ""
         bash /usr/local/bin/v2ray
 
     elif [[ ${EXTRA_CHOICE} == 3 ]]; then

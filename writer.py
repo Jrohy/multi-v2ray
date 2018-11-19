@@ -342,6 +342,46 @@ class GlobalWriter(Writer):
         super(GlobalWriter, self).__init__()
         self.group_list = group_list
 
+    def write_ban_bittorrent(self, status = False):
+        '''
+        禁止BT设置
+        '''
+        conf_rules = self.config["routing"]["rules"]
+        if status:
+            for group in self.group_list:
+                if "sniffing" not in self.config["inbounds"][group.index]:
+                    self.config["inbounds"][group.index].update({
+                        "sniffing": {
+                            "enabled": True,
+                            "destOverride": ["http", "tls"]
+                        }
+                    })
+            has_rule = False
+            for rule in conf_rules:
+                if "protocol" in rule and "bittorrent" in rule["protocol"]:
+                    has_rule = True
+                    break
+            if not has_rule:
+                self.config["routing"]["rules"].append(
+                    {
+                        "type": "field",
+                        "outboundTag": "blocked",
+                        "protocol": [
+                            "bittorrent"
+                        ]
+                    }
+                )
+        else:
+            for group in self.group_list:
+                if "sniffing" in self.config["inbounds"][group.index]:
+                    del self.config["inbounds"][group.index]["sniffing"]
+
+            for index, rule in enumerate(conf_rules):
+                if "protocol" in rule and "bittorrent" in rule["protocol"]:
+                    del self.config["routing"]["rules"][index]
+
+        self.save()
+
     def write_stats(self, status = False):
         '''
         更改流量统计设置
@@ -353,8 +393,8 @@ class GlobalWriter(Writer):
             del stats_json["routingRules"]
 
             has_rule = False
-            for rules_list in conf_rules:
-                if rules_list["outboundTag"] == "api":
+            for rule in conf_rules:
+                if rule["outboundTag"] == "api":
                     has_rule = True
                     break
             if not has_rule:
@@ -370,8 +410,8 @@ class GlobalWriter(Writer):
             dokodemo_door["port"] = random_port
 
             has_door = False
-            for inbound_list in self.config["inbounds"]:
-                if inbound_list["protocol"] == "dokodemo-door" and inbound_list["tag"] == "api":
+            for inbound in self.config["inbounds"]:
+                if inbound["protocol"] == "dokodemo-door" and inbound["tag"] == "api":
                     has_door = True 
                     break
             if not has_door:
@@ -400,8 +440,8 @@ class GlobalWriter(Writer):
             if "policy" in self.config:
                 del self.config["policy"]
 
-            for index,rules_list in enumerate(conf_rules):
-                if rules_list["outboundTag"] == "api":
+            for index, rule in enumerate(conf_rules):
+                if rule["outboundTag"] == "api":
                     del conf_rules[index]
         self.save()
 

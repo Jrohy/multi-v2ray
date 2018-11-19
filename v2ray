@@ -102,7 +102,7 @@ while [[ $# > 0 ]];do
 	    service v2ray restart
         ;;
         stats)
-        python3 $APP_PATH/other_setting/stats_ctr.py
+        python3 $APP_PATH/global_setting/stats_ctr.py
         ;;
         clean)
         cleanLog
@@ -134,7 +134,7 @@ colorEcho ${BLUE} "欢迎使用 multi-v2ray 管理程序"
 echo -e ""
 echo -e "1.服务管理           2.用户管理\n"
 echo -e "3.更改配置           4.查看配置\n"
-echo -e "5.其他功能           6.更新V2Ray\n"
+echo -e "5.全局功能           6.更新V2Ray\n"
 echo -e "7.生成客户端配置文件"
 
 while :; do echo
@@ -342,14 +342,15 @@ fi
 if [[ ${CHOICE} == 5 ]]; then
     echo -e ""
     echo -e "1.流量统计\n"
-    echo -e "2.定时更新V2ray\n"
-    echo -e "3.清理v2ray日志\n"
-    echo -e "4.脚本升级\n"
+    echo -e "2.禁止bittorrent\n"
+    echo -e "3.定时更新V2ray\n"
+    echo -e "4.清理v2ray日志\n"
+    echo -e "5.脚本升级\n"
     echo -e "请输入数字选择功能：\n"
 
     while :; do echo
 	    read -n1 -p "请选择： " EXTRA_CHOICE
-	    if [[ ! $EXTRA_CHOICE =~ ^[1-4]$ ]]; then
+	    if [[ ! $EXTRA_CHOICE =~ ^[1-5]$ ]]; then
             if [[ -z ${EXTRA_CHOICE} ]];then
                 bash /usr/local/bin/v2ray
                 exit 0
@@ -362,18 +363,22 @@ if [[ ${CHOICE} == 5 ]]; then
     done
 
     if [[ ${EXTRA_CHOICE} == 1 ]]; then
-        python3 $APP_PATH/other_setting/stats_ctr.py
+        python3 $APP_PATH/global_setting/stats_ctr.py
         bash /usr/local/bin/v2ray
 
     elif [[ ${EXTRA_CHOICE} == 2 ]]; then
-        bash $APP_PATH/other_setting/update_timer.sh
+        python3 $APP_PATH/global_setting/ban_bt.py
         bash /usr/local/bin/v2ray
 
     elif [[ ${EXTRA_CHOICE} == 3 ]]; then
-        cleanLog
+        bash $APP_PATH/global_setting/update_timer.sh
         bash /usr/local/bin/v2ray
 
     elif [[ ${EXTRA_CHOICE} == 4 ]]; then
+        cleanLog
+        bash /usr/local/bin/v2ray
+
+    elif [[ ${EXTRA_CHOICE} == 5 ]]; then
         echo -e "脚本正在以保留配置文件形式升级, 若失败请自行手动全新安装..\n"
         source <(curl -sL https://git.io/fNgqx) -k
         echo -e "\n脚本升级成功!!\n"

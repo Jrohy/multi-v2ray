@@ -346,7 +346,7 @@ if [[ ${CHOICE} == 5 ]]; then
     echo -e "3.定时更新V2ray\n"
     echo -e "4.清理v2ray日志\n"
     echo -e "5.脚本升级\n"
-    echo -e "请输入数字选择功能：\n"
+    echo -e "请输入数字选择功能"
 
     while :; do echo
 	    read -n1 -p "请选择： " EXTRA_CHOICE

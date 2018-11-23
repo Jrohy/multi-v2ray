@@ -40,7 +40,7 @@ def add_user(group_tag):
     success, msg, kw = True, "add user success!!!", dict()
     if request_data:
         json_request = json.loads(request.get_data())
-        kw = json_request['data']
+        kw['email'] = json_request['email']
     try:
         loader.load_profile()
         group_list = loader.profile.group_list
@@ -99,39 +99,49 @@ def del_group(group_tag):
         msg = str(e)
     return jsonify(ResponseJson(success, msg).__dict__)
 
-@app.route('/group/<modify_type>/<group_tag>', methods = ['PUT'])
-def modify_group(modify_type, group_tag):
-    success, msg = True, "modify group {} success!!!".format(modify_type)
+@app.route('/group/<group_tag>', methods = ['PUT'])
+def modify_group(group_tag):
+    success, msg = True, "modify group success!!!"
     try:
         json_request = json.loads(request.get_data())
         loader.load_profile()
         group_list = loader.profile.group_list
         group = list(filter(lambda group:group.tag == group_tag, group_list))[0]
         gw = GroupWriter(group.tag, group.index)
-        if modify_type == 'port':
+        if 'port' in json_request and json_request['port'] != None:
             gw.write_port(json_request['port'])
-        elif modify_type == 'ss_password':
+
+        if 'ss_password' in json_request and json_request['ss_password'] != None:
             gw.write_ss_password(json_request['ss_password'])
-        elif modify_type == 'ss_method':
+
+        if 'ss_method' in json_request and json_request['ss_method'] != None:
             gw.write_ss_password(json_request['ss_method'])
-        elif modify_type == 'ss_email':
+
+        if 'ss_email' in json_request and json_request['ss_email'] != None:
             gw.write_ss_email(json_request['ss_email'])
-        elif modify_type == 'tfo':
-            gw.write_tfo(json_request['action'])
-        elif modify_type == 'dyp':
-            gw.write_dyp(bool(json_request['status']), int(json_request['aid']))
-        elif modify_type == 'tls':
-            gw.write_tls(bool(json_request['status']), crt_file=json_request['crt_file'], key_file=json_request['key_file'], domain=json_request['domain'])
+
+        if 'tfo' in json_request and json_request['tfo'] != None:
+            gw.write_tfo(json_request['tfo'])
+
+        if 'dyp' in json_request and json_request['tfo'] != None:
+            dyp_json = json_request['dyp']
+            if 'status' in dyp_json and 'aid' in dyp_json:
+                gw.write_dyp(bool(dyp_json['status']), int(dyp_json['aid']))
+
+        # if modify_type == 'tls' and json_request['tls'] != None:
+        #     gw.write_tls(bool(json_request['status']), crt_file=json_request['crt_file'], key_file=json_request['key_file'], domain=json_request['domain'])
     except Exception as e:
         success = False
         msg = str(e)
     return jsonify(ResponseJson(success, msg).__dict__)
 
-@app.route('/user/<modify_type>/<int:client_index>', methods = ['PUT'])
-def modify_user(modify_type, client_index):
-    success, msg = True, "modify user {} success!!!".format(modify_type)
+@app.route('/user/<int:client_index>', methods = ['PUT'])
+def modify_user(client_index):
+    success, msg, modify_type = True, "modify user {} success!!!", ""
     try:
         json_request = json.loads(request.get_data())
+        modify_type = json_request['modify_type']
+        value = json_request['value']
         loader.load_profile()
         group_list = loader.profile.group_list
         group, client_index = find_client(group_list, client_index)
@@ -139,28 +149,30 @@ def modify_user(modify_type, client_index):
         method = 'write_' + modify_type
         if hasattr(cw, method):
             func = getattr(cw, method)
-            func(json_request['param'])
+            func(value)
     except Exception as e:
         success = False
         msg = str(e)
-    return jsonify(ResponseJson(success, msg).__dict__)
+    return jsonify(ResponseJson(success, msg.format(modify_type)).__dict__)
 
-@app.route('/global/<modify_type>', methods = ['PUT'])
-def modify_global(modify_type):
-    success, msg = True, "modify global {} success!!!".format(modify_type)
+@app.route('/global', methods = ['PUT'])
+def modify_global():
+    success, msg, modify_type = True, "modify global {} success!!!", ""
     try:
         json_request = json.loads(request.get_data())
+        modify_type = json_request['modify_type']
+        value = json_request['value']
         loader.load_profile()
         group_list = loader.profile.group_list
         gw = GlobalWriter(group_list)
         method = 'write_' + modify_type
         if hasattr(gw, method):
             func = getattr(gw, method)
-            func(json_request['param'])
+            func(value)
     except Exception as e:
         success = False
         msg = str(e)
-    return jsonify(ResponseJson(success, msg).__dict__)
+    return jsonify(ResponseJson(success, msg.format(modify_type)).__dict__)
 
 if __name__ == '__main__':
     app.run(debug=True)

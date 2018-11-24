@@ -2,17 +2,17 @@
 # -*- coding: utf-8 -*-
 import json
 import os
-from flask import Flask, request, jsonify
+from flask import request, jsonify, Blueprint
 
 from writer import NodeWriter, GroupWriter, ClientWriter, GlobalWriter
 from loader import Loader
 
-app = Flask(__name__)
+func_router = Blueprint('func_router', __name__)
 
 loader = Loader()
 
 class ResponseJson:
-    def __init__(self, success=True, msg="ok", data=None):
+    def __init__(self, success=True, msg="success", data=None):
         self.success = success
         self.msg = msg
         self.data = data
@@ -30,12 +30,12 @@ def find_client(group_list, client_index):
                 break
     return group, client_index
 
-@app.route('/list', methods=['GET'])
+@func_router.route('/list', methods=['GET'])
 def node_list():
     loader.load_profile()
     return json.dumps(loader.profile, default=lambda x: x.__dict__, ensure_ascii=False)
 
-@app.route('/manage/<action>', methods=['POST'])
+@func_router.route('/manage/<action>', methods=['POST'])
 def manage(action):
     success, msg, result = True, "{} v2ray success!!!", None
     try:
@@ -48,7 +48,7 @@ def manage(action):
         msg = str(e)
     return jsonify(ResponseJson(success, msg, result).__dict__)
 
-@app.route('/user', methods = ['POST'])
+@func_router.route('/user', methods = ['POST'])
 def add_user():
     success, msg, kw = True, "add user success!!!", dict()
     try:
@@ -65,7 +65,7 @@ def add_user():
         msg = str(e)
     return jsonify(ResponseJson(success, msg).__dict__)
 
-@app.route('/user/<int:client_index>', methods = ['DELETE'])
+@func_router.route('/user/<int:client_index>', methods = ['DELETE'])
 def del_user(client_index):
     success, msg = True, "del user {} success!!!"
     try:
@@ -79,7 +79,7 @@ def del_user(client_index):
         msg = str(e)
     return jsonify(ResponseJson(success, msg.format(client_index)).__dict__)
 
-@app.route('/group', methods = ['POST'])
+@func_router.route('/group', methods = ['POST'])
 def add_group():
     success, msg, kw, stream_type = True, "add group {} success!!!", dict(), ""
     try:
@@ -100,7 +100,7 @@ def add_group():
         msg = str(e)
     return jsonify(ResponseJson(success, msg.format(stream_type)).__dict__)
 
-@app.route('/group/<group_tag>', methods = ['DELETE'])
+@func_router.route('/group/<group_tag>', methods = ['DELETE'])
 def del_group(group_tag):
     success, msg = True, "del group {} success!!!"
     try:
@@ -114,7 +114,7 @@ def del_group(group_tag):
         msg = str(e)
     return jsonify(ResponseJson(success, msg.format(group_tag)).__dict__)
 
-@app.route('/group/<group_tag>', methods = ['PUT'])
+@func_router.route('/group/<group_tag>', methods = ['PUT'])
 def modify_group(group_tag):
     success, msg = True, "modify group {} success!!!"
     try:
@@ -139,7 +139,7 @@ def modify_group(group_tag):
         msg = str(e)
     return jsonify(ResponseJson(success, msg.format(modify_type)).__dict__)
 
-@app.route('/user/<int:client_index>', methods = ['PUT'])
+@func_router.route('/user/<int:client_index>', methods = ['PUT'])
 def modify_user(client_index):
     success, msg, modify_type = True, "modify user {} success!!!", ""
     try:
@@ -161,7 +161,7 @@ def modify_user(client_index):
         msg = str(e)
     return jsonify(ResponseJson(success, msg.format(modify_type)).__dict__)
 
-@app.route('/global', methods = ['PUT'])
+@func_router.route('/global', methods = ['PUT'])
 def modify_global():
     success, msg, modify_type = True, "modify global {} success!!!", ""
     try:
@@ -181,6 +181,3 @@ def modify_global():
         success = False
         msg = str(e)
     return jsonify(ResponseJson(success, msg.format(modify_type)).__dict__)
-
-if __name__ == '__main__':
-    app.run(debug=True)

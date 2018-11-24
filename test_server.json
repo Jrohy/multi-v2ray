@@ -101,17 +101,20 @@
           },
           {
             "alterId": 32,
-            "id": "5cecf848-ef2d-11e8-963e-74d02bc1d815",
-            "email": "123@qq.com"
+            "id": "befa6dfa-ef30-11e8-ac30-74d02bc1d815",
+            "email": "12345@qq.com"
           },
           {
             "alterId": 32,
-            "id": "befa6dfa-ef30-11e8-ac30-74d02bc1d815",
-            "email": "12345@qq.com"
+            "id": "57b4b5ac-ef95-11e8-98b8-74d02bc1d815",
+            "email": "123456@qq.com"
           }
-        ]
+        ],
+        "detour": {
+          "to": "dynamicPortbedb4be"
+        }
       },
-      "port": 2819,
+      "port": 28109,
       "sniffing": {
         "enabled": true,
         "destOverride": [
@@ -186,6 +189,21 @@
           "http",
           "tls"
         ]
+      }
+    },
+    {
+      "protocol": "vmess",
+      "port": "10000-20000",
+      "tag": "dynamicPortbedb4be",
+      "settings": {
+        "default": {
+          "alterId": 32
+        }
+      },
+      "allocate": {
+        "strategy": "random",
+        "concurrency": 3,
+        "refresh": 5
       }
     }
   ]

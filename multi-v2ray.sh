@@ -210,7 +210,7 @@ updateProject() {
         DOMAIN=$(cat ~/my_domain | awk 'NR==1')
         rm -f ~/my_domain
     elif [[ -e ~/multi-v2ray.conf ]];then
-        DOMAIN=$(python3 -c "from config import Config; print(Config().get_data('domain'));"))
+        DOMAIN=$(python3 -c "from config import Config; print(Config().get_data('domain'));")
         rm -f ~/multi-v2ray.conf
     fi
 

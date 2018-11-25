@@ -5,10 +5,9 @@ import json
 import random
 import string
 import uuid
-from enum import Enum, unique
 
 from config import Config
-from utils import port_is_use
+from utils import port_is_use, StreamType
 from loader import Loader
 from group import Mtproto, Vmess, Socks
 
@@ -35,34 +34,6 @@ def clean_mtproto_tag(config, group_index):
                     del rule["inboundTag"][tag_index]
                     break
         break
-
-def stream_list():
-    return [
-        ("wireguard", StreamType.KCP_WG), 
-        ("dtls", StreamType.KCP_DTLS), 
-        ("wechat", StreamType.KCP_WECHAT), 
-        ("utp", StreamType.KCP_UTP), 
-        ("srtp", StreamType.KCP_SRTP), 
-        ("mtproto", StreamType.MTPROTO), 
-        ("socks", StreamType.SOCKS),
-        ("ss", StreamType.SS)
-    ]
-
-@unique
-class StreamType(Enum):
-    TCP = 'tcp'
-    TCP_HOST = 'tcp_host'
-    SOCKS = 'socks'
-    SS = 'shadowsocks'
-    MTPROTO = 'mtproto'
-    H2 = 'h2'
-    WS = 'ws'
-    KCP = 'kcp'
-    KCP_UTP = 'kcp_utp'
-    KCP_SRTP = 'kcp_srtp'
-    KCP_DTLS = 'kcp_dtls'
-    KCP_WECHAT = 'kcp_wechat'
-    KCP_WG = 'kcp_wg'
 
 class Writer:
     def __init__(self, group_tag = 'A', group_index=0):

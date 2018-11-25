@@ -23,6 +23,38 @@ class Color(Enum):
     #: no color
     RESET = '\033[0m'      # 终端默认颜色
 
+@unique
+class StreamType(Enum):
+    TCP = 'tcp'
+    TCP_HOST = 'tcp_host'
+    SOCKS = 'socks'
+    SS = 'ss'
+    MTPROTO = 'mtproto'
+    H2 = 'h2'
+    WS = 'ws'
+    KCP = 'kcp'
+    KCP_UTP = 'utp'
+    KCP_SRTP = 'srtp'
+    KCP_DTLS = 'dtls'
+    KCP_WECHAT = 'wechat'
+    KCP_WG = 'wireguard'
+
+def stream_list():
+    return [ 
+        StreamType.KCP_WG, 
+        StreamType.KCP_DTLS, 
+        StreamType.KCP_WECHAT, 
+        StreamType.KCP_UTP, 
+        StreamType.KCP_SRTP, 
+        StreamType.MTPROTO, 
+        StreamType.SOCKS,
+        StreamType.SS
+    ]
+
+def ss_method():
+    return ("aes-256-cfb", "aes-128-cfb", "chacha20", 
+        "chacha20-ietf", "aes-256-gcm", "aes-128-gcm", "chacha20-poly1305")
+
 def color_str(color: Color, str: str) -> str:
     """
     返回有色字符串

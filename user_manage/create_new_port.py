@@ -4,21 +4,19 @@ import random
 import sys
 
 from config_modify.ss import SSFactory
-from writer import NodeWriter, StreamType, stream_list
+from utils import StreamType, stream_list
+from writer import NodeWriter
 
 info = dict()
 
 if len(sys.argv) > 1:
-    stream_list = stream_list()
-    stream = sys.argv[1]
-    correct = False
-    for x in stream_list:
-        if x[0] == stream:
-            correct = True
-            stream = x[1]
-    if not correct:
+    stream_list, param = stream_list(), sys.argv[1]
+    
+    if param not in [x.value for x in stream_list]:
         print("输入的参数无效! 输入-h 或者--help查看帮助")
         exit(-1)
+    
+    stream = list(filter(lambda stream:stream.value == param, stream_list))[0]
 
     if stream == StreamType.SOCKS:
         user = input("请输入socks的用户名: ")

@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 import random
 
-from writer import StreamWriter, StreamType
+from writer import StreamWriter
 from selector import GroupSelector
 from group import Mtproto, SS
+from utils import StreamType
 
 from config_modify.ss import SSFactory
 
@@ -31,13 +32,11 @@ class StreamModifier:
     def select(self, index):
         sw = StreamWriter(self.group_tag, self.group_index, self.stream_type[index][0])
         kw = {}
-        if index == 0 or (index >= 3 and index < 9) or index == 11:
+        if index == 0 or (index >= 3 and index <= 9) or index == 11:
             pass
         elif index == 1 or index == 2:
             host = input("请输入你想要为伪装的域名（不不不需要http）：")
             kw['host'] = host
-        elif index == 9:
-            pass
         elif index == 10:
             user = input("请输入socks的用户名: ")
             password = input("请输入socks的密码: ")

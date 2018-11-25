@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 import configparser
 
-# CONF_FILE_PATH = '/usr/local/multi-v2ray/multi-v2ray.conf'
-CONF_FILE_PATH = 'multi-v2ray.conf'
+CONF_FILE_PATH = '/usr/local/multi-v2ray/multi-v2ray.conf'
+# CONF_FILE_PATH = 'multi-v2ray.conf'
 
-ENV = 'dev-path'
-# ENV = 'prod-path'
+# ENV = 'dev-path'
+ENV = 'prod-path'
 
 class Config:
 

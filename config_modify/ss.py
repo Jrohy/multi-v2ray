@@ -7,11 +7,11 @@ import sys
 from group import SS
 from writer import GroupWriter
 from selector import GroupSelector
+from utils import ss_method
 
 class SSFactory:
     def __init__(self):
-        self.method_tuple = ("aes-256-cfb", "aes-128-cfb", "chacha20", 
-        "chacha20-ietf", "aes-256-gcm", "aes-128-gcm", "chacha20-poly1305")
+        self.method_tuple = ss_method()
 
     def get_method(self):
         print ("请选择shadowsocks的加密方式：")

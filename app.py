@@ -4,8 +4,9 @@ import json
 import os
 from flask import request, jsonify, Blueprint
 
-from writer import NodeWriter, GroupWriter, ClientWriter, GlobalWriter
 from loader import Loader
+from utils import ss_method, stream_list, StreamType
+from writer import NodeWriter, GroupWriter, ClientWriter, GlobalWriter, StreamWriter
 
 func_router = Blueprint('func_router', __name__)
 
@@ -35,9 +36,26 @@ def node_list():
     loader.load_profile()
     return json.dumps(loader.profile, default=lambda x: x.__dict__, ensure_ascii=False)
 
+@func_router.route('/collection/<ctype>', methods=['GET'])
+def collection(ctype):
+    success, msg, result = True, "get {} success!!!".format(ctype), None
+    try:
+        if ctype == 'ss_method':
+            result = ss_method()
+        elif ctype == 'new_port':
+            result = [x.value for x in stream_list()]
+        elif ctype == 'stream':
+            result = [x.value for x in StreamType]
+        else:
+            raise ValueError("{} ctype not found".format(ctype))
+    except Exception as e:
+        success = False
+        msg = str(e)
+    return jsonify(ResponseJson(success, msg, result).__dict__)
+
 @func_router.route('/manage/<action>', methods=['POST'])
 def manage(action):
-    success, msg, result = True, "{} v2ray success!!!", None
+    success, msg, result = True, "{} v2ray success!!!".format(action), None
     try:
         if action in ['start', 'stop', 'restart']:
             os.system("service v2ray {}".format(action))
@@ -67,7 +85,7 @@ def add_user():
 
 @func_router.route('/user/<int:client_index>', methods = ['DELETE'])
 def del_user(client_index):
-    success, msg = True, "del user {} success!!!"
+    success, msg = True, "del user {} success!!!".format(client_index)
     try:
         loader.load_profile()
         group_list = loader.profile.group_list
@@ -77,7 +95,7 @@ def del_user(client_index):
     except Exception as e:
         success = False
         msg = str(e)
-    return jsonify(ResponseJson(success, msg.format(client_index)).__dict__)
+    return jsonify(ResponseJson(success, msg).__dict__)
 
 @func_router.route('/group', methods = ['POST'])
 def add_group():
@@ -86,23 +104,26 @@ def add_group():
         json_request = json.loads(request.get_data())
         port = int(json_request['port'])
         stream_type = json_request['stream_type']
-        if stream_type not in ['wireguard', 'dtls', 'wechat', 'utp', 'srtp', 'mtproto', 'socks', 'ss']:
+
+        from utils import stream_list
+        stream_list = stream_list()
+        if stream_type not in [x.value for x in stream_list]:
             raise ValueError("stream_type {} not found".format(stream_type))
         if "data" in json_request:
             kw = json_request['data']
-        from writer import stream_list
-        stream_list = stream_list()
-        stream = list(filter(lambda stream:stream[0] == stream_type, stream_list))[0][1]
+        
+        stream = list(filter(lambda stream:stream.value == stream_type, stream_list))[0]
         nw = NodeWriter()
         nw.create_new_port(port, stream, **kw)
+        msg = msg.format(stream_type)
     except Exception as e:
         success = False
         msg = str(e)
-    return jsonify(ResponseJson(success, msg.format(stream_type)).__dict__)
+    return jsonify(ResponseJson(success, msg).__dict__)
 
 @func_router.route('/group/<group_tag>', methods = ['DELETE'])
 def del_group(group_tag):
-    success, msg = True, "del group {} success!!!"
+    success, msg = True, "del group {} success!!!".format(group_tag)
     try:
         loader.load_profile()
         group_list = loader.profile.group_list
@@ -112,11 +133,33 @@ def del_group(group_tag):
     except Exception as e:
         success = False
         msg = str(e)
-    return jsonify(ResponseJson(success, msg.format(group_tag)).__dict__)
+    return jsonify(ResponseJson(success, msg).__dict__)
+
+@func_router.route('/stream/<group_tag>', methods = ['PUT'])
+def modify_stream(group_tag):
+    success, msg, kw = True, "modify group {} success!!!".format(group_tag), dict()
+    try:
+        json_request = json.loads(request.get_data())
+        stream_type = json_request['stream_type']
+        if stream_type not in [x.value for x in StreamType]:
+            raise ValueError("stream_type {} not found".format(stream_type))
+        if "data" in json_request:
+            kw = json_request['data']
+        stream = list(filter(lambda stream:stream.value == stream_type, StreamType))[0]
+
+        loader.load_profile()
+        group_list = loader.profile.group_list
+        group = list(filter(lambda group:group.tag == group_tag, group_list))[0]
+        sw = StreamWriter(group.tag, group.index, stream)
+        sw.write(**kw)
+    except Exception as e:
+        success = False
+        msg = str(e)
+    return jsonify(ResponseJson(success, msg).__dict__)
 
 @func_router.route('/group/<group_tag>', methods = ['PUT'])
 def modify_group(group_tag):
-    success, msg = True, "modify group {} success!!!"
+    success, msg = True, "modify group {} success!!!".format(group_tag)
     try:
         json_request = json.loads(request.get_data())
         modify_type = json_request['modify_type']
@@ -137,11 +180,11 @@ def modify_group(group_tag):
     except Exception as e:
         success = False
         msg = str(e)
-    return jsonify(ResponseJson(success, msg.format(modify_type)).__dict__)
+    return jsonify(ResponseJson(success, msg).__dict__)
 
 @func_router.route('/user/<int:client_index>', methods = ['PUT'])
 def modify_user(client_index):
-    success, msg, modify_type = True, "modify user {} success!!!", ""
+    success, msg, modify_type = True, "modify user {} success!!!".format(client_index), ""
     try:
         json_request = json.loads(request.get_data())
         modify_type = json_request['modify_type']
@@ -159,7 +202,7 @@ def modify_user(client_index):
     except Exception as e:
         success = False
         msg = str(e)
-    return jsonify(ResponseJson(success, msg.format(modify_type)).__dict__)
+    return jsonify(ResponseJson(success, msg).__dict__)
 
 @func_router.route('/global', methods = ['PUT'])
 def modify_global():
@@ -177,7 +220,8 @@ def modify_global():
             func(value)
         else:
             raise RuntimeError("{} method not found".format(method))
+        msg = msg.format(modify_type)
     except Exception as e:
         success = False
         msg = str(e)
-    return jsonify(ResponseJson(success, msg.format(modify_type)).__dict__)
+    return jsonify(ResponseJson(success, msg).__dict__)

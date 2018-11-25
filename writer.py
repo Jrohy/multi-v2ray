@@ -111,10 +111,12 @@ class StreamWriter(Writer):
     def write(self, **kw):
         security_backup, tls_settings_backup, origin_protocol = "", "", None
 
-        for menber in StreamType.__members__.items():
-            if menber[1].value == self.part_json['protocol']:
-                origin_protocol = menber[1]
-                break
+        if self.part_json['protocol'] == 'shadowsocks':
+            origin_protocol = StreamType.SS
+        elif self.part_json['protocol'] == 'mtproto':
+            origin_protocol = StreamType.MTPROTO
+        elif self.part_json['protocol'] == 'socks':
+            origin_protocol = StreamType.SOCKS
 
         if origin_protocol != StreamType.MTPROTO and origin_protocol != StreamType.SS:
             security_backup = self.part_json["streamSettings"]["security"]

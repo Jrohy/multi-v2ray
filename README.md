@@ -125,6 +125,9 @@ source <(curl -sL https://git.io/fNgqx) --remove
 **不支持Centos 6**
 
 ## 更新日志
+**2018.11.25**  
+加入Flask Web接口
+
 **2018.11.19**  
 加入禁止BT
 

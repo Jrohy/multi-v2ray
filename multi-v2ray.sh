@@ -182,13 +182,17 @@ planUpdate(){
 }
 
 updateProject() {
-    [[ ${INSTARLL_WAY} != 0 && -e $APP_PATH/my_domain ]] && mv $APP_PATH/my_domain ~
+    local DOMAIN=""
 
-    [[ -e $APP_PATH/multi-v2ray.conf ]] && mv $APP_PATH/multi-v2ray.conf ~
+    [[ -e $APP_PATH/my_domain ]] && cp -f $APP_PATH/my_domain ~
+
+    [[ -e $APP_PATH/multi-v2ray.conf ]] && cp -f $APP_PATH/multi-v2ray.conf ~
 
     cd /usr/local/
     if [[ -e multi-v2ray && -e multi-v2ray/.git ]];then
         cd multi-v2ray
+
+        git reset --hard && git clean -d -f
 
         if [[ $DEV_MODE == 1 ]];then
             git checkout dev
@@ -196,19 +200,21 @@ updateProject() {
             git checkout master
         fi
 
-        git reset --hard && git clean -d -f && git pull
+        git pull
     else
         [[ $DEV_MODE == 1 ]] && BRANCH="dev" || BRANCH="master" 
         git clone -b $BRANCH https://github.com/Jrohy/multi-v2ray
     fi
 
-    if [[ ${INSTARLL_WAY} != 0 && -e ~/my_domain ]];then
-        local DOMAIN=$(cat ~/my_domain | awk 'NR==1')
-        sed -i "s/^domain.*/domain=${DOMAIN}/g" $APP_PATH/multi-v2ray.conf
+    if [[ -e ~/my_domain ]];then
+        DOMAIN=$(cat ~/my_domain | awk 'NR==1')
         rm -f ~/my_domain
+    elif [[ -e ~/multi-v2ray.conf ]];then
+        DOMAIN=$(python3 -c "from config import Config; print(Config().get_data('domain'));"))
+        rm -f ~/multi-v2ray.conf
     fi
 
-    [[ -e ~/multi-v2ray.conf ]] && mv -f ~/multi-v2ray.conf $APP_PATH/
+    [[ ! -z $DOMAIN ]] && sed -i "s/^domain.*/domain=${DOMAIN}/g" $APP_PATH/multi-v2ray.conf
 
     #更新v2ray bash_completion脚本
     cp -f $APP_PATH/v2ray.bash /etc/bash_completion.d/

@@ -184,34 +184,27 @@ planUpdate(){
 updateProject() {
     local DOMAIN=""
 
-    [[ -e $APP_PATH/my_domain ]] && cp -f $APP_PATH/my_domain ~
-
-    [[ -e $APP_PATH/multi-v2ray.conf ]] && cp -f $APP_PATH/multi-v2ray.conf ~
+    if [[ -e $APP_PATH/my_domain ]];then
+        DOMAIN=$(cat $APP_PATH/my_domain|awk 'NR==1')
+    elif [[ -e $APP_PATH/multi-v2ray.conf ]];then
+        TEMP_VALUE=$(cat $APP_PATH/multi-v2ray.conf|grep domain|awk 'NR==1')
+        DOMAIN=${TEMP_VALUE/*=}
+    fi
 
     cd /usr/local/
     if [[ -e multi-v2ray && -e multi-v2ray/.git ]];then
         cd multi-v2ray
 
         git reset --hard && git clean -d -f
-
         if [[ $DEV_MODE == 1 ]];then
             git checkout dev
         else 
             git checkout master
         fi
-
         git pull
     else
         [[ $DEV_MODE == 1 ]] && BRANCH="dev" || BRANCH="master" 
         git clone -b $BRANCH https://github.com/Jrohy/multi-v2ray
-    fi
-
-    if [[ -e ~/my_domain ]];then
-        DOMAIN=$(cat ~/my_domain | awk 'NR==1')
-        rm -f ~/my_domain
-    elif [[ -e ~/multi-v2ray.conf ]];then
-        DOMAIN=$(python3 -c "from config import Config; print(Config().get_data('domain'));")
-        rm -f ~/multi-v2ray.conf
     fi
 
     [[ ! -z $DOMAIN ]] && sed -i "s/^domain.*/domain=${DOMAIN}/g" $APP_PATH/multi-v2ray.conf

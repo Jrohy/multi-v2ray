@@ -214,7 +214,7 @@ updateProject() {
     source /etc/bash_completion.d/v2ray.bash
     
     #安装/更新V2ray主程序
-    bash <(curl -L -s https://install.direct/go.sh)
+    [[ ${INSTARLL_WAY} != 2 ]] && bash <(curl -L -s https://install.direct/go.sh)
 }
 
 #时间同步

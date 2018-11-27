@@ -2,8 +2,8 @@
   "network": "kcp",
   "security": "none",
   "tlsSettings": {},
-  "tcpSettings": null,
-  "httpSettings": null,
+  "tcpSettings": {},
+  "httpSettings": {},
   "kcpSettings": {
     "mtu": 1350,
     "tti": 50,
@@ -13,10 +13,9 @@
     "readBufferSize": 2,
     "writeBufferSize": 2,
     "header": {
-      "type": "none",
-      "request": null,
-      "response": null
+      "type": "none"
     }
   },
-  "wsSettings": null
+  "wsSettings": {},
+  "quicSettings": {}
 }

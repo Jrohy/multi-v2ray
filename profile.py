@@ -101,12 +101,12 @@ class Profile:
             if "sockopt" in conf_stream and "tcpFastOpen" in conf_stream["sockopt"]:
                 tfo = "开启" if conf_stream["sockopt"]["tcpFastOpen"] else "关闭"
 
-            if conf_stream["httpSettings"] != None:
+            if conf_stream["httpSettings"]:
                 path = conf_stream["httpSettings"]["path"]
-            elif conf_stream["wsSettings"] != None:
+            elif conf_stream["wsSettings"]:
                 host = conf_stream["wsSettings"]["headers"]["Host"]
                 path = conf_stream["wsSettings"]["path"]
-            elif conf_stream["tcpSettings"] != None:
+            elif conf_stream["tcpSettings"]:
                 host = conf_stream["tcpSettings"]["header"]["request"]["headers"]["Host"]
 
             if (tls == "tls"):
@@ -134,7 +134,7 @@ class Profile:
         for client in clients:
             email, node = "", None
             self.user_number = self.user_number + 1
-            if "email" in client and client["email"] != None:
+            if "email" in client and client["email"]:
                 email = client["email"]
 
             if protocol == "vmess":

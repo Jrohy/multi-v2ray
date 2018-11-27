@@ -138,19 +138,24 @@ class StreamWriter(Writer):
             self.part_json["streamSettings"] = self.load_template('kcp.json')
         
         elif self.stream_type == StreamType.KCP_UTP:
-            self.part_json["streamSettings"] = self.load_template('kcp_utp.json')
+            self.part_json["streamSettings"] = self.load_template('kcp.json')
+            self.part_json["streamSettings"]["kcpSettings"]["header"]["type"] = "utp"
 
         elif self.stream_type == StreamType.KCP_SRTP:
-            self.part_json["streamSettings"] = self.load_template('kcp_srtp.json')
+            self.part_json["streamSettings"] = self.load_template('kcp.json')
+            self.part_json["streamSettings"]["kcpSettings"]["header"]["type"] = "srtp"
 
         elif self.stream_type == StreamType.KCP_WECHAT:
-            self.part_json["streamSettings"] = self.load_template('kcp_wechat.json')
+            self.part_json["streamSettings"] = self.load_template('kcp.json')
+            self.part_json["streamSettings"]["kcpSettings"]["header"]["type"] = "wechat-video"
 
         elif self.stream_type == StreamType.KCP_DTLS:
-            self.part_json["streamSettings"] = self.load_template('kcp_dtls.json')
+            self.part_json["streamSettings"] = self.load_template('kcp.json')
+            self.part_json["streamSettings"]["kcpSettings"]["header"]["type"] = "dtls"
 
         elif self.stream_type == StreamType.KCP_WG:
-            self.part_json["streamSettings"] = self.load_template('kcp_wireguard.json')
+            self.part_json["streamSettings"] = self.load_template('kcp.json')
+            self.part_json["streamSettings"]["kcpSettings"]["header"]["type"] = "wireguard"
 
         elif self.stream_type == StreamType.TCP:
             self.part_json["streamSettings"] = self.load_template('tcp.json')
@@ -267,8 +272,8 @@ class GroupWriter(Writer):
         else:
             if self.part_json["streamSettings"]["network"] == StreamType.H2.value:
                 print("关闭tls同时也会关闭HTTP/2！\n")
-                print("已重置为kcp utp传输方式, 若要其他方式请自行切换")
-                self.part_json["streamSettings"] = self.load_template('kcp_utp.json')
+                print("已重置为kcp传输方式, 若要其他方式请自行切换")
+                self.part_json["streamSettings"] = self.load_template('kcp.json')
             else:
                 self.part_json["streamSettings"]["security"] = "none"
                 self.part_json["streamSettings"]["tlsSettings"] = {}

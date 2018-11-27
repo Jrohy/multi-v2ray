@@ -2,7 +2,7 @@
   "network": "tcp",
   "security": "none",
   "tlsSettings": {},
-  "httpSettings": null,
+  "httpSettings": {},
   "tcpSettings": {
     "connectionReuse": true,
     "header": {
@@ -50,6 +50,7 @@
       }
     }
   },
-  "kcpSettings": null,
-  "wsSettings": null
+  "kcpSettings": {},
+  "wsSettings": {},
+  "quicSettings": {}
 }

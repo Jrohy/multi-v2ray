@@ -6,8 +6,5 @@
       "pass": "socks"
     }
   ],
-  "udp": true,
-  "ip": "127.0.0.1",
-  "timeout": 0,
-  "userLevel": 0
+  "udp": true
 }

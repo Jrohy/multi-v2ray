@@ -19,11 +19,12 @@
     "streamSettings": {
       "security": "none",
       "tlsSettings": {},
-      "wsSettings": null,
-      "httpSettings": null,
+      "wsSettings": {},
+      "httpSettings": {},
       "network": "",
-      "kcpSettings": null,
-      "tcpSettings": null
+      "kcpSettings": {},
+      "tcpSettings": {},
+      "quicSettings": {}
     }
   }
   ],

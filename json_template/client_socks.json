@@ -39,11 +39,12 @@
         "streamSettings": {
           "security": "",
           "tlsSettings": {},
-          "wsSettings": null,
-          "httpSettings": null, 
+          "wsSettings": {},
+          "httpSettings": {}, 
           "network": "tcp", 
-          "kcpSettings": null, 
-          "tcpSettings": null
+          "kcpSettings": {}, 
+          "tcpSettings": {},
+          "quicSettings": {}
         },
         "mux": {
           "enabled": true

@@ -2,10 +2,11 @@
   "network": "h2",
   "security": "tls",
   "tlsSettings": {},
-  "tcpSettings": null,
+  "tcpSettings": {},
   "httpSettings": { 
     "path": "/ray/"
   },
-  "kcpSettings": null,
-  "wsSettings": null
+  "kcpSettings": {},
+  "wsSettings": {},
+  "quicSettings": {}
 }

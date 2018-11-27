@@ -27,4 +27,4 @@ class Config:
 
     def set_data(self, key, value):
         self.config.set('data', key, value)
-        self.config.write(open(self.config_path),"w")
+        self.config.write(open(self.config_path, "w"))

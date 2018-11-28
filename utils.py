@@ -32,6 +32,7 @@ class StreamType(Enum):
     MTPROTO = 'mtproto'
     H2 = 'h2'
     WS = 'ws'
+    QUIC = 'quic'
     KCP = 'kcp'
     KCP_UTP = 'utp'
     KCP_SRTP = 'srtp'
@@ -50,6 +51,9 @@ def stream_list():
         StreamType.SOCKS,
         StreamType.SS
     ]
+
+def header_type_list():
+    return ("none", "srtp", "utp", "wechat-video", "dtls", "wireguard")
 
 def ss_method():
     return ("aes-256-cfb", "aes-128-cfb", "chacha20", 

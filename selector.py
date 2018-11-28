@@ -3,6 +3,29 @@
 from loader import Loader
 from utils import color_str, Color
 
+class CommonSelector:
+    def __init__(self, collection, msg):
+        from collections.abc import Iterable
+        if isinstance(collection, Iterable):
+            self.collection = collection
+        else:
+            raise ValueError("{} 对象不可迭代".format(collection))
+        self.msg = msg
+    
+    def select(self):
+        for index, element in enumerate(self.collection):
+            print("{0}.{1}".format(index + 1, element))
+        choice = input(self.msg)
+
+        if not choice.isnumeric():
+            raise RuntimeError('输入错误，请检查是否为数字')
+
+        choice = int(choice)
+        if choice < 1 or choice > len(self.collection):
+            raise RuntimeError('输入错误，请检查是否符合范围中')
+        else:
+            return self.collection[choice - 1]
+
 class Selector:
     def __init__(self, action):
         loader = Loader()

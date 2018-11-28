@@ -1,0 +1,16 @@
+{
+  "network": "quic",
+  "security": "none",
+  "tlsSettings": {},
+  "tcpSettings": {},
+  "kcpSettings": {},
+  "httpSettings": {},
+  "wsSettings": {},
+  "quicSettings": {
+    "security": "none",
+    "key": "",
+    "header": {
+      "type": "none"
+    }
+  }
+}

@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import random
+import string
 
 from writer import StreamWriter
-from selector import GroupSelector
+from selector import GroupSelector, CommonSelector
 from group import Mtproto, SS
-from utils import StreamType
+from utils import StreamType, header_type_list
 
 from config_modify.ss import SSFactory
 
@@ -24,7 +25,8 @@ class StreamModifier:
             (StreamType.H2, "HTTP/2"), 
             (StreamType.SOCKS, "Socks5"), 
             (StreamType.MTPROTO, "MTProto"), 
-            (StreamType.SS, "Shadowsocks")
+            (StreamType.SS, "Shadowsocks"),
+            (StreamType.QUIC, "QUIC")
         ]
         self.group_tag = group_tag
         self.group_index = group_index
@@ -47,6 +49,17 @@ class StreamModifier:
         elif index == 12:
             sf = SSFactory()
             kw = {"method": sf.get_method(), "password": sf.get_password()}
+        elif index == 13:
+            key = ""
+            security_list = ('none', "aes-128-gcm", "chacha20-poly1305")
+            security = CommonSelector(security_list, "请输入序号选择加密方法: ").select()
+            if security != "none":
+                key = ''.join(random.sample(string.ascii_letters + string.digits, 8))
+                new_pass = input('随机生成密码{}, 回车直接使用, 否则输入自定义加密密码: '.format(key))
+                if new_pass:
+                    key = new_pass
+            header = CommonSelector(header_type_list(), "请输入序号选择伪装协议: ").select()
+            kw = {'security': security, 'key': key, 'header': header}
         sw.write(**kw)
 
     def random_kcp(self):

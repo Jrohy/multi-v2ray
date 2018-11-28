@@ -82,6 +82,7 @@ while [[ $# > 0 ]];do
         else
             bash <(curl -L -s https://install.direct/go.sh) --version $V2RAY_VERSION
         fi
+        shift
         ;;
         update.sh)
         source <(curl -sL https://git.io/fNgqx) -k

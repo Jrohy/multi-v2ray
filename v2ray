@@ -30,7 +30,8 @@ help(){
     echo "  restart              重启 V2Ray"
     echo "  status               查看 V2Ray 运行状态"
     echo "  log                  查看 V2Ray 运行日志"
-    echo "  update               更新 V2Ray"
+    echo "  update               更新 V2Ray 到最新Release版本"
+    echo "  update [version]     更新 V2Ray 到特定版本"
     echo "  update.sh            更新 multi-v2ray脚本"
     echo "  add                  新增mkcp + 随机一种 (srtp | wechat-video | utp | dtls) header伪装的端口(Group)"
     echo "  add [wechat|utp|srtp|dtls|wireguard|socks|mtproto|ss]     新增一种协议的组，端口随机,如 v2ray add utp 为新增utp协议"
@@ -75,7 +76,12 @@ while [[ $# > 0 ]];do
         tail -f /var/log/v2ray/access.log
         ;;
         update)
-        bash <(curl -L -s https://install.direct/go.sh)
+        V2RAY_VERSION="$2"
+        if [[ -z $V2RAY_VERSION ]];then
+            bash <(curl -L -s https://install.direct/go.sh)
+        else
+            bash <(curl -L -s https://install.direct/go.sh) --version $V2RAY_VERSION
+        fi
         ;;
         update.sh)
         source <(curl -sL https://git.io/fNgqx) -k

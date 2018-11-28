@@ -88,8 +88,9 @@ source <(curl -sL https://git.io/fNgqx) --remove
    v2ray restart              重启 V2Ray
    v2ray status               查看 V2Ray 运行状态
    v2ray log                  查看 V2Ray 运行日志
-   v2ray update               更新 V2Ray
-   v2ray update.sh            更新 multi-v2ray脚本
+   v2ray update               更新 V2Ray 到最新Release版本
+   v2ray update [version]     更新 V2Ray 到特定版本
+   v2ray update.sh            更新 multi-v2ray 脚本
    v2ray add                  新增mkcp + 随机一种 (srtp | wechat-video | utp) header伪装的端口(Group)
    v2ray add [wechat|utp|srtp|dtls|wireguard|socks|mtproto|ss]     新增一种协议的组，端口随机,如 v2ray add utp 为新增utp协议
    v2ray del                  删除端口组
@@ -126,6 +127,9 @@ source <(curl -sL https://git.io/fNgqx) --remove
 **不支持Centos 6**
 
 ## 更新日志
+**2018.11.29**  
+加入更新v2ray到特定版本的指令
+
 **2018.11.28**  
 初版支持Quic, 因v2rayN还未支持, 所以Quic分享协议还不支持
 

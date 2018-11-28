@@ -26,7 +26,7 @@ class StreamModifier:
             (StreamType.SOCKS, "Socks5"), 
             (StreamType.MTPROTO, "MTProto"), 
             (StreamType.SS, "Shadowsocks"),
-            (StreamType.QUIC, "QUIC")
+            (StreamType.QUIC, "Quic")
         ]
         self.group_tag = group_tag
         self.group_index = group_index

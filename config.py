@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 import configparser
 
-# ENV = 'dev'
-ENV = 'prod'
+ENV = 'dev'
+# ENV = 'prod'
 
 DEV_FILE_PATH = 'multi-v2ray.conf'
 PROD_FILE_PATH = '/usr/local/multi-v2ray/multi-v2ray.conf'

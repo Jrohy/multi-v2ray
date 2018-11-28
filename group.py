@@ -15,6 +15,15 @@ class Dyport:
     def __str__(self):
         return "开启,alterId为{}".format(self.aid) if self.status else "关闭"
 
+class Quic:
+    def __init__(self, security="none", key="", header="none"):
+        self.security = security
+        self.key = key
+        self.header = header
+    
+    def __str__(self):
+        return "Security: {0}\nKey: {1}\nHeader: {2}".format(self.security, self.key, self.header)
+
 class User:
     def __init__(self, user_number, password, user_info=None):
         """
@@ -73,16 +82,19 @@ class Socks(User):
         return "socks"
 
 class Vmess(User):
-    def __init__(self, uuid, alter_id: int, network: str, user_number, *, path=None, host=None, header=None, email=None):
+    def __init__(self, uuid, alter_id: int, network: str, user_number, *, path=None, host=None, header=None, email=None, quic=None):
         super(Vmess, self).__init__(user_number, uuid, email)
         self.alter_id = alter_id
         self.network = network
         self.path = path
         self.host = host
         self.header = header
+        self.quic = quic
 
     def stream(self):
-        if self.network == "h2":
+        if self.network == "quic":
+            network = "Quic\n{}".format(self.quic)
+        elif self.network == "h2":
             network = "HTTP/2 path: {}".format(self.path)
         elif self.network == "ws":
             network = "WebSocket host: {0}, path: {1}".format(self.host, self.path)

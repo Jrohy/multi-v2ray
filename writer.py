@@ -169,6 +169,13 @@ class StreamWriter(Writer):
             mtproto = self.load_template('mtproto.json')
             self.to_mtproto(mtproto)
 
+        elif self.stream_type == StreamType.QUIC:
+            quic = self.load_template('quic.json')
+            quic["quicSettings"]["security"] = kw["security"]
+            quic["quicSettings"]["key"] = kw["key"]
+            quic["quicSettings"]["header"]["type"] = kw["header"]
+            self.part_json["streamSettings"] = quic
+
         elif self.stream_type == StreamType.SOCKS:
             socks = self.load_template('socks.json')
             tcp = self.load_template('tcp.json')

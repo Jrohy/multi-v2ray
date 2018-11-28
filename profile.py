@@ -6,7 +6,7 @@ import os
 import urllib.request
 
 from config import Config
-from group import SS, Socks, Vmess,Mtproto, Group, Dyport
+from group import SS, Socks, Vmess,Mtproto, Group, Dyport, Quic
 
 class Stats:
     def __init__(self, status=False, door_port=0):
@@ -70,7 +70,7 @@ class Profile:
         del self.config
 
     def parse_group(self, part_json, group_index, local_ip):
-        dyp, end_port, header, tfo, tls, path, host, conf_ip = Dyport(), None, None, None, "", "", "", local_ip
+        dyp, quic, end_port, header, tfo, tls, path, host, conf_ip = Dyport(), None, None, None, None, "", "", "", local_ip
         
         protocol = part_json["protocol"]
 
@@ -114,6 +114,10 @@ class Profile:
 
             if conf_stream["network"] == "kcp" and "header" in conf_stream["kcpSettings"]:
                 header = conf_stream["kcpSettings"]["header"]["type"]
+            
+            if conf_stream["network"] == "quic" and conf_stream["quicSettings"]:
+                quic_settings = conf_stream["quicSettings"]
+                quic = Quic(quic_settings["security"], quic_settings["key"], quic_settings["header"]["type"])
         
         group = Group(conf_ip, port,  end_port=end_port, tls=tls, tfo=tfo, dyp=dyp, index=group_index)
 
@@ -138,7 +142,7 @@ class Profile:
                 email = client["email"]
 
             if protocol == "vmess":
-                node = Vmess(client["id"], client["alterId"], conf_stream["network"], self.user_number, path=path, host=host, header=header, email=email)
+                node = Vmess(client["id"], client["alterId"], conf_stream["network"], self.user_number, path=path, host=host, header=header, email=email, quic=quic)
 
             elif protocol == "socks":
                 node = Socks(self.user_number, client["pass"], user_info=client["user"])

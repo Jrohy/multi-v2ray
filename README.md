@@ -59,6 +59,7 @@ V2ray多用户管理脚本，向导式管理[新增|删除|修改]传输协议�
   - Socks5
   - MTProto
   - Shadowsocks
+  - Quic
 
 **WebSocket和HTTP/2不包括Nginx分流，请自行安装Nginx来分流。**
 
@@ -125,6 +126,9 @@ source <(curl -sL https://git.io/fNgqx) --remove
 **不支持Centos 6**
 
 ## 更新日志
+**2018.11.28**  
+初版支持Quic, 因v2rayN还未支持, 所以Quic分享协议还不支持
+
 **2018.11.25**  
 加入Flask Web接口
 

@@ -52,12 +52,15 @@ class StreamModifier:
         elif index == 13:
             key = ""
             security_list = ('none', "aes-128-gcm", "chacha20-poly1305")
+            print("")
             security = CommonSelector(security_list, "请输入序号选择加密方法: ").select()
             if security != "none":
                 key = ''.join(random.sample(string.ascii_letters + string.digits, 8))
                 new_pass = input('随机生成密码{}, 回车直接使用, 否则输入自定义加密密码: '.format(key))
                 if new_pass:
                     key = new_pass
+                    
+            print("")
             header = CommonSelector(header_type_list(), "请输入序号选择伪装协议: ").select()
             kw = {'security': security, 'key': key, 'header': header}
         sw.write(**kw)

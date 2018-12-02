@@ -244,6 +244,9 @@ updateProject() {
     #更新v2ray bash_completion脚本
     cp -f $APP_PATH/v2ray.bash /etc/bash_completion.d/
     source /etc/bash_completion.d/v2ray.bash
+
+    #替换换行符
+    sed -i -e 's/\r//g' $APP_PATH/v2ray
     
     #安装/更新V2ray主程序
     [[ ${INSTARLL_WAY} != 2 ]] && bash <(curl -L -s https://install.direct/go.sh)
@@ -267,6 +270,7 @@ timeSync() {
 
 
 profileInit() {
+    rm -f /usr/local/bin/v2ray >/dev/null 2>&1
     #配置V2ray初始环境
     cp -f $APP_PATH/v2ray /usr/local/bin
     chmod +x /usr/local/bin/v2ray

@@ -18,6 +18,8 @@ REMOVE=0
 
 FORCE=0
 
+IS_LATEST=0
+
 UPDATE_VERSION=""
 
 APP_PATH="/usr/local/multi-v2ray"
@@ -79,7 +81,8 @@ checkUpdate(){
             CURRENT_VERSION=${VERSION_TEMP_VALUE/*=}
             if [[ -z $UPDATE_VERSION && $FORCE == 0 && $INSTARLL_WAY != 0 && $LASTEST_VERSION == $CURRENT_VERSION ]]; then
                 echo -e "multi-v2ray当前版本: $(colorEcho $GREEN $CURRENT_VERSION), 已是最新!!!"
-                return 2
+                IS_LATEST=1
+                return
             fi
         fi
     fi
@@ -325,11 +328,7 @@ main() {
 
     [[ ${FORCE} == 1 ]] && colorEcho ${BLUE} "当前为强制更新模式, 会更新到master最新代码\n"
 
-    checkUpdate
-
-    echo "上一个返回值: $?"
-    
-    [[ $? == 2 ]] && return
+    checkUpdate && [[ $IS_LATEST == 1 ]] && return
 
     [[ ${INSTARLL_WAY} == 0 ]] && colorEcho ${BLUE} "当前为全新安装\n"
 

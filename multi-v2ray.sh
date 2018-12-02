@@ -78,8 +78,8 @@ checkUpdate(){
         if [[ ! -z $VERSION_TEMP_VALUE ]]; then
             CURRENT_VERSION=${VERSION_TEMP_VALUE/*=}
             if [[ $FORCE == 0 && $INSTARLL_WAY != 0 && $LASTEST_VERSION == $CURRENT_VERSION ]]; then
-                colorEcho $GREEN "脚本已为最新!!"
-                exit
+                echo -e "multi-v2ray当前版本: $(colorEcho $GREEN $CURRENT_VERSION), 已是最新!!!"
+                return 1
             fi
         fi
     fi
@@ -325,7 +325,7 @@ main() {
 
     [[ ${FORCE} == 1 ]] && colorEcho ${BLUE} "当前为强制更新模式, 会更新到master最新代码\n"
 
-    checkUpdate
+    checkUpdate && [ $? -ne 0 ] && return
 
     [[ ${INSTARLL_WAY} == 0 ]] && colorEcho ${BLUE} "当前为全新安装\n"
 

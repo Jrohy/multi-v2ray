@@ -51,6 +51,7 @@ while [[ $# > 0 ]];do
         ;;
         -v|--version)
         UPDATE_VERSION="$2"
+        echo -e "更新multi-v2ray到 $(colorEcho ${BLUE} $UPDATE_VERSION) 版本\n"
         shift
         ;;
         -k|--keep)
@@ -75,8 +76,8 @@ checkUpdate(){
     if [[ -e /usr/local/bin/v2ray ]];then
         VERSION_TEMP_VALUE=$(cat /usr/local/bin/v2ray|grep SHELL_V2RAY|awk 'NR==1')
         if [[ ! -z $VERSION_TEMP_VALUE ]]; then
-            CURRENT_VERSION=${VERSION_TEMP_VALUE/*=}
-            if [[ $LASTEST_VERSION == $CURRENT_VERSION ]]; then
+            CURRENT_VERSION=$(${VERSION_TEMP_VALUE/*=}|sed 's/\"//g')
+            if [[ $FORCE == 0 && $INSTARLL_WAY != 0 && $LASTEST_VERSION == $CURRENT_VERSION ]]; then
                 colorEcho $GREEN "脚本已为最新!!"
                 exit
             fi
@@ -321,6 +322,8 @@ main() {
     [[ ${HELP} == 1 ]] && help && return
 
     [[ ${REMOVE} == 1 ]] && removeV2Ray && return
+
+    [[ ${FORCE} == 1 ]] && colorEcho ${BLUE} "当前为强制更新模式, 会更新到master最新代码\n"
 
     checkUpdate
 

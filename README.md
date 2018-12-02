@@ -83,6 +83,7 @@ source <(curl -sL https://git.io/fNgqx) --remove
 所有命令行参数支持**Tab**补全  
 ```bash
    v2ray -h                   查看帮助
+   v2ray -v                   查看版本信息
    v2ray start                启动 V2Ray
    v2ray stop                 停止 V2Ray
    v2ray restart              重启 V2Ray
@@ -127,7 +128,7 @@ source <(curl -sL https://git.io/fNgqx) --remove
 **不支持Centos 6**
 
 ## 更新日志
-**2018.11.29**  
+[**2018.11.29**](https://github.com/Jrohy/multi-v2ray/tree/v2.4)   
 加入更新v2ray到特定版本的指令
 
 **2018.11.28**  
@@ -136,14 +137,14 @@ source <(curl -sL https://git.io/fNgqx) --remove
 **2018.11.25**  
 加入Flask Web接口
 
-**2018.11.19**  
+[**2018.11.19**](https://github.com/Jrohy/multi-v2ray/tree/v2.2)  
 加入禁止BT
 
-**2018.11.18**  
+[**2018.11.18**](https://github.com/Jrohy/multi-v2ray/tree/v2.1)  
 支持新版v2ray配置文件格式(v4.1+), 升级脚本自动转换格式为新版  
 支持范围端口修改
 
-**2018.10.9**  
+[**2018.10.9**](https://github.com/Jrohy/multi-v2ray/tree/v2.0)  
 面向对象 来重构代码  
 加入json文件缓存(利用序列化实现)
 

@@ -74,9 +74,9 @@ checkUpdate(){
     LASTEST_VERSION=$(curl -H 'Cache-Control: no-cache' -s "https://api.github.com/repos/Jrohy/multi-v2ray/releases/latest" | grep 'tag_name' | cut -d\" -f4)
 
     if [[ -e /usr/local/bin/v2ray ]];then
-        VERSION_TEMP_VALUE=$(cat /usr/local/bin/v2ray|grep SHELL_V2RAY|awk 'NR==1')
+        VERSION_TEMP_VALUE=$(cat /usr/local/bin/v2ray|grep SHELL_V2RAY|awk 'NR==1'|sed 's/\"//g')
         if [[ ! -z $VERSION_TEMP_VALUE ]]; then
-            CURRENT_VERSION=$(${VERSION_TEMP_VALUE/*=}|sed 's/\"//g')
+            CURRENT_VERSION=${VERSION_TEMP_VALUE/*=}
             if [[ $FORCE == 0 && $INSTARLL_WAY != 0 && $LASTEST_VERSION == $CURRENT_VERSION ]]; then
                 colorEcho $GREEN "脚本已为最新!!"
                 exit

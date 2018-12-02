@@ -191,19 +191,27 @@ updateProject() {
         DOMAIN=${TEMP_VALUE/*=}
     fi
 
+    [[ $DEV_MODE == 1 ]] && BRANCH="dev" || BRANCH="master"
+
     cd /usr/local/
     if [[ -e multi-v2ray && -e multi-v2ray/.git ]];then
         cd multi-v2ray
 
-        git reset --hard && git clean -d -f
-        if [[ $DEV_MODE == 1 ]];then
-            git checkout dev
-        else 
-            git checkout master
+        FIR_COMMIT_AUTHOR=$(git log --reverse | awk 'NR==2'| awk '{print $2}')
+        if [[ $FIR_COMMIT_AUTHOR == 'Jrohy' ]];then
+            git reset --hard HEAD && git clean -d -f
+            if [[ $DEV_MODE == 1 ]];then
+                git checkout dev >/dev/null 2>&1
+            else 
+                git checkout master >/dev/null 2>&1
+            fi
+            git pull
+        else
+            cd /usr/local/
+            rm -rf multi-v2ray
+            git clone -b $BRANCH https://github.com/Jrohy/multi-v2ray
         fi
-        git pull
     else
-        [[ $DEV_MODE == 1 ]] && BRANCH="dev" || BRANCH="master" 
         git clone -b $BRANCH https://github.com/Jrohy/multi-v2ray
     fi
 

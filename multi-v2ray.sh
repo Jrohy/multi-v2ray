@@ -270,6 +270,7 @@ timeSync() {
 
 
 profileInit() {
+    rm -f /usr/local/bin/v2ray >/dev/null 2>&1
     #配置V2ray初始环境
     cp -f $APP_PATH/v2ray /usr/local/bin
     chmod +x /usr/local/bin/v2ray

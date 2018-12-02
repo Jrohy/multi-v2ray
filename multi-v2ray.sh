@@ -79,7 +79,7 @@ checkUpdate(){
             CURRENT_VERSION=${VERSION_TEMP_VALUE/*=}
             if [[ -z $UPDATE_VERSION && $FORCE == 0 && $INSTARLL_WAY != 0 && $LASTEST_VERSION == $CURRENT_VERSION ]]; then
                 echo -e "multi-v2ray当前版本: $(colorEcho $GREEN $CURRENT_VERSION), 已是最新!!!"
-                return 1
+                return 2
             fi
         fi
     fi
@@ -329,7 +329,7 @@ main() {
 
     echo "上一个返回值: $?"
     
-    [[ $? != 0 ]] && return
+    [[ $? == 2 ]] && return
 
     [[ ${INSTARLL_WAY} == 0 ]] && colorEcho ${BLUE} "当前为全新安装\n"
 

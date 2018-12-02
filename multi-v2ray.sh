@@ -77,7 +77,7 @@ checkUpdate(){
         VERSION_TEMP_VALUE=$(cat /usr/local/bin/v2ray|grep SHELL_V2RAY|awk 'NR==1'|sed 's/\"//g')
         if [[ ! -z $VERSION_TEMP_VALUE ]]; then
             CURRENT_VERSION=${VERSION_TEMP_VALUE/*=}
-            if [[ $FORCE == 0 && $INSTARLL_WAY != 0 && $LASTEST_VERSION == $CURRENT_VERSION ]]; then
+            if [[ -z $UPDATE_VERSION && $FORCE == 0 && $INSTARLL_WAY != 0 && $LASTEST_VERSION == $CURRENT_VERSION ]]; then
                 echo -e "multi-v2ray当前版本: $(colorEcho $GREEN $CURRENT_VERSION), 已是最新!!!"
                 return 1
             fi

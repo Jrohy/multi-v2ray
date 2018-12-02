@@ -224,7 +224,7 @@ updateProject() {
 
         FIR_COMMIT_AUTHOR=$(git log --reverse | awk 'NR==2'| awk '{print $2}')
         if [[ $FIR_COMMIT_AUTHOR == 'Jrohy' ]];then
-            git reset --hard HEAD && git clean -d -f && git checkout master >/dev/null 2>&1
+            git reset --hard HEAD && git clean -d -f
             if [[ $FORCE == 1 ]]; then
                 git pull
             else

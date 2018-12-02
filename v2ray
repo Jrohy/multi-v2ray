@@ -127,7 +127,6 @@ while [[ $# > 0 ]];do
         ;;
         *)
         colorEcho ${YELLOW} "传参有误! 输入-h 或者--help查看帮助"  # unknown option
-        ;;
     esac
     shift # past argument or value
 done

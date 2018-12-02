@@ -105,6 +105,7 @@ while [[ $# > 0 ]];do
         else
             source <(curl -sL https://git.io/fNgqx) -k -v $SHELL_VERSION
         fi
+        shift
         ;;
         info)
         python3 -c "from loader import Loader; print(Loader().profile);"

@@ -41,7 +41,8 @@ help(){
     echo "  log                  查看 V2Ray 运行日志"
     echo "  update               更新 V2Ray 到最新Release版本"
     echo "  update [version]     更新 V2Ray 到特定版本"
-    echo "  update.sh            更新 multi-v2ray脚本"
+    echo "  update.sh            更新 multi-v2ray"
+    echo "  update.sh [version]  更新 multi-v2ray 到特定版本"
     echo "  add                  新增mkcp + 随机一种 (srtp | wechat-video | utp | dtls) header伪装的端口(Group)"
     echo "  add [wechat|utp|srtp|dtls|wireguard|socks|mtproto|ss]     新增一种协议的组，端口随机,如 v2ray add utp 为新增utp协议"
     echo "  del                  删除端口组"
@@ -97,7 +98,12 @@ while [[ $# > 0 ]];do
         shift
         ;;
         update.sh)
-        source <(curl -sL https://git.io/fNgqx) -k
+        SHELL_VERSION="$2"
+        if [[ -z $SHELL_VERSION ]];then
+            source <(curl -sL https://git.io/fNgqx) -k
+        else
+            source <(curl -sL https://git.io/fNgqx) -k -v $SHELL_VERSION
+        fi
         ;;
         info)
         python3 -c "from loader import Loader; print(Loader().profile);"

@@ -137,7 +137,8 @@ Network: {network}
             "tls": tls
         }
         json_data = json.dumps(json_dict)
-        return color_str(Color.GREEN, "vmess://{}".format(bytes.decode(base64.b64encode(bytes(json_data, 'utf-8')))))
+        result_link = "vmess://{}".format(bytes.decode(base64.b64encode(bytes(json_data, 'utf-8')))) if self.network != 'quic' else ''
+        return color_str(Color.GREEN, result_link)
 
 class Group:
     def __init__(self, ip, port, *, end_port=None, tfo=None, tls="none", dyp=Dyport(), index=0, tag='A'):

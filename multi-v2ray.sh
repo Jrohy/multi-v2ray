@@ -326,6 +326,8 @@ main() {
     [[ ${FORCE} == 1 ]] && colorEcho ${BLUE} "当前为强制更新模式, 会更新到master最新代码\n"
 
     checkUpdate
+
+    echo "上一个返回值: $?"
     
     [[ $? != 0 ]] && return
 

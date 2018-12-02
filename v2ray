@@ -16,6 +16,7 @@ colorEcho(){
 }
 
 showVersion(){
+    echo ""
     echo -e "multi-v2ray: $(colorEcho $GREEN $SHELL_V2RAY)\n"
     V2RAY_VERSION=$(/usr/bin/v2ray/v2ray -version | head -n 1 | cut -d " " -f2-4)
     echo -e "v2ray: $(colorEcho $GREEN $V2RAY_VERSION)\n"

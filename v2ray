@@ -1,5 +1,7 @@
 #!/bin/bash
 
+SHELL_V2RAY="v2.5.0"
+
 #######color code########
 RED="31m"      # Error message
 GREEN="32m"    # Success message
@@ -13,6 +15,12 @@ colorEcho(){
     echo -e "\033[${COLOR}${@:2}\033[0m"
 }
 
+showVersion(){
+    echo -e "multi-v2ray: $(colorEcho $GREEN $SHELL_V2RAY)\n"
+    V2RAY_VERSION=$(/usr/bin/v2ray/v2ray -version | head -n 1 | cut -d " " -f2-4)
+    echo -e "v2ray: $(colorEcho $GREEN $V2RAY_VERSION)\n"
+}
+
 cleanLog() {
     cat /dev/null > /var/log/v2ray/access.log
     cat /dev/null > /var/log/v2ray/error.log
@@ -23,8 +31,9 @@ cleanLog() {
 [ $(id -u) != "0" ] && { colorEcho ${RED} "Error: You must be root to run this script"; exit 1; }
 
 help(){
-    echo "v2ray [-h|--help] [options]"
+    echo "v2ray [-h|--help] [-v|--version] [options]"
     echo "  -h, --help           查看帮助"
+    echo "  -v, --version        查看版本信息"
     echo "  start                启动 V2Ray"
     echo "  stop                 停止 V2Ray"
     echo "  restart              重启 V2Ray"
@@ -55,6 +64,9 @@ while [[ $# > 0 ]];do
     case $key in
         -h|--help)
         help
+        ;;
+        -v|--version)
+        showVersion
         ;;
         start)
         service v2ray start
@@ -127,6 +139,7 @@ while [[ $# > 0 ]];do
         ;;
         *)
         colorEcho ${YELLOW} "传参有误! 输入-h 或者--help查看帮助"  # unknown option
+        ;;
     esac
     shift # past argument or value
 done

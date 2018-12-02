@@ -12,11 +12,13 @@ BEGIN_PATH=$(pwd)
 INSTARLL_WAY=0
 
 #定义操作变量, 0为否, 1为是
-DEV_MODE=0
-
 HELP=0
 
 REMOVE=0
+
+FORCE=0
+
+UPDATE_VERSION=""
 
 APP_PATH="/usr/local/multi-v2ray"
 
@@ -44,6 +46,13 @@ while [[ $# > 0 ]];do
         -h|--help)
         HELP=1
         ;;
+        -f|--force)
+        FORCE=1
+        ;;
+        -v|--version)
+        UPDATE_VERSION="$2"
+        shift
+        ;;
         -k|--keep)
         INSTARLL_WAY=1
         colorEcho ${BLUE} "当前以keep保留配置文件形式更新, 若失败请用全新安装\n"
@@ -51,10 +60,6 @@ while [[ $# > 0 ]];do
         -c|--code)
         INSTARLL_WAY=2
         colorEcho ${BLUE} "当前仅更新multi-v2ray源码\n"
-        ;;
-        -d|--dev)
-        DEV_MODE=1
-        colorEcho ${BLUE} "当前为开发模式, 用dev分支来更新\n"
         ;;
         *)
                 # unknown option
@@ -64,12 +69,30 @@ while [[ $# > 0 ]];do
 done
 #############################
 
+checkUpdate(){
+    LASTEST_VERSION=$(curl -H 'Cache-Control: no-cache' -s "https://api.github.com/repos/Jrohy/multi-v2ray/releases/latest" | grep 'tag_name' | cut -d\" -f4)
+
+    if [[ -e /usr/local/bin/v2ray ]];then
+        VERSION_TEMP_VALUE=$(cat /usr/local/bin/v2ray|grep SHELL_V2RAY|awk 'NR==1')
+        if [[ ! -z $VERSION_TEMP_VALUE ]]; then
+            CURRENT_VERSION=${VERSION_TEMP_VALUE/*=}
+            if [[ $LASTEST_VERSION == $CURRENT_VERSION ]]; then
+                colorEcho $GREEN "脚本已为最新!!"
+                exit
+            fi
+        fi
+    fi
+
+    [[ -z $UPDATE_VERSION ]] && UPDATE_VERSION=$LASTEST_VERSION
+}
+
 help(){
-    echo "source multi-v2ray.sh [-h|--help] [-k|--keep] [-d|--dev][-c|--code][--remove]"
+    echo "source multi-v2ray.sh [-h|--help] [-k|--keep] [-c|--code] [-f|--force] [--remove]"
     echo "  -h, --help           Show help"
     echo "  -k, --keep           keep the v2ray config.json to update"
-    echo "  -d, --dev            update from dev branch"
     echo "  -c, --code           only update multi-v2ray code"
+    echo "  -f, --force          force to update multi-v2ray lastest code"
+    echo "  -v, --version        update multi-v2ray to special version"
     echo "      --remove         remove v2ray && multi-v2ray"
     echo "                       no params to new install"
     return 0
@@ -191,21 +214,18 @@ updateProject() {
         DOMAIN=${TEMP_VALUE/*=}
     fi
 
-    [[ $DEV_MODE == 1 ]] && BRANCH="dev" || BRANCH="master"
-
     cd /usr/local/
     if [[ -e multi-v2ray && -e multi-v2ray/.git ]];then
         cd multi-v2ray
 
         FIR_COMMIT_AUTHOR=$(git log --reverse | awk 'NR==2'| awk '{print $2}')
         if [[ $FIR_COMMIT_AUTHOR == 'Jrohy' ]];then
-            git reset --hard HEAD && git clean -d -f
-            if [[ $DEV_MODE == 1 ]];then
-                git checkout dev >/dev/null 2>&1
-            else 
-                git checkout master >/dev/null 2>&1
+            git reset --hard HEAD && git clean -d -f && git checkout master >/dev/null 2>&1
+            if [[ $FORCE == 1 ]]; then
+                git pull
+            else
+                git fetch origin && git checkout $UPDATE_VERSION
             fi
-            git pull
         else
             cd /usr/local/
             rm -rf multi-v2ray
@@ -244,7 +264,7 @@ timeSync() {
 
 profileInit() {
     #配置V2ray初始环境
-    cp $APP_PATH/v2ray /usr/local/bin
+    cp -f $APP_PATH/v2ray /usr/local/bin
     chmod +x /usr/local/bin/v2ray
 
     #加入multi-v2ray模块搜索路径
@@ -301,6 +321,8 @@ main() {
     [[ ${HELP} == 1 ]] && help && return
 
     [[ ${REMOVE} == 1 ]] && removeV2Ray && return
+
+    checkUpdate
 
     [[ ${INSTARLL_WAY} == 0 ]] && colorEcho ${BLUE} "当前为全新安装\n"
 

@@ -79,6 +79,11 @@ checkUpdate(){
         VERSION_TEMP_VALUE=$(cat /usr/local/bin/v2ray|grep SHELL_V2RAY|awk 'NR==1'|sed 's/\"//g')
         if [[ ! -z $VERSION_TEMP_VALUE ]]; then
             CURRENT_VERSION=${VERSION_TEMP_VALUE/*=}
+            if [[ ! -z $UPDATE_VERSION && $UPDATE_VERSION == $CURRENT_VERSION ]];then
+                echo -e "multi-v2ray当前版本: $(colorEcho $GREEN $CURRENT_VERSION), 已是指定版本!!!"
+                IS_LATEST=1
+                return
+            fi
             if [[ -z $UPDATE_VERSION && $FORCE == 0 && $INSTARLL_WAY != 0 && $LASTEST_VERSION == $CURRENT_VERSION ]]; then
                 echo -e "multi-v2ray当前版本: $(colorEcho $GREEN $CURRENT_VERSION), 已是最新!!!"
                 IS_LATEST=1
@@ -244,9 +249,6 @@ updateProject() {
     #更新v2ray bash_completion脚本
     cp -f $APP_PATH/v2ray.bash /etc/bash_completion.d/
     source /etc/bash_completion.d/v2ray.bash
-
-    #替换换行符
-    sed -i -e 's/\r//g' $APP_PATH/v2ray
     
     #安装/更新V2ray主程序
     [[ ${INSTARLL_WAY} != 2 ]] && bash <(curl -L -s https://install.direct/go.sh)

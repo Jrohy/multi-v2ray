@@ -61,8 +61,6 @@ V2ray多用户管理脚本，向导式管理[新增|删除|修改]传输协议�
   - Shadowsocks
   - Quic
 
-**WebSocket和HTTP/2不包括Nginx分流，请自行安装Nginx来分流。**
-
 ## 安装命令
 
 ```bash

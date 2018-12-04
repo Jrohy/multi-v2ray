@@ -171,7 +171,11 @@ checkSys() {
 installDependent(){
     if [[ ${OS} == 'CentOS' ]];then
         yum install epel-release curl wget unzip git ntp ntpdate socat crontabs lsof -y
-        [[ -z $(rpm -qa|grep python3) ]] && yum install python34 -y
+        if [[ -z $(rpm -qa|grep python3) ]];then
+            yum install https://centos7.iuscommunity.org/ius-release.rpm -y
+            yum install python36u -y
+            ln -s /bin/python3.6 /bin/python3
+        fi
     else
         apt-get update
         apt-get install curl unzip git ntp wget ntpdate socat cron lsof -y

@@ -4,7 +4,6 @@
   "tlsSettings": {},
   "httpSettings": {},
   "tcpSettings": {
-    "connectionReuse": true,
     "header": {
       "type": "http",
       "request": {

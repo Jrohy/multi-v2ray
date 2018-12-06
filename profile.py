@@ -108,6 +108,7 @@ class Profile:
                 path = conf_stream["wsSettings"]["path"]
             elif conf_stream["tcpSettings"]:
                 host = conf_stream["tcpSettings"]["header"]["request"]["headers"]["Host"]
+                header = "http"
 
             if (tls == "tls"):
                 conf_ip = Config().get_data('domain')

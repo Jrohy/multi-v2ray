@@ -12,11 +12,15 @@ BEGIN_PATH=$(pwd)
 INSTARLL_WAY=0
 
 #定义操作变量, 0为否, 1为是
-DEV_MODE=0
-
 HELP=0
 
 REMOVE=0
+
+FORCE=0
+
+IS_LATEST=0
+
+UPDATE_VERSION=""
 
 APP_PATH="/usr/local/multi-v2ray"
 
@@ -44,6 +48,14 @@ while [[ $# > 0 ]];do
         -h|--help)
         HELP=1
         ;;
+        -f|--force)
+        FORCE=1
+        ;;
+        -v|--version)
+        UPDATE_VERSION="$2"
+        echo -e "更新multi-v2ray到 $(colorEcho ${BLUE} $UPDATE_VERSION) 版本\n"
+        shift
+        ;;
         -k|--keep)
         INSTARLL_WAY=1
         colorEcho ${BLUE} "当前以keep保留配置文件形式更新, 若失败请用全新安装\n"
@@ -51,10 +63,6 @@ while [[ $# > 0 ]];do
         -c|--code)
         INSTARLL_WAY=2
         colorEcho ${BLUE} "当前仅更新multi-v2ray源码\n"
-        ;;
-        -d|--dev)
-        DEV_MODE=1
-        colorEcho ${BLUE} "当前为开发模式, 用dev分支来更新\n"
         ;;
         *)
                 # unknown option
@@ -64,12 +72,36 @@ while [[ $# > 0 ]];do
 done
 #############################
 
+checkUpdate(){
+    LASTEST_VERSION=$(curl -H 'Cache-Control: no-cache' -s "https://api.github.com/repos/Jrohy/multi-v2ray/releases/latest" | grep 'tag_name' | cut -d\" -f4)
+
+    if [[ -e /usr/local/bin/v2ray ]];then
+        VERSION_TEMP_VALUE=$(cat /usr/local/bin/v2ray|grep SHELL_V2RAY|awk 'NR==1'|sed 's/\"//g')
+        if [[ ! -z $VERSION_TEMP_VALUE ]]; then
+            CURRENT_VERSION=${VERSION_TEMP_VALUE/*=}
+            if [[ ! -z $UPDATE_VERSION && $UPDATE_VERSION == $CURRENT_VERSION ]];then
+                echo -e "multi-v2ray当前版本: $(colorEcho $GREEN $CURRENT_VERSION), 已是指定版本!!!"
+                IS_LATEST=1
+                return
+            fi
+            if [[ -z $UPDATE_VERSION && $FORCE == 0 && $INSTARLL_WAY != 0 && $LASTEST_VERSION == $CURRENT_VERSION ]]; then
+                echo -e "multi-v2ray当前版本: $(colorEcho $GREEN $CURRENT_VERSION), 已是最新!!!"
+                IS_LATEST=1
+                return
+            fi
+        fi
+    fi
+
+    [[ -z $UPDATE_VERSION ]] && UPDATE_VERSION=$LASTEST_VERSION
+}
+
 help(){
-    echo "source multi-v2ray.sh [-h|--help] [-k|--keep] [-d|--dev][-c|--code][--remove]"
+    echo "source multi-v2ray.sh [-h|--help] [-k|--keep] [-c|--code] [-f|--force] [--remove]"
     echo "  -h, --help           Show help"
     echo "  -k, --keep           keep the v2ray config.json to update"
-    echo "  -d, --dev            update from dev branch"
     echo "  -c, --code           only update multi-v2ray code"
+    echo "  -f, --force          force to update multi-v2ray lastest code"
+    echo "  -v, --version        update multi-v2ray to special version"
     echo "      --remove         remove v2ray && multi-v2ray"
     echo "                       no params to new install"
     return 0
@@ -139,7 +171,11 @@ checkSys() {
 installDependent(){
     if [[ ${OS} == 'CentOS' ]];then
         yum install epel-release curl wget unzip git ntp ntpdate socat crontabs lsof -y
-        [[ -z $(rpm -qa|grep python3) ]] && yum install python34 -y
+        if [[ -z $(rpm -qa|grep python3) ]];then
+            yum install https://centos7.iuscommunity.org/ius-release.rpm -y
+            yum install python36u -y
+            ln -s /bin/python3.6 /bin/python3
+        fi
     else
         apt-get update
         apt-get install curl unzip git ntp wget ntpdate socat cron lsof -y
@@ -191,8 +227,6 @@ updateProject() {
         DOMAIN=${TEMP_VALUE/*=}
     fi
 
-    [[ $DEV_MODE == 1 ]] && BRANCH="dev" || BRANCH="master"
-
     cd /usr/local/
     if [[ -e multi-v2ray && -e multi-v2ray/.git ]];then
         cd multi-v2ray
@@ -200,19 +234,18 @@ updateProject() {
         FIR_COMMIT_AUTHOR=$(git log --reverse | awk 'NR==2'| awk '{print $2}')
         if [[ $FIR_COMMIT_AUTHOR == 'Jrohy' ]];then
             git reset --hard HEAD && git clean -d -f
-            if [[ $DEV_MODE == 1 ]];then
-                git checkout dev >/dev/null 2>&1
-            else 
-                git checkout master >/dev/null 2>&1
+            if [[ $FORCE == 1 ]]; then
+                git pull
+            else
+                git fetch origin && git checkout $UPDATE_VERSION
             fi
-            git pull
         else
             cd /usr/local/
             rm -rf multi-v2ray
-            git clone -b $BRANCH https://github.com/Jrohy/multi-v2ray
+            git clone https://github.com/Jrohy/multi-v2ray
         fi
     else
-        git clone -b $BRANCH https://github.com/Jrohy/multi-v2ray
+        git clone https://github.com/Jrohy/multi-v2ray
     fi
 
     [[ ! -z $DOMAIN ]] && sed -i "s/^domain.*/domain=${DOMAIN}/g" $APP_PATH/multi-v2ray.conf
@@ -243,8 +276,9 @@ timeSync() {
 
 
 profileInit() {
+    rm -f /usr/local/bin/v2ray >/dev/null 2>&1
     #配置V2ray初始环境
-    cp $APP_PATH/v2ray /usr/local/bin
+    cp -f $APP_PATH/v2ray /usr/local/bin
     chmod +x /usr/local/bin/v2ray
 
     #加入multi-v2ray模块搜索路径
@@ -301,6 +335,10 @@ main() {
     [[ ${HELP} == 1 ]] && help && return
 
     [[ ${REMOVE} == 1 ]] && removeV2Ray && return
+
+    [[ ${FORCE} == 1 ]] && colorEcho ${BLUE} "当前为强制更新模式, 会更新到master最新代码\n"
+
+    checkUpdate && [[ $IS_LATEST == 1 ]] && return
 
     [[ ${INSTARLL_WAY} == 0 ]] && colorEcho ${BLUE} "当前为全新安装\n"
 

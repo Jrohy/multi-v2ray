@@ -61,8 +61,6 @@ V2ray多用户管理脚本，向导式管理[新增|删除|修改]传输协议�
   - Shadowsocks
   - Quic
 
-**WebSocket和HTTP/2不包括Nginx分流，请自行安装Nginx来分流。**
-
 ## 安装命令
 
 ```bash
@@ -83,6 +81,7 @@ source <(curl -sL https://git.io/fNgqx) --remove
 所有命令行参数支持**Tab**补全  
 ```bash
    v2ray -h                   查看帮助
+   v2ray -v                   查看版本信息
    v2ray start                启动 V2Ray
    v2ray stop                 停止 V2Ray
    v2ray restart              重启 V2Ray
@@ -91,6 +90,7 @@ source <(curl -sL https://git.io/fNgqx) --remove
    v2ray update               更新 V2Ray 到最新Release版本
    v2ray update [version]     更新 V2Ray 到特定版本
    v2ray update.sh            更新 multi-v2ray 脚本
+   v2ray update.sh [version]  更新 multi-v2ray 到特定版本
    v2ray add                  新增mkcp + 随机一种 (srtp | wechat-video | utp) header伪装的端口(Group)
    v2ray add [wechat|utp|srtp|dtls|wireguard|socks|mtproto|ss]     新增一种协议的组，端口随机,如 v2ray add utp 为新增utp协议
    v2ray del                  删除端口组
@@ -127,7 +127,12 @@ source <(curl -sL https://git.io/fNgqx) --remove
 **不支持Centos 6**
 
 ## 更新日志
-**2018.11.29**  
+[**2018.12.3**](https://github.com/Jrohy/multi-v2ray/tree/v2.5.1)   
+更新策略更改, 只用最新的Release版本更新  
+脚本可指定版本更新(回退),支持指令操作  
+增加版本信息显示  
+
+[**2018.11.29**](https://github.com/Jrohy/multi-v2ray/tree/v2.4)   
 加入更新v2ray到特定版本的指令
 
 **2018.11.28**  
@@ -136,14 +141,14 @@ source <(curl -sL https://git.io/fNgqx) --remove
 **2018.11.25**  
 加入Flask Web接口
 
-**2018.11.19**  
+[**2018.11.19**](https://github.com/Jrohy/multi-v2ray/tree/v2.2)  
 加入禁止BT
 
-**2018.11.18**  
+[**2018.11.18**](https://github.com/Jrohy/multi-v2ray/tree/v2.1)  
 支持新版v2ray配置文件格式(v4.1+), 升级脚本自动转换格式为新版  
 支持范围端口修改
 
-**2018.10.9**  
+[**2018.10.9**](https://github.com/Jrohy/multi-v2ray/tree/v2.0)  
 面向对象 来重构代码  
 加入json文件缓存(利用序列化实现)
 

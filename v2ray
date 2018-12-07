@@ -1,5 +1,7 @@
 #!/bin/bash
 
+SHELL_V2RAY="v2.5.2"
+
 #######color code########
 RED="31m"      # Error message
 GREEN="32m"    # Success message
@@ -13,6 +15,13 @@ colorEcho(){
     echo -e "\033[${COLOR}${@:2}\033[0m"
 }
 
+showVersion(){
+    echo ""
+    echo -e "multi-v2ray: $(colorEcho $GREEN $SHELL_V2RAY)\n"
+    V2RAY_VERSION=$(/usr/bin/v2ray/v2ray -version | head -n 1 | cut -d " " -f2-4)
+    echo -e "v2ray: $(colorEcho $GREEN $V2RAY_VERSION)\n"
+}
+
 cleanLog() {
     cat /dev/null > /var/log/v2ray/access.log
     cat /dev/null > /var/log/v2ray/error.log
@@ -23,8 +32,9 @@ cleanLog() {
 [ $(id -u) != "0" ] && { colorEcho ${RED} "Error: You must be root to run this script"; exit 1; }
 
 help(){
-    echo "v2ray [-h|--help] [options]"
+    echo "v2ray [-h|--help] [-v|--version] [options]"
     echo "  -h, --help           查看帮助"
+    echo "  -v, --version        查看版本信息"
     echo "  start                启动 V2Ray"
     echo "  stop                 停止 V2Ray"
     echo "  restart              重启 V2Ray"
@@ -32,7 +42,8 @@ help(){
     echo "  log                  查看 V2Ray 运行日志"
     echo "  update               更新 V2Ray 到最新Release版本"
     echo "  update [version]     更新 V2Ray 到特定版本"
-    echo "  update.sh            更新 multi-v2ray脚本"
+    echo "  update.sh            更新 multi-v2ray"
+    echo "  update.sh [version]  更新 multi-v2ray 到特定版本"
     echo "  add                  新增mkcp + 随机一种 (srtp | wechat-video | utp | dtls) header伪装的端口(Group)"
     echo "  add [wechat|utp|srtp|dtls|wireguard|socks|mtproto|ss]     新增一种协议的组，端口随机,如 v2ray add utp 为新增utp协议"
     echo "  del                  删除端口组"
@@ -55,6 +66,9 @@ while [[ $# > 0 ]];do
     case $key in
         -h|--help)
         help
+        ;;
+        -v|--version)
+        showVersion
         ;;
         start)
         service v2ray start
@@ -85,7 +99,13 @@ while [[ $# > 0 ]];do
         shift
         ;;
         update.sh)
-        source <(curl -sL https://git.io/fNgqx) -k
+        SHELL_VERSION="$2"
+        if [[ -z $SHELL_VERSION ]];then
+            source <(curl -sL https://git.io/fNgqx) -k
+        else
+            source <(curl -sL https://git.io/fNgqx) -k -v $SHELL_VERSION
+        fi
+        shift
         ;;
         info)
         python3 -c "from loader import Loader; print(Loader().profile);"
@@ -127,6 +147,7 @@ while [[ $# > 0 ]];do
         ;;
         *)
         colorEcho ${YELLOW} "传参有误! 输入-h 或者--help查看帮助"  # unknown option
+        ;;
     esac
     shift # past argument or value
 done

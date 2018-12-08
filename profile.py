@@ -70,7 +70,7 @@ class Profile:
         del self.config
 
     def parse_group(self, part_json, group_index, local_ip):
-        dyp, quic, end_port, header, tfo, tls, path, host, conf_ip = Dyport(), None, None, None, None, "", "", "", local_ip
+        dyp, quic, end_port, tfo, header, tls, path, host, conf_ip = Dyport(), None, None, None, "", "", "", "", local_ip
         
         protocol = part_json["protocol"]
 

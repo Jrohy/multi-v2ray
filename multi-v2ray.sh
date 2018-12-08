@@ -235,7 +235,7 @@ updateProject() {
         if [[ $FIR_COMMIT_AUTHOR == 'Jrohy' ]];then
             git reset --hard HEAD && git clean -d -f
             if [[ $FORCE == 1 ]]; then
-                git pull
+                git pull origin master
             else
                 git fetch origin && git checkout $UPDATE_VERSION
             fi

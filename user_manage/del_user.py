@@ -3,6 +3,7 @@
 import os
 from writer import NodeWriter
 from selector import ClientSelector
+from utils import clean_iptables
 
 cs = ClientSelector('删除user')
 client_index = cs.client_index
@@ -15,9 +16,9 @@ else:
     print(group.show_node(client_index))
     choice = input("是否删除y/n：").lower()
     if choice == 'y':
+        if len(group.node_list) == 1:
+            clean_iptables(group.port)
         nw = NodeWriter()
         nw.del_user(group, client_index)
-        # 自动清理没用的iptables规则
-        os.system("bash /usr/local/multi-v2ray/global_setting/clean_iptables.sh")
     else:
         print("撤销删除")

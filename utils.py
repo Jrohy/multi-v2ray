@@ -168,12 +168,21 @@ def gen_cert(domain):
     for name in service_name:
         os.system(start_cmd.format(name))
 
+def clean_iptables(port):
+    clean_cmd = "iptables -D {0} {1}"
+    check_cmd = "iptables -nvL %s --line-number|grep %s|awk '{print $1}'|sort -r"
+
+    input_result = os.popen(check_cmd % ("INPUT", str(port))).readlines()
+    for line in input_result:
+        os.system(clean_cmd.format("INPUT", str(line)))
+
+    output_result = os.popen(check_cmd % ("OUTPUT", str(port))).readlines()
+    for line in output_result:
+        os.system(clean_cmd.format("OUTPUT", str(line)))
+
 def open_port():
     input_cmd = "iptables -I INPUT -p {0} --dport {1} -j ACCEPT"
     output_cmd = "iptables -I OUTPUT -p {0} --sport {1}"
-
-    # 自动清理没用的iptables规则
-    os.system("bash /usr/local/multi-v2ray/global_setting/clean_iptables.sh")
 
     from loader import Loader
 

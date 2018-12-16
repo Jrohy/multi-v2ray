@@ -311,8 +311,8 @@ profileInit() {
     fi
 
     bash $APP_PATH/global_setting/clean_iptables.sh
-
-    echo -e "生成$(colorEcho $BLUE iptables)流量统计规则中.."
+    echo ""
+    echo -e "生成 $(colorEcho $BLUE iptables) 流量统计规则中.."
     python3 -c "from utils import open_port; open_port();"
 }
 

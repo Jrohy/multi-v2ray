@@ -96,7 +96,7 @@ if __name__ == '__main__':
                 print("流量统计开启状态才能{}统计\n".format(action_info))
                 continue
             
-            if len(group_list) > 1:
+            if group_list[-1].node_list[-1].user_number > 1:
                 print(profile)
                 schoice = input("请输入所需要{}流量的组别(字母)或者序号(数字): ".format(action_info))
             else:

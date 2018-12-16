@@ -5,7 +5,7 @@ clean_old_iptables(){
     echo "$RESULT" | while read LINE
     do
         LINE_ARRAY=($LINE)
-        if [[ $(lsof -i:${LINE_ARRAY[1]}|grep v2ray) ]];then
+        if [[ ${LINE_ARRAY[1]} && $(lsof -i:${LINE_ARRAY[1]}|grep v2ray) ]];then
             iptables -D $TYPE ${LINE_ARRAY[0]}
         fi
     done

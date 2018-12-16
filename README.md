@@ -99,7 +99,7 @@ source <(curl -sL https://git.io/fNgqx) --remove
    v2ray tls                  修改tls
    v2ray tfo                  修改tcpFastOpen
    v2ray stream               修改传输协议
-   v2ray stats                流量统计
+   v2ray stats                iptables流量统计
    v2ray clean                清理日志
 ```
 更多命令行参数请参考 [multi-v2ray wiki](https://github.com/Jrohy/multi-v2ray/wiki)

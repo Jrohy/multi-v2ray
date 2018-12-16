@@ -52,7 +52,7 @@ help(){
     echo "  tls                  修改tls"
     echo "  tfo                  修改tcpFastOpen"
     echo "  stream               修改传输协议"
-    echo "  stats                流量统计"
+    echo "  stats                iptables流量统计"
     echo "  clean                清理日志"
     echo "  更多功能 请输入 v2ray 回车进入服务管理程序"
     return 0
@@ -129,7 +129,7 @@ while [[ $# > 0 ]];do
 	    service v2ray restart
         ;;
         stats)
-        python3 $APP_PATH/global_setting/stats_ctr.py
+        python3 $APP_PATH/global_setting/iptables_ctr.py
         ;;
         clean)
         cleanLog

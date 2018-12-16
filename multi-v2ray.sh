@@ -307,10 +307,12 @@ profileInit() {
         python3 -c "from config_modify import stream; stream.StreamModifier().random_kcp();"
 
         python3 $APP_PATH/client.py
-        python3 -c "from utils import open_port; open_port();"
     else
         python3 $APP_PATH/converter.py
     fi
+
+    bash $APP_PATH/global_setting/clean_iptables.sh
+    python3 -c "from utils import open_port; open_port();"
 }
 
 installFinish() {

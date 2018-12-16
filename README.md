@@ -37,7 +37,7 @@ V2ray多用户管理脚本，向导式管理[新增|删除|修改]传输协议�
 
 ## 功能
 - 一键 启动 / 停止 / 重启 V2ray 服务端
-- 流量统计
+- 流量统计(v2ray && iptables)
 - 命令行模式管理v2ray
 - 支持多用户， 多端口管理
 - 开启关闭动态端口
@@ -127,6 +127,9 @@ source <(curl -sL https://git.io/fNgqx) --remove
 **不支持Centos 6**
 
 ## 更新日志
+[**2018.12.16**](https://github.com/Jrohy/multi-v2ray/tree/v2.6.0)   
+增加iptables流量统计
+
 [**2018.12.3**](https://github.com/Jrohy/multi-v2ray/tree/v2.5.1)   
 更新策略更改, 只用最新的Release版本更新  
 脚本可指定版本更新(回退),支持指令操作  

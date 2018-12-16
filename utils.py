@@ -170,7 +170,7 @@ def gen_cert(domain):
 
 def clean_iptables(port):
     clean_cmd = "iptables -D {0} {1}"
-    check_cmd = "iptables -nvL %s --line-number|grep %s|awk '{print $1}'|sort -r"
+    check_cmd = "iptables -nvL %s --line-number|grep -w \"%s\"|awk '{print $1}'|sort -r"
 
     input_result = os.popen(check_cmd % ("INPUT", str(port))).readlines()
     for line in input_result:
@@ -183,6 +183,7 @@ def clean_iptables(port):
 def open_port():
     input_cmd = "iptables -I INPUT -p {0} --dport {1} -j ACCEPT"
     output_cmd = "iptables -I OUTPUT -p {0} --sport {1}"
+    check_cmd = "iptables -nvL --line-number|grep -w \"%s\""
 
     from loader import Loader
 
@@ -192,6 +193,8 @@ def open_port():
 
     for port in port_set:
         port_str = str(port)
+        if len(os.popen(check_cmd % port_str).readlines()) > 0:
+            continue
         os.system(input_cmd.format("tcp", port_str))
         os.system(input_cmd.format("udp", port_str))
         os.system(output_cmd.format("tcp", port_str))

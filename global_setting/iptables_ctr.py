@@ -16,7 +16,7 @@ while True:
     print("")
     print("1.查看流量统计\n")
     print("2.重置流量统计\n")
-    print("tip: 默认v2端口自动开启iptables的流量统计\n")
+    print("tip: v2ray功能端口默认自动开启iptables的流量统计\n")
 
     choice = input("请输入数字选择功能：")
     if choice == "1":

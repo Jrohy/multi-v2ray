@@ -169,6 +169,11 @@ def gen_cert(domain):
         os.system(start_cmd.format(name))
 
 def open_port():
+    input_cmd = "iptables -I INPUT -p {0} --dport {1} -j ACCEPT"
+    output_cmd = "iptables -I OUTPUT -p {0} --sport {1}"
+
+    # 自动清理没用的iptables规则
+    os.system("bash /usr/local/multi-v2ray/global_setting/clean_iptables.sh")
 
     from loader import Loader
 
@@ -177,7 +182,8 @@ def open_port():
     port_set = set([group.port for group in group_list])
 
     for port in port_set:
-        cmd1="iptables -I INPUT -m state --state NEW -m tcp -p tcp --dport " + str(port) +" -j ACCEPT"
-        cmd2="iptables -I INPUT -m state --state NEW -m udp -p udp --dport " + str(port) +" -j ACCEPT"
-        os.system(cmd1)
-        os.system(cmd2)
+        port_str = str(port)
+        os.system(input_cmd.format("tcp", port_str))
+        os.system(input_cmd.format("udp", port_str))
+        os.system(output_cmd.format("tcp", port_str))
+        os.system(output_cmd.format("udp", port_str))

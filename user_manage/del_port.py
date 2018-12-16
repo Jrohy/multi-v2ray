@@ -3,6 +3,7 @@
 import os
 from writer import NodeWriter
 from selector import GroupSelector
+from utils import clean_iptables
 
 gs = GroupSelector('删除port')
 group = gs.group
@@ -16,7 +17,6 @@ else:
     if choice == 'y':
         nw = NodeWriter()
         nw.del_port(group)
-        # 自动清理没用的iptables规则
-        os.system("bash /usr/local/multi-v2ray/global_setting/clean_iptables.sh")
+        clean_iptables(group.port)
     else:
         print("撤销删除")

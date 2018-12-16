@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import os
 from writer import NodeWriter
 from selector import GroupSelector
+from utils import clean_iptables
 
 gs = GroupSelector('删除port')
 group = gs.group
@@ -15,5 +17,6 @@ else:
     if choice == 'y':
         nw = NodeWriter()
         nw.del_port(group)
+        clean_iptables(group.port)
     else:
         print("撤销删除")

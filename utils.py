@@ -168,7 +168,28 @@ def gen_cert(domain):
     for name in service_name:
         os.system(start_cmd.format(name))
 
+def calcul_iptables_traffic(port):
+    traffic_result = os.popen("bash /usr/local/multi-v2ray/global_setting/calcul_traffic.sh {}".format(str(port))).readlines()
+    if traffic_result:
+        traffic_list = traffic_result[0].split()
+        return [bytes_2_human_readable(traffic_list[0]), bytes_2_human_readable(traffic_list[1]), bytes_2_human_readable(traffic_list[2])]
+
+def clean_iptables(port):
+    clean_cmd = "iptables -D {0} {1}"
+    check_cmd = "iptables -nvL %s --line-number|grep -w \"%s\"|awk '{print $1}'|sort -r"
+
+    input_result = os.popen(check_cmd % ("INPUT", str(port))).readlines()
+    for line in input_result:
+        os.system(clean_cmd.format("INPUT", str(line)))
+
+    output_result = os.popen(check_cmd % ("OUTPUT", str(port))).readlines()
+    for line in output_result:
+        os.system(clean_cmd.format("OUTPUT", str(line)))
+
 def open_port():
+    input_cmd = "iptables -I INPUT -p {0} --dport {1} -j ACCEPT"
+    output_cmd = "iptables -I OUTPUT -p {0} --sport {1}"
+    check_cmd = "iptables -nvL --line-number|grep -w \"%s\""
 
     from loader import Loader
 
@@ -177,7 +198,10 @@ def open_port():
     port_set = set([group.port for group in group_list])
 
     for port in port_set:
-        cmd1="iptables -I INPUT -m state --state NEW -m tcp -p tcp --dport " + str(port) +" -j ACCEPT"
-        cmd2="iptables -I INPUT -m state --state NEW -m udp -p udp --dport " + str(port) +" -j ACCEPT"
-        os.system(cmd1)
-        os.system(cmd2)
+        port_str = str(port)
+        if len(os.popen(check_cmd % port_str).readlines()) > 0:
+            continue
+        os.system(input_cmd.format("tcp", port_str))
+        os.system(input_cmd.format("udp", port_str))
+        os.system(output_cmd.format("tcp", port_str))
+        os.system(output_cmd.format("udp", port_str))

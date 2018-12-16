@@ -168,6 +168,12 @@ def gen_cert(domain):
     for name in service_name:
         os.system(start_cmd.format(name))
 
+def calcul_iptables_traffic(port):
+    traffic_result = os.popen("bash /usr/local/multi-v2ray/global_setting/calcul_traffic.sh {}".format(str(port))).readlines()
+    if traffic_result:
+        traffic_list = traffic_result[0].split()
+        return [bytes_2_human_readable(traffic_list[0]), bytes_2_human_readable(traffic_list[1]), bytes_2_human_readable(traffic_list[2])]
+
 def clean_iptables(port):
     clean_cmd = "iptables -D {0} {1}"
     check_cmd = "iptables -nvL %s --line-number|grep -w \"%s\"|awk '{print $1}'|sort -r"

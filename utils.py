@@ -175,7 +175,7 @@ def calcul_iptables_traffic(port):
         upload_traffic = bytes_2_human_readable(int(traffic_list[0]), 2)
         download_traffic = bytes_2_human_readable(int(traffic_list[1]), 2)
         total_traffic = bytes_2_human_readable(int(traffic_list[2]), 2)
-        return "{0}:  upload:{1} download:{2} total:{3}".format(str(port), 
+        return "{0}:  upload:{1} download:{2} total:{3}".format(color_str(Color.GREEN, str(port)), 
                 color_str(Color.CYAN, upload_traffic), color_str(Color.CYAN, download_traffic), color_str(Color.CYAN, total_traffic))
 
 def clean_iptables(port):

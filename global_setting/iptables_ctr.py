@@ -12,16 +12,18 @@ profile = loader.profile
 group_list = profile.group_list
 
 while True:
-    print("{} 端口流量统计".format(color_str(Color.CYAN, "Iptables")))
+    print("Iptables 端口流量统计")
     print("")
     print("1.查看流量统计\n")
     print("2.重置流量统计\n")
-    print("tip: 默认全部v2端口都开启iptables的流量统计, 重启vps会全部重置!!!\n")
+    print("tip: 默认v2端口自动开启iptables的流量统计, 重启vps会全部重置!!!\n")
 
     choice = input("请输入数字选择功能：")
     if choice == "1":
+        print("")
         for group in group_list:
             print(calcul_iptables_traffic(group.port))
+        print("")
 
     elif choice == "2":
         port = input("请输入要重置流量的端口：")

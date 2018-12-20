@@ -1,6 +1,8 @@
 #!/bin/bash
 PORT=$1
 
+[[ $# == 0 ]]  && exit 1 
+
 INPUT_TRAFFIC=$(iptables -nvL INPUT -x|grep $PORT|awk '{sum += $2};END {printf("%.0f\n",sum)}')
 
 OUTPUT_TRAFFIC=$(iptables -nvL OUTPUT -x|grep $PORT|awk '{sum += $2};END {printf("%.0f\n",sum)}')

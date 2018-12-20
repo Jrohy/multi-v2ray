@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SHELL_V2RAY="v2.5.4"
+SHELL_V2RAY="v2.6.0"
 
 #######color code########
 RED="31m"      # Error message
@@ -52,7 +52,7 @@ help(){
     echo "  tls                  修改tls"
     echo "  tfo                  修改tcpFastOpen"
     echo "  stream               修改传输协议"
-    echo "  stats                流量统计"
+    echo "  stats                iptables流量统计"
     echo "  clean                清理日志"
     echo "  更多功能 请输入 v2ray 回车进入服务管理程序"
     return 0
@@ -129,7 +129,7 @@ while [[ $# > 0 ]];do
 	    service v2ray restart
         ;;
         stats)
-        python3 $APP_PATH/global_setting/stats_ctr.py
+        python3 $APP_PATH/global_setting/iptables_ctr.py
         ;;
         clean)
         cleanLog
@@ -368,16 +368,17 @@ fi
 
 if [[ ${CHOICE} == 5 ]]; then
     echo -e ""
-    echo -e "1.流量统计\n"
-    echo -e "2.禁止bittorrent\n"
-    echo -e "3.定时更新V2ray\n"
-    echo -e "4.清理v2ray日志\n"
-    echo -e "5.脚本升级\n"
+    echo -e "1.流量统计(v2ray)\n"
+    echo -e "2.流量统计(iptables)\n"
+    echo -e "3.禁止bittorrent\n"
+    echo -e "4.定时更新V2ray\n"
+    echo -e "5.清理v2ray日志\n"
+    echo -e "6.脚本升级\n"
     echo -e "请输入数字选择功能"
 
     while :; do echo
 	    read -n1 -p "请选择： " EXTRA_CHOICE
-	    if [[ ! $EXTRA_CHOICE =~ ^[1-5]$ ]]; then
+	    if [[ ! $EXTRA_CHOICE =~ ^[1-6]$ ]]; then
             if [[ -z ${EXTRA_CHOICE} ]];then
                 bash /usr/local/bin/v2ray
                 exit 0
@@ -394,20 +395,24 @@ if [[ ${CHOICE} == 5 ]]; then
         bash /usr/local/bin/v2ray
 
     elif [[ ${EXTRA_CHOICE} == 2 ]]; then
+        python3 $APP_PATH/global_setting/iptables_ctr.py
+        bash /usr/local/bin/v2ray
+
+    elif [[ ${EXTRA_CHOICE} == 3 ]]; then
         python3 $APP_PATH/global_setting/ban_bt.py
         service v2ray restart
         echo ""
         bash /usr/local/bin/v2ray
 
-    elif [[ ${EXTRA_CHOICE} == 3 ]]; then
+    elif [[ ${EXTRA_CHOICE} == 4 ]]; then
         bash $APP_PATH/global_setting/update_timer.sh
         bash /usr/local/bin/v2ray
 
-    elif [[ ${EXTRA_CHOICE} == 4 ]]; then
+    elif [[ ${EXTRA_CHOICE} == 5 ]]; then
         cleanLog
         bash /usr/local/bin/v2ray
 
-    elif [[ ${EXTRA_CHOICE} == 5 ]]; then
+    elif [[ ${EXTRA_CHOICE} == 6 ]]; then
         echo -e "脚本正在以保留配置文件形式升级, 若失败请自行手动全新安装..\n"
         source <(curl -sL https://git.io/fNgqx) -k
         echo -e "\n脚本升级成功!!\n"

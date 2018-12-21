@@ -15,25 +15,26 @@ def clean_mtproto_tag(config, group_index):
     '''
     清理mtproto 协议减少时无用的tag
     '''
-    rules = config["routing"]["rules"]
+    if "tag" in config["inbounds"][group_index]:
+        tag = config["inbounds"][group_index]["tag"]
 
-    tag = config["inbounds"][group_index]["tag"]
+        rules = config["routing"]["rules"]
 
-    for index, rule in enumerate(rules):
-        if rule["outboundTag"] != "tg-out":
-            continue
-        if len(rule["inboundTag"]) == 1:
-            del rules[index]
-            for out_index, oubound_mtproto in enumerate(config["outbounds"]):
-                if oubound_mtproto["protocol"] == "mtproto":
-                    del config["outbounds"][out_index]
-                    break
-        else:
-            for tag_index, rule_tag in enumerate(rule["inboundTag"]):
-                if rule_tag == tag:
-                    del rule["inboundTag"][tag_index]
-                    break
-        break
+        for index, rule in enumerate(rules):
+            if rule["outboundTag"] != "tg-out":
+                continue
+            if len(rule["inboundTag"]) == 1:
+                del rules[index]
+                for out_index, oubound_mtproto in enumerate(config["outbounds"]):
+                    if oubound_mtproto["protocol"] == "mtproto":
+                        del config["outbounds"][out_index]
+                        break
+            else:
+                for tag_index, rule_tag in enumerate(rule["inboundTag"]):
+                    if rule_tag == tag:
+                        del rule["inboundTag"][tag_index]
+                        break
+            break
 
 class Writer:
     def __init__(self, group_tag = 'A', group_index=0):
@@ -315,10 +316,10 @@ class ClientWriter(Writer):
         self.save()
 
     def write_email(self, email):
-        if not "email" in self.part_json:
-            self.part_json["settings"][self.client_str][self.client_index].update({"email": email})
+        if self.part_json["protocol"] == "shadowsocks":
+            self.part_json["settings"].update({"email": email})
         else:
-            self.part_json["settings"][self.client_str][self.client_index]["email"] = email
+            self.part_json["settings"][self.client_str][self.client_index].update({"email": email})
         self.save()
 
 class GlobalWriter(Writer):

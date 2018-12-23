@@ -10,7 +10,7 @@ client_index = cs.client_index
 group = cs.group
 
 if group == None:
-    exit(-1)
+    pass
 else:
     print("你选择的user信息:")
     print(group.show_node(client_index))

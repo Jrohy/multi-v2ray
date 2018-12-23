@@ -9,7 +9,7 @@ gs = GroupSelector('删除port')
 group = gs.group
 
 if group == None:
-    exit(-1)
+    pass
 else:
     print("你要删除的Group组所有节点信息: ")
     print(group)

@@ -6,12 +6,12 @@ from selector import ClientSelector
 from utils import clean_iptables
 
 cs = ClientSelector('删除user')
-client_index = cs.client_index
 group = cs.group
 
 if group == None:
     pass
 else:
+    client_index = cs.client_index
     print("你选择的user信息:")
     print(group.show_node(client_index))
     choice = input("是否删除y/n：").lower()

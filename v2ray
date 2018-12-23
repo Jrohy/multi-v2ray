@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SHELL_V2RAY="v2.6.1"
+SHELL_V2RAY="v2.6.2"
 
 #######color code########
 RED="31m"      # Error message

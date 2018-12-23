@@ -37,10 +37,14 @@ class ClientSelector(Selector):
     def __init__(self, action):
         super(ClientSelector, self).__init__(action)
         self.list_size = self.group_list[-1].node_list[-1].user_number
-        self.group = self.group_list[0]
-        self.client_index = 0
-        if self.list_size > 1: 
+        if "删除" in action and self.list_size == 1:
+            print(color_str(Color.RED, "仅剩最后一个节点无法删除!!!"))
+            self.group = None
+        elif self.list_size > 1: 
             self.select_client()
+        else:
+            self.group = self.group_list[0]
+            self.client_index = 0
 
     def select_client(self):
         print(self.profile)
@@ -69,9 +73,13 @@ class ClientSelector(Selector):
 class GroupSelector(Selector):
     def __init__(self, action):
         super(GroupSelector, self).__init__(action)
-        self.group = self.group_list[0]
-        if len(self.group_list) > 1:
-            self.select_group()          
+        if "删除" in action and self.group_list[-1].node_list[-1].user_number == 1:
+            print(color_str(Color.RED, "仅剩最后一个节点无法删除!!!"))
+            self.group = None
+        elif len(self.group_list) > 1:
+            self.select_group()
+        else:
+            self.group = self.group_list[0]
 
     def select_group(self):
         print(self.profile)

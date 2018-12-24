@@ -7,12 +7,12 @@ from writer import ClientWriter
 from selector import ClientSelector
 
 cs = ClientSelector('修改uuid')
-client_index = cs.client_index
 group = cs.group
 
 if group == None:
-    exit(-1)
+    pass
 else:
+    client_index = cs.client_index
     if type(group.node_list[client_index]) == Vmess:
         print("当前节点UUID为：{}".format(group.node_list[client_index].password))
         choice = input("是否要随机生成一个新的UUID (y/n)：").lower()

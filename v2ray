@@ -285,7 +285,7 @@ if [[ ${CHOICE} == 3 ]]; then
     echo -e "10.更改Shadowsocks密码\n"
 
     while :; do echo
-	    read -n1 -p "请输入数字选择功能： " CONFIG_CHOICE
+	    read -p "请输入数字选择功能： " CONFIG_CHOICE
 	    if [[ ! $CONFIG_CHOICE =~ (^[1-9]$|10) ]]; then
             if [[ -z ${CONFIG_CHOICE} ]];then
                 bash /usr/local/bin/v2ray

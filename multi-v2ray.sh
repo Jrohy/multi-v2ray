@@ -25,7 +25,7 @@ UPDATE_VERSION=""
 APP_PATH="/usr/local/multi-v2ray"
 
 #Centos 临时取消别名
-[ -f /etc/redhat-release ] && unalias -a
+[[ -f /etc/redhat-release && -z $(echo $SHELL|grep zsh) ]] && unalias -a
 
 [[ $(echo $SHELL|grep zsh) ]] && ENV_FILE=".zshrc" || ENV_FILE=".bashrc"
 

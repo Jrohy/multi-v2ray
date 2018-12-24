@@ -5,12 +5,12 @@ from writer import ClientWriter
 from selector import ClientSelector
 
 cs = ClientSelector('修改alterId')
-client_index = cs.client_index
 group = cs.group
 
 if group == None:
-    exit(-1)
+    pass
 else:
+    client_index = cs.client_index
     if type(group.node_list[client_index]) == Vmess:
         print("当前节点alterID: {}".format(group.node_list[client_index].alter_id))
         new_alterid = input("请输入新的alterID: ")

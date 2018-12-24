@@ -7,7 +7,7 @@ gs = GroupSelector('修改动态端口')
 group = gs.group
 
 if group == None:
-    exit()
+    pass
 else:
     print('当前组的动态端口状态：{}'.format(group.dyp))
     gw = GroupWriter(group.tag, group.index)

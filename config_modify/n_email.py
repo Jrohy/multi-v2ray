@@ -6,16 +6,15 @@ from selector import ClientSelector
 from utils import is_email
 
 cs = ClientSelector('修改email')
-client_index = cs.client_index
 group = cs.group
-group_list = cs.group_list
 
 if group == None:
-    exit(-1)
+    pass
 elif type(group.node_list[0]) == Socks:
     print("Socks5节点 不支持写入email!")
-    exit(-1)
 else:
+    client_index = cs.client_index
+    group_list = cs.group_list
     print ("当前节点email为：{}".format(group.node_list[client_index].user_info))
     email = ""
     while True:

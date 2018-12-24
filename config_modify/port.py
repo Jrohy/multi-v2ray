@@ -8,7 +8,7 @@ gs = GroupSelector('修改port')
 group = gs.group
 
 if group == None:
-    exit(-1)
+    pass
 else:
     if group.end_port:
         port_info = "{0}-{1}".format(group.port, group.end_port)

@@ -287,7 +287,7 @@ profileInit() {
     [[ -z $(grep multi-v2ray ~/$ENV_FILE) ]] && echo "export PYTHONPATH=$PYTHONPATH:$APP_PATH" >> ~/$ENV_FILE && source ~/$ENV_FILE
 
     # 加入v2ray tab补全环境变量
-    [[ -z $(grep v2ray.bash ~/$ENV_FILE) ]] && echo "source /etc/bash_completion.d/v2ray.bash" >> ~/$ENV_FILE && source ~/$ENV_FILE
+    [[ -z $(echo $SHELL|grep zsh) && -z $(grep v2ray.bash ~/$ENV_FILE) ]] && echo "source /etc/bash_completion.d/v2ray.bash" >> ~/$ENV_FILE && source ~/$ENV_FILE
 
     #解决Python3中文显示问题
     [[ -z $(grep PYTHONIOENCODING=utf-8 ~/$ENV_FILE) ]] && echo "export PYTHONIOENCODING=utf-8" >> ~/$ENV_FILE && source ~/$ENV_FILE

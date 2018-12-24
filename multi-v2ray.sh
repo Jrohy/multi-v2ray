@@ -27,6 +27,8 @@ APP_PATH="/usr/local/multi-v2ray"
 #Centos 临时取消别名
 [ -f /etc/redhat-release ] && unalias -a
 
+[[ $(echo $SHELL|grep zsh) ]] && ENV_FILE=".zshrc" || ENV_FILE=".bashrc"
+
 #######color code########
 RED="31m"      # Error message
 GREEN="32m"    # Success message
@@ -136,8 +138,8 @@ removeV2Ray() {
     fi
 
     #删除multi-v2ray环境变量
-    sed -i '/v2ray/d' ~/.bashrc
-    source ~/.bashrc
+    sed -i '/v2ray/d' ~/$ENV_FILE
+    source ~/$ENV_FILE
 
     colorEcho ${GREEN} "卸载完成！"
 }
@@ -282,13 +284,13 @@ profileInit() {
     chmod +x /usr/local/bin/v2ray
 
     #加入multi-v2ray模块搜索路径
-    [[ -z $(grep multi-v2ray ~/.bashrc) ]] && echo "export PYTHONPATH=$PYTHONPATH:$APP_PATH" >> ~/.bashrc && source ~/.bashrc
+    [[ -z $(grep multi-v2ray ~/$ENV_FILE) ]] && echo "export PYTHONPATH=$PYTHONPATH:$APP_PATH" >> ~/$ENV_FILE && source ~/$ENV_FILE
 
     # 加入v2ray tab补全环境变量
-    [[ -z $(grep v2ray.bash ~/.bashrc) ]] && echo "source /etc/bash_completion.d/v2ray.bash" >> ~/.bashrc && source ~/.bashrc
+    [[ -z $(grep v2ray.bash ~/$ENV_FILE) ]] && echo "source /etc/bash_completion.d/v2ray.bash" >> ~/$ENV_FILE && source ~/$ENV_FILE
 
     #解决Python3中文显示问题
-    [[ -z $(grep PYTHONIOENCODING=utf-8 ~/.bashrc) ]] && echo "export PYTHONIOENCODING=utf-8" >> ~/.bashrc && source ~/.bashrc
+    [[ -z $(grep PYTHONIOENCODING=utf-8 ~/$ENV_FILE) ]] && echo "export PYTHONIOENCODING=utf-8" >> ~/$ENV_FILE && source ~/$ENV_FILE
 
     #全新安装的新配置
     if [[ ${INSTARLL_WAY} == 0 ]];then 
@@ -320,8 +322,8 @@ installFinish() {
     #回到原点
     cd ${BEGIN_PATH}
 
-    [[ ${INSTARLL_WAY} == 0 ]] && way="安装" || way="更新"
-    colorEcho  ${GREEN} "multi-v2ray ${way}成功！\n"
+    [[ ${INSTARLL_WAY} == 0 ]] && WAY="安装" || WAY="更新"
+    colorEcho  ${GREEN} "multi-v2ray ${WAY}成功！\n"
 
     clear
 

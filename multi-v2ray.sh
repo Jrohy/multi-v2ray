@@ -27,7 +27,7 @@ APP_PATH="/usr/local/multi-v2ray"
 #Centos 临时取消别名
 [[ -f /etc/redhat-release && -z $(echo $SHELL|grep zsh) ]] && unalias -a
 
-[[ $(echo $SHELL|grep zsh) ]] && ENV_FILE=".zshrc" || ENV_FILE=".bashrc"
+[[ -z $(echo $SHELL|grep zsh) ]] && ENV_FILE=".bashrc" || ENV_FILE=".zshrc"
 
 #######color code########
 RED="31m"      # Error message

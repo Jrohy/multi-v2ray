@@ -180,8 +180,9 @@ installDependent(){
         fi
     else
         apt-get update
-        apt-get install python3-distutils curl unzip git ntp wget ntpdate socat cron lsof -y
+        apt-get install curl unzip git ntp wget ntpdate socat cron lsof -y
         [[ -z $(dpkg -l|grep python3) ]] && apt-get install python3 -y
+        apt-get install python3-distutils -y
     fi
 
     # 安装 pip依赖

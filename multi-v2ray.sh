@@ -180,15 +180,12 @@ installDependent(){
         fi
     else
         apt-get update
-        apt-get install curl unzip git ntp wget ntpdate socat cron lsof -y
+        apt-get install python3-distutils curl unzip git ntp wget ntpdate socat cron lsof -y
         [[ -z $(dpkg -l|grep python3) ]] && apt-get install python3 -y
     fi
 
     # 安装 pip依赖
     python3 <(curl -sL https://bootstrap.pypa.io/get-pip.py)
-    if [[ -z $(which pip) ]];then
-        [[ ${OS} == 'Ubuntu' || ${OS} == 'Debian' ]] && apt-get install python3-pip -y
-    fi
     pip3 install pyopenssl
 }
 

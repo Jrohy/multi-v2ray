@@ -131,7 +131,7 @@ removeV2Ray() {
     crontab crontab.txt >/dev/null 2>&1
     rm -f crontab.txt >/dev/null 2>&1
 
-    if [[ ${OS} == "CentOS" ]];then
+    if [[ ${OS} == 'CentOS' || ${OS} == 'Fedora' ]];then
         service crond restart >/dev/null 2>&1
     else
         service cron restart >/dev/null 2>&1
@@ -157,12 +157,20 @@ checkSys() {
     [ $(id -u) != "0" ] && { colorEcho ${RED} "Error: You must be root to run this script"; exit 1; }
 
     #检查系统信息
-    if [ -f /etc/redhat-release ];then
-        OS='CentOS'
-    elif [ ! -z "`cat /etc/issue | grep bian`" ];then
+    if [[ -e /etc/redhat-release ]];then
+        if [[ $(cat /etc/redhat-release | grep Fedora) ]];then
+            OS='Fedora'
+            PACKAGE_MANAGER='dnf'
+        else
+            OS='CentOS'
+            PACKAGE_MANAGER='yum'
+        fi
+    elif [[ $(cat /etc/issue | grep Debian) ]];then
         OS='Debian'
-    elif [ ! -z "`cat /etc/issue | grep Ubuntu`" ];then
+        PACKAGE_MANAGER='apt-get'
+    elif [[ $(cat /etc/issue | grep Ubuntu) ]];then
         OS='Ubuntu'
+        PACKAGE_MANAGER='apt-get'
     else
         colorEcho ${RED} "Not support OS, Please reinstall OS and retry!"
         exit 1
@@ -171,18 +179,19 @@ checkSys() {
 
 #安装依赖
 installDependent(){
-    if [[ ${OS} == 'CentOS' ]];then
-        yum install epel-release curl wget unzip git ntp ntpdate socat crontabs lsof -y
+    if [[ ${OS} == 'CentOS' || ${OS} == 'Fedora' ]];then
+        [[ ${OS} == 'CentOS' ]] && ${PACKAGE_MANAGER} install epel-release -y
+        ${PACKAGE_MANAGER} install curl wget unzip git ntp ntpdate socat crontabs lsof -y
         if [[ -z $(rpm -qa|grep python3) ]];then
-            yum install https://centos7.iuscommunity.org/ius-release.rpm -y
-            yum install python36u -y
+            ${PACKAGE_MANAGER} install https://centos7.iuscommunity.org/ius-release.rpm -y
+            ${PACKAGE_MANAGER} install python36u -y
             ln -s /bin/python3.6 /bin/python3
         fi
     else
-        apt-get update
-        apt-get install curl unzip git ntp wget ntpdate socat cron lsof -y
-        [[ -z $(dpkg -l|grep python3) ]] && apt-get install python3 -y
-        apt-get install python3-distutils -y >/dev/null 2>&1
+        ${PACKAGE_MANAGER} update
+        ${PACKAGE_MANAGER} install curl unzip git ntp wget ntpdate socat cron lsof -y
+        [[ -z $(dpkg -l|grep python3) ]] && ${PACKAGE_MANAGER} install python3 -y
+        ${PACKAGE_MANAGER} install python3-distutils -y >/dev/null 2>&1
     fi
 
     # 安装 pip依赖
@@ -211,7 +220,7 @@ planUpdate(){
 	echo "0 ${LOCAL_TIME} * * * bash <(curl -L -s https://install.direct/go.sh) | tee -a /root/v2rayUpdate.log && service v2ray restart" >> crontab.txt
 	crontab crontab.txt
 	sleep 1
-	if [[ ${OS} == "CentOS" ]];then
+	if [[ ${OS} == 'CentOS' || ${OS} == 'Fedora' ]];then
         service crond restart
 	else
 		service cron restart

@@ -186,6 +186,9 @@ installDependent(){
 
     # 安装 pip依赖
     python3 <(curl -sL https://bootstrap.pypa.io/get-pip.py)
+    if [[ -z $(which pip) ]];then
+        [[ ${OS} == 'Ubuntu' || ${OS} == 'Debian' ]] && apt-get install python3-pip -y
+    fi
     pip3 install pyopenssl
 }
 

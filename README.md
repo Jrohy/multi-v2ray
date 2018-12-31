@@ -123,10 +123,15 @@ source <(curl -sL https://git.io/fNgqx) --remove
 - Ubuntu 16 
 - Ubuntu 18
 - CentOS 7
+- Fedora 28
+- Fedora 29
 
 **不支持Centos 6**
 
 ## 更新日志
+**2018.12.31**   
+Support Fedora 28+
+
 [**2018.12.16**](https://github.com/Jrohy/multi-v2ray/tree/v2.6.0)   
 增加iptables流量统计
 

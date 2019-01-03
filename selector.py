@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from loader import Loader
-from utils import color_str, Color
+from utils import ColorStr
 
 class CommonSelector:
     def __init__(self, collection, msg):
@@ -38,7 +38,7 @@ class ClientSelector(Selector):
         super(ClientSelector, self).__init__(action)
         self.list_size = self.group_list[-1].node_list[-1].user_number
         if "删除" in action and self.list_size == 1:
-            print(color_str(Color.RED, "仅剩最后一个节点无法删除!!!"))
+            print(ColorStr.red("仅剩最后一个节点无法删除!!!"))
             self.group = None
         elif self.list_size > 1: 
             self.select_client()
@@ -52,12 +52,12 @@ class ClientSelector(Selector):
         choice = input("请输入要{}的节点序号数字: ".format(self.action))
 
         if not choice.isnumeric():
-            print(color_str(Color.RED, '输入错误，请检查是否为数字'))
+            print(ColorStr.red('输入错误，请检查是否为数字'))
             return
 
         choice = int(choice)
         if choice < 1 or choice > self.list_size:
-            print(color_str(Color.RED, '输入错误，请检查是否符合范围中'))
+            print(ColorStr.red('输入错误，请检查是否符合范围中'))
         else:
             find = False
             for group in self.group_list:
@@ -74,7 +74,7 @@ class GroupSelector(Selector):
     def __init__(self, action):
         super(GroupSelector, self).__init__(action)
         if "删除" in action and len(self.group_list) == 1:
-            print(color_str(Color.RED, "仅剩最后一个端口无法删除!!!"))
+            print(ColorStr.red("仅剩最后一个端口无法删除!!!"))
             self.group = None
         elif len(self.group_list) > 1:
             self.select_group()
@@ -86,7 +86,7 @@ class GroupSelector(Selector):
         choice = input("请输入要{}的节点Group字母: ".format(self.action))
         group_list = [x for x in self.group_list if x.tag == choice]
         if len(group_list) == 0:
-            print(color_str(Color.RED, '输入有误，请检查 {} Group是否存在'.format(choice)))
+            print(ColorStr.red('输入有误，请检查 {} Group是否存在'.format(choice)))
             self.group = None
         else:
             self.group = group_list[0]

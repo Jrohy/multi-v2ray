@@ -3,7 +3,7 @@
 import os
 
 from loader import Loader
-from utils import color_str, Color, is_number, calcul_iptables_traffic
+from utils import ColorStr, calcul_iptables_traffic
 
 loader = Loader()
 
@@ -27,9 +27,9 @@ while True:
 
     elif choice == "2":
         port = input("请输入要重置流量的端口：")
-        if port and is_number(port):
+        if port and port.isnumeric():
             os.system("bash /usr/local/multi-v2ray/global_setting/clean_traffic.sh {}".format(str(port)))
         else:
-            print(color_str(Color.RED, "输入有误!"))
+            print(ColorStr.red("输入有误!"))
     else:
         break

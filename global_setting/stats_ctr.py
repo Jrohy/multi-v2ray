@@ -5,7 +5,7 @@ import re
 
 from loader import Loader
 from writer import GlobalWriter
-from utils import bytes_2_human_readable, color_str, Color
+from utils import bytes_2_human_readable, ColorStr
 
 class StatsFactory:
     def __init__(self, door_port):
@@ -39,9 +39,9 @@ class StatsFactory:
 downlink: {0}  
 uplink: {1} 
 total: {2}
-        '''.format(color_str(Color.CYAN, bytes_2_human_readable(self.downlink_value, 2)),
-        color_str(Color.CYAN, bytes_2_human_readable(self.uplink_value, 2)),
-        color_str(Color.CYAN, bytes_2_human_readable(self.downlink_value + self.uplink_value, 2)))
+        '''.format(ColorStr.cyan(bytes_2_human_readable(self.downlink_value, 2)),
+        ColorStr.cyan(bytes_2_human_readable(self.uplink_value, 2)),
+        ColorStr.cyan(bytes_2_human_readable(self.downlink_value + self.uplink_value, 2)))
         )
 
 

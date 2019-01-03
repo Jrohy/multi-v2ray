@@ -3,7 +3,7 @@
 import json
 import base64
 
-from utils import color_str, Color
+from utils import ColorStr
 
 __author__ = 'Jrohy'
 
@@ -50,7 +50,7 @@ class SS(User):
 
     def link(self, ip, port, tls):
         ss_origin_url = "{0}:{1}@{2}:{3}".format(self.method, self.password, ip, port)
-        return color_str(Color.GREEN, "ss://{}".format(bytes.decode(base64.b64encode(bytes(ss_origin_url, 'utf-8')))))
+        return ColorStr.green("ss://{}".format(bytes.decode(base64.b64encode(bytes(ss_origin_url, 'utf-8')))))
 
     def stream(self):
         return "shadowsocks"
@@ -63,7 +63,7 @@ class Mtproto(User):
             return "Secret: {}\n".format(self.password)
     
     def link(self, ip, port, tls):
-        return color_str(Color.GREEN, "tg://proxy?server={0}&port={1}&secret={2}".format(ip, port, self.password))
+        return ColorStr.green("tg://proxy?server={0}&port={1}&secret={2}".format(ip, port, self.password))
 
     def stream(self):
         return "mtproto"
@@ -74,9 +74,9 @@ class Socks(User):
 
     def link(self, ip, port, tls):
         if tls == "tls":
-            return color_str(Color.RED, "HTTPS的Socks5不支持tg的分享连接. 请自行配合设置BifrostV等软件使用")
+            return ColorStr.red("HTTPS的Socks5不支持tg的分享连接. 请自行配合设置BifrostV等软件使用")
         else:
-            return color_str(Color.GREEN, "tg://socks?server={0}&port={1}&user={2}&pass={3}".format(ip, port, self.user_info, self.password))
+            return ColorStr.green("tg://socks?server={0}&port={1}&user={2}&pass={3}".format(ip, port, self.user_info, self.password))
 
     def stream(self):
         return "socks"
@@ -138,7 +138,7 @@ Network: {network}
         }
         json_data = json.dumps(json_dict)
         result_link = "vmess://{}".format(bytes.decode(base64.b64encode(bytes(json_data, 'utf-8')))) if self.network != 'quic' else ''
-        return color_str(Color.GREEN, result_link)
+        return ColorStr.green(result_link)
 
 class Group:
     def __init__(self, ip, port, *, end_port=None, tfo=None, tls="none", dyp=Dyport(), index=0, tag='A'):
@@ -168,7 +168,7 @@ TLS: {tls}
 {node}{tfo}
 {dyp}
 {link}
-            '''.format(self=self, color_ip=color_str(Color.FUCHSIA, self.ip), port_way=port_way, node=node,tfo=tfo, dyp=dyp,tls=tls, link=node.link(self.ip, int(self.port), self.tls))
+            '''.format(self=self, color_ip=ColorStr.fuchsia(self.ip), port_way=port_way, node=node,tfo=tfo, dyp=dyp,tls=tls, link=node.link(self.ip, int(self.port), self.tls))
         return result
 
     # print一个实例打印的字符串
@@ -187,7 +187,7 @@ Port: {self.port}{port_way}
 TLS: {tls}
 {node}{tfo}
 {dyp}
-            '''.format(self=self, color_ip=color_str(Color.FUCHSIA, self.ip), node=node,tfo=tfo,dyp=dyp,tls=tls, port_way=port_way)
+            '''.format(self=self, color_ip=ColorStr.fuchsia(self.ip), node=node,tfo=tfo,dyp=dyp,tls=tls, port_way=port_way)
             result = "{0}{1}\n\n{2}\n\n".format(result, temp.strip(), node.link(self.ip, int(self.port), self.tls))
         return result
 

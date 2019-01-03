@@ -6,13 +6,7 @@ import re
 from enum import Enum, unique
 from OpenSSL import crypto
 
-@unique
-class Color(Enum):
-    """
-    终端显示颜色 枚举类
-    """
-   # 显示格式: \033[显示方式;前景色;背景色m
-    # 只写一个字段表示前景色,背景色默认
+class ColorStr:
     RED = '\033[31m'       # 红色
     GREEN = '\033[32m'     # 绿色
     YELLOW = '\033[33m'    # 黄色
@@ -22,6 +16,34 @@ class Color(Enum):
     WHITE = '\033[37m'     # 白色
     #: no color
     RESET = '\033[0m'      # 终端默认颜色
+
+    @classmethod
+    def red(cls, s):
+        return cls.RED + s + cls.RESET
+
+    @classmethod
+    def green(cls, s):
+        return cls.GREEN + s + cls.RESET
+
+    @classmethod
+    def yellow(cls, s):
+        return cls.YELLOW + s + cls.RESET
+
+    @classmethod
+    def blue(cls, s):
+        return cls.BLUE + s + cls.RESET
+
+    @classmethod
+    def cyan(cls, s):
+        return cls.CYAN + s + cls.RESET
+
+    @classmethod
+    def fuchsia(cls, s):
+        return cls.FUCHSIA + s + cls.RESET
+
+    @classmethod
+    def white(cls, s):
+        return cls.WHITE + s + cls.RESET
 
 @unique
 class StreamType(Enum):
@@ -58,35 +80,6 @@ def header_type_list():
 def ss_method():
     return ("aes-256-cfb", "aes-128-cfb", "chacha20", 
         "chacha20-ietf", "aes-256-gcm", "aes-128-gcm", "chacha20-poly1305")
-
-def color_str(color: Color, str: str) -> str:
-    """
-    返回有色字符串
-    """
-    return '{}{}{}'.format(
-        color.value,
-        str,
-        Color.RESET.value
-    )
-
-def is_number(s):
-    """
-    判断是否为数字的函数
-    """
-    try:
-        float(s)
-        return True
-    except ValueError:
-        pass
- 
-    try:
-        import unicodedata
-        unicodedata.numeric(s)
-        return True
-    except (TypeError, ValueError):
-        pass
- 
-    return False
 
 def get_ip():
     """

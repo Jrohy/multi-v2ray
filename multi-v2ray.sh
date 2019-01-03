@@ -180,22 +180,15 @@ checkSys() {
 #安装依赖
 installDependent(){
     if [[ ${OS} == 'CentOS' || ${OS} == 'Fedora' ]];then
-        [[ ${OS} == 'CentOS' ]] && ${PACKAGE_MANAGER} install epel-release -y
-        ${PACKAGE_MANAGER} install curl wget unzip git ntp ntpdate socat crontabs lsof -y
-        if [[ -z $(rpm -qa|grep python3) ]];then
-            ${PACKAGE_MANAGER} install https://centos7.iuscommunity.org/ius-release.rpm -y
-            ${PACKAGE_MANAGER} install python36u -y
-            ln -s /bin/python3.6 /bin/python3
-        fi
+        ${PACKAGE_MANAGER} install wget unzip git ntp ntpdate socat crontabs lsof -y
     else
         ${PACKAGE_MANAGER} update
-        ${PACKAGE_MANAGER} install curl unzip git ntp wget ntpdate socat cron lsof -y
-        [[ -z $(dpkg -l|grep python3) ]] && ${PACKAGE_MANAGER} install python3 -y
-        ${PACKAGE_MANAGER} install python3-distutils -y >/dev/null 2>&1
+        ${PACKAGE_MANAGER} install wget unzip git ntp ntpdate socat cron lsof -y
     fi
 
-    # 安装 pip依赖
-    python3 <(curl -sL https://bootstrap.pypa.io/get-pip.py)
+    #install python3 & pip3
+    bash <(curl -sL https://git.io/fhqMz)
+
     pip3 install pyopenssl
 }
 

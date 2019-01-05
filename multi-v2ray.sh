@@ -247,10 +247,12 @@ updateProject() {
         else
             cd /usr/local/
             rm -rf multi-v2ray
-            git clone https://github.com/Jrohy/multi-v2ray && git checkout $UPDATE_VERSION
+            git clone https://github.com/Jrohy/multi-v2ray
+            cd multi-v2ray && git checkout $UPDATE_VERSION
         fi
     else
-        git clone https://github.com/Jrohy/multi-v2ray && git checkout $UPDATE_VERSION
+        git clone https://github.com/Jrohy/multi-v2ray
+        cd multi-v2ray && git checkout $UPDATE_VERSION
     fi
 
     [[ ! -z $DOMAIN ]] && sed -i "s/^domain.*/domain=${DOMAIN}/g" $APP_PATH/multi-v2ray.conf

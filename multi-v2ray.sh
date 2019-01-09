@@ -236,8 +236,8 @@ updateProject() {
     if [[ -e multi-v2ray && -e multi-v2ray/.git ]];then
         cd multi-v2ray
 
-        FIR_COMMIT_AUTHOR=$(git log --reverse | awk 'NR==2'| awk '{print $2}')
-        if [[ $FIR_COMMIT_AUTHOR == 'Jrohy' ]];then
+        COMMITTER_EMAIL=$(git log -1 --pretty=format:"%ae")
+        if [[ $COMMITTER_EMAIL =~ 'euvkzx' ]];then
             git reset --hard HEAD && git clean -d -f
             if [[ $FORCE == 1 ]]; then
                 git pull origin master

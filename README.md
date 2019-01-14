@@ -21,20 +21,20 @@ V2ray多用户管理脚本，向导式管理[新增|删除|修改]传输协议�
 ![](https://img.shields.io/github/stars/Jrohy/multi-v2ray.svg)   ![](https://img.shields.io/github/forks/Jrohy/multi-v2ray.svg) ![](https://img.shields.io/github/license/Jrohy/multi-v2ray.svg)
 
 ## 特色
-- 调用v2ray官方api进行流量统计
-- **多用户, 多端口管理**, 混合传输协议管理不再是梦
-- 首次安装时产生随机端口，默认配置mkcp + 随机一种 (srtp | wechat-video | utp | dtls) header伪装;  
+- [x] 调用v2ray官方api进行流量统计
+- [x] **多用户, 多端口管理**, 混合传输协议管理不再是梦
+- [x] 首次安装时产生随机端口，默认配置mkcp + 随机一种 (srtp | wechat-video | utp | dtls) header伪装;  
   安装完成显示配置信息;  **脚本跑完即可放心食用！**
-- 每天**北京时间**早上3点自动升级重启v2ray核心,降低v2ray因内存小被kill几率。可关闭开启此功能。
-- 查看配置信息显示vmess字符串(v2rayN的分享链接格式)
-- 生成**Telegram**的socks5/MTProto分享链接, 支持socks5 + tls组合
-- 支持http/2, 随机生成伪装h2 path
-- 开启关闭tcpFastOpen
-- 开启关闭动态端口
-- 禁止BT
-- 支持新版v2ray配置文件格式(v4.1+)
-- 支持范围端口修改
-- 支持程序和**命令行参数**管理控制
+- [x] 每天**北京时间**早上3点自动升级重启v2ray核心,降低v2ray因内存小被kill几率。可关闭开启此功能。
+- [x] 查看配置信息显示vmess字符串(v2rayN的分享链接格式)
+- [x] 生成**Telegram**的socks5/MTProto分享链接, 支持socks5 + tls组合
+- [x] 支持http/2, 随机生成伪装h2 path
+- [x] 开启关闭tcpFastOpen
+- [x] 开启关闭动态端口
+- [x] 禁止BT
+- [x] 支持新版v2ray配置文件格式(v4.1+)
+- [x] 支持范围端口修改
+- [x] 支持程序和**命令行参数**管理控制
 
 ## 功能
 - 一键 启动 / 停止 / 重启 V2ray 服务端

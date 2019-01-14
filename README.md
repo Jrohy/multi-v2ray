@@ -18,6 +18,7 @@
 
 # multi-v2ray
 V2ray多用户管理脚本，向导式管理[新增|删除|修改]传输协议，享受V2ray的乐趣~  
+![](https://img.shields.io/github/stars/Jrohy/multi-v2ray.svg)   ![](https://img.shields.io/github/forks/Jrohy/multi-v2ray.svg) ![](https://img.shields.io/github/license/Jrohy/multi-v2ray.svg)
 
 ## 特色
 - 调用v2ray官方api进行流量统计

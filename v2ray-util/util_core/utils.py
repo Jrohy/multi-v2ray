@@ -188,7 +188,7 @@ def open_port():
     output_cmd = "iptables -I OUTPUT -p {0} --sport {1}"
     check_cmd = "iptables -nvL --line-number|grep -w \"%s\""
 
-    from loader import Loader
+    from .loader import Loader
 
     group_list = Loader().profile.group_list
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from ..loader import Loader
-from ..writer import GlobalWriter
+from ..util_core.loader import Loader
+from ..util_core.writer import GlobalWriter
 
 if __name__ == '__main__':
     loader = Loader()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from ..writer import GroupWriter
-from ..selector import GroupSelector
+from ..util_core.writer import GroupWriter
+from ..util_core.selector import GroupSelector
 
 gs = GroupSelector('修改动态端口')
 group = gs.group

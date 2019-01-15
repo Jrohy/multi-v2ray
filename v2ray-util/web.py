@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify, render_template
 from flask_httpauth import HTTPBasicAuth
 
 from .app import func_router
-from .config import Config
+from .util_core.config import Config
 
 config = Config()
 app = Flask(__name__, static_url_path='/static')

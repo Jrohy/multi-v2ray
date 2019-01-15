@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import os
-from ..writer import NodeWriter
-from ..selector import ClientSelector
-from ..utils import clean_iptables
+from ..util_core.writer import NodeWriter
+from ..util_core.selector import ClientSelector
+from ..util_core.utils import clean_iptables
 
 cs = ClientSelector('删除user')
 group = cs.group

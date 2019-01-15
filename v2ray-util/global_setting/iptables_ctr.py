@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 import os
 
-from ..loader import Loader
-from ..utils import ColorStr, calcul_iptables_traffic
+from ..util_core.loader import Loader
+from ..util_core.utils import ColorStr, calcul_iptables_traffic
 
 loader = Loader()
 

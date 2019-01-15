@@ -5,8 +5,8 @@ import configparser
 # ENV = 'dev'
 ENV = 'prod'
 
-DEV_FILE_PATH = 'multi-v2ray.conf'
-PROD_FILE_PATH = '/usr/local/multi-v2ray/multi-v2ray.conf'
+DEV_FILE_PATH = 'v2ray-util.cnf'
+PROD_FILE_PATH = 'v2ray-util.cnf'
 
 class Config:
 

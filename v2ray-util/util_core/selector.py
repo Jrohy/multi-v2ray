@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from .loader import Loader
-from .utils import ColorStr
+from loader import Loader
+from utils import ColorStr
 
 class CommonSelector:
     def __init__(self, collection, msg):

@@ -3,11 +3,11 @@
 import socket
 import os
 
-from ..writer import GroupWriter
-from ..group import Mtproto, SS
-from ..selector import GroupSelector
+from ..util_core.writer import GroupWriter
+from ..util_core.group import Mtproto, SS
+from ..util_core.selector import GroupSelector
 
-from ..utils import get_ip, get_domain_by_crt_file, gen_cert
+from ..util_core.utils import get_ip, get_domain_by_crt_file, gen_cert
 
 class TLSModifier:
     def __init__(self, group_tag, group_index):

@@ -3,10 +3,10 @@
 import os
 import json
 
-from .config import Config
-from .utils import get_ip
-from .group import Vmess, Socks, SS, Mtproto
-from .selector import ClientSelector
+from config import Config
+from utils import get_ip
+from group import Vmess, Socks, SS, Mtproto
+from selector import ClientSelector
 
 class ClientWriter:
     def __init__(self, group, client_index):

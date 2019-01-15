@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from ..group import Mtproto, SS
-from ..writer import GroupWriter
-from ..selector import GroupSelector
+from ..util_core.group import Mtproto, SS
+from ..util_core.writer import GroupWriter
+from ..util_core.selector import GroupSelector
 
 gs = GroupSelector('修改tcpFastOpen')
 group = gs.group

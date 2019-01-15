@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 import uuid
 
-from ..group import Vmess
-from ..writer import ClientWriter
-from ..selector import ClientSelector
+from ..util_core.group import Vmess
+from ..util_core.writer import ClientWriter
+from ..util_core.selector import ClientSelector
 
 cs = ClientSelector('修改uuid')
 group = cs.group

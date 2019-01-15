@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from ..group import Vmess
-from ..writer import ClientWriter
-from ..selector import ClientSelector
+from ..util_core.group import Vmess
+from ..util_core.writer import ClientWriter
+from ..util_core.selector import ClientSelector
 
 cs = ClientSelector('修改alterId')
 group = cs.group

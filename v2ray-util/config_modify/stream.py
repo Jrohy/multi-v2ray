@@ -3,10 +3,10 @@
 import random
 import string
 
-from ..writer import StreamWriter
-from ..selector import GroupSelector, CommonSelector
-from ..group import Mtproto, SS
-from ..utils import StreamType, header_type_list
+from ..util_core.writer import StreamWriter
+from ..util_core.selector import GroupSelector, CommonSelector
+from ..util_core.group import Mtproto, SS
+from ..util_core.utils import StreamType, header_type_list
 
 from ..config_modify.ss import SSFactory
 

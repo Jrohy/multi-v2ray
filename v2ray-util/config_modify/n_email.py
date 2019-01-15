@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from ..group import Socks
-from ..writer import ClientWriter
-from ..selector import ClientSelector
-from ..utils import is_email
+from ..util_core.group import Socks
+from ..util_core.writer import ClientWriter
+from ..util_core.selector import ClientSelector
+from ..util_core.utils import is_email
 
 cs = ClientSelector('修改email')
 group = cs.group

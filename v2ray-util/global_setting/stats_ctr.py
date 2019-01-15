@@ -3,9 +3,9 @@
 import os
 import re
 
-from ..loader import Loader
-from ..writer import GlobalWriter
-from ..utils import bytes_2_human_readable, ColorStr
+from ..util_core.loader import Loader
+from ..util_core.writer import GlobalWriter
+from ..util_core.utils import bytes_2_human_readable, ColorStr
 
 class StatsFactory:
     def __init__(self, door_port):

@@ -4,9 +4,9 @@ import json
 import os
 from flask import request, jsonify, Blueprint
 
-from .loader import Loader
-from .utils import ss_method, stream_list, StreamType
-from .writer import NodeWriter, GroupWriter, ClientWriter, GlobalWriter, StreamWriter
+from .util_core.loader import Loader
+from .util_core.utils import ss_method, stream_list, StreamType
+from .util_core.writer import NodeWriter, GroupWriter, ClientWriter, GlobalWriter, StreamWriter
 
 func_router = Blueprint('func_router', __name__)
 
@@ -105,7 +105,7 @@ def add_group():
         port = int(json_request['port'])
         stream_type = json_request['stream_type']
 
-        from utils import stream_list
+        from .util_core.utils import stream_list
         stream_list = stream_list()
         if stream_type not in [x.value for x in stream_list]:
             raise ValueError("stream_type {} not found".format(stream_type))

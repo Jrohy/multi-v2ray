@@ -121,6 +121,9 @@ removeV2Ray() {
     rm -rf /lib/systemd/system/v2ray.service  >/dev/null 2>&1
     rm -rf /etc/init.d/v2ray  >/dev/null 2>&1
 
+    #清理v2ray相关iptable规则
+    bash $APP_PATH/global_setting/clean_iptables.sh
+
     #卸载multi-v2ray
     rm -rf $APP_PATH >/dev/null 2>&1
     rm -rf /etc/bash_completion.d/v2ray.bash >/dev/null 2>&1

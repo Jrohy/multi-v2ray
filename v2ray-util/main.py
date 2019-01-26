@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import sys
+import os
 
 from .util_core.v2ray import V2ray
 from .util_core.utils import ColorStr
@@ -55,22 +56,78 @@ def user_manage():
     elif choice == 4:
         from .user_manage import del_port
 
-def main_menu():
-    print("")
-    print("欢迎使用 v2ray-util 管理程序")
-    show_text = ("1.服务管理", "2.用户管理", "3.更改配置", "4.查看配置", "5.全局功能", "6.更新V2Ray", "7.生成客户端配置文件")
+def profile_alter():
+    show_text = ("更改email", "更改UUID", "更改alterID", "更改主端口", "更改传输方式", "更改TLS设置", 
+                "更改tcpFastOpen设置", "更改动态端口", "更改Shadowsocks加密方式", "更改Shadowsocks密码")
     for index, text in enumerate(show_text): 
-        if index % 2 == 0:
-            print('{:<25}'.format(text), end="")   
-        else:
-            print(text)
+        print("{}.{}".format(index + 1, text))
     choice = loop_input_choice_number("请选择: ", len(show_text))
     if choice == 1:
-        service_manage()
+        from .profile_alter import n_email
     elif choice == 2:
-        user_manage()
+        from .profile_alter import n_uuid
+    elif choice == 3:
+        from .profile_alter import alterid
+    elif choice == 4:
+        from .profile_alter import port
+    elif choice == 5:
+        from .profile_alter import stream
+    elif choice == 6:
+        from .profile_alter import tls
+    elif choice == 7:
+        from .profile_alter import tfo
+    elif choice == 8:
+        from .profile_alter import dyn_port
+    elif choice == 9:
+        from .profile_alter import ss
+    elif choice == 10:
+        from .profile_alter import ss
+    V2ray.restart()
 
+def global_setting():
+    show_text = ("流量统计(v2ray)", "流量统计(iptables)", "禁止bittorrent", "定时更新V2ray", "清理v2ray日志", "脚本升级")
+    for index, text in enumerate(show_text): 
+        print("{}.{}".format(index + 1, text))
+    choice = loop_input_choice_number("请选择: ", len(show_text))
+    if choice == 1:
+        from .global_setting import stats_ctr
+    elif choice == 2:
+        from .global_setting import iptables_ctr
+    elif choice == 3:
+        from .global_setting import ban_bt
+    elif choice == 4:
+        os.system("bash global_setting/update_timer.sh")
+    elif choice == 5:
+        V2ray.cleanLog()
+    elif choice == 6:
+        pass
 
-    
+def main_menu():
+    while True:
+        print("")
+        print("欢迎使用 v2ray 管理程序")
+        show_text = ("1.服务管理", "2.用户管理", "3.更改配置", "4.查看配置", "5.全局功能", "6.更新V2Ray", "7.生成客户端配置文件")
+        for index, text in enumerate(show_text): 
+            if index % 2 == 0:
+                print('{:<25}'.format(text), end="")   
+            else:
+                print(text)
+        choice = loop_input_choice_number("请选择: ", len(show_text))
+        if choice == 1:
+            service_manage()
+        elif choice == 2:
+            user_manage()
+        elif choice == 3:
+            profile_alter()
+        elif choice == 4:
+            from .util_core.loader import Loader 
+            print(Loader().profile)
+        elif choice == 5:
+            global_setting()
+        elif choice == 6:
+            V2ray.update()
+        elif choice == 6:
+            from .util_core import client
+
 if __name__ == "__main__":
     main_menu()

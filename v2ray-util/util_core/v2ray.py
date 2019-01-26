@@ -32,6 +32,10 @@ class V2ray:
         os.system("service v2ray status")
 
     @staticmethod
+    def update():
+        os.system("bash <(curl -L -s https://install.direct/go.sh)")
+
+    @staticmethod
     def cleanLog():
         os.system("cat /dev/null > /var/log/v2ray/access.log")
         os.system("cat /dev/null > /var/log/v2ray/error.log")

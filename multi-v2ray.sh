@@ -24,6 +24,10 @@ UPDATE_VERSION=""
 
 APP_PATH="/usr/local/multi-v2ray"
 
+DEB_UPDATE=1
+
+IS_DEB=1
+
 #Centos 临时取消别名
 [[ -f /etc/redhat-release && -z $(echo $SHELL|grep zsh) ]] && unalias -a
 
@@ -134,7 +138,7 @@ removeV2Ray() {
     crontab crontab.txt >/dev/null 2>&1
     rm -f crontab.txt >/dev/null 2>&1
 
-    if [[ ${OS} == 'CentOS' || ${OS} == 'Fedora' ]];then
+    if [ $IS_DEB == 0 ];then
         service crond restart >/dev/null 2>&1
     else
         service cron restart >/dev/null 2>&1
@@ -161,6 +165,7 @@ checkSys() {
 
     #检查系统信息
     if [[ -e /etc/redhat-release ]];then
+        IS_DEB=0
         if [[ $(cat /etc/redhat-release | grep Fedora) ]];then
             OS='Fedora'
             PACKAGE_MANAGER='dnf'
@@ -178,15 +183,29 @@ checkSys() {
         colorEcho ${RED} "Not support OS, Please reinstall OS and retry!"
         exit 1
     fi
+
+    if type curl >/dev/null 2>&1;then
+        echo 'exists curl'
+    else
+        debUpdate
+        ${PACKAGE_MANAGER} install -y curl
+    fi
+}
+
+debUpdate(){
+    if [ $DEB_UPDATE == 1 ] && [ $IS_DEB == 1 ];then
+        ${PACKAGE_MANAGER} update
+        DEB_UPDATE=0
+    fi
 }
 
 #安装依赖
 installDependent(){
-    if [[ ${OS} == 'CentOS' || ${OS} == 'Fedora' ]];then
-        ${PACKAGE_MANAGER} install wget unzip git ntp ntpdate socat crontabs lsof -y
+    if [ $IS_DEB == 0 ];then
+        ${PACKAGE_MANAGER} install wget unzip git ntp ntpdate socat crontabs lsof iptables -y
     else
-        ${PACKAGE_MANAGER} update
-        ${PACKAGE_MANAGER} install wget unzip git ntp ntpdate socat cron lsof -y
+        debUpdate
+        ${PACKAGE_MANAGER} install wget unzip git ntp ntpdate socat cron lsof iptables -y
     fi
 
     #install python3 & pip3
@@ -216,7 +235,7 @@ planUpdate(){
 	echo "0 ${LOCAL_TIME} * * * bash <(curl -L -s https://install.direct/go.sh) | tee -a /root/v2rayUpdate.log && service v2ray restart" >> crontab.txt
 	crontab crontab.txt
 	sleep 1
-	if [[ ${OS} == 'CentOS' || ${OS} == 'Fedora' ]];then
+	if [ $IS_DEB == 0 ];then
         service crond restart
 	else
 		service cron restart
@@ -351,12 +370,13 @@ main() {
 
     [[ ${FORCE} == 1 ]] && colorEcho ${BLUE} "当前为强制更新模式, 会更新到master最新代码\n"
 
+    checkSys
+
     checkUpdate && [[ $IS_LATEST == 1 ]] && return
 
     [[ ${INSTARLL_WAY} == 0 ]] && colorEcho ${BLUE} "当前为全新安装\n"
 
     if [[ ${INSTARLL_WAY} != 2 ]];then 
-        checkSys
 
         installDependent
 

@@ -3,7 +3,7 @@
 import os
 import subprocess
 
-from utils import ColorStr
+from .utils import ColorStr
 
 class V2ray:
 

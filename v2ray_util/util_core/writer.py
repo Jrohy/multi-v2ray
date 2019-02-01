@@ -6,10 +6,10 @@ import random
 import string
 import uuid
 
-from config import Config
-from utils import port_is_use, StreamType
-from loader import Loader
-from group import Mtproto, Vmess, Socks
+from .config import Config
+from .utils import port_is_use, StreamType
+from .loader import Loader
+from .group import Mtproto, Vmess, Socks
 
 def clean_mtproto_tag(config, group_index):
     '''

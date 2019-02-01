@@ -3,7 +3,7 @@
 import json
 import base64
 
-from utils import ColorStr
+from .utils import ColorStr
 
 __author__ = 'Jrohy'
 

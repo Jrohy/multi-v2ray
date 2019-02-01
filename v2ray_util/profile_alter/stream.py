@@ -8,7 +8,7 @@ from ..util_core.selector import GroupSelector, CommonSelector
 from ..util_core.group import Mtproto, SS
 from ..util_core.utils import StreamType, header_type_list
 
-from ..config_modify.ss import SSFactory
+from .ss import SSFactory
 
 class StreamModifier:
     def __init__(self, group_tag='A', group_index=-1):

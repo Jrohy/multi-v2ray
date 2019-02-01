@@ -3,8 +3,8 @@
 import os
 import pickle
 
-from config import Config
-from profile import Profile
+from .config import Config
+from .profile import Profile
 
 class Loader:
     def __init__(self):

@@ -11,6 +11,7 @@ def loop_input_choice_number(input_tip, number_max):
     循环输入选择的序号,直到符合规定为止
     """
     while True:
+        print("")
         choice = input(input_tip)
         if not choice:
             sys.exit(0)
@@ -30,6 +31,7 @@ def parse_command(quality, mode, path, thread, verbose, url):
 
 def service_manage():
     show_text = ("启动服务", "停止服务", "重启服务", "运行状态")
+    print("")
     for index, text in enumerate(show_text): 
         print("{}.{}".format(index + 1, text))
     choice = loop_input_choice_number("请选择: ", len(show_text))
@@ -44,6 +46,7 @@ def service_manage():
 
 def user_manage():
     show_text = ("新增用户", "新增端口", "删除用户", "删除端口")
+    print("")
     for index, text in enumerate(show_text): 
         print("{}.{}".format(index + 1, text))
     choice = loop_input_choice_number("请选择: ", len(show_text))
@@ -59,6 +62,7 @@ def user_manage():
 def profile_alter():
     show_text = ("更改email", "更改UUID", "更改alterID", "更改主端口", "更改传输方式", "更改TLS设置", 
                 "更改tcpFastOpen设置", "更改动态端口", "更改Shadowsocks加密方式", "更改Shadowsocks密码")
+    print("")
     for index, text in enumerate(show_text): 
         print("{}.{}".format(index + 1, text))
     choice = loop_input_choice_number("请选择: ", len(show_text))
@@ -86,6 +90,7 @@ def profile_alter():
 
 def global_setting():
     show_text = ("流量统计(v2ray)", "流量统计(iptables)", "禁止bittorrent", "定时更新V2ray", "清理v2ray日志", "脚本升级")
+    print("")
     for index, text in enumerate(show_text): 
         print("{}.{}".format(index + 1, text))
     choice = loop_input_choice_number("请选择: ", len(show_text))
@@ -102,16 +107,19 @@ def global_setting():
     elif choice == 6:
         pass
 
-def main_menu():
+def menu():
     while True:
         print("")
-        print("欢迎使用 v2ray 管理程序")
+        print(ColorStr.cyan("欢迎使用 v2ray 管理程序"))
+        print("")
         show_text = ("1.服务管理", "2.用户管理", "3.更改配置", "4.查看配置", "5.全局功能", "6.更新V2Ray", "7.生成客户端配置文件")
         for index, text in enumerate(show_text): 
             if index % 2 == 0:
-                print('{:<25}'.format(text), end="")   
+                print('{:<20}'.format(text), end="")   
             else:
                 print(text)
+                print("")
+        print("")
         choice = loop_input_choice_number("请选择: ", len(show_text))
         if choice == 1:
             service_manage()
@@ -130,4 +138,4 @@ def main_menu():
             from .util_core import client
 
 if __name__ == "__main__":
-    main_menu()
+    menu()

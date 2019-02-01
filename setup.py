@@ -25,10 +25,11 @@ setup(
     zip_safe=True,
     install_requires=[
         'click',
+        'pyOpenSSL'
     ],
     entry_points={
         'console_scripts': [
-            'v2ray = v2ray-util.v2ray:main'
+            'v2ray = v2ray_util.main:menu'
         ]
     },
 )

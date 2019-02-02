@@ -42,7 +42,7 @@ class Writer:
         self.group_index = group_index
         self.group_tag = group_tag
         self.path = self.multi_config.get_path('config_path')
-        self.template_path = self.multi_config.get_path('template_path')
+        self.template_path = self.multi_config.json_path
         self.config = self.load(self.path)
         self.part_json = self.config["inbounds"][self.group_index]
 
@@ -211,7 +211,7 @@ class StreamWriter(Writer):
 
             # http2 tls的设置
             if security_backup != "tls" or not "certificates" in tls_settings_backup:
-                from .config_modify.tls import TLSModifier
+                from ..profile_alter.tls import TLSModifier
                 tm = TLSModifier(self.group_tag, self.group_index)
                 tm.turn_on()
                 return

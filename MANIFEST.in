@@ -1,0 +1,3 @@
+include README.rst
+include v2ray_util/json_template *.json
+include v2ray_util/util_core *.dat *.cfg

@@ -1,19 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import pkg_resources
 import configparser
 
-# ENV = 'dev'
 ENV = 'prod'
-
-DEV_FILE_PATH = 'v2ray-util.cnf'
-PROD_FILE_PATH = 'v2ray-util.cnf'
+CONF_FILE = 'util.cfg'
 
 class Config:
 
     def __init__(self):
-        #读取配置文件
-        self.config_path = eval('{}_FILE_PATH'.format(ENV.upper()))
         self.config = configparser.ConfigParser()
+        self.config_path = pkg_resources.resource_filename(__name__, CONF_FILE)
+        self.json_path = pkg_resources.resource_listdir('v2ray_util', "json_template")
         self.config.read(self.config_path)
 
     def get_path(self, key):

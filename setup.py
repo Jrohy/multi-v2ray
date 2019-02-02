@@ -2,19 +2,13 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup, find_packages
 
-"""
-打包的用的setup必须引入，
-"""
-
-VERSION = '3.0'
+import v2ray_util
 
 setup(
-    name='v2ray-util',
-    version=VERSION,
-    package_data={'danmufm': ['template/*', ]},
+    name='v2ray_util',
+    version=v2ray_util.__version__,
     description="a tool to manage v2ray config json",
-    long_description='just enjoy',
-    classifiers=[],  # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+    long_description=open('README.rst').read(),
     keywords='python v2ray multi-v2ray vmess socks5',
     author='Jrohy',
     author_email='euvkzx@gmail.com',
@@ -22,14 +16,25 @@ setup(
     license='GPL',
     packages=find_packages(),
     include_package_data=True,
-    zip_safe=True,
+    zip_safe=False,
+    python_requires='>=3',
     install_requires=[
         'click',
         'pyOpenSSL'
     ],
     entry_points={
         'console_scripts': [
-            'v2ray = v2ray_util.main:menu'
+            'v2ray_util = v2ray_util.main:menu'
         ]
     },
+    classifiers=[
+        'Topic :: Utilities',
+        'Development Status :: 5 - Production/Stable',
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+    ]
 )

@@ -52,6 +52,5 @@ class ConfigConverter:
             
         self.save()
 
-if __name__ == '__main__':
-    print("转换配置文件格式中..")
-    ConfigConverter().transform()
+print("转换配置文件格式中..")
+ConfigConverter().transform()

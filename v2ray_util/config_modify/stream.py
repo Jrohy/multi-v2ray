@@ -71,8 +71,7 @@ class StreamModifier:
         print("随机一种 (srtp | wechat-video | utp | dtls) header伪装, 当前生成 {} \n".format(kcp_list[choice - 4]))
         self.select(choice)
 
-if __name__ == '__main__':
-
+def modify():
     gs = GroupSelector('修改传输方式')
     group = gs.group
 

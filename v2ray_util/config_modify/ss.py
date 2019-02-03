@@ -32,17 +32,13 @@ class SSFactory:
             new_pass = random_pass
         return new_pass
 
-if __name__ == '__main__':
-
+def modify(alter_type='method'):
     # 外部传参来决定修改哪种, 默认修改method
-    choice = "method"
     correct_way = ("method", "password")
 
-    if len(sys.argv) > 1:
-        choice = sys.argv[1]
-        if choice not in correct_way:
-            print("传参有误!")
-            exit(-1)
+    if alter_type not in correct_way:
+        print("传参有误!")
+        exit(-1)
     else:
         print("请传以下参数来修改ss配置: {}". format(correct_way))
         exit(-1)
@@ -58,8 +54,8 @@ if __name__ == '__main__':
     else:
         sm = SSFactory()
         gw = GroupWriter(group.tag, group.index)
-        if choice == correct_way[0]:
+        if alter_type == correct_way[0]:
             gw.write_ss_method(sm.get_method())
-        elif choice == correct_way[1]:
+        elif alter_type == correct_way[1]:
             gw.write_ss_password(sm.get_password())
-        print("修改Shadowsocks {}成功!\n".format(choice))
+        print("修改Shadowsocks {}成功!\n".format(alter_type))

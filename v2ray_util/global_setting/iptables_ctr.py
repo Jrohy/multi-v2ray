@@ -32,6 +32,7 @@ def manage():
             port = input("请输入要重置流量的端口：")
             if port and port.isnumeric():
                 subprocess.call("bash {0} {1}".format(pkg_resources.resource_filename(__name__, "clean_traffic.sh"), str(port)), shell=True)
+                print(ColorStr.green("重置成功!"))
             else:
                 print(ColorStr.red("输入有误!"))
         else:

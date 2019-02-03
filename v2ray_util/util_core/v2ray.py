@@ -5,7 +5,7 @@ import uuid
 import random
 import subprocess
 import pkg_resources
-from .utils import ColorStr
+from .utils import ColorStr, open_port
 
 class V2ray:
 
@@ -13,6 +13,7 @@ class V2ray:
     def run(command, keyword):
         try:
             subprocess.check_output(command, shell=True)
+            open_port()
             print(ColorStr.green("v2ray {} success !".format(keyword)))
         except subprocess.CalledProcessError:
             print(ColorStr.red("v2ray {} fail !".format(keyword)))

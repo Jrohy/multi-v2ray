@@ -39,9 +39,6 @@ def modify(alter_type='method'):
     if alter_type not in correct_way:
         print("传参有误!")
         exit(-1)
-    else:
-        print("请传以下参数来修改ss配置: {}". format(correct_way))
-        exit(-1)
 
     gs = GroupSelector('修改SS')
     group = gs.group

@@ -93,6 +93,7 @@ def parse_arg():
             V2ray.restart()
         elif sys.argv[1] == "add":
             multiple.new_port()
+            open_port()
             V2ray.restart()
         elif sys.argv[1] == "update":
             V2ray.update()
@@ -129,6 +130,7 @@ def user_manage():
         multiple.new_user()
     elif choice == 2:
         multiple.new_port()
+        open_port()
     elif choice == 3:
         multiple.del_user()
     elif choice == 4:
@@ -150,6 +152,7 @@ def profile_alter():
         base.alterid()
     elif choice == 4:
         base.port()
+        open_port()
     elif choice == 5:
         stream.modify()
     elif choice == 6:

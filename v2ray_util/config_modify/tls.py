@@ -6,7 +6,6 @@ import os
 from ..util_core.writer import GroupWriter
 from ..util_core.group import Mtproto, SS
 from ..util_core.selector import GroupSelector
-
 from ..util_core.utils import get_ip, get_domain_by_crt_file, gen_cert
 
 class TLSModifier:
@@ -56,7 +55,7 @@ class TLSModifier:
     def turn_off(self):
         self.writer.write_tls(False)
 
-if __name__ == '__main__':
+def modify():
     gs = GroupSelector('修改TLS')
     group = gs.group
 

@@ -6,6 +6,7 @@ import os
 import urllib.request
 
 from .config import Config
+from .utils import ColorStr
 from .group import SS, Socks, Vmess, Mtproto, Quic, Group, Dyport
 
 class Stats:
@@ -37,6 +38,12 @@ class Profile:
 
         with open(self.path, 'r') as json_file:
             self.config = json.load(json_file)
+
+        if "inbounds" not in self.config:
+            import converter
+            self.modify_time = os.path.getmtime(self.path)
+            with open(self.path, 'r') as json_file:
+                self.config = json.load(json_file)
 
         #读取配置文件大框架
         conf_inbounds = self.config["inbounds"]
@@ -74,7 +81,11 @@ class Profile:
         
         protocol = part_json["protocol"]
 
-        if protocol == 'dokodemo-door' or (protocol == "vmess" and "streamSettings" not in part_json):
+        if protocol == 'dokodemo-door':
+            return
+
+        if protocol == "vmess" and "streamSettings" not in part_json:
+            print("v2ray 配置文件缺少streamSettings项, 请运行{}新建配置!".format(ColorStr.cyan("v2ray_util new")))
             return
 
         conf_settings = part_json["settings"]

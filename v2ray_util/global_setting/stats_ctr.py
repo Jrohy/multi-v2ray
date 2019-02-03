@@ -45,7 +45,7 @@ total: {2}
         )
 
 
-if __name__ == '__main__':
+def manage():
 
     RESTART_CMD = "service v2ray restart"
 

@@ -3,7 +3,7 @@
 from ..util_core.loader import Loader
 from ..util_core.writer import GlobalWriter
 
-if __name__ == '__main__':
+def manage():
     loader = Loader()
 
     profile = loader.profile

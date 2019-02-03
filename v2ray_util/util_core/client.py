@@ -11,11 +11,11 @@ from .selector import ClientSelector
 class ClientWriter:
     def __init__(self, group, client_index):
         self.config_factory = Config()
-        with open(self.config_factory.get_path("config_path"), 'r') as json_file:
+        with open(self.config_factory.get_path('config_path'), 'r') as json_file:
             self.config = json.load(json_file)
         
         self.write_path = self.config_factory.get_path("write_client_path")
-        self.template_path = self.config_factory.get_path("template_path")
+        self.template_path = self.config_factory.json_path
         self.group = group
         self.client_index = client_index
         self.node = group.node_list[client_index]
@@ -73,9 +73,8 @@ class ClientWriter:
             write_json_file.writelines(json_dump)
 
         print("保存成功！({})\n".format(self.write_path))
-        
 
-if __name__ == '__main__':
+def generate():
     cs = ClientSelector('生成客户端json')
     client_index = cs.client_index
     group = cs.group

@@ -19,7 +19,6 @@ setup(
     zip_safe=False,
     python_requires='>=3',
     install_requires=[
-        'click',
         'pyOpenSSL'
     ],
     entry_points={

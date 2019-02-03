@@ -10,7 +10,7 @@ class Loader:
     def __init__(self):
         config = Config()
         self.config_path = config.get_path("config_path")
-        self.path = config.get_path("data_path")
+        self.path = config.data_path
         self.profile = None
         self.load_profile()
 

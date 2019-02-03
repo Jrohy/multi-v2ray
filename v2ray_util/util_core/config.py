@@ -5,13 +5,15 @@ import configparser
 
 ENV = 'prod'
 CONF_FILE = 'util.cfg'
+DATA_FILE = 'util.dat'
 
 class Config:
 
     def __init__(self):
         self.config = configparser.ConfigParser()
         self.config_path = pkg_resources.resource_filename(__name__, CONF_FILE)
-        self.json_path = pkg_resources.resource_listdir('v2ray_util', "json_template")
+        self.data_path = pkg_resources.resource_filename('v2ray_util', DATA_FILE)
+        self.json_path = pkg_resources.resource_filename('v2ray_util', "json_template")
         self.config.read(self.config_path)
 
     def get_path(self, key):

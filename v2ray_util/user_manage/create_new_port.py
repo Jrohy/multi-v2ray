@@ -3,7 +3,7 @@
 import random
 import sys
 
-from ..config_modify.ss import SSFactory
+from ..profile_alter.ss import SSFactory
 from ..util_core.utils import StreamType, stream_list
 from ..util_core.writer import NodeWriter
 

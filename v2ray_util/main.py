@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import sys
-import os
+import subprocess
+import pkg_resources
 
 from .util_core.v2ray import V2ray
 from .util_core.utils import ColorStr
@@ -14,7 +15,7 @@ def loop_input_choice_number(input_tip, number_max):
         print("")
         choice = input(input_tip)
         if not choice:
-            sys.exit(0)
+            break
         if choice.isnumeric():
             choice = int(choice)
         else:
@@ -101,11 +102,11 @@ def global_setting():
     elif choice == 3:
         from .global_setting import ban_bt
     elif choice == 4:
-        os.system("bash global_setting/update_timer.sh")
+        subprocess.call("bash {0}".format(pkg_resources.resource_filename(__name__, "global_setting/update_timer.sh")), shell=True)
     elif choice == 5:
         V2ray.cleanLog()
     elif choice == 6:
-        pass
+        V2ray.update()
 
 def menu():
     while True:
@@ -136,6 +137,8 @@ def menu():
             V2ray.update()
         elif choice == 6:
             from .util_core import client
+        else:
+            break
 
 if __name__ == "__main__":
     menu()

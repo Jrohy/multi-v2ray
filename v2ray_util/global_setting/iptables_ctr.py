@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import os
+import subprocess
+import pkg_resources
 
 from ..util_core.loader import Loader
 from ..util_core.utils import ColorStr, calcul_iptables_traffic
@@ -12,6 +13,7 @@ profile = loader.profile
 group_list = profile.group_list
 
 while True:
+    print("")
     print("Iptables 端口流量统计")
     print("")
     print("1.查看流量统计\n")
@@ -28,7 +30,7 @@ while True:
     elif choice == "2":
         port = input("请输入要重置流量的端口：")
         if port and port.isnumeric():
-            os.system("bash /usr/local/multi-v2ray/global_setting/clean_traffic.sh {}".format(str(port)))
+            subprocess.call("bash {0} {1}".format(pkg_resources.resource_filename(__name__, "clean_traffic.sh"), str(port)), shell=True)
         else:
             print(ColorStr.red("输入有误!"))
     else:

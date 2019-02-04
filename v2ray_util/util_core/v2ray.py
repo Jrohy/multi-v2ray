@@ -60,7 +60,7 @@ class V2ray:
     def new(cls):
         subprocess.call("rm -rf /etc/v2ray/config.json && cp {}/server.json /etc/v2ray/config.json".format(pkg_resources.resource_filename('v2ray_util', "json_template")), shell=True)
         new_uuid = uuid.uuid1()
-        print("new UUID：{}".format(ColorStr.green(str(new_uuid))))
+        print("new UUID: {}".format(ColorStr.green(str(new_uuid))))
         random_port = random.randint(1000, 65535)
         print("new port: {}".format(ColorStr.green(str(random_port))))
         subprocess.call("sed -i \"s/cc4f8d5b-967b-4557-a4b6-bde92965bc27/{0}/g\" /etc/v2ray/config.json && sed -i \"s/999999999/{1}/g\" /etc/v2ray/config.json".format(new_uuid, random_port), shell=True)

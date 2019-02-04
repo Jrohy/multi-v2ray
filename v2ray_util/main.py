@@ -186,7 +186,7 @@ def menu():
     parse_arg()
     while True:
         print("")
-        print(ColorStr.cyan("Welcome use v2ray-util"))
+        print(ColorStr.cyan("Welcome to v2ray-util"))
         print("")
         show_text = ("1.V2ray Manage", "2.Group Manage", "3.Modify Config", "4.Check Config", "5.Global Setting", "6.Update V2Ray", "7.Generate Client Json")
         for index, text in enumerate(show_text): 

@@ -6,7 +6,7 @@ import sys
 from ..util_core.writer import NodeWriter, GroupWriter
 from ..util_core.group import Vmess, Socks, Mtproto, SS
 from ..util_core.selector import GroupSelector, ClientSelector
-from ..util_core.utils import StreamType, stream_list, is_email, clean_iptables
+from ..util_core.utils import StreamType, stream_list, is_email, clean_iptables, ColorStr
 
 def new_port(new_stream=None):
     info = dict()
@@ -33,10 +33,10 @@ def new_port(new_stream=None):
         salt_stream = [StreamType.KCP_DTLS, StreamType.KCP_WECHAT, StreamType.KCP_UTP, StreamType.KCP_SRTP]
         random.shuffle(salt_stream)
         stream = salt_stream[0]
-        print("random generate (srtp | wechat-video | utp | dtls) fake header, now use {} \n".format(stream.value))
+        print("random generate (srtp | wechat-video | utp | dtls) fake header, new protocol: {} \n".format(ColorStr.green(stream.value)))
 
     random_port = random.randint(1000, 65535)
-    new_port = input("random generate port {}, enter to use, or input customize port: ".format(random_port))
+    new_port = input("random generate port {}, enter to use, or input customize port: ".format(ColorStr.green(random_port)))
 
     if not new_port:
         new_port = str(random_port)

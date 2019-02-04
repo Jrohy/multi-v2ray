@@ -76,4 +76,4 @@ def modify():
         elif choice == '2':
             tm.turn_off()
         else:
-            print("input error, please try again!)
+            print("input error, please try again!")

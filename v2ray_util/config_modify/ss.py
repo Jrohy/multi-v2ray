@@ -14,20 +14,20 @@ class SSFactory:
         self.method_tuple = ss_method()
 
     def get_method(self):
-        print ("请选择shadowsocks的加密方式：")
+        print ("please select shadowsocks method:")
         for index, method in enumerate(self.method_tuple):
             print ("{}.{}".format(index + 1, method))
         choice = input()
         choice = int(choice)
         if choice < 0 or choice > len(self.method_tuple):
-            print("输入错误，请检查是否符合范围中")
+            print("input out of range!!")
             exit(-1)
         else:
             return self.method_tuple[choice - 1]
 
     def get_password(self):
         random_pass = ''.join(random.sample(string.ascii_letters + string.digits, 16))
-        new_pass =input("产生随机密码 {} , 回车直接使用该密码, 否则输入自定义密码: ".format(random_pass))
+        new_pass =input("random generate password {}, enter to use, or input customize password: ".format(random_pass))
         if not new_pass:
             new_pass = random_pass
         return new_pass
@@ -37,16 +37,16 @@ def modify(alter_type='method'):
     correct_way = ("method", "password")
 
     if alter_type not in correct_way:
-        print("传参有误!")
+        print("input error!")
         exit(-1)
 
-    gs = GroupSelector('修改SS')
+    gs = GroupSelector('modify SS')
     group = gs.group
 
     if group == None:
         exit(-1)
     elif type(group.node_list[0]) != SS:
-        print("\n当前选择组不是Shadowsocks协议!\n")
+        print("\nlocal group not Shadowsocks protocol!\n")
         exit(-1)
     else:
         sm = SSFactory()
@@ -55,4 +55,4 @@ def modify(alter_type='method'):
             gw.write_ss_method(sm.get_method())
         elif alter_type == correct_way[1]:
             gw.write_ss_password(sm.get_password())
-        print("修改Shadowsocks {}成功!\n".format(alter_type))
+        print("modify Shadowsocks {} success!\n".format(alter_type))

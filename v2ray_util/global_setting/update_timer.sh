@@ -43,7 +43,7 @@ planUpdate(){
     elif [ $LOCAL_TIME -ge 24 ];then
         LOCAL_TIME=$[$LOCAL_TIME-24]
     fi
-	colorEcho ${BLUE} "北京时间${BEIJING_UPDATE_TIME}点，VPS时间为${LOCAL_TIME}点\n"
+	colorEcho ${BLUE} "beijing time ${BEIJING_UPDATE_TIME}, VPS time: ${LOCAL_TIME}\n"
 
     OLD_CRONTAB=$(crontab -l)
     echo "SHELL=/bin/bash" >> crontab.txt
@@ -57,26 +57,26 @@ planUpdate(){
 		service cron restart
 	fi
 	rm -f crontab.txt
-	colorEcho ${GREEN} "成功配置每天北京时间${BEIJING_UPDATE_TIME}点自动升级V2ray内核任务\n"
+	colorEcho ${GREEN} "success open schedule update task: beijing time ${BEIJING_UPDATE_TIME}\n"
 }
 
-[[ -z $(crontab -l|grep v2ray) ]] && IS_OPEN="关闭" || IS_OPEN="开启"
+[[ -z $(crontab -l|grep v2ray) ]] && IS_OPEN="close" || IS_OPEN="open"
 
-echo -e "当前定时更新任务状态: ${IS_OPEN}\n" 
+echo -e "schedule update v2ray task: ${IS_OPEN}\n" 
 
 echo -e ""
-echo -e "1.开启定时更新任务\n"
-echo -e "2.关闭定时更新任务\n"
-echo -e "Tip: 开启定时更新v2ray的更新时间为每天北京时间3:00更新"
+echo -e "1.open schedule task\n"
+echo -e "2.close schedule task\n"
+echo -e "Tip: open schedule update v2ray at beijing 3:00"
 
 while :; do echo
-    read -n1 -p "请选择： " CHOICE
+    read -n1 -p "please select： " CHOICE
     if [[ ! $CHOICE =~ ^[1-2]$ ]]; then
         if [[ -z ${CHOICE} ]];then
             bash /usr/local/bin/v2ray
             exit 0
         fi
-        colorEcho ${RED} "输入错误! 请输入正确的数字!"
+        colorEcho ${RED} "input error, please input number!"
     else
         echo -e "\n"
         break
@@ -84,8 +84,8 @@ while :; do echo
 done
 
 if [[ ${CHOICE} == 1 ]]; then
-    if [[ ${IS_OPEN} == "开启" ]]; then
-        colorEcho ${YELLOW} "当前定时更新已开启,无需重复操作!\n"
+    if [[ ${IS_OPEN} == "open" ]]; then
+        colorEcho ${YELLOW} "have open schedule!\n"
         bash /usr/local/bin/v2ray
         exit 0
     fi
@@ -101,5 +101,5 @@ else
 	else
 		service cron restart >/dev/null 2>&1
 	fi
-    colorEcho ${GREEN} "成功关闭定时更新任务\n"
+    colorEcho ${GREEN} "close shedule task success\n"
 fi

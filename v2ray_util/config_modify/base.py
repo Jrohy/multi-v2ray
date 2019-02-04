@@ -5,7 +5,7 @@ from ..util_core.writer import ClientWriter, GroupWriter
 from ..util_core.selector import ClientSelector, GroupSelector
 
 def alterid():
-    cs = ClientSelector('修改alterId')
+    cs = ClientSelector('modify alterId')
     group = cs.group
 
     if group == None:
@@ -13,64 +13,64 @@ def alterid():
     else:
         client_index = cs.client_index
         if type(group.node_list[client_index]) == Vmess:
-            print("当前节点alterID: {}".format(group.node_list[client_index].alter_id))
-            new_alterid = input("请输入新的alterID: ")
+            print("node alterID: {}".format(group.node_list[client_index].alter_id))
+            new_alterid = input("please input new alterID: ")
             if (new_alterid.isnumeric()):
                 cw = ClientWriter(group.tag, group.index, client_index)
                 cw.write_aid(int(new_alterid))
-                print("alterID修改成功！")
+                print("alterID modify success！")
             else:
-                print ("输入错误，请检查是否为数字")
+                print ("input error, please check is number")
         else:
-            print("只有vmess协议才能修改alterId!")
+            print("only vmess protocol can modify alterId!")
 
 def dyn_port():
-    gs = GroupSelector('修改动态端口')
+    gs = GroupSelector('modify dyn_port')
     group = gs.group
 
     if group == None:
         pass
     else:
-        print('当前组的动态端口状态：{}'.format(group.dyp))
+        print('dyn_port status：{}'.format(group.dyp))
         gw = GroupWriter(group.tag, group.index)
         
-        choice = input("是否开启动态端口(y/n): ").lower()
+        choice = input("open/close dyn_port(y/n): ").lower()
 
         if choice == 'y':
-            newAlterId = input("请为动态端口设置alterID(默认32): ")
+            newAlterId = input("please input dyn_port alterID(default 32): ")
             newAlterId = '32' if newAlterId == '' else newAlterId
             if (newAlterId.isdecimal()):
                 gw.write_dyp(True, newAlterId)
-                print("\n成功开启动态端口!")
+                print("\nopen dyn_port success!")
             else:
-                print ("\n输入错误，请检查是否为数字")
+                print ("\ninput error, please check is number")
         elif choice == 'n':
             gw.write_dyp(False)
-            print("\n成功关闭动态端口!")
+            print("\nclose dyn_port success!")
         else:
-            print ("\n输入错误，请检查重新输入")
+            print ("\ninput error, please try again")
 
 def new_email():
-    cs = ClientSelector('修改email')
+    cs = ClientSelector('modify email')
     group = cs.group
 
     if group == None:
         pass
     elif type(group.node_list[0]) == Socks:
-        print("Socks5节点 不支持写入email!")
+        print("Socks5 don't support email!")
     else:
         client_index = cs.client_index
         group_list = cs.group_list
-        print ("当前节点email为：{}".format(group.node_list[client_index].user_info))
+        print ("node email：{}".format(group.node_list[client_index].user_info))
         email = ""
         while True:
             is_duplicate_email=False
-            email = input("请输入新的email地址: ")
+            email = input("please input new email: ")
             if email == "":
                 break
             from ..util_core.utils import is_email
             if not is_email(email):
-                print("不是合格的email格式，请重新输入")
+                print("not email, please input again")
                 continue
             
             for loop_group in group_list:
@@ -78,7 +78,7 @@ def new_email():
                     if node.user_info == None or node.user_info == '':
                         continue
                     elif node.user_info == email:
-                        print("已经有重复的email, 请重新输入")
+                        print("have same email, please input other")
                         is_duplicate_email = True
                         break              
             if not is_duplicate_email:
@@ -87,10 +87,10 @@ def new_email():
         if email != "":
             cw = ClientWriter(group.tag, group.index, client_index)
             cw.write_email(email)
-            print("修改email成功!")
+            print("modify email success!")
 
 def new_uuid():
-    cs = ClientSelector('修改uuid')
+    cs = ClientSelector('modify uuid')
     group = cs.group
 
     if group == None:
@@ -98,22 +98,22 @@ def new_uuid():
     else:
         client_index = cs.client_index
         if type(group.node_list[client_index]) == Vmess:
-            print("当前节点UUID为：{}".format(group.node_list[client_index].password))
-            choice = input("是否要随机生成一个新的UUID (y/n)：").lower()
+            print("node UUID：{}".format(group.node_list[client_index].password))
+            choice = input("get new UUID?(y/n)：").lower()
             if choice == "y":
                 import uuid
                 new_uuid = uuid.uuid1()
-                print("新的UUID为：{}".format(new_uuid))
+                print("new UUID: {}".format(new_uuid))
                 cw = ClientWriter(group.tag, group.index, client_index)
                 cw.write_uuid(new_uuid)
-                print("UUID修改成功！")
+                print("UUID modify success！")
             else:
-                print("已取消生成新的UUID,未执行任何操作")
+                print("undo modify")
         else:
-            print("只有vmess协议才能修改uuid!")
+            print("only vmess protocol can modify uuid!")
 
 def port():
-    gs = GroupSelector('修改port')
+    gs = GroupSelector('modify port')
     group = gs.group
 
     if group == None:
@@ -123,33 +123,33 @@ def port():
             port_info = "{0}-{1}".format(group.port, group.end_port)
         else:
             port_info = group.port
-        print('当前组的端口信息为：{}'.format(port_info))
-        new_port_info = input("请输入新端口(支持输入端口范围, 用'-'隔开, 表示该范围的全部端口生效)：")
+        print('group port：{}'.format(port_info))
+        new_port_info = input("please input new port(support range port(use '-' as separator), all range port can effect)：")
         import re
         if new_port_info.isdecimal() or re.match(r'^\d+\-\d+$', new_port_info):
             gw = GroupWriter(group.tag, group.index)
             gw.write_port(new_port_info)
-            print('端口修改成功！')
+            print('port modify success！')
         else:
-            print("输入错误!")
+            print("input error!")
 
 def tfo():
-    gs = GroupSelector('修改tcpFastOpen')
+    gs = GroupSelector('modify tcpFastOpen')
     group = gs.group
 
     if group == None:
         exit(-1)
     else:
         if type(group.node_list[0]) == Mtproto or type(group.node_list[0]) == SS:
-            print("\nv2ray MTProto/Shadowsocks协议不支持配置tcpFastOpen!!!\n")
+            print("\nv2ray MTProto/Shadowsocks don't support tcpFastOpen!!!\n")
             exit(-1)
         
-        print('当前组的tcpFastOpen状态：{}'.format(group.tfo))
+        print('group tcpFastOpen：{}'.format(group.tfo))
         print("")
-        print("1.开启TFO(强制开启)")
-        print("2.关闭TFO(强制关闭)")
-        print("3.删除TFO(使用系统默认设置)")
-        choice = input("请输入数字选择功能：")
+        print("1.open TFO(force open)")
+        print("2.close TFO(force close)")
+        print("3.delete TFO(use system default profile)")
+        choice = input("please select：")
         
         gw = GroupWriter(group.tag, group.index)
         if choice == "1":
@@ -159,4 +159,4 @@ def tfo():
         elif choice == "3":
             gw.write_tfo('del')
         else:
-            print("输入错误，请重试！")
+            print("input error, please try again!")

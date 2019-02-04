@@ -52,5 +52,5 @@ class ConfigConverter:
             
         self.save()
 
-print("转换配置文件格式中..")
+print("tranfrom to v2ray new version json..")
 ConfigConverter().transform()

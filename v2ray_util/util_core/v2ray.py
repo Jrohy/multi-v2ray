@@ -35,24 +35,24 @@ class V2ray:
     def cleanLog():
         subprocess.call("cat /dev/null > /var/log/v2ray/access.log", shell=True)
         subprocess.call("cat /dev/null > /var/log/v2ray/error.log", shell=True)
-        print(ColorStr.green("清理v2ray日志成功!\n"))
+        print(ColorStr.green("clean v2ray log success!\n"))
 
     @classmethod
     def restart(cls):
-        cls.run("service v2ray restart", "重启")
+        cls.run("service v2ray restart", "restart")
 
     @classmethod
     def start(cls):
-        cls.run("service v2ray start", "启动")
+        cls.run("service v2ray start", "start")
 
     @classmethod
     def stop(cls):
-        cls.run("service v2ray stop", "停止")
+        cls.run("service v2ray stop", "stop")
 
     @classmethod
     def check(cls):
         if not os.path.exists("/usr/bin/v2ray/v2ray"):
-            print(ColorStr.yellow("检测到v2ray未安装, 正在自动安装.."))
+            print(ColorStr.yellow("check v2ray no install, auto install v2ray.."))
             cls.update()
             cls.new()
 
@@ -60,9 +60,9 @@ class V2ray:
     def new(cls):
         subprocess.call("rm -rf /etc/v2ray/config.json && cp {}/server.json /etc/v2ray/config.json".format(pkg_resources.resource_filename('v2ray_util', "json_template")), shell=True)
         new_uuid = uuid.uuid1()
-        print("新的UUID为：{}".format(ColorStr.green(str(new_uuid))))
+        print("new UUID：{}".format(ColorStr.green(str(new_uuid))))
         random_port = random.randint(1000, 65535)
-        print("产生随机端口: {}".format(ColorStr.green(str(random_port))))
+        print("new port: {}".format(ColorStr.green(str(random_port))))
         subprocess.call("sed -i \"s/cc4f8d5b-967b-4557-a4b6-bde92965bc27/{0}/g\" /etc/v2ray/config.json && sed -i \"s/999999999/{1}/g\" /etc/v2ray/config.json".format(new_uuid, random_port), shell=True)
         from ..config_modify import stream
         stream.StreamModifier().random_kcp()

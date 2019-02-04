@@ -49,7 +49,7 @@ class ClientWriter:
             user_json["password"] = self.node.password
 
         elif type(self.node) == Mtproto:
-            print("\nMTProto协议只支持Telegram通信, 所以无法生成配置文件!\n")
+            print("\nMTProto protocol only use Telegram, and can't generate client json!\n")
             exit(-1)
 
         user_json["port"] = int(self.group.port)
@@ -72,10 +72,10 @@ class ClientWriter:
         with open(self.write_path, 'w') as write_json_file:
             write_json_file.writelines(json_dump)
 
-        print("保存成功！({})\n".format(self.write_path))
+        print("save json success！({})\n".format(self.write_path))
 
 def generate():
-    cs = ClientSelector('生成客户端json')
+    cs = ClientSelector('generate client json')
     client_index = cs.client_index
     group = cs.group
 

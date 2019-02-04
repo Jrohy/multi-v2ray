@@ -13,7 +13,7 @@ class Dyport:
         self.aid = aid
 
     def __str__(self):
-        return "开启,alterId为{}".format(self.aid) if self.status else "关闭"
+        return "open,alterId为{}".format(self.aid) if self.status else "close"
 
 class Quic:
     def __init__(self, security="none", key="", header="none"):
@@ -74,7 +74,7 @@ class Socks(User):
 
     def link(self, ip, port, tls):
         if tls == "tls":
-            return ColorStr.red("HTTPS的Socks5不支持tg的分享连接. 请自行配合设置BifrostV等软件使用")
+            return ColorStr.red("HTTPS Socks5 don't support telegram share link")
         else:
             return ColorStr.green("tg://socks?server={0}&port={1}&user={2}&pass={3}".format(ip, port, self.user_info, self.password))
 
@@ -154,7 +154,7 @@ class Group:
         self.index = index
 
     def show_node(self, index):
-        tls = "开启" if self.tls == "tls" else "关闭"
+        tls = "open" if self.tls == "tls" else "close"
         tfo = "TcpFastOpen: {}".format(self.tfo) if self.tfo != None else ""
         dyp = "DynamicPort: {}".format(self.dyp) if self.dyp.status else ""
         port_way = "-{}".format(self.end_port) if self.end_port else ""
@@ -173,7 +173,7 @@ TLS: {tls}
 
     # print一个实例打印的字符串
     def __str__(self):
-        tls = "开启" if self.tls == "tls" else "关闭"
+        tls = "open" if self.tls == "tls" else "close"
         tfo = "TcpFastOpen: {}".format(self.tfo) if self.tfo != None else ""
         dyp = "DynamicPort: {}".format(self.dyp) if self.dyp.status else ""
         port_way = "-{}".format(self.end_port) if self.end_port else ""

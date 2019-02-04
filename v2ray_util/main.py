@@ -21,39 +21,35 @@ def loop_input_choice_number(input_tip, number_max):
         if choice.isnumeric():
             choice = int(choice)
         else:
-            print(ColorStr.red("输入有误,请重新输入"))
+            print(ColorStr.red("input error, please input again"))
             continue
         if (choice <= number_max and choice > 0):
             return choice
         else:
-            print(ColorStr.red("输入有误,请重新输入"))
+            print(ColorStr.red("input error, please input again"))
 
 def help():
+    exec_name = sys.argv[0]
     print("""
-v2ray [-h|--help] [-v|--version] [options]
-    -h, --help           查看帮助
-    -v, --version        查看版本信息
-    start                启动 V2Ray
-    stop                 停止 V2Ray
-    restart              重启 V2Ray
-    status               查看 V2Ray 运行状态
-    new                  新建全新配置
-    update               更新 V2Ray 到最新Release版本
-    update [version]     更新 V2Ray 到特定版本
-    update.sh            更新 multi-v2ray
-    update.sh [version]  更新 multi-v2ray 到特定版本
-    add                  新增mkcp + 随机一种 (srtp | wechat-video | utp | dtls) header伪装的端口(Group)
-    add [wechat|utp|srtp|dtls|wireguard|socks|mtproto|ss]     新增一种协议的组，端口随机,如 v2ray add utp 为新增utp协议
-    del                  删除端口组
-    info                 查看配置
-    port                 修改端口
-    tls                  修改tls
-    tfo                  修改tcpFastOpen
-    stream               修改传输协议
-    stats                iptables流量统计
-    clean                清理日志
-    更多功能 请输入 v2ray 回车进入服务管理程序
-    """)
+{0} [-h|--help] [-v|--version] [options]
+    -h, --help           get help
+    start                start V2Ray
+    stop                 stop V2Ray
+    restart              restart V2Ray
+    status               check V2Ray status
+    new                  create new json profile
+    update               update v2ray to latest
+    add                  random create mkcp + (srtp | wechat-video | utp | dtls) fake header group
+    add [wechat|utp|srtp|dtls|wireguard|socks|mtproto|ss]     create special protocol, random new port
+    del                  delete port group
+    info                 check v2ray profile
+    port                 modify port
+    tls                  modify tls
+    tfo                  modify tcpFastOpen
+    stream               modify protocol
+    stats                iptables traffic statistics
+    clean                clean v2ray log
+    """.format(exec_name[exec_name.rfind("/") + 1:]))
 
 def parse_arg():
     if len(sys.argv) == 1:
@@ -106,11 +102,11 @@ def parse_arg():
     sys.exit(0)
 
 def service_manage():
-    show_text = ("启动服务", "停止服务", "重启服务", "运行状态")
+    show_text = ("start v2ray", "stop v2ray", "restart v2ray", "v2ray status")
     print("")
     for index, text in enumerate(show_text): 
         print("{}.{}".format(index + 1, text))
-    choice = loop_input_choice_number("请选择: ", len(show_text))
+    choice = loop_input_choice_number("please select: ", len(show_text))
     if choice == 1:
         V2ray.start()
     elif choice == 2:
@@ -121,11 +117,11 @@ def service_manage():
         V2ray.status()
 
 def user_manage():
-    show_text = ("新增用户", "新增端口", "删除用户", "删除端口")
+    show_text = ("add user", "add port", "del user", "del port")
     print("")
     for index, text in enumerate(show_text): 
         print("{}.{}".format(index + 1, text))
-    choice = loop_input_choice_number("请选择: ", len(show_text))
+    choice = loop_input_choice_number("please select: ", len(show_text))
     if choice == 1:
         multiple.new_user()
     elif choice == 2:
@@ -138,12 +134,12 @@ def user_manage():
     V2ray.restart()
 
 def profile_alter():
-    show_text = ("更改email", "更改UUID", "更改alterID", "更改主端口", "更改传输方式", "更改TLS设置", 
-                "更改tcpFastOpen设置", "更改动态端口", "更改Shadowsocks加密方式", "更改Shadowsocks密码")
+    show_text = ("email", "UUID", "alterID", "port", "stream", "tls", 
+                "tcpFastOpen", "dyn_port", "shadowsocks method", "shadowsocks password")
     print("")
     for index, text in enumerate(show_text): 
         print("{}.{}".format(index + 1, text))
-    choice = loop_input_choice_number("请选择: ", len(show_text))
+    choice = loop_input_choice_number("please select: ", len(show_text))
     if choice == 1:
         base.new_email()
     elif choice == 2:
@@ -168,32 +164,31 @@ def profile_alter():
     V2ray.restart()
 
 def global_setting():
-    show_text = ("流量统计(v2ray)", "流量统计(iptables)", "禁止bittorrent", "定时更新V2ray", "清理v2ray日志", "脚本升级")
+    show_text = ("V2ray Traffic Statistics", "Iptables Traffic Statistics", "Ban Bittorrent", "Schedule Update V2ray", "Clean Log")
     print("")
     for index, text in enumerate(show_text): 
         print("{}.{}".format(index + 1, text))
-    choice = loop_input_choice_number("请选择: ", len(show_text))
+    choice = loop_input_choice_number("please select: ", len(show_text))
     if choice == 1:
         stats_ctr.manage()
     elif choice == 2:
         iptables_ctr.manage()
     elif choice == 3:
         ban_bt.manage()
+        V2ray.restart()
     elif choice == 4:
         subprocess.call("bash {0}".format(pkg_resources.resource_filename(__name__, "global_setting/update_timer.sh")), shell=True)
     elif choice == 5:
         V2ray.cleanLog()
-    elif choice == 6:
-        V2ray.update()
 
 def menu():
     V2ray.check()
     parse_arg()
     while True:
         print("")
-        print(ColorStr.cyan("欢迎使用 v2ray 管理程序"))
+        print(ColorStr.cyan("Welcome use v2ray-util"))
         print("")
-        show_text = ("1.服务管理", "2.用户管理", "3.更改配置", "4.查看配置", "5.全局功能", "6.更新V2Ray", "7.生成客户端配置文件")
+        show_text = ("1.V2ray Manage", "2.Group Manage", "3.Modify Config", "4.Check Config", "5.Global Setting", "6.Update V2Ray", "7.Generate Client Json")
         for index, text in enumerate(show_text): 
             if index % 2 == 0:
                 print('{:<20}'.format(text), end="")   
@@ -201,7 +196,7 @@ def menu():
                 print(text)
                 print("")
         print("")
-        choice = loop_input_choice_number("请选择: ", len(show_text))
+        choice = loop_input_choice_number("please select: ", len(show_text))
         if choice == 1:
             service_manage()
         elif choice == 2:

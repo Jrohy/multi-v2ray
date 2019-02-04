@@ -211,7 +211,7 @@ class StreamWriter(Writer):
 
             # http2 tls的设置
             if security_backup != "tls" or not "certificates" in tls_settings_backup:
-                from ..profile_alter.tls import TLSModifier
+                from ..config_modify.tls import TLSModifier
                 tm = TLSModifier(self.group_tag, self.group_index)
                 tm.turn_on()
                 return
@@ -279,8 +279,8 @@ class GroupWriter(Writer):
             Config().set_data("domain", domain)
         else:
             if self.part_json["streamSettings"]["network"] == StreamType.H2.value:
-                print("关闭tls同时也会关闭HTTP/2！\n")
-                print("已重置为kcp传输方式, 若要其他方式请自行切换")
+                print("close tls will also close HTTP/2！\n")
+                print("already reset protocol to origin kcp")
                 self.part_json["streamSettings"] = self.load_template('kcp.json')
             else:
                 self.part_json["streamSettings"]["security"] = "none"
@@ -439,7 +439,7 @@ class NodeWriter(Writer):
         new_inbound["port"] = int(newPort)
         new_inbound["settings"]["clients"][0]["id"] = str(uuid.uuid1())
         self.config["inbounds"].append(new_inbound)
-        print("新增端口组成功!")
+        print("add port group success!")
         self.save()
 
         reload_data = Loader()
@@ -454,7 +454,7 @@ class NodeWriter(Writer):
         if self.part_json['protocol'] == 'socks':
             user = {"user": kw["user"], "pass": kw["pass"]}
             self.part_json["settings"]["accounts"].append(user)
-            print("新建Socks5用户成功! user: %s, pass: %s" % (kw["user"], kw["pass"]))
+            print("add socks5 user success! user: %s, pass: %s" % (kw["user"], kw["pass"]))
         
         elif self.part_json['protocol'] == 'vmess' :
             new_uuid = uuid.uuid1()
@@ -468,7 +468,7 @@ class NodeWriter(Writer):
                 email_info = ", email: " + kw["email"]
             user["id"]=str(new_uuid)
             self.part_json["settings"]["clients"].append(user)
-            print("新建用户成功! uuid: %s, alterId: 32%s" % (str(new_uuid), email_info))
+            print("add user success! uuid: %s, alterId: 32%s" % (str(new_uuid), email_info))
 
         self.save()
 
@@ -482,12 +482,12 @@ class NodeWriter(Writer):
             client_str = 'clients' if type(node) == Vmess else 'accounts'
             del self.config["inbounds"][group.index]["settings"][client_str][client_index]
 
-        print("删除用户成功!")
+        print("del user success!")
         self.save()
 
     def del_port(self, group):
         if type(group.node_list[0]) == Mtproto:
             clean_mtproto_tag(self.config, group.index)
         del self.config["inbounds"][group.index]
-        print("删除端口成功!")
+        print("del port success!")
         self.save()

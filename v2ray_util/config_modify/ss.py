@@ -7,7 +7,7 @@ import sys
 from ..util_core.group import SS
 from ..util_core.writer import GroupWriter
 from ..util_core.selector import GroupSelector
-from ..util_core.utils import ss_method
+from ..util_core.utils import ss_method, ColorStr
 
 class SSFactory:
     def __init__(self):
@@ -27,7 +27,7 @@ class SSFactory:
 
     def get_password(self):
         random_pass = ''.join(random.sample(string.ascii_letters + string.digits, 16))
-        new_pass =input("random generate password {}, enter to use, or input customize password: ".format(random_pass))
+        new_pass =input("random generate password {}, enter to use, or input customize password: ".format(ColorStr.green(random_pass)))
         if not new_pass:
             new_pass = random_pass
         return new_pass

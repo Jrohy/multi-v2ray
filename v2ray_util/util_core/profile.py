@@ -74,6 +74,9 @@ class Profile:
                 group.tag = chr(group_ascii)
                 self.group_list.append(group)
         
+        if len(self.group_list) == 0:
+            print("v2ray json no streamSettings item, please run {} to recreate v2ray json!".format(ColorStr.cyan("v2ray_util new")))
+
         del self.config
 
     def parse_group(self, part_json, group_index, local_ip):
@@ -81,11 +84,7 @@ class Profile:
         
         protocol = part_json["protocol"]
 
-        if protocol == 'dokodemo-door':
-            return
-
-        if protocol == "vmess" and "streamSettings" not in part_json:
-            print("v2ray json no streamSettings item, please run {} to recreate v2ray json!".format(ColorStr.cyan("v2ray_util new")))
+        if protocol == 'dokodemo-door' or (protocol == "vmess" and "streamSettings" not in part_json):
             return
 
         conf_settings = part_json["settings"]

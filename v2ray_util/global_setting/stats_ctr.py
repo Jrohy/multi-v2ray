@@ -69,7 +69,7 @@ def manage():
         print("4.reset statistics\n")
         print("tip: only have email node can statistics, restart v2ray will reset traffic statistics!!!\n")
 
-        choice = input("please select：")
+        choice = input("please select: ")
         if choice == "1":
             if os.popen(FIND_V2RAY_CRONTAB_CMD).readlines():
                 rchoice = input("open traffic statistics will close schedule update v2ray, continue?(y/n): ")

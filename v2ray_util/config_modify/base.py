@@ -18,7 +18,7 @@ def alterid():
             if (new_alterid.isnumeric()):
                 cw = ClientWriter(group.tag, group.index, client_index)
                 cw.write_aid(int(new_alterid))
-                print("alterID modify success！")
+                print("alterID modify success!")
             else:
                 print ("input error, please check is number")
         else:
@@ -31,7 +31,7 @@ def dyn_port():
     if group == None:
         pass
     else:
-        print('dyn_port status：{}'.format(group.dyp))
+        print('dyn_port status: {}'.format(group.dyp))
         gw = GroupWriter(group.tag, group.index)
         
         choice = input("open/close dyn_port(y/n): ").lower()
@@ -61,7 +61,7 @@ def new_email():
     else:
         client_index = cs.client_index
         group_list = cs.group_list
-        print ("node email：{}".format(group.node_list[client_index].user_info))
+        print ("node email: {}".format(group.node_list[client_index].user_info))
         email = ""
         while True:
             is_duplicate_email=False
@@ -98,15 +98,15 @@ def new_uuid():
     else:
         client_index = cs.client_index
         if type(group.node_list[client_index]) == Vmess:
-            print("node UUID：{}".format(group.node_list[client_index].password))
-            choice = input("get new UUID?(y/n)：").lower()
+            print("node UUID: {}".format(group.node_list[client_index].password))
+            choice = input("get new UUID?(y/n): ").lower()
             if choice == "y":
                 import uuid
                 new_uuid = uuid.uuid1()
                 print("new UUID: {}".format(new_uuid))
                 cw = ClientWriter(group.tag, group.index, client_index)
                 cw.write_uuid(new_uuid)
-                print("UUID modify success！")
+                print("UUID modify success!")
             else:
                 print("undo modify")
         else:
@@ -123,13 +123,13 @@ def port():
             port_info = "{0}-{1}".format(group.port, group.end_port)
         else:
             port_info = group.port
-        print('group port：{}'.format(port_info))
-        new_port_info = input("please input new port(support range port(use '-' as separator), all range port can effect)：")
+        print('group port: {}'.format(port_info))
+        new_port_info = input("please input new port(support range port(use '-' as separator), all range port can effect):")
         import re
         if new_port_info.isdecimal() or re.match(r'^\d+\-\d+$', new_port_info):
             gw = GroupWriter(group.tag, group.index)
             gw.write_port(new_port_info)
-            print('port modify success！')
+            print('port modify success!')
         else:
             print("input error!")
 
@@ -144,12 +144,12 @@ def tfo():
             print("\nv2ray MTProto/Shadowsocks don't support tcpFastOpen!!!\n")
             exit(-1)
         
-        print('group tcpFastOpen：{}'.format(group.tfo))
+        print('group tcpFastOpen: {}'.format(group.tfo))
         print("")
         print("1.open TFO(force open)")
         print("2.close TFO(force close)")
         print("3.delete TFO(use system default profile)")
-        choice = input("please select：")
+        choice = input("please select: ")
         
         gw = GroupWriter(group.tag, group.index)
         if choice == "1":

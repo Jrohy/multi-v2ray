@@ -3,7 +3,6 @@
 import pkg_resources
 import configparser
 
-ENV = 'prod'
 CONF_FILE = 'util.cfg'
 DATA_FILE = 'util.dat'
 
@@ -17,7 +16,7 @@ class Config:
         self.config.read(self.config_path)
 
     def get_path(self, key):
-        return self.config.get('{}-path'.format(ENV), key)
+        return self.config.get('path', key)
 
     def get_web(self, key):
         return self.config.get('web', key)

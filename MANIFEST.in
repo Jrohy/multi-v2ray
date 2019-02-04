@@ -1,3 +1,5 @@
 include README.rst
-include v2ray_util/json_template *.json
-include v2ray_util/util_core *.dat *.cfg
+include v2ray_util/util_core/util.dat
+include v2ray_util/util_core/util.cfg
+recursive-include v2ray_util/json_template *.json
+recursive-include v2ray_util/global_setting *.sh

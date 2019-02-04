@@ -72,7 +72,7 @@ class ClientWriter:
         with open(self.write_path, 'w') as write_json_file:
             write_json_file.writelines(json_dump)
 
-        print("save json success！({})\n".format(self.write_path))
+        print("save json success!({})\n".format(self.write_path))
 
 def generate():
     cs = ClientSelector('generate client json')

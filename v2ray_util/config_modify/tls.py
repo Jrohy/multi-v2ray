@@ -18,8 +18,8 @@ class TLSModifier:
         choice=input("please select: ")
         if choice == "1":
             local_ip = get_ip()
-            print("local vps ip address：" + local_ip + "\n")
-            input_domain=input("please input your vps domain：")
+            print("local vps ip address: " + local_ip + "\n")
+            input_domain=input("please input your vps domain: ")
             try:
                 input_ip = socket.gethostbyname(input_domain)
             except Exception:
@@ -66,11 +66,11 @@ def modify():
             exit(-1)
         tm = TLSModifier(group.tag, group.index)
         tls_status = 'open' if group.tls == 'tls' else 'close'
-        print("group tls status：{}\n".format(tls_status))
+        print("group tls status: {}\n".format(tls_status))
         print("")
         print("1.open TLS")
         print("2.close TLS")
-        choice = input("please select：")
+        choice = input("please select: ")
         if choice == '1':
             tm.turn_on()
         elif choice == '2':

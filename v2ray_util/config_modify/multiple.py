@@ -36,7 +36,7 @@ def new_port(new_stream=None):
         print("random generate (srtp | wechat-video | utp | dtls) fake header, new protocol: {} \n".format(ColorStr.green(stream.value)))
 
     random_port = random.randint(1000, 65535)
-    new_port = input("random generate port {}, enter to use, or input customize port: ".format(ColorStr.green(random_port)))
+    new_port = input("random generate port {}, enter to use, or input customize port: ".format(ColorStr.green(str(random_port))))
 
     if not new_port:
         new_port = str(random_port)

@@ -279,7 +279,7 @@ class GroupWriter(Writer):
             Config().set_data("domain", domain)
         else:
             if self.part_json["streamSettings"]["network"] == StreamType.H2.value:
-                print("close tls will also close HTTP/2！\n")
+                print("close tls will also close HTTP/2!\n")
                 print("already reset protocol to origin kcp")
                 self.part_json["streamSettings"] = self.load_template('kcp.json')
             else:

@@ -70,7 +70,7 @@ echo -e "2.close schedule task\n"
 echo -e "Tip: open schedule update v2ray at beijing 3:00"
 
 while :; do echo
-    read -n1 -p "please select： " CHOICE
+    read -n1 -p "please select: " CHOICE
     if [[ ! $CHOICE =~ ^[1-2]$ ]]; then
         if [[ -z ${CHOICE} ]];then
             bash /usr/local/bin/v2ray

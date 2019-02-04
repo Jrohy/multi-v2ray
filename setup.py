@@ -4,11 +4,15 @@ from setuptools import setup, find_packages
 
 import v2ray_util
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
 setup(
     name='v2ray-util',
     version=v2ray_util.__version__,
     description="a tool to manage v2ray config json",
-    long_description=open('README.rst').read(),
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     keywords='python v2ray multi-v2ray vmess socks5',
     author='Jrohy',
     author_email='euvkzx@gmail.com',

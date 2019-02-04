@@ -1,4 +1,4 @@
-include README.rst
+include README.md
 include v2ray_util/util_core/util.dat
 include v2ray_util/util_core/util.cfg
 recursive-include v2ray_util/json_template *.json

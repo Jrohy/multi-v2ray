@@ -31,7 +31,7 @@ def loop_input_choice_number(input_tip, number_max):
 def help():
     exec_name = sys.argv[0]
     print("""
-{0} [-h|--help] [-v|--version] [options]
+{0} [-h|--help] [options]
     -h, --help           get help
     start                start V2Ray
     stop                 stop V2Ray

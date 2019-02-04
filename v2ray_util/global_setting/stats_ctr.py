@@ -24,7 +24,7 @@ class StatsFactory:
         if downlink_result and len(downlink_result) == 5:
             re_result = re.findall(r"\d+", downlink_result[2])
             if not re_result:
-                print("当前无流量数据，请使用流量片刻再来查看统计!")
+                print("no data traffic now!")
                 return
             self.downlink_value = int(re_result[0])
 
@@ -60,45 +60,45 @@ def manage():
 
         group_list = profile.group_list
 
-        print("当前流量统计状态: {}".format(profile.stats.status))
+        print("V2ray Traffic Statistics: {}".format(profile.stats.status))
 
         print("")
-        print("1.开启流量统计\n")
-        print("2.关闭流量统计\n")
-        print("3.查看流量统计\n")
-        print("4.重置流量统计\n")
-        print("tip: 具有有效email节点才会统计, 重启v2ray会重置流量统计!!!\n")
+        print("1.open statistics\n")
+        print("2.close statistics\n")
+        print("3.check statistics result\n")
+        print("4.reset statistics\n")
+        print("tip: only have email node can statistics, restart v2ray will reset traffic statistics!!!\n")
 
-        choice = input("请输入数字选择功能：")
+        choice = input("please select：")
         if choice == "1":
             if os.popen(FIND_V2RAY_CRONTAB_CMD).readlines():
-                rchoice = input("开启流量统计会关闭定时更新v2ray服务, 是否继续y/n: ")
+                rchoice = input("open traffic statistics will close schedule update v2ray, continue?(y/n): ")
                 if rchoice == "y" or rchoice == "Y":
                     #关闭定时更新v2ray服务
                     os.system(DEL_UPDATE_TIMER_CMD)
                 else:
-                    print("撤销开启流量统计!!")
+                    print("undo open traffic statistics!!")
                     continue
             gw = GlobalWriter(group_list)
             gw.write_stats(True)
             os.system(RESTART_CMD)
-            print("开启流量统计成功!\n")
+            print("open traffic statistics success!\n")
             
         elif choice == "2":
             gw = GlobalWriter(group_list)
             gw.write_stats(False)
             os.system(RESTART_CMD)
-            print("关闭流量统计成功!\n")
+            print("close traffic statistics success!\n")
         elif choice == "3" or choice == "4":
             is_reset = (False if choice == "3" else True)
-            action_info = ("查看" if choice == "3" else "重置")
+            action_info = ("check" if choice == "3" else "reset")
             if not profile.stats.status:
-                print("流量统计开启状态才能{}统计\n".format(action_info))
+                print("only open traffic statistics can {}\n".format(action_info))
                 continue
             
             if group_list[-1].node_list[-1].user_number > 1:
                 print(profile)
-                schoice = input("请输入所需要{}流量的组别(字母)或者序号(数字): ".format(action_info))
+                schoice = input("please input number or group alphabet to {}: ".format(action_info))
             else:
                 schoice = "A"
 
@@ -117,13 +117,13 @@ def manage():
                                    sf.get_stats(node.user_info, is_reset)
                                    sf.print_stats()
                                 else:
-                                    print("无有效邮箱，无法统计!!!\n")
+                                    print("no effective email!!!\n")
                                 find = True
                                 break
             elif schoice.isalpha() and schoice <= group_list[-1].tag:
                 sf.get_stats(schoice, is_reset, True)
                 sf.print_stats()
             else:
-                print("输入有误! 请重新输入\n")
+                print("input error, please input again\n")
         else:
             break

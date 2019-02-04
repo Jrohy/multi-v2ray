@@ -13,10 +13,10 @@ from .ss import SSFactory
 class StreamModifier:
     def __init__(self, group_tag='A', group_index=-1):
         self.stream_type = [
-            (StreamType.TCP, "普通TCP"), 
-            (StreamType.TCP_HOST, "HTTP伪装"), 
-            (StreamType.WS, "WebSocket流量"), 
-            (StreamType.KCP, "普通mKCP"), 
+            (StreamType.TCP, "TCP"), 
+            (StreamType.TCP_HOST, "Fake HTTP"), 
+            (StreamType.WS, "WebSocket"), 
+            (StreamType.KCP, "mKCP"), 
             (StreamType.KCP_SRTP, "mKCP + srtp"), 
             (StreamType.KCP_UTP, "mKCP + utp"), 
             (StreamType.KCP_WECHAT, "mKCP + wechat-video"),
@@ -37,13 +37,13 @@ class StreamModifier:
         if index == 0 or (index >= 3 and index <= 9) or index == 11:
             pass
         elif index == 1 or index == 2:
-            host = input("请输入你想要为伪装的域名（不不不需要http）：")
+            host = input("please input fake domainï¼š")
             kw['host'] = host
         elif index == 10:
-            user = input("请输入socks的用户名: ")
-            password = input("请输入socks的密码: ")
+            user = input("please input socks user: ")
+            password = input("please input socks password: ")
             if user == "" or password == "":
-                print("socks的用户名或者密码不能为空")
+                print("socks user or password is null")
                 exit(-1)
             kw = {'user': user, 'pass': password}
         elif index == 12:
@@ -53,26 +53,26 @@ class StreamModifier:
             key = ""
             security_list = ('none', "aes-128-gcm", "chacha20-poly1305")
             print("")
-            security = CommonSelector(security_list, "请输入序号选择加密方法: ").select()
+            security = CommonSelector(security_list, "please select ss method: ").select()
             if security != "none":
                 key = ''.join(random.sample(string.ascii_letters + string.digits, 8))
-                new_pass = input('随机生成密码{}, 回车直接使用, 否则输入自定义加密密码: '.format(key))
+                new_pass = input('random generate password {}, enter to use, or input customize password: '.format(key))
                 if new_pass:
                     key = new_pass
                     
             print("")
-            header = CommonSelector(header_type_list(), "请输入序号选择伪装协议: ").select()
+            header = CommonSelector(header_type_list(), "please select fake header: ").select()
             kw = {'security': security, 'key': key, 'header': header}
         sw.write(**kw)
 
     def random_kcp(self):
         kcp_list = ('mKCP + srtp', 'mKCP + utp', 'mKCP + wechat-video', 'mKCP + dtls')
         choice = random.randint(4, 7)
-        print("随机一种 (srtp | wechat-video | utp | dtls) header伪装, 当前生成 {} \n".format(kcp_list[choice - 4]))
+        print("random generate (srtp | wechat-video | utp | dtls) fake header, now use {} \n".format(kcp_list[choice - 4]))
         self.select(choice)
 
 def modify():
-    gs = GroupSelector('修改传输方式')
+    gs = GroupSelector('modify protocol')
     group = gs.group
 
     if group == None:
@@ -80,7 +80,7 @@ def modify():
     else:
         sm = StreamModifier(group.tag, group.index)
 
-        print("当前组的传输方式为：{}".format(group.node_list[0].stream()))
+        print("group protocolï¼š{}".format(group.node_list[0].stream()))
         print ("")
         for index, stream_type in enumerate(sm.stream_type):
             print("{0}.{1}".format(index + 1, stream_type[1]))
@@ -88,13 +88,13 @@ def modify():
         choice = input()
 
         if not choice.isdecimal():
-            print("请输入数字！")
+            print("please input number!")
         else:
             choice = int(choice)
             if choice > 0 and choice <= len(sm.stream_type):
                 if (sm.stream_type[choice - 1][1] == "MTProto" or sm.stream_type[choice - 1][1] == "Shadowsocks") and group.tls == 'tls':
-                    print("v2ray MTProto/Shadowsocks不支持https, 关闭tls成功!")
+                    print("v2ray MTProto/Shadowsocks not support https, close tls success!")
                 sm.select(choice - 1)
-                print("传输模式修改成功！")
+                print("modify protocol success")
             else:
-                print("请输入符合范围的数字！")
+                print("input out of range!!")

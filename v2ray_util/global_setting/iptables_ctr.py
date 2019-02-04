@@ -15,13 +15,12 @@ def manage():
 
     while True:
         print("")
-        print("Iptables 端口流量统计")
+        print("Iptables Traffic Statistics")
         print("")
-        print("1.查看流量统计\n")
-        print("2.重置流量统计\n")
-        print("tip: v2ray功能端口默认自动开启iptables的流量统计\n")
+        print("1.check statistics result\n")
+        print("2.reset special port statistics\n")
 
-        choice = input("请输入数字选择功能：")
+        choice = input("please select:")
         if choice == "1":
             print("")
             for group in group_list:
@@ -29,11 +28,11 @@ def manage():
             print("")
 
         elif choice == "2":
-            port = input("请输入要重置流量的端口：")
+            port = input("please input reset port:")
             if port and port.isnumeric():
                 subprocess.call("bash {0} {1}".format(pkg_resources.resource_filename(__name__, "clean_traffic.sh"), str(port)), shell=True)
-                print(ColorStr.green("重置成功!"))
+                print(ColorStr.green("reset success!"))
             else:
-                print(ColorStr.red("输入有误!"))
+                print(ColorStr.red("input error!"))
         else:
             break

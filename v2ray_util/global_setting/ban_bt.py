@@ -8,9 +8,9 @@ def manage():
 
     profile = loader.profile
 
-    print("当前禁止BT状态: {}".format(profile.ban_bt))
+    print("Ban BT status: {}".format(profile.ban_bt))
 
-    choice = input("是否禁止BT(y/n)：").lower()
+    choice = input("Ban BT?(y/n)").lower()
 
     ban_bt = True if choice == 'y' else False
 
@@ -18,4 +18,4 @@ def manage():
 
     gw.write_ban_bittorrent(ban_bt)
 
-    print("修改成功!")
+    print("modify success!")

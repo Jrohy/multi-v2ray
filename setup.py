@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 import v2ray_util
 
 setup(
-    name='v2ray_util',
+    name='v2ray-util',
     version=v2ray_util.__version__,
     description="a tool to manage v2ray config json",
     long_description=open('README.rst').read(),
@@ -23,7 +23,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'v2ray_util = v2ray_util.main:menu'
+            'v2ray-util = v2ray_util.main:menu'
         ]
     },
     classifiers=[

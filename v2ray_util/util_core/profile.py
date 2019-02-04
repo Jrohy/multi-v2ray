@@ -15,7 +15,7 @@ class Stats:
         self.door_port = door_port
 
     def __str__(self):
-        return "开启" if self.status else "关闭"
+        return "open" if self.status else "close"
 
 class Profile:
     def __init__(self):
@@ -31,7 +31,7 @@ class Profile:
         result = ""
         for group in self.group_list:
             result = "{}{}".format(result, group)
-        result = result + "Tip: 同一Group的节点传输方式,端口配置,TLS等设置相同\n"
+        result = result + "Tip: The same group's node protocol, port, tls are the same.\n"
         return result
 
     def read_json(self):
@@ -85,7 +85,7 @@ class Profile:
             return
 
         if protocol == "vmess" and "streamSettings" not in part_json:
-            print("v2ray 配置文件缺少streamSettings项, 请运行{}新建配置!".format(ColorStr.cyan("v2ray_util new")))
+            print("v2ray json no streamSettings item, please run {} to recreate v2ray json!".format(ColorStr.cyan("v2ray_util new")))
             return
 
         conf_settings = part_json["settings"]
@@ -110,7 +110,7 @@ class Profile:
             tls = conf_stream["security"]
 
             if "sockopt" in conf_stream and "tcpFastOpen" in conf_stream["sockopt"]:
-                tfo = "开启" if conf_stream["sockopt"]["tcpFastOpen"] else "关闭"
+                tfo = "open" if conf_stream["sockopt"]["tcpFastOpen"] else "close"
 
             if conf_stream["httpSettings"]:
                 path = conf_stream["httpSettings"]["path"]

@@ -6,7 +6,7 @@ import string
 from ..util_core.writer import StreamWriter
 from ..util_core.selector import GroupSelector, CommonSelector
 from ..util_core.group import Mtproto, SS
-from ..util_core.utils import StreamType, header_type_list
+from ..util_core.utils import StreamType, header_type_list, ColorStr
 
 from .ss import SSFactory
 
@@ -37,7 +37,7 @@ class StreamModifier:
         if index == 0 or (index >= 3 and index <= 9) or index == 11:
             pass
         elif index == 1 or index == 2:
-            host = input("please input fake domainï¼š")
+            host = input("please input fake domain: ")
             kw['host'] = host
         elif index == 10:
             user = input("please input socks user: ")
@@ -68,7 +68,7 @@ class StreamModifier:
     def random_kcp(self):
         kcp_list = ('mKCP + srtp', 'mKCP + utp', 'mKCP + wechat-video', 'mKCP + dtls')
         choice = random.randint(4, 7)
-        print("random generate (srtp | wechat-video | utp | dtls) fake header, now use {} \n".format(kcp_list[choice - 4]))
+        print("random generate (srtp | wechat-video | utp | dtls) fake header, new protocol: {} \n".format(ColorStr.green(kcp_list[choice - 4])))
         self.select(choice)
 
 def modify():
@@ -80,7 +80,7 @@ def modify():
     else:
         sm = StreamModifier(group.tag, group.index)
 
-        print("group protocolï¼š{}".format(group.node_list[0].stream()))
+        print("group protocol: {}".format(group.node_list[0].stream()))
         print ("")
         for index, stream_type in enumerate(sm.stream_type):
             print("{0}.{1}".format(index + 1, stream_type[1]))

@@ -193,6 +193,7 @@ installDependent(){
     bash <(curl -sL https://git.io/fhqMz)
 
     pip3 install pyopenssl
+    pip3 install subprocess32
 }
 
 #设置定时升级任务

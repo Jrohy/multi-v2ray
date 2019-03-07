@@ -104,7 +104,7 @@ def parse_arg():
 def service_manage():
     show_text = ("start v2ray", "stop v2ray", "restart v2ray", "v2ray status")
     print("")
-    for index, text in enumerate(show_text): 
+    for index, text in enumerate(show_text):
         print("{}.{}".format(index + 1, text))
     choice = loop_input_choice_number("please select: ", len(show_text))
     if choice == 1:
@@ -119,7 +119,7 @@ def service_manage():
 def user_manage():
     show_text = ("add user", "add port", "del user", "del port")
     print("")
-    for index, text in enumerate(show_text): 
+    for index, text in enumerate(show_text):
         print("{}.{}".format(index + 1, text))
     choice = loop_input_choice_number("please select: ", len(show_text))
     if choice == 1:
@@ -134,10 +134,10 @@ def user_manage():
     V2ray.restart()
 
 def profile_alter():
-    show_text = ("email", "UUID", "alterID", "port", "stream", "tls", 
+    show_text = ("email", "UUID", "alterID", "port", "stream", "tls",
                 "tcpFastOpen", "dyn_port", "shadowsocks method", "shadowsocks password")
     print("")
-    for index, text in enumerate(show_text): 
+    for index, text in enumerate(show_text):
         print("{}.{}".format(index + 1, text))
     choice = loop_input_choice_number("please select: ", len(show_text))
     if choice == 1:
@@ -166,7 +166,7 @@ def profile_alter():
 def global_setting():
     show_text = ("V2ray Traffic Statistics", "Iptables Traffic Statistics", "Ban Bittorrent", "Schedule Update V2ray", "Clean Log")
     print("")
-    for index, text in enumerate(show_text): 
+    for index, text in enumerate(show_text):
         print("{}.{}".format(index + 1, text))
     choice = loop_input_choice_number("please select: ", len(show_text))
     if choice == 1:
@@ -182,6 +182,13 @@ def global_setting():
         V2ray.cleanLog()
 
 def menu():
+
+    from .manager import Managecmd
+
+    mgcmd = Managecmd()
+    mgcmd.cmdloop()
+    return
+
     V2ray.check()
     parse_arg()
     while True:
@@ -189,9 +196,9 @@ def menu():
         print(ColorStr.cyan("Welcome to v2ray-util"))
         print("")
         show_text = ("1.V2ray Manage", "2.Group Manage", "3.Modify Config", "4.Check Config", "5.Global Setting", "6.Update V2Ray", "7.Generate Client Json")
-        for index, text in enumerate(show_text): 
+        for index, text in enumerate(show_text):
             if index % 2 == 0:
-                print('{:<20}'.format(text), end="")   
+                print('{:<20}'.format(text), end="")
             else:
                 print(text)
                 print("")

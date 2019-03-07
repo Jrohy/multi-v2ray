@@ -23,7 +23,8 @@ setup(
     zip_safe=False,
     python_requires='>=3',
     install_requires=[
-        'pyOpenSSL'
+        'pyOpenSSL',
+        'subprocess32',
     ],
     entry_points={
         'console_scripts': [

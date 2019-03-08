@@ -1,11 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import os
-import uuid
-import random
-import subprocess
 import pkg_resources
+import random
+import shutil
+import subprocess
+import uuid
 from .utils import ColorStr, open_port
+
+service_cmd_fmt = get_service_cmd_fmt()
+
+def get_service_cmd_fmt():
+    systemctl = shutil.which('systemctl')
+    if systemctl is not None:
+        return systemctl + ' {0} v2ray'
+
+    service = shutil.which('service')
+    if service is not None:
+        return service + ' v2ray {0}'
+    else:
+        return 'service v2ray {0}'
 
 class V2ray:
 
@@ -20,11 +34,11 @@ class V2ray:
 
     @staticmethod
     def status():
-        subprocess.call("service v2ray status", shell=True)
+        subprocess.call(service_cmd_fmt.format('status'), shell=True)
 
     @staticmethod
     def info():
-        from .loader import Loader 
+        from .loader import Loader
         print(Loader().profile)
 
     @staticmethod
@@ -39,15 +53,15 @@ class V2ray:
 
     @classmethod
     def restart(cls):
-        cls.run("service v2ray restart", "restart")
+        cls.run(service_cmd_fmt.format('restart'), 'restart')
 
     @classmethod
     def start(cls):
-        cls.run("service v2ray start", "start")
+        cls.run(service_cmd_fmt.format('start'), 'start')
 
     @classmethod
     def stop(cls):
-        cls.run("service v2ray stop", "stop")
+        cls.run(service_cmd_fmt.format('stop'), 'stop')
 
     @classmethod
     def check(cls):

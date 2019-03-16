@@ -1,4 +1,4 @@
-# v2ray-util
+# multi-v2ray
 a tool to manage v2ray config json, support multiple user && group manage  
 ![](https://img.shields.io/pypi/v/v2ray-util.svg) 
 ![](https://img.shields.io/github/stars/Jrohy/multi-v2ray.svg) 
@@ -31,16 +31,24 @@ a tool to manage v2ray config json, support multiple user && group manage
   - Quic
 
 ## Install
+new install
 ```
-pip install v2ray-util
+source <(curl -sL https://git.io/fNgqx)
 ```
-run `v2ray-util` to start manage v2ray  
-this tool only support **python3+**
 
+keep profile to update
+```
+source <(curl -sL https://git.io/fNgqx) -k
+```
+
+uninstall
+```
+source <(curl -sL https://git.io/fNgqx) --remove
+```
 
 ## Command Line
 ```bash
-v2ray-util [-h|--help] [options]
+v2ray [-h|--help] [options]
     -h, --help           get help
     start                start V2Ray
     stop                 stop V2Ray

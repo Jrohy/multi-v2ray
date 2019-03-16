@@ -16,13 +16,13 @@ HELP=0
 
 REMOVE=0
 
-UPDATE_VERSION=""
+BASE_SOURCE_PATH="https://raw.githubusercontent.com/Jrohy/multi-v2ray/master"
 
-CLEAN_IPTABLES_SHELL="https://raw.githubusercontent.com/Jrohy/multi-v2ray/dev-pip/v2ray_util/global_setting/clean_iptables.sh"
+CLEAN_IPTABLES_SHELL="$BASE_SOURCE_PATH/v2ray_util/global_setting/clean_iptables.sh"
 
-BASH_COMPLETION_SHELL="https://raw.githubusercontent.com/Jrohy/multi-v2ray/dev-pip/v2ray.bash"
+BASH_COMPLETION_SHELL="$BASE_SOURCE_PATH/v2ray.bash"
 
-UTIL_CFG="https://raw.githubusercontent.com/Jrohy/multi-v2ray/dev-pip/v2ray_util/util_core/util.cfg"
+UTIL_CFG="$BASE_SOURCE_PATH/v2ray_util/util_core/util.cfg"
 
 #Centos 临时取消别名
 [[ -f /etc/redhat-release && -z $(echo $SHELL|grep zsh) ]] && unalias -a
@@ -54,11 +54,6 @@ while [[ $# > 0 ]];do
         INSTALL_WAY=1
         colorEcho ${BLUE} "keep v2ray profile to update\n"
         ;;
-        -v|--version)
-        UPDATE_VERSION="$2"
-        echo -e "update multi-v2ray to $(colorEcho ${BLUE} $UPDATE_VERSION) version\n"
-        shift
-        ;;
         *)
                 # unknown option
         ;;
@@ -68,10 +63,9 @@ done
 #############################
 
 help(){
-    echo "source multi-v2ray.sh [-h|--help] [-k|--keep] [-c|--code] [--remove]"
+    echo "bash multi-v2ray.sh [-h|--help] [-k|--keep] [--remove]"
     echo "  -h, --help           Show help"
     echo "  -k, --keep           keep the v2ray config.json to update"
-    echo "  -v, --version        update multi-v2ray to special version"
     echo "      --remove         remove v2ray && multi-v2ray"
     echo "                       no params to new install"
     return 0
@@ -93,7 +87,7 @@ removeV2Ray() {
     bash <(curl -L -s $CLEAN_IPTABLES_SHELL)
 
     #卸载multi-v2ray
-    pip uninstall v2ray_util
+    pip uninstall v2ray_util -y
     rm -rf /etc/bash_completion.d/v2ray.bash >/dev/null 2>&1
     rm -rf /usr/local/bin/v2ray >/dev/null 2>&1
     rm -rf /etc/v2ray_util >/dev/null 2>&1
@@ -211,7 +205,7 @@ updateProject() {
     fi
     [[ -e /usr/local/multi-v2ray ]] && rm -rf /usr/local/multi-v2ray
 
-    [[ $UPDATE_VERSION ]] && pip3 install v2ray_util==$UPDATE_VERSION || pip3 install -U v2ray_util
+    pip3 install -U v2ray_util
 
     rm -f /usr/local/bin/v2ray >/dev/null 2>&1
     ln -s /usr/bin/v2ray-util /usr/local/bin/v2ray

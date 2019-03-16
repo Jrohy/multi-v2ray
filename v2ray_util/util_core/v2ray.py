@@ -51,7 +51,9 @@ class V2ray:
 
     @classmethod
     def convert(cls):
-        import converter
+        from .converter import ConfigConverter
+        print("tranfrom to v2ray new version json..")
+        ConfigConverter().transform()
 
     @classmethod
     def check(cls):

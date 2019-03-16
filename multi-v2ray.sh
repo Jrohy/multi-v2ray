@@ -9,7 +9,7 @@ BEIJING_UPDATE_TIME=3
 BEGIN_PATH=$(pwd)
 
 #安装方式, 0为全新安装, 1为保留v2ray配置更新
-INSTARLL_WAY=0
+INSTALL_WAY=0
 
 #定义操作变量, 0为否, 1为是
 HELP=0
@@ -17,8 +17,6 @@ HELP=0
 REMOVE=0
 
 UPDATE_VERSION=""
-
-APP_PATH="/usr/local/multi-v2ray"
 
 CLEAN_IPTABLES_SHELL="https://raw.githubusercontent.com/Jrohy/multi-v2ray/dev-pip/v2ray_util/global_setting/clean_iptables.sh"
 
@@ -53,7 +51,7 @@ while [[ $# > 0 ]];do
         HELP=1
         ;;
         -k|--keep)
-        INSTARLL_WAY=1
+        INSTALL_WAY=1
         colorEcho ${BLUE} "keep v2ray profile to update\n"
         ;;
         -v|--version)
@@ -203,7 +201,7 @@ updateProject() {
     fi
 
     if [[ -e /usr/local/multi-v2ray/multi-v2ray.conf ]];then
-        TEMP_VALUE=$(cat $APP_PATH/multi-v2ray.conf|grep domain|awk 'NR==1')
+        TEMP_VALUE=$(cat /usr/local/multi-v2ray/multi-v2ray.conf|grep domain|awk 'NR==1')
         DOMAIN=${TEMP_VALUE/*=}
         if [[ ! -e /etc/v2ray_util/util.cfg ]];then
             mkdir -p /etc/v2ray_util
@@ -228,7 +226,7 @@ updateProject() {
 
 #时间同步
 timeSync() {
-    if [[ ${INSTARLL_WAY} == 0 ]];then
+    if [[ ${INSTALL_WAY} == 0 ]];then
         systemctl stop ntp &>/dev/null
         echo -e "${Info} Time Synchronizing.. ${Font}"
         ntpdate time.nist.gov
@@ -251,7 +249,7 @@ profileInit() {
     [[ -z $(echo $SHELL|grep zsh) && -z $(grep v2ray.bash ~/$ENV_FILE) ]] && echo "source /etc/bash_completion.d/v2ray.bash" >> ~/$ENV_FILE && source ~/$ENV_FILE
 
     #全新安装的新配置
-    if [[ ${INSTARLL_WAY} == 0 ]];then 
+    if [[ ${INSTALL_WAY} == 0 ]];then 
         v2ray new
     else
         v2ray convert
@@ -265,7 +263,7 @@ installFinish() {
     #回到原点
     cd ${BEGIN_PATH}
 
-    [[ ${INSTARLL_WAY} == 0 ]] && WAY="install" || WAY="update"
+    [[ ${INSTALL_WAY} == 0 ]] && WAY="install" || WAY="update"
     colorEcho  ${GREEN} "multi-v2ray ${WAY} success!\n"
 
     clear
@@ -282,7 +280,7 @@ main() {
 
     [[ ${REMOVE} == 1 ]] && removeV2Ray && return
 
-    [[ ${INSTARLL_WAY} == 0 ]] && colorEcho ${BLUE} "new install\n"
+    [[ ${INSTALL_WAY} == 0 ]] && colorEcho ${BLUE} "new install\n"
 
     checkSys
 

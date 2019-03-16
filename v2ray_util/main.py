@@ -96,7 +96,7 @@ def parse_arg():
         elif sys.argv[1] == "new":
             V2ray.new()
         elif sys.argv[1] == "convert":
-            V2ray.new()
+            V2ray.convert()
     else:
         if sys.argv[1] == "add":
             multiple.new_port(sys.argv[2])

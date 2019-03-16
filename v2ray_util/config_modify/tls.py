@@ -6,14 +6,14 @@ import os
 from ..util_core.writer import GroupWriter
 from ..util_core.group import Mtproto, SS
 from ..util_core.selector import GroupSelector
-from ..util_core.utils import get_ip, get_domain_by_crt_file, gen_cert
+from ..util_core.utils import get_ip, gen_cert
 
 class TLSModifier:
     def __init__(self, group_tag, group_index):
         self.writer = GroupWriter(group_tag, group_index)
     
     def turn_on(self):
-        print("1. Let’s Encrypt certificate(auto create, please prepare domain)")
+        print("1. Let's Encrypt certificate(auto create, please prepare domain)")
         print("2. Customize certificate(prepare certificate file paths)\n")
         choice=input("please select: ")
         if choice == "1":

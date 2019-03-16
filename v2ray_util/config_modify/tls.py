@@ -43,9 +43,9 @@ class TLSModifier:
             if not os.path.exists(crt_file) or not os.path.exists(key_file):
                 print("certificate cert or key not exist!\n")
                 return
-            domain = get_domain_by_crt_file(crt_file)
+            domain = input("please input the certificate cert file domain: ")
             if not domain:
-                print("get certificate error!\n")
+                print("domain is null!\n")
                 return
             self.writer.write_tls(True, crt_file=crt_file, key_file=key_file, domain=domain)
         else:

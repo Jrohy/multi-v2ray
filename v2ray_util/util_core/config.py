@@ -3,14 +3,14 @@
 import pkg_resources
 import configparser
 
-CONF_FILE = 'util.cfg'
+CONF_FILE = '/etc/v2ray_util/util.cfg'
 DATA_FILE = 'util.dat'
 
 class Config:
 
     def __init__(self):
         self.config = configparser.ConfigParser()
-        self.config_path = pkg_resources.resource_filename(__name__, CONF_FILE)
+        self.config_path = CONF_FILE
         self.data_path = pkg_resources.resource_filename('v2ray_util', DATA_FILE)
         self.json_path = pkg_resources.resource_filename('v2ray_util', "json_template")
         self.config.read(self.config_path)

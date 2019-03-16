@@ -5,7 +5,6 @@ import re
 import pkg_resources
 import urllib.request
 from enum import Enum, unique
-from OpenSSL import crypto
 
 class ColorStr:
     RED = '\033[31m'       # 红色
@@ -103,16 +102,6 @@ def is_email(email):
     """
     str=r'^[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}$'
     return re.match(str, email)
-
-def get_domain_by_crt_file(crt_path):
-    """
-    通过证书文件获取域名, 证书文件有误或不存在则返回空
-    """
-    try:
-        cert = crypto.load_certificate(crypto.FILETYPE_PEM, open(crt_path).read())
-    except:
-        return
-    return cert.get_subject().CN
 
 def bytes_2_human_readable(number_of_bytes, precision=1):
     """

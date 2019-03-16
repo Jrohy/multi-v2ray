@@ -50,11 +50,17 @@ class V2ray:
         cls.run("service v2ray stop", "stop")
 
     @classmethod
+    def convert(cls):
+        import converter
+
+    @classmethod
     def check(cls):
         if not os.path.exists("/usr/bin/v2ray/v2ray"):
             print(ColorStr.yellow("check v2ray no install, auto install v2ray.."))
             cls.update()
             cls.new()
+        if not os.path.exists("/etc/v2ray_util/util.cfg"):
+            subprocess.call("mkdir -p /etc/v2ray_util && cp -f {} /etc/v2ray_util/".format(pkg_resources.resource_filename(__name__, 'util.cfg')), shell=True)
 
     @classmethod
     def new(cls):

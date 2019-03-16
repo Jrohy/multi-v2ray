@@ -8,16 +8,23 @@ BEIJING_UPDATE_TIME=3
 #记录最开始运行脚本的路径
 BEGIN_PATH=$(pwd)
 
+#安装方式, 0为全新安装, 1为保留v2ray配置更新
+INSTARLL_WAY=0
+
 #定义操作变量, 0为否, 1为是
 HELP=0
 
 REMOVE=0
 
-IS_LATEST=0
-
 UPDATE_VERSION=""
 
 APP_PATH="/usr/local/multi-v2ray"
+
+CLEAN_IPTABLES_SHELL="https://raw.githubusercontent.com/Jrohy/multi-v2ray/dev-pip/v2ray_util/global_setting/clean_iptables.sh"
+
+BASH_COMPLETION_SHELL="https://raw.githubusercontent.com/Jrohy/multi-v2ray/dev-pip/v2ray.bash"
+
+UTIL_CFG="https://raw.githubusercontent.com/Jrohy/multi-v2ray/dev-pip/v2ray_util/util_core/util.cfg"
 
 #Centos 临时取消别名
 [[ -f /etc/redhat-release && -z $(echo $SHELL|grep zsh) ]] && unalias -a
@@ -45,6 +52,10 @@ while [[ $# > 0 ]];do
         -h|--help)
         HELP=1
         ;;
+        -k|--keep)
+        INSTARLL_WAY=1
+        echo -e "keep v2ray profile to update"
+        ;;
         -v|--version)
         UPDATE_VERSION="$2"
         echo -e "update multi-v2ray to $(colorEcho ${BLUE} $UPDATE_VERSION) version\n"
@@ -62,7 +73,6 @@ help(){
     echo "source multi-v2ray.sh [-h|--help] [-k|--keep] [-c|--code] [--remove]"
     echo "  -h, --help           Show help"
     echo "  -k, --keep           keep the v2ray config.json to update"
-    echo "  -c, --code           only update multi-v2ray code"
     echo "  -v, --version        update multi-v2ray to special version"
     echo "      --remove         remove v2ray && multi-v2ray"
     echo "                       no params to new install"
@@ -82,12 +92,13 @@ removeV2Ray() {
     rm -rf /etc/init.d/v2ray  >/dev/null 2>&1
 
     #清理v2ray相关iptable规则
-    bash $APP_PATH/global_setting/clean_iptables.sh
+    bash <(curl -L -s $CLEAN_IPTABLES_SHELL)
 
     #卸载multi-v2ray
-    rm -rf $APP_PATH >/dev/null 2>&1
+    pip uninstall v2ray_util
     rm -rf /etc/bash_completion.d/v2ray.bash >/dev/null 2>&1
     rm -rf /usr/local/bin/v2ray >/dev/null 2>&1
+    rm -rf /etc/v2ray_util >/dev/null 2>&1
 
     #删除v2ray定时更新任务
     crontab -l|sed '/SHELL=/d;/v2ray/d' > crontab.txt
@@ -104,7 +115,7 @@ removeV2Ray() {
     sed -i '/v2ray/d' ~/$ENV_FILE
     source ~/$ENV_FILE
 
-    colorEcho ${GREEN} "卸载完成！"
+    colorEcho ${GREEN} "uninstall success!"
 }
 
 closeSELinux() {
@@ -168,7 +179,7 @@ planUpdate(){
     elif [ $LOCAL_TIME -ge 24 ];then
         LOCAL_TIME=$[$LOCAL_TIME-24]
     fi
-	colorEcho ${BLUE} "北京时间${BEIJING_UPDATE_TIME}点，VPS时间为${LOCAL_TIME}点\n"
+	colorEcho ${BLUE} "beijing time ${BEIJING_UPDATE_TIME}, VPS time: ${LOCAL_TIME}\n"
 
     OLD_CRONTAB=$(crontab -l)
     echo "SHELL=/bin/bash" >> crontab.txt
@@ -182,7 +193,7 @@ planUpdate(){
 		service cron restart
 	fi
 	rm -f crontab.txt
-	colorEcho ${GREEN} "成功配置每天北京时间${BEIJING_UPDATE_TIME}点自动升级V2ray内核任务\n"
+	colorEcho ${GREEN} "success open schedule update task: beijing time ${BEIJING_UPDATE_TIME}\n"
 }
 
 updateProject() {
@@ -198,7 +209,7 @@ updateProject() {
         DOMAIN=${TEMP_VALUE/*=}
         if [[ ! -e /etc/v2ray_util/util.cfg ]];then
             mkdir -p /etc/v2ray_util
-            curl https://raw.githubusercontent.com/Jrohy/multi-v2ray/dev-pip/v2ray_util/util_core/util.cfg > /etc/v2ray_util/util.cfg
+            curl $UTIL_CFG > /etc/v2ray_util/util.cfg
             [[ ! -z $DOMAIN ]] && sed -i "s/^domain.*/domain=${DOMAIN}/g" /etc/v2ray_util/util.cfg
         fi
     fi
@@ -210,7 +221,7 @@ updateProject() {
     ln -s /usr/bin/v2ray-util /usr/local/bin/v2ray
 
     #更新v2ray bash_completion脚本
-    curl https://raw.githubusercontent.com/Jrohy/multi-v2ray/dev-pip/v2ray.bash > /etc/bash_completion.d/v2ray.bash
+    curl $BASH_COMPLETION_SHELL > /etc/bash_completion.d/v2ray.bash
     [[ -z $(echo $SHELL|grep zsh) ]] && source /etc/bash_completion.d/v2ray.bash
     
     #安装/更新V2ray主程序
@@ -233,7 +244,6 @@ timeSync() {
     fi
 }
 
-
 profileInit() {
 
     #清理v2ray模块环境变量
@@ -246,29 +256,25 @@ profileInit() {
     if [[ ${INSTARLL_WAY} == 0 ]];then 
         v2ray new
     else
-        python3 $APP_PATH/converter.py
+        v2ray convert
     fi
 
-    bash $APP_PATH/global_setting/clean_iptables.sh
+    bash <(curl -L -s $CLEAN_IPTABLES_SHELL)
     echo ""
-    echo -e "生成 $(colorEcho $BLUE iptables) 流量统计规则中.."
-    python3 -c "from utils import open_port; open_port();"
 }
 
 installFinish() {
     #回到原点
     cd ${BEGIN_PATH}
 
-    [[ ${INSTARLL_WAY} == 0 ]] && WAY="安装" || WAY="更新"
-    colorEcho  ${GREEN} "multi-v2ray ${WAY}成功！\n"
+    [[ ${INSTARLL_WAY} == 0 ]] && WAY="install" || WAY="update"
+    colorEcho  ${GREEN} "multi-v2ray ${WAY} success!\n"
 
     clear
 
-    echo "V2ray配置信息:"
-    #安装完后显示v2ray的配置信息，用于快速部署
-    python3 -c "from loader import Loader; print(Loader().profile);"
+    v2ray info
 
-    echo -e "输入 v2ray 回车即可进行服务管理\n"
+    echo -e "please input 'v2ray' command to manage v2ray\n"
 }
 
 
@@ -278,23 +284,18 @@ main() {
 
     [[ ${REMOVE} == 1 ]] && removeV2Ray && return
 
-    checkUpdate && [[ $IS_LATEST == 1 ]] && return
+    [[ ${INSTARLL_WAY} == 0 ]] && colorEcho ${BLUE} "new install\n"
 
-    [[ ${INSTARLL_WAY} == 0 ]] && colorEcho ${BLUE} "当前为全新安装\n"
+    checkSys
 
-    if [[ ${INSTARLL_WAY} != 2 ]];then 
-        checkSys
+    installDependent
 
-        installDependent
+    closeSELinux
 
-        closeSELinux
+    timeSync
 
-        timeSync
-
-        #设置定时任务
-        [[ -z $(crontab -l|grep v2ray) ]] && planUpdate
-
-    fi
+    #设置定时任务
+    [[ -z $(crontab -l|grep v2ray) ]] && planUpdate
 
     updateProject
 

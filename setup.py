@@ -22,9 +22,6 @@ setup(
     include_package_data=True,
     zip_safe=False,
     python_requires='>=3',
-    install_requires=[
-        'pyOpenSSL'
-    ],
     entry_points={
         'console_scripts': [
             'v2ray-util = v2ray_util.main:menu'

@@ -54,7 +54,7 @@ while [[ $# > 0 ]];do
         ;;
         -k|--keep)
         INSTARLL_WAY=1
-        echo -e "keep v2ray profile to update"
+        colorEcho ${BLUE} "keep v2ray profile to update\n"
         ;;
         -v|--version)
         UPDATE_VERSION="$2"
@@ -162,8 +162,6 @@ installDependent(){
 
     #install python3 & pip3
     bash <(curl -sL https://git.io/fhqMz)
-
-    pip3 install pyopenssl
 }
 
 #设置定时升级任务

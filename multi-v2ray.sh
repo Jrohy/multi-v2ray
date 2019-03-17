@@ -189,8 +189,8 @@ installDependent(){
         ${PACKAGE_MANAGER} install wget unzip git ntp ntpdate socat cron lsof -y
     fi
 
-    #install python3 & pip3
-    bash <(curl -sL https://git.io/fhqMz)
+    #install python3
+    bash <(curl -sL https://git.io/fhqMz) --nopip
 }
 
 #设置定时升级任务

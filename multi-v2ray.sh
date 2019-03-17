@@ -20,7 +20,7 @@ FORCE=0
 
 IS_LATEST=0
 
-UPDATE_VERSION="v2.6.3.1"
+UPDATE_VERSION="v2.7.0"
 
 APP_PATH="/usr/local/multi-v2ray"
 

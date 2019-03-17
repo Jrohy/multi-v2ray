@@ -208,7 +208,7 @@ updateProject() {
     pip3 install -U v2ray_util
 
     rm -f /usr/local/bin/v2ray >/dev/null 2>&1
-    ln -s /usr/bin/v2ray-util /usr/local/bin/v2ray
+    ln -s $(which v2ray-util) /usr/local/bin/v2ray
 
     #更新v2ray bash_completion脚本
     curl $BASH_COMPLETION_SHELL > /etc/bash_completion.d/v2ray.bash

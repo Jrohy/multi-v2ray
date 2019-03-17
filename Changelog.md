@@ -1,5 +1,7 @@
 > v3.0.6
 * Change to pip install
+* [#152](https://github.com/Jrohy/multi-v2ray/issues/152)
+* [#155](https://github.com/Jrohy/multi-v2ray/issues/155)
 
 > v2.6.3.1
 * fix some bug

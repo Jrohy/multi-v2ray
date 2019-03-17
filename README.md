@@ -14,7 +14,7 @@ a tool to manage v2ray config json, support multiple user && group manage
 - Range port
 - TcpFastOpen
 - Vmess/Socks5/MTproto share link
-- Support protocol modify：
+- Support protocol modify:
   - TCP
   - Fake http
   - WebSocket
@@ -67,3 +67,9 @@ v2ray [-h|--help] [options]
     stats                iptables traffic statistics
     clean                clean v2ray log
 ```
+
+## Pip Source
+https://pypi.org/project/v2ray-util/
+
+## Changelog
+see [Changelog](https://github.com/Jrohy/multi-v2ray/blob/master/Changelog.md)

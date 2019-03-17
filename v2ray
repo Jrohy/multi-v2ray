@@ -101,9 +101,9 @@ while [[ $# > 0 ]];do
         update.sh)
         SHELL_VERSION="$2"
         if [[ -z $SHELL_VERSION ]];then
-            source <(curl -sL https://git.io/fNgqx) -k
+            source <(curl -sL https://git.io/fjvcJ) -k
         else
-            source <(curl -sL https://git.io/fNgqx) -k -v $SHELL_VERSION
+            source <(curl -sL https://git.io/fjvcJ) -k -v $SHELL_VERSION
         fi
         shift
         ;;

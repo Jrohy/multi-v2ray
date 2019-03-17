@@ -20,7 +20,7 @@ FORCE=0
 
 IS_LATEST=0
 
-UPDATE_VERSION=""
+UPDATE_VERSION="v2.6.3.1"
 
 APP_PATH="/usr/local/multi-v2ray"
 
@@ -191,8 +191,6 @@ installDependent(){
 
     #install python3 & pip3
     bash <(curl -sL https://git.io/fhqMz)
-
-    pip3 install pyopenssl
 }
 
 #设置定时升级任务
@@ -243,7 +241,7 @@ updateProject() {
         if [[ $COMMITTER_EMAIL =~ 'euvkzx' ]];then
             git reset --hard HEAD && git clean -d -f
             if [[ $FORCE == 1 ]]; then
-                git pull origin master
+                git pull origin no-pip
             else
                 git fetch origin && git checkout $UPDATE_VERSION
             fi
@@ -351,7 +349,7 @@ main() {
 
     [[ ${FORCE} == 1 ]] && colorEcho ${BLUE} "当前为强制更新模式, 会更新到master最新代码\n"
 
-    checkUpdate && [[ $IS_LATEST == 1 ]] && return
+    # checkUpdate && [[ $IS_LATEST == 1 ]] && return
 
     [[ ${INSTARLL_WAY} == 0 ]] && colorEcho ${BLUE} "当前为全新安装\n"
 

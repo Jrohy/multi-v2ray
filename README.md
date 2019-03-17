@@ -18,6 +18,7 @@
 
 # multi-v2ray
 V2ray多用户管理脚本，向导式管理[新增|删除|修改]传输协议，享受V2ray的乐趣~  
+**本分支版本仅供不能安装pip的vps使用, no-pip分支不会做功能更新**  
 ![](https://img.shields.io/github/stars/Jrohy/multi-v2ray.svg)   ![](https://img.shields.io/github/forks/Jrohy/multi-v2ray.svg) ![](https://img.shields.io/github/license/Jrohy/multi-v2ray.svg)
 
 ## 特色
@@ -65,17 +66,17 @@ V2ray多用户管理脚本，向导式管理[新增|删除|修改]传输协议�
 ## 安装命令
 
 ```bash
-source <(curl -sL https://git.io/fNgqx)
+source <(curl -sL https://git.io/fjvcJ)
 ```
 
 ## 升级命令(保留配置文件，升级失败请全新安装)
 ```bash
-source <(curl -sL https://git.io/fNgqx) -k
+source <(curl -sL https://git.io/fjvcJ) -k
 ```
 
 ## 卸载命令
 ```bash
-source <(curl -sL https://git.io/fNgqx) --remove
+source <(curl -sL https://git.io/fjvcJ) --remove
 ```
 
 ## 命令行参数  

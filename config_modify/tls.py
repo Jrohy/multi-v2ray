@@ -7,7 +7,7 @@ from writer import GroupWriter
 from group import Mtproto, SS
 from selector import GroupSelector
 
-from utils import get_ip, get_domain_by_crt_file, gen_cert
+from utils import get_ip, gen_cert
 
 class TLSModifier:
     def __init__(self, group_tag, group_index):
@@ -45,9 +45,9 @@ class TLSModifier:
             if not os.path.exists(crt_file) or not os.path.exists(key_file):
                 print("证书crt文件或者key文件指定路径不存在!\n")
                 return
-            domain = get_domain_by_crt_file(crt_file)
+            domain = input("请输入证书的域名: ")
             if not domain:
-                print("证书文件有误!\n")
+                print("证书域名为空!\n")
                 return
             self.writer.write_tls(True, crt_file=crt_file, key_file=key_file, domain=domain)
         else:

@@ -1,6 +1,5 @@
 __version__ = '3.0.6'
 
-import gettext
-import pkg_resources
+from .util_core.utils import i18n_create
 
-gettext.translation('lang', pkg_resources.resource_filename('v2ray_util', 'locale_i18n'), languages=['zh_CH']).install()
+i18n_create()

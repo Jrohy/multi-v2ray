@@ -30,7 +30,31 @@ def loop_input_choice_number(input_tip, number_max):
 
 def help():
     exec_name = sys.argv[0]
-    print("""
+    from .util_core.config import Config
+    lang = Config().get_data('lang')
+    if lang == 'zh':
+        print("""
+{0} [-h|--help] [options]
+    -h, --help           查看帮助
+    start                启动 V2Ray
+    stop                 停止 V2Ray
+    restart              重启 V2Ray
+    status               查看 V2Ray 运行状态
+    new                  重建新的v2ray json配置文件
+    update               更新 V2Ray 到最新Release版本
+    add                  新增mkcp + 随机一种 (srtp | wechat-video | utp | dtls) header伪装的端口(Group)
+    add [wechat|utp|srtp|dtls|wireguard|socks|mtproto|ss]     新增一种协议的组，端口随机,如 v2ray add utp 为新增utp协议
+    del                  删除端口组
+    info                 查看配置
+    port                 修改端口
+    tls                  修改tls
+    tfo                  修改tcpFastOpen
+    stream               修改传输协议
+    stats                iptables流量统计
+    clean                清理日志
+        """.format(exec_name[exec_name.rfind("/") + 1:]))
+    else:
+        print("""
 {0} [-h|--help] [options]
     -h, --help           get help
     start                start V2Ray
@@ -49,7 +73,7 @@ def help():
     stream               modify protocol
     stats                iptables traffic statistics
     clean                clean v2ray log
-    """.format(exec_name[exec_name.rfind("/") + 1:]))
+        """.format(exec_name[exec_name.rfind("/") + 1:]))
 
 def parse_arg():
     if len(sys.argv) == 1:
@@ -166,11 +190,11 @@ def profile_alter():
     V2ray.restart()
 
 def global_setting():
-    show_text = ("V2ray Traffic Statistics", "Iptables Traffic Statistics", "Ban Bittorrent", "Schedule Update V2ray", "Clean Log")
+    show_text = (_("V2ray Traffic Statistics"), _("Iptables Traffic Statistics"), _("Ban Bittorrent"), _("Schedule Update V2ray"), _("Clean Log"))
     print("")
     for index, text in enumerate(show_text): 
         print("{}.{}".format(index + 1, text))
-    choice = loop_input_choice_number("please select: ", len(show_text))
+    choice = loop_input_choice_number(_("please select: "), len(show_text))
     if choice == 1:
         stats_ctr.manage()
     elif choice == 2:

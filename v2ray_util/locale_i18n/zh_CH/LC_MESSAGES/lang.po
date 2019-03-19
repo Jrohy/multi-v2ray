@@ -102,6 +102,20 @@ msgstr "更改Shadowsocks加密方式"
 msgid "modify shadowsocks password"
 msgstr "更改Shadowsocks密码"
 
+msgid "V2ray Traffic Statistics"
+msgstr "流量统计(v2ray)"
+
+msgid "Iptables Traffic Statistics"
+msgstr "流量统计(iptables)"
+
+msgid "Ban Bittorrent"
+msgstr "禁止bittorrent"
+
+msgid "Schedule Update V2ray"
+msgstr "定时更新V2ray"
+
+msgid "Clean Log"
+msgstr "清理v2ray日志"
 
 ### main.py end ###
 

@@ -1,0 +1,112 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2019-03-19 22:21+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+### 通用翻译 start ###
+msgid "please select: "
+msgstr "请选择: "
+
+msgid "input error, please input again"
+msgstr "输入有误, 请重新输入"
+
+### 通用翻译 end ###
+
+### main.py start ###
+msgid "Welcome to v2ray-util"
+msgstr "欢迎使用 v2ray-util 管理程序"
+
+msgid "1.V2ray Manage"
+msgstr "1.服务管理"
+
+msgid "2.Group Manage"
+msgstr "2.用户管理"
+
+msgid "3.Modify Config"
+msgstr "3.更改配置"
+
+msgid "4.Check Config"
+msgstr "4.查看配置"
+
+msgid "5.Global Setting"
+msgstr "5.全局功能"
+
+msgid "6.Update V2Ray"
+msgstr "6.更新V2Ray"
+
+msgid "7.Generate Client Json"
+msgstr "7.生成客户端配置文件"
+
+msgid "start v2ray"
+msgstr "启动服务"
+
+msgid "stop v2ray"
+msgstr "停止服务"
+
+msgid "restart v2ray"
+msgstr "重启服务"
+
+msgid "v2ray status"
+msgstr "运行状态"
+
+msgid "add user"
+msgstr "新增用户"
+
+msgid "add port"
+msgstr "新增端口"
+
+msgid "del user"
+msgstr "删除用户"
+
+msgid "del port"
+msgstr "删除端口"
+
+msgid "modify email"
+msgstr "更改email"
+
+msgid "modify UUID"
+msgstr "更改UUID"
+
+msgid "modify alterID"
+msgstr "更改alterID"
+
+msgid "modify port"
+msgstr "更改主端口"
+
+msgid "modify stream"
+msgstr "更改传输方式"
+
+msgid "modify tls"
+msgstr "更改TLS设置"
+
+msgid "modify tcpFastOpen"
+msgstr "更改tcpFastOpen设置"
+
+msgid "modify dyn_port"
+msgstr "更改动态端口"
+
+msgid "modify shadowsocks method"
+msgstr "更改Shadowsocks加密方式"
+
+msgid "modify shadowsocks password"
+msgstr "更改Shadowsocks密码"
+
+
+### main.py end ###
+
+
+
+
+
+

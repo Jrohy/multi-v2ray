@@ -21,12 +21,12 @@ def loop_input_choice_number(input_tip, number_max):
         if choice.isnumeric():
             choice = int(choice)
         else:
-            print(ColorStr.red("input error, please input again"))
+            print(ColorStr.red(_("input error, please input again")))
             continue
         if (choice <= number_max and choice > 0):
             return choice
         else:
-            print(ColorStr.red("input error, please input again"))
+            print(ColorStr.red(_("input error, please input again")))
 
 def help():
     exec_name = sys.argv[0]
@@ -104,11 +104,11 @@ def parse_arg():
     sys.exit(0)
 
 def service_manage():
-    show_text = ("start v2ray", "stop v2ray", "restart v2ray", "v2ray status")
+    show_text = (_("start v2ray"), _("stop v2ray"), _("restart v2ray"), _("v2ray status"))
     print("")
     for index, text in enumerate(show_text): 
         print("{}.{}".format(index + 1, text))
-    choice = loop_input_choice_number("please select: ", len(show_text))
+    choice = loop_input_choice_number(_("please select: "), len(show_text))
     if choice == 1:
         V2ray.start()
     elif choice == 2:
@@ -119,11 +119,11 @@ def service_manage():
         V2ray.status()
 
 def user_manage():
-    show_text = ("add user", "add port", "del user", "del port")
+    show_text = (_("add user"), _("add port"), _("del user"), _("del port"))
     print("")
     for index, text in enumerate(show_text): 
         print("{}.{}".format(index + 1, text))
-    choice = loop_input_choice_number("please select: ", len(show_text))
+    choice = loop_input_choice_number(_("please select: "), len(show_text))
     if choice == 1:
         multiple.new_user()
     elif choice == 2:
@@ -136,12 +136,12 @@ def user_manage():
     V2ray.restart()
 
 def profile_alter():
-    show_text = ("email", "UUID", "alterID", "port", "stream", "tls", 
-                "tcpFastOpen", "dyn_port", "shadowsocks method", "shadowsocks password")
+    show_text = (_("modify email"), _("modify UUID"), _("modify alterID"), _("modify port"), _("modify stream"), _("modify tls"), 
+                _("modify tcpFastOpen"), _("modify dyn_port"), _("modify shadowsocks method"), _("modify shadowsocks password"))
     print("")
     for index, text in enumerate(show_text): 
         print("{}.{}".format(index + 1, text))
-    choice = loop_input_choice_number("please select: ", len(show_text))
+    choice = loop_input_choice_number(_("please select: "), len(show_text))
     if choice == 1:
         base.new_email()
     elif choice == 2:
@@ -188,9 +188,9 @@ def menu():
     parse_arg()
     while True:
         print("")
-        print(ColorStr.cyan("Welcome to v2ray-util"))
+        print(ColorStr.cyan(_("Welcome to v2ray-util")))
         print("")
-        show_text = ("1.V2ray Manage", "2.Group Manage", "3.Modify Config", "4.Check Config", "5.Global Setting", "6.Update V2Ray", "7.Generate Client Json")
+        show_text = (_("1.V2ray Manage"), _("2.Group Manage"), _("3.Modify Config"), _("4.Check Config"), _("5.Global Setting"), _("6.Update V2Ray"), _("7.Generate Client Json"))
         for index, text in enumerate(show_text): 
             if index % 2 == 0:
                 print('{:<20}'.format(text), end="")   
@@ -198,7 +198,7 @@ def menu():
                 print(text)
                 print("")
         print("")
-        choice = loop_input_choice_number("please select: ", len(show_text))
+        choice = loop_input_choice_number(_("please select: "), len(show_text))
         if choice == 1:
             service_manage()
         elif choice == 2:

@@ -24,7 +24,7 @@ class StatsFactory:
         if downlink_result and len(downlink_result) == 5:
             re_result = re.findall(r"\d+", downlink_result[2])
             if not re_result:
-                print("no data traffic now!")
+                print(_("no data traffic now!"))
                 return
             self.downlink_value = int(re_result[0])
 
@@ -60,45 +60,53 @@ def manage():
 
         group_list = profile.group_list
 
-        print("V2ray Traffic Statistics: {}".format(profile.stats.status))
+        print("{}: {}".format(_("V2ray Traffic Statistics"), profile.stats.status))
 
         print("")
-        print("1.open statistics\n")
-        print("2.close statistics\n")
-        print("3.check statistics result\n")
-        print("4.reset statistics\n")
-        print("tip: only have email node can statistics, restart v2ray will reset traffic statistics!!!\n")
+        print(_("1.open statistics"))
+        print("")
+        print(_("2.close statistics"))
+        print("")
+        print(_("3.check statistics result"))
+        print("")
+        print(_("4.reset statistics"))
+        print("")
+        print(_("tip: only have email node can statistics, restart v2ray will reset traffic statistics!!!"))
+        print("")
 
-        choice = input("please select: ")
+        choice = input(_("please select: "))
         if choice == "1":
             if os.popen(FIND_V2RAY_CRONTAB_CMD).readlines():
-                rchoice = input("open traffic statistics will close schedule update v2ray, continue?(y/n): ")
+                rchoice = input(_("open traffic statistics will close schedule update v2ray, continue?(y/n): "))
                 if rchoice == "y" or rchoice == "Y":
                     #关闭定时更新v2ray服务
                     os.system(DEL_UPDATE_TIMER_CMD)
                 else:
-                    print("undo open traffic statistics!!")
+                    print(_("undo open traffic statistics!!"))
                     continue
             gw = GlobalWriter(group_list)
             gw.write_stats(True)
             os.system(RESTART_CMD)
-            print("open traffic statistics success!\n")
+            print(_("open traffic statistics success!"))
+            print("")
             
         elif choice == "2":
             gw = GlobalWriter(group_list)
             gw.write_stats(False)
             os.system(RESTART_CMD)
-            print("close traffic statistics success!\n")
+            print(_("close traffic statistics success!"))
+            print("")
         elif choice == "3" or choice == "4":
             is_reset = (False if choice == "3" else True)
             action_info = ("check" if choice == "3" else "reset")
             if not profile.stats.status:
-                print("only open traffic statistics can {}\n".format(action_info))
+                print("{} {}".format(_("only open traffic statistics can"), action_info))
+                print("")
                 continue
             
             if group_list[-1].node_list[-1].user_number > 1:
                 print(profile)
-                schoice = input("please input number or group alphabet to {}: ".format(action_info))
+                schoice = input("{} {}: ".format(_("please input number or group alphabet to"), action_info))
             else:
                 schoice = "A"
 
@@ -117,13 +125,15 @@ def manage():
                                    sf.get_stats(node.user_info, is_reset)
                                    sf.print_stats()
                                 else:
-                                    print("no effective email!!!\n")
+                                    print(_("no effective email!!!"))
+                                    print("")
                                 find = True
                                 break
             elif schoice.isalpha() and schoice <= group_list[-1].tag:
                 sf.get_stats(schoice, is_reset, True)
                 sf.print_stats()
             else:
-                print("input error, please input again\n")
+                print(_("input error, please input again"))
+                print("")
         else:
             break

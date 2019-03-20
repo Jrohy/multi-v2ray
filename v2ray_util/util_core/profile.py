@@ -31,7 +31,7 @@ class Profile:
         result = ""
         for group in self.group_list:
             result = "{}{}".format(result, group)
-        result = result + "Tip: The same group's node protocol, port, tls are the same.\n"
+        result = result + _("Tip: The same group's node protocol, port, tls are the same.")
         return result
 
     def read_json(self):

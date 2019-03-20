@@ -190,7 +190,7 @@ def profile_alter():
     V2ray.restart()
 
 def global_setting():
-    show_text = (_("V2ray Traffic Statistics"), _("Iptables Traffic Statistics"), _("Ban Bittorrent"), _("Schedule Update V2ray"), _("Clean Log"))
+    show_text = (_("V2ray Traffic Statistics"), _("Iptables Traffic Statistics"), _("Ban Bittorrent"), _("Schedule Update V2ray"), _("Clean Log"), _("Change Language"))
     print("")
     for index, text in enumerate(show_text): 
         print("{}.{}".format(index + 1, text))
@@ -206,6 +206,13 @@ def global_setting():
         subprocess.call("bash {0}".format(pkg_resources.resource_filename(__name__, "global_setting/update_timer.sh")), shell=True)
     elif choice == 5:
         V2ray.cleanLog()
+    elif choice == 6:
+        from .util_core.config import Config
+        config = Config()
+        lang = config.get_data("lang")
+        config.set_data("lang", "zh" if lang == "en" else "en")
+        print(ColorStr.yellow(_("please run again to become effective!")))
+        sys.exit(0)
 
 def menu():
     V2ray.check()

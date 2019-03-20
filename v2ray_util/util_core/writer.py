@@ -279,8 +279,9 @@ class GroupWriter(Writer):
             Config().set_data("domain", domain)
         else:
             if self.part_json["streamSettings"]["network"] == StreamType.H2.value:
-                print("close tls will also close HTTP/2!\n")
-                print("already reset protocol to origin kcp")
+                print(_("close tls will also close HTTP/2!"))
+                print("")
+                print(_("already reset protocol to origin kcp"))
                 self.part_json["streamSettings"] = self.load_template('kcp.json')
             else:
                 self.part_json["streamSettings"]["security"] = "none"
@@ -439,7 +440,7 @@ class NodeWriter(Writer):
         new_inbound["port"] = int(newPort)
         new_inbound["settings"]["clients"][0]["id"] = str(uuid.uuid1())
         self.config["inbounds"].append(new_inbound)
-        print("add port group success!")
+        print(_("add port group success!"))
         self.save()
 
         reload_data = Loader()
@@ -454,7 +455,7 @@ class NodeWriter(Writer):
         if self.part_json['protocol'] == 'socks':
             user = {"user": kw["user"], "pass": kw["pass"]}
             self.part_json["settings"]["accounts"].append(user)
-            print("add socks5 user success! user: %s, pass: %s" % (kw["user"], kw["pass"]))
+            print("{0} user: {1}, pass: {2}".format(_("add socks5 user success!"), kw["user"], kw["pass"]))
         
         elif self.part_json['protocol'] == 'vmess' :
             new_uuid = uuid.uuid1()
@@ -468,7 +469,7 @@ class NodeWriter(Writer):
                 email_info = ", email: " + kw["email"]
             user["id"]=str(new_uuid)
             self.part_json["settings"]["clients"].append(user)
-            print("add user success! uuid: %s, alterId: 32%s" % (str(new_uuid), email_info))
+            print("{0} uuid: {1}, alterId: 32{2}".format(_("add user success!"), str(new_uuid), email_info))
 
         self.save()
 
@@ -482,12 +483,12 @@ class NodeWriter(Writer):
             client_str = 'clients' if type(node) == Vmess else 'accounts'
             del self.config["inbounds"][group.index]["settings"][client_str][client_index]
 
-        print("del user success!")
+        print(_("del user success!"))
         self.save()
 
     def del_port(self, group):
         if type(group.node_list[0]) == Mtproto:
             clean_mtproto_tag(self.config, group.index)
         del self.config["inbounds"][group.index]
-        print("del port success!")
+        print(_("del port success!"))
         self.save()

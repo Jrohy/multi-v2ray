@@ -13,16 +13,16 @@ def new_port(new_stream=None):
     if new_stream:
         correct_list = stream_list()
         if new_stream not in [x.value for x in correct_list]:
-            print("input error! input -h or --help to get help")
+            print(_("input error! input -h or --help to get help"))
             exit(-1)
         
         stream = list(filter(lambda stream:stream.value == new_stream, correct_list))[0]
 
         if stream == StreamType.SOCKS:
-            user = input("please input socks user: ")
-            password = input("please input socks password: ")
+            user = input(_("please input socks user: "))
+            password = input(_("please input socks password: "))
             if user == "" or password == "":
-                print("socks user or password is null!!")
+                print(_("socks user or password is null!!"))
                 exit(-1)
             info = {"user":user, "pass": password}
         elif stream == StreamType.SS:
@@ -33,23 +33,25 @@ def new_port(new_stream=None):
         salt_stream = [StreamType.KCP_DTLS, StreamType.KCP_WECHAT, StreamType.KCP_UTP, StreamType.KCP_SRTP]
         random.shuffle(salt_stream)
         stream = salt_stream[0]
-        print("random generate (srtp | wechat-video | utp | dtls) fake header, new protocol: {} \n".format(ColorStr.green(stream.value)))
+        print("{}: {} \n".format(_("random generate (srtp | wechat-video | utp | dtls) fake header, new protocol"), ColorStr.green(stream.value)))
 
     random_port = random.randint(1000, 65535)
-    new_port = input("random generate port {}, enter to use, or input customize port: ".format(ColorStr.green(str(random_port))))
+    new_port = input("{0} {1}, {2}: ".format(_("random generate port"), ColorStr.green(str(random_port)), _("enter to use, or input customize port")))
 
     if not new_port:
         new_port = str(random_port)
 
     if new_port.isnumeric():
-        print("\nnew port: {} \n".format(new_port))
+        print("")
+        print("{}: {}".format(_("new port"), new_port))
+        print("")
         nw = NodeWriter()
         nw.create_new_port(int(new_port), stream, **info)
     else:
-        print ("\ninput error, please input number!!")
+        print(_("input error, please check is number"))
 
 def new_user():
-    gs = GroupSelector('user number')
+    gs = GroupSelector(_('user number'))
     group = gs.group
     group_list = gs.group_list
 
@@ -61,11 +63,11 @@ def new_user():
             while True:
                 is_duplicate_email=False
 
-                email = input("input email to create user, or enter to pass: ")
+                email = input(_("input email to create user, or enter to pass: "))
                 if email == "":
                     break
                 if not is_email(email):
-                    print("not email, please input again")
+                    print(_("not email, please input again"))
                     continue
                 
                 for loop_group in group_list:
@@ -73,7 +75,7 @@ def new_user():
                         if node.user_info == None or node.user_info == '':
                             continue
                         elif node.user_info == email:
-                            print("have same email, please input other")
+                            print(_("have same email, please input other"))
                             is_duplicate_email = True
                             break              
                 if not is_duplicate_email:
@@ -84,54 +86,57 @@ def new_user():
             nw.create_new_user(**info)
 
         elif type(group.node_list[0]) == Socks:
-            print("local group is socks, please input user and password to create user\n")
-            user = input("please input socks user: ")
-            password = input("please input socks password: ")
+            print(_("local group is socks, please input user and password to create user"))
+            print("")
+            user = input(_("please input socks user: "))
+            password = input(_("please input socks password: "))
             if user == "" or password == "":
-                print("socks user or password is null!!!")
+                print(_("socks user or password is null!!"))
                 exit(-1)
             info = {"user":user, "pass": password}
             nw = NodeWriter(group.tag, group.index)
             nw.create_new_user(**info)
 
         elif type(group.node_list[0]) == Mtproto:
-            print("\nMtproto protocol only support one user!!")
+            print("")
+            print(_("Mtproto protocol only support one user!!"))
 
         elif type(group.node_list[0]) == SS:
-            print("\nShadowsocks protocol only support one user, u can add new port to multiple SS!!")
+            print("")
+            print(_("Shadowsocks protocol only support one user, u can add new port to multiple SS!"))
 
 def del_port():
-    gs = GroupSelector('del port')
+    gs = GroupSelector(_('del port'))
     group = gs.group
 
     if group == None:
         pass
     else:
-        print("del group info: ")
+        print(_("del group info: "))
         print(group)
-        choice = input("delete?(y/n): ").lower()
+        choice = input(_("delete?(y/n): ")).lower()
         if choice == 'y':
             nw = NodeWriter()
             nw.del_port(group)
             clean_iptables(group.port)
         else:
-            print("undo delete")
+            print(_("undo delete"))
 
 def del_user():
-    cs = ClientSelector('del user')
+    cs = ClientSelector(_('del user'))
     group = cs.group
 
     if group == None:
         pass
     else:
         client_index = cs.client_index
-        print("del user info:")
+        print(_("del user info:"))
         print(group.show_node(client_index))
-        choice = input("delete?(y/n):").lower()
+        choice = input(_("delete?(y/n): ")).lower()
         if choice == 'y':
             if len(group.node_list) == 1:
                 clean_iptables(group.port)
             nw = NodeWriter()
             nw.del_user(group, client_index)
         else:
-            print("undo delete")
+            print(_("undo delete"))

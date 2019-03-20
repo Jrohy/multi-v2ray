@@ -409,5 +409,166 @@ msgstr "3.删除TFO(使用系统默认设置)"
 
 ### base.py end ###
 
+### multiple.py start ###
 
+msgid "input error! input -h or --help to get help"
+msgstr "输入的参数无效! 输入-h 或者--help查看帮助"
+
+msgid "please input socks user: "
+msgstr "请输入socks的用户名: "
+
+msgid "please input socks password: "
+msgstr "请输入socks的密码: "
+
+msgid "socks user or password is null!!"
+msgstr "socks的用户名或者密码不能为空"
+
+msgid "random generate (srtp | wechat-video | utp | dtls) fake header, new protocol"
+msgstr "随机一种 (srtp | wechat-video | utp | dtls) header伪装, 当前生成"
+
+msgid "random generate port"
+msgstr "产生随机端口"
+
+msgid "enter to use, or input customize port"
+msgstr "回车直接以该端口新建Group, 否则输入自定义端口"
+
+msgid "new port"
+msgstr "新端口为"
+
+msgid "user number"
+msgstr "user数量"
+
+msgid "input email to create user, or enter to pass: "
+msgstr "是否输入email来新建用户, 回车直接跳过: "
+
+msgid "local group is socks, please input user and password to create user"
+msgstr "当前组为socks组, 请输入用户密码创建新的socks用户"
+
+msgid "Mtproto protocol only support one user!!"
+msgstr "当前选择的组为MTProto协议, V2ray只支持该协议同组的第一个用户生效, 所以没必要新增用户!"
+
+msgid "Shadowsocks protocol only support one user, u can add new port to multiple SS!"
+msgstr "当前选择的组为Shadowsocks协议, V2ray只支持ss协议一个用户一个端口, 想多用户请新增端口!"
+
+msgid "del group info: "
+msgstr "你要删除的Group组所有节点信息: "
+
+msgid "delete?(y/n): "
+msgstr "是否删除y/n："
+
+msgid "undo delete"
+msgstr "撤销删除"
+
+msgid "del user info:"
+msgstr "你选择的user信息:"
+
+### multiple.py end ###
+
+### ss.py start ###
+
+msgid "please select shadowsocks method:"
+msgstr "请选择shadowsocks的加密方式:"
+
+msgid "input out of range!!"
+msgstr "输入错误，请检查是否符合范围中"
+
+msgid "random generate password"
+msgstr "产生随机密码"
+
+msgid "enter to use, or input customize password: "
+msgstr "回车直接使用该密码, 否则输入自定义密码: "
+
+msgid "modify SS"
+msgstr "修改SS"
+
+msgid "local group not Shadowsocks protocol!"
+msgstr "当前选择组不是Shadowsocks协议!"
+
+msgid "modify Shadowsocks"
+msgstr "修改Shadowsocks"
+
+msgid "success"
+msgstr "成功"
+
+### ss.py end ###
+
+### stream.py start ###
+
+msgid "please input fake domain: "
+msgstr "请输入你想要为伪装的域名(不不不需要http):"
+
+msgid "please select ss method: "
+msgstr "请输入序号选择加密方法: "
+
+msgid "please select fake header: "
+msgstr "请输入序号选择伪装协议: "
+
+msgid "modify protocol"
+msgstr "修改传输方式"
+
+msgid "group protocol"
+msgstr "当前组的传输方式为"
+
+msgid "please input number!"
+msgstr "请输入数字!"
+
+msgid "V2ray MTProto/Shadowsocks not support https, close tls success!"
+msgstr "V2ray MTProto/Shadowsocks不支持https, 关闭tls成功!"
+
+msgid "modify protocol success"
+msgstr "传输模式修改成功!"
+
+### stream.py end ###
+
+### tls.py start ###
+
+msgid "1. Let's Encrypt certificate(auto create, please prepare domain)"
+msgstr "1. Let’s Encrypt 生成证书(准备域名)"
+
+msgid "2. Customize certificate(prepare certificate file paths)"
+msgstr "2. 自定义已存在的其他路径的证书(准备证书文件路径)"
+
+msgid "local vps ip address: "
+msgstr "本机器IP地址为："
+
+msgid "please input your vps domain: "
+msgstr "请输入您绑定的域名："
+
+msgid "domain check error!!!"
+msgstr "域名检测错误!!!"
+
+msgid "domain can't analysis to local ip!!!"
+msgstr "输入的域名与本机ip不符!!!"
+
+msgid "auto generate SSL certificate, please wait.."
+msgstr "正在获取SSL证书，请稍等.."
+
+msgid "please input certificate cert file path: "
+msgstr "请输入证书cert文件路径: "
+
+msgid "please input certificate key file path: "
+msgstr "请输入证书key文件路径: "
+
+msgid "certificate cert or key not exist!"
+msgstr "证书crt文件或者key文件指定路径不存在!"
+
+msgid "please input the certificate cert file domain: "
+msgstr "请输入证书的域名: "
+
+msgid "domain is null!"
+msgstr "证书域名为空!"
+
+msgid "group tls status"
+msgstr "当前选择组tls状态"
+
+msgid "1.open TLS"
+msgstr "1.开启 TLS"
+
+msgid "2.close TLS"
+msgstr "2.关闭 TLS"
+
+msgid "V2ray MTProto/Shadowsocks protocol not support https!!!"
+msgstr "V2ray MTProto/Shadowsocks协议不支持配置https!!!"
+
+### tls.py end ###
 

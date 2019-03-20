@@ -14,20 +14,20 @@ class SSFactory:
         self.method_tuple = ss_method()
 
     def get_method(self):
-        print ("please select shadowsocks method:")
+        print(_("please select shadowsocks method:"))
         for index, method in enumerate(self.method_tuple):
             print ("{}.{}".format(index + 1, method))
         choice = input()
         choice = int(choice)
         if choice < 0 or choice > len(self.method_tuple):
-            print("input out of range!!")
+            print(_("input out of range!!"))
             exit(-1)
         else:
             return self.method_tuple[choice - 1]
 
     def get_password(self):
         random_pass = ''.join(random.sample(string.ascii_letters + string.digits, 16))
-        new_pass =input("random generate password {}, enter to use, or input customize password: ".format(ColorStr.green(random_pass)))
+        new_pass =input("{} {}, {}".format(_("random generate password"), ColorStr.green(random_pass), _("enter to use, or input customize password: ")))
         if not new_pass:
             new_pass = random_pass
         return new_pass
@@ -37,16 +37,18 @@ def modify(alter_type='method'):
     correct_way = ("method", "password")
 
     if alter_type not in correct_way:
-        print("input error!")
+        print(_("input error!"))
         exit(-1)
 
-    gs = GroupSelector('modify SS')
+    gs = GroupSelector(_('modify SS'))
     group = gs.group
 
     if group == None:
         exit(-1)
     elif type(group.node_list[0]) != SS:
-        print("\nlocal group not Shadowsocks protocol!\n")
+        print("")
+        print(_("local group not Shadowsocks protocol!"))
+        print("")
         exit(-1)
     else:
         sm = SSFactory()
@@ -55,4 +57,4 @@ def modify(alter_type='method'):
             gw.write_ss_method(sm.get_method())
         elif alter_type == correct_way[1]:
             gw.write_ss_password(sm.get_password())
-        print("modify Shadowsocks {} success!\n".format(alter_type))
+        print("{0} {1} {2}\n".format(_("modify Shadowsocks"),alter_type, _("success")))

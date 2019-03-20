@@ -13,24 +13,27 @@ class TLSModifier:
         self.writer = GroupWriter(group_tag, group_index)
     
     def turn_on(self):
-        print("1. Let's Encrypt certificate(auto create, please prepare domain)")
-        print("2. Customize certificate(prepare certificate file paths)\n")
-        choice=input("please select: ")
+        print(_("1. Let's Encrypt certificate(auto create, please prepare domain)"))
+        print(_("2. Customize certificate(prepare certificate file paths)"))
+        print("")
+        choice=input(_("please select: "))
         if choice == "1":
             local_ip = get_ip()
-            print("local vps ip address: " + local_ip + "\n")
-            input_domain=input("please input your vps domain: ")
+            print(_("local vps ip address: ") + local_ip + "\n")
+            input_domain=input(_("please input your vps domain: "))
             try:
                 input_ip = socket.gethostbyname(input_domain)
             except Exception:
-                print("\ndomain check error!!!\n")
+                print(_("domain check error!!!"))
+                print("")
                 return
             if input_ip != local_ip:
-                print("\ndomain can't analysis to local ip!!!\n")
+                print(_("domain can't analysis to local ip!!!"))
+                print("")
                 return
 
             print("")
-            print("auto generate SSL certificate, please wait..")
+            print(_("auto generate SSL certificate, please wait.."))
             gen_cert(input_domain)
             crt_file = "/root/.acme.sh/" + input_domain +"_ecc"+ "/fullchain.cer"
             key_file = "/root/.acme.sh/" + input_domain +"_ecc"+ "/"+ input_domain +".key"
@@ -38,42 +41,43 @@ class TLSModifier:
             self.writer.write_tls(True, crt_file=crt_file, key_file=key_file, domain=input_domain)
 
         elif choice == "2":
-            crt_file = input("please input certificate cert file path: ")
-            key_file = input("please input certificate key file path: ")
+            crt_file = input(_("please input certificate cert file path: "))
+            key_file = input(_("please input certificate key file path: "))
             if not os.path.exists(crt_file) or not os.path.exists(key_file):
-                print("certificate cert or key not exist!\n")
+                print(_("certificate cert or key not exist!"))
                 return
-            domain = input("please input the certificate cert file domain: ")
+            domain = input(_("please input the certificate cert file domain: "))
             if not domain:
-                print("domain is null!\n")
+                print(_("domain is null!"))
                 return
             self.writer.write_tls(True, crt_file=crt_file, key_file=key_file, domain=domain)
         else:
-            print("input error!\n")
+            print(_("input error!"))
     
     def turn_off(self):
         self.writer.write_tls(False)
 
 def modify():
-    gs = GroupSelector('modify TLS')
+    gs = GroupSelector(_('modify tls'))
     group = gs.group
 
     if group == None:
         exit(-1)
     else:
         if type(group.node_list[0]) == Mtproto or type(group.node_list[0]) == SS:
-            print("\nv2ray MTProto/Shadowsocks protocol not support https!!!\n")
+            print(_("V2ray MTProto/Shadowsocks protocol not support https!!!"))
+            print("")
             exit(-1)
         tm = TLSModifier(group.tag, group.index)
         tls_status = 'open' if group.tls == 'tls' else 'close'
-        print("group tls status: {}\n".format(tls_status))
+        print("{}: {}\n".format(_("group tls status"), tls_status))
         print("")
-        print("1.open TLS")
-        print("2.close TLS")
-        choice = input("please select: ")
+        print(_("1.open TLS"))
+        print(_("2.close TLS"))
+        choice = input(_("please select: "))
         if choice == '1':
             tm.turn_on()
         elif choice == '2':
             tm.turn_off()
         else:
-            print("input error, please try again!")
+            print(_("input error, please input again"))

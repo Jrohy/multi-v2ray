@@ -74,7 +74,7 @@ class Socks(User):
 
     def link(self, ip, port, tls):
         if tls == "tls":
-            return ColorStr.red("HTTPS Socks5 don't support telegram share link")
+            return ColorStr.red(_("HTTPS Socks5 don't support telegram share link"))
         else:
             return ColorStr.green("tg://socks?server={0}&port={1}&user={2}&pass={3}".format(ip, port, self.user_info, self.password))
 

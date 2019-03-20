@@ -35,7 +35,8 @@ class V2ray:
     def cleanLog():
         subprocess.call("cat /dev/null > /var/log/v2ray/access.log", shell=True)
         subprocess.call("cat /dev/null > /var/log/v2ray/error.log", shell=True)
-        print(ColorStr.green("clean v2ray log success!\n"))
+        print(ColorStr.green(_("clean v2ray log success!")))
+        print("")
 
     @classmethod
     def restart(cls):
@@ -56,7 +57,7 @@ class V2ray:
     @classmethod
     def check(cls):
         if not os.path.exists("/usr/bin/v2ray/v2ray"):
-            print(ColorStr.yellow("check v2ray no install, auto install v2ray.."))
+            print(ColorStr.yellow(_("check v2ray no install, auto install v2ray..")))
             cls.update()
             cls.new()
         if not os.path.exists("/etc/v2ray_util/util.cfg"):

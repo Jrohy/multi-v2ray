@@ -15,12 +15,14 @@ def manage():
 
     while True:
         print("")
-        print("Iptables Traffic Statistics")
+        print(_("Iptables Traffic Statistics"))
         print("")
-        print("1.check statistics result\n")
-        print("2.reset special port statistics\n")
+        print(_("1.check statistics result"))
+        print("")
+        print(_("2.reset special port statistics"))
+        print("")
 
-        choice = input("please select:")
+        choice = input(_("please select: "))
         if choice == "1":
             print("")
             for group in group_list:
@@ -28,11 +30,11 @@ def manage():
             print("")
 
         elif choice == "2":
-            port = input("please input reset port:")
+            port = input(_("please input reset port:"))
             if port and port.isnumeric():
                 subprocess.call("bash {0} {1}".format(pkg_resources.resource_filename(__name__, "clean_traffic.sh"), str(port)), shell=True)
-                print(ColorStr.green("reset success!"))
+                print(ColorStr.green(_("reset success!")))
             else:
-                print(ColorStr.red("input error!"))
+                print(ColorStr.red(_("input error!")))
         else:
             break

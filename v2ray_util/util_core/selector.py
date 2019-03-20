@@ -18,11 +18,11 @@ class CommonSelector:
         choice = input(self.msg)
 
         if not choice.isnumeric():
-            raise RuntimeError('input error, please check is number')
+            raise RuntimeError(_('input error, please check is number'))
 
         choice = int(choice)
         if choice < 1 or choice > len(self.collection):
-            raise RuntimeError('input error, input index out of range')
+            raise RuntimeError(_('input error, input index out of range'))
         else:
             return self.collection[choice - 1]
 
@@ -37,8 +37,8 @@ class ClientSelector(Selector):
     def __init__(self, action):
         super(ClientSelector, self).__init__(action)
         self.list_size = self.group_list[-1].node_list[-1].user_number
-        if "del" in action and self.list_size == 1:
-            print(ColorStr.red("last node can't delete!!!"))
+        if _("del") in action and self.list_size == 1:
+            print(ColorStr.red(_("last node can't delete!!!")))
             self.group = None
         elif self.list_size > 1: 
             self.select_client()
@@ -49,15 +49,15 @@ class ClientSelector(Selector):
     def select_client(self):
         print(self.profile)
         self.group = None
-        choice = input("please input number to {}: ".format(self.action))
+        choice = input("{} {}: ".format(_("please input number to"), self.action))
 
         if not choice.isnumeric():
-            print(ColorStr.red('input error, please check is number'))
+            print(ColorStr.red(_('input error, please check is number')))
             return
 
         choice = int(choice)
         if choice < 1 or choice > self.list_size:
-            print(ColorStr.red('input error, input index out of range'))
+            print(ColorStr.red(_('input error, input index out of range')))
         else:
             find = False
             for group in self.group_list:
@@ -73,8 +73,8 @@ class ClientSelector(Selector):
 class GroupSelector(Selector):
     def __init__(self, action):
         super(GroupSelector, self).__init__(action)
-        if "del" in action and len(self.group_list) == 1:
-            print(ColorStr.red("last group can't delete!!!"))
+        if _("del") in action and len(self.group_list) == 1:
+            print(ColorStr.red(_("last group can't delete!!!")))
             self.group = None
         elif len(self.group_list) > 1:
             self.select_group()
@@ -83,10 +83,10 @@ class GroupSelector(Selector):
 
     def select_group(self):
         print(self.profile)
-        choice = input("please input group alphabet to {}: ".format(self.action))
+        choice = input("{} {}: ".format(_("please input group alphabet to"), self.action))
         group_list = [x for x in self.group_list if x.tag == choice]
         if len(group_list) == 0:
-            print(ColorStr.red('input error, please check group {} exist'.format(choice)))
+            print(ColorStr.red('{0} {1} {2}'.format(_("input error, please check group"), choice, _("exist")))
             self.group = None
         else:
             self.group = group_list[0]

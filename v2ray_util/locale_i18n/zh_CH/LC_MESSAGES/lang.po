@@ -21,6 +21,15 @@ msgstr "请选择: "
 msgid "input error, please input again"
 msgstr "输入有误, 请重新输入"
 
+msgid "input error, please check is number"
+msgstr "输入有误, 请检查是否为数字"
+
+msgid "input error!"
+msgstr "输入有误!"
+
+msgid "modify success!"
+msgstr "修改成功!"
+
 ### 通用翻译 end ###
 
 ### main.py start ###
@@ -117,10 +126,288 @@ msgstr "定时更新V2ray"
 msgid "Clean Log"
 msgstr "清理v2ray日志"
 
+msgid "Change Language"
+msgstr "Switch to English"
+
 ### main.py end ###
 
+### client.py start ###
 
+msgid "MTProto protocol only use Telegram, and can't generate client json!"
+msgstr "MTProto协议只支持Telegram通信, 所以无法生成配置文件!"
 
+msgid "save json success!"
+msgstr "保存成功!"
+
+msgid "generate client json"
+msgstr "生成客户端json"
+
+### client.py end ###
+
+### converter.py start ###
+
+msgid "tranfrom to v2ray new version json.."
+msgstr "转换配置文件格式中.."
+
+### converter.py end ###
+
+### group.py start ###
+
+msgid "HTTPS Socks5 don't support telegram share link"
+msgstr "HTTPS的Socks5不支持tg的分享连接"
+
+### group.py end ###
+
+### profile.py start ###
+
+msgid "Tip: The same group's node protocol, port, tls are the same."
+msgstr "Tip: 同一Group的节点传输方式,端口配置,TLS等设置相同"
+
+### profile.py end ###
+
+### selector.py start ###
+
+msgid "del"
+msgstr "删除"
+
+msgid "last node can't delete!!!"
+msgstr "仅剩最后一个节点无法删除!!!"
+
+msgid "please input number to"
+msgstr "请输入数字来"
+
+msgid "last group can't delete!!!"
+msgstr "仅剩最后一个端口无法删除!!!"
+
+msgid "please input group alphabet to"
+msgstr "请输入节点Group字母来"
+
+msgid "input error, please check group"
+msgstr "输入有误，请检查组"
+
+msgid "exist"
+msgstr "是否存在"
+
+### selector.py end ###
+
+### v2ray.py start ###
+
+msgid "clean v2ray log success!"
+msgstr "清理v2ray日志成功!"
+
+msgid "check v2ray no install, auto install v2ray.."
+msgstr "检测到本机没安装v2ray, 正在自动安装.."
+
+### v2ray.py end ###
+
+### writer.py start ###
+
+msgid "close tls will also close HTTP/2!"
+msgstr "关闭tls同时也会关闭HTTP/2!"
+
+msgid "already reset protocol to origin kcp"
+msgstr "已重置为kcp传输方式, 若要其他方式请自行切换"
+
+msgid "add port group success!"
+msgstr "新增端口组成功!"
+
+msgid "add socks5 user success!"
+msgstr "新建Socks5用户成功!"
+
+msgid "add user success!"
+msgstr "新建用户成功!"
+
+msgid "del user success!"
+msgstr "删除用户成功!"
+
+msgid "del port success!"
+msgstr "删除端口成功!"
+
+### writer.py end ###
+
+### ban_bt.py start ###
+
+msgid "Ban BT status"
+msgstr "当前禁止BT状态"
+
+msgid "Ban BT?(y/n): "
+msgstr "是否禁止BT(y/n)："
+
+### ban_bt.py end ###
+
+### iptables_ctr.py start ###
+
+msgid "Iptables Traffic Statistics"
+msgstr "Iptables 端口流量统计"
+
+msgid "1.check statistics result"
+msgstr "1.查看流量统计"
+
+msgid "2.reset special port statistics"
+msgstr "2.重置流量统计"
+
+msgid "please input reset port:"
+msgstr "请输入要重置流量的端口："
+
+msgid "reset success!"
+msgstr "重置成功!"
+
+### iptables_ctr.py end ###
+
+### stats_ctr.py start ###
+
+msgid "no data traffic now!"
+msgstr "当前无流量数据, 请使用流量片刻再来查看统计!"
+
+msgid "V2ray Traffic Statistics"
+msgstr "当前V2ray流量统计状态"
+
+msgid "1.open statistics"
+msgstr "1.开启流量统计"
+
+msgid "2.close statistics"
+msgstr "2.关闭流量统计"
+
+msgid "3.check statistics result"
+msgstr "3.查看流量统计"
+
+msgid "4.reset statistics"
+msgstr "4.重置流量统计"
+
+msgid "tip: only have email node can statistics, restart v2ray will reset traffic statistics!!!"
+msgstr "tip: 具有有效email节点才会统计, 重启v2ray会重置流量统计!!!"
+
+msgid "open traffic statistics will close schedule update v2ray, continue?(y/n): "
+msgstr "开启流量统计会关闭定时更新v2ray服务, 是否继续y/n: "
+
+msgid "undo open traffic statistics!!"
+msgstr "撤销开启流量统计!!"
+
+msgid "open traffic statistics success!"
+msgstr "开启流量统计成功!"
+
+msgid "close traffic statistics success!"
+msgstr "关闭流量统计成功!"
+
+msgid "only open traffic statistics can"
+msgstr "流量统计开启状态才能"
+
+msgid "please input number or group alphabet to"
+msgstr "请输入流量的组别(字母)或者序号(数字)来"
+
+msgid "no effective email!!!"
+msgstr "无有效邮箱，无法统计!!!"
+
+### stats_ctr.py end ###
+
+### base.py start ###
+
+msgid "modify alterId"
+msgstr "修改 alterId"
+
+msgid "node alterID"
+msgstr "当前节点alterID"
+
+msgid "please input new alterId: "
+msgstr "请输入新的alterID: "
+
+msgid "alterId modify success!"
+msgstr "alterID修改成功!"
+
+msgid "only vmess protocol can modify alterId!"
+msgstr "只有vmess协议才能修改alterId!"
+
+msgid "modify dyn_port"
+msgstr "修改动态端口"
+
+msgid "dyn_port status"
+msgstr "当前组的动态端口状态"
+
+msgid "open/close dyn_port(y/n): "
+msgstr "是否开启动态端口(y/n): "
+
+msgid "please input dyn_port alterID(default 32): "
+msgstr "请为动态端口设置alterID(默认32): "
+
+msgid "open dyn_port success!"
+msgstr "成功开启动态端口!"
+
+msgid "close dyn_port success!"
+msgstr "成功关闭动态端口!"
+
+msgid "modify email"
+msgstr "修改email"
+
+msgid "Socks5 don't support email!"
+msgstr "Socks5节点 不支持写入email!"
+
+msgid "node email"
+msgstr "当前节点email为"
+
+msgid "please input new email: "
+msgstr "请输入新的email地址: "
+
+msgid "not email, please input again"
+msgstr "不是合格的email格式，请重新输入"
+
+msgid "have same email, please input other"
+msgstr "已经有重复的email, 请重新输入"
+
+msgid "modify email success!"
+msgstr "修改email成功!"
+
+msgid "modify uuid"
+msgstr "修改uuid"
+
+msgid "node UUID"
+msgstr "当前节点UUID为"
+
+msgid "get new UUID?(y/n): "
+msgstr "是否要随机生成一个新的UUID (y/n)："
+
+msgid "new UUID"
+msgstr "新的UUID为"
+
+msgid "UUID modify success!"
+msgstr "UUID修改成功!"
+
+msgid "undo modify"
+msgstr "已取消生成新的UUID,未执行任何操作"
+
+msgid "only vmess protocol can modify uuid!"
+msgstr "只有vmess协议才能修改uuid!"
+
+msgid "modify port"
+msgstr "修改port"
+
+msgid "group port"
+msgstr "当前组的端口信息为"
+
+msgid "please input new port(support range port(use '-' as separator), all range port can effect):"
+msgstr "请输入新端口(支持输入端口范围, 用'-'隔开, 表示该范围的全部端口生效)："
+
+msgid "port modify success!"
+msgstr "端口修改成功!"
+
+msgid "modify tcpFastOpen"
+msgstr "修改tcpFastOpen"
+
+msgid "V2ray MTProto/Shadowsocks don't support tcpFastOpen!!!"
+msgstr "V2ray MTProto/Shadowsocks协议不支持配置tcpFastOpen!!!"
+
+msgid "group tcpFastOpen"
+msgstr "当前组的tcpFastOpen状态"
+
+msgid "1.open TFO(force open)"
+msgstr "1.开启TFO(强制开启)"
+
+msgid "2.close TFO(force close)"
+msgstr "2.关闭TFO(强制关闭)"
+
+msgid "3.delete TFO(use system default profile)"
+msgstr "3.删除TFO(使用系统默认设置)"
+
+### base.py end ###
 
 
 

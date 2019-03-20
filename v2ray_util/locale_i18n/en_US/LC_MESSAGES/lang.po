@@ -13,3 +13,9 @@ msgstr ""
 "Content-Type: text/plain; charset=utf8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
+
+msgid "Change Language"
+msgstr "切换到中文"
+
+msgid "please run again to become effective!"
+msgstr "请重新运行来生效!"

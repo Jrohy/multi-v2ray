@@ -57,7 +57,7 @@ class ClientSelector(Selector):
 
         choice = int(choice)
         if choice < 1 or choice > self.list_size:
-            print(ColorStr.red(_('input error, input index out of range')))
+            print(ColorStr.red(_('input out of range!!')))
         else:
             find = False
             for group in self.group_list:

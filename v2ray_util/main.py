@@ -154,7 +154,9 @@ def user_manage():
     for index, text in enumerate(show_text): 
         print("{}.{}".format(index + 1, text))
     choice = loop_input_choice_number(_("please select: "), len(show_text))
-    if choice == 1:
+    if not choice:
+        return
+    elif choice == 1:
         multiple.new_user()
     elif choice == 2:
         multiple.new_port()
@@ -172,7 +174,9 @@ def profile_alter():
     for index, text in enumerate(show_text): 
         print("{}.{}".format(index + 1, text))
     choice = loop_input_choice_number(_("please select: "), len(show_text))
-    if choice == 1:
+    if not choice:
+        return
+    elif choice == 1:
         base.new_email()
     elif choice == 2:
         base.new_uuid()

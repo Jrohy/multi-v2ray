@@ -60,7 +60,7 @@ def manage():
 
         group_list = profile.group_list
 
-        print("{}: {}".format(_("V2ray Traffic Statistics"), profile.stats.status))
+        print("{}: {}".format(_("V2ray Traffic Statistics Status"), profile.stats.status))
 
         print("")
         print(_("1.open statistics"))

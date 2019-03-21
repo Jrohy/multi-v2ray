@@ -32,7 +32,7 @@ setup(
         'Development Status :: 5 - Production/Stable',
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Natural Language :: English",
-        "Natural Language :: Chinese(Simplified)",
+        'Natural Language :: Chinese (Simplified)',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',

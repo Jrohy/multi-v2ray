@@ -69,6 +69,9 @@ msgstr "重启服务"
 msgid "v2ray status"
 msgstr "运行状态"
 
+msgid "v2ray log"
+msgstr "运行日志"
+
 msgid "add user"
 msgstr "新增用户"
 

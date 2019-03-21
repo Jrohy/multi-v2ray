@@ -1,3 +1,9 @@
+> v3.0.7
+* support chinese && english switch
+* check v2ray log
+* [#163](https://github.com/Jrohy/multi-v2ray/issues/163)
+* [#168](https://github.com/Jrohy/multi-v2ray/issues/168)
+
 > v3.0.6
 * Change to pip install
 * [#152](https://github.com/Jrohy/multi-v2ray/issues/152)

@@ -38,6 +38,14 @@ class V2ray:
         print(ColorStr.green(_("clean v2ray log success!")))
         print("")
 
+    @staticmethod
+    def log():
+        import subprocess
+        f = subprocess.Popen(['tail','-f', '/var/log/v2ray/access.log'],
+                stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        while True:
+            print(bytes.decode(f.stdout.readline().strip()))
+
     @classmethod
     def restart(cls):
         cls.run("service v2ray restart", "restart")

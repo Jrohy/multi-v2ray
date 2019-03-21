@@ -52,6 +52,7 @@ def help():
     stream               修改传输协议
     stats                iptables流量统计
     clean                清理日志
+    log                  查看日志
         """.format(exec_name[exec_name.rfind("/") + 1:]))
     else:
         print("""
@@ -73,6 +74,7 @@ def help():
     stream               modify protocol
     stats                iptables traffic statistics
     clean                clean v2ray log
+    log                  check v2ray log
         """.format(exec_name[exec_name.rfind("/") + 1:]))
 
 def parse_arg():
@@ -121,6 +123,8 @@ def parse_arg():
             V2ray.new()
         elif sys.argv[1] == "convert":
             V2ray.convert()
+        elif sys.argv[1] == "log":
+            V2ray.log()
     else:
         if sys.argv[1] == "add":
             multiple.new_port(sys.argv[2])
@@ -128,7 +132,7 @@ def parse_arg():
     sys.exit(0)
 
 def service_manage():
-    show_text = (_("start v2ray"), _("stop v2ray"), _("restart v2ray"), _("v2ray status"))
+    show_text = (_("start v2ray"), _("stop v2ray"), _("restart v2ray"), _("v2ray status"), _("v2ray log"))
     print("")
     for index, text in enumerate(show_text): 
         print("{}.{}".format(index + 1, text))
@@ -141,6 +145,8 @@ def service_manage():
         V2ray.restart()
     elif choice == 4:
         V2ray.status()
+    elif choice == 5:
+        V2ray.log()
 
 def user_manage():
     show_text = (_("add user"), _("add port"), _("del user"), _("del port"))

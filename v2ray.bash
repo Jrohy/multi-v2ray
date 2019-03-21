@@ -1,6 +1,6 @@
 # bash completion for v2ray                             -*- shell-script -*-
 function _auto_tab() {
-	local options_array=("start" "stop" "restart" "status" "update" "add" "del" "info" "port" "tls" "tfo" "stream" "stats" "clean" "-h")
+	local options_array=("start" "stop" "restart" "status" "update" "add" "del" "info" "port" "tls" "tfo" "stream" "stats" "clean" "log" "-h")
 	local add_array=("wechat" "utp" "srtp" "dtls" "wireguard" "socks" "mtproto" "ss")
 	local cur pre
 

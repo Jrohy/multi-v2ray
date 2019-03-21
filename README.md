@@ -36,6 +36,11 @@ new install
 source <(curl -sL https://git.io/fNgqx)
 ```
 
+中文版安装
+```
+source <(curl -sL https://git.io/fNgqx) --zh
+```
+
 keep profile to update
 ```
 source <(curl -sL https://git.io/fNgqx) -k

@@ -6,7 +6,7 @@ import pkg_resources
 
 from .util_core.v2ray import V2ray
 from .util_core.utils import ColorStr, open_port
-from .global_setting import stats_ctr, iptables_ctr, ban_bt
+from .global_setting import stats_ctr, iptables_ctr, ban_bt, update_timer
 from .config_modify import base, multiple, ss, stream, tls
 
 def loop_input_choice_number(input_tip, number_max):
@@ -203,7 +203,7 @@ def global_setting():
         ban_bt.manage()
         V2ray.restart()
     elif choice == 4:
-        subprocess.call("bash {0}".format(pkg_resources.resource_filename(__name__, "global_setting/update_timer.sh")), shell=True)
+        update_timer.manage()
     elif choice == 5:
         V2ray.cleanLog()
     elif choice == 6:

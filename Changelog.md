@@ -1,3 +1,6 @@
+> v3.1.0
+* 修复翻译错误, 流量统计乱码
+
 > v3.0.7
 * support chinese && english switch
 * check v2ray log

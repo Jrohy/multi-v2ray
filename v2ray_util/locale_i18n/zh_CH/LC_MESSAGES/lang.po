@@ -240,7 +240,7 @@ msgstr "是否禁止BT(y/n)："
 
 ### iptables_ctr.py start ###
 
-msgid "Iptables Traffic Statistics"
+msgid "Iptables Port Traffic Statistics"
 msgstr "Iptables 端口流量统计"
 
 msgid "1.check statistics result"
@@ -262,7 +262,7 @@ msgstr "重置成功!"
 msgid "no data traffic now!"
 msgstr "当前无流量数据, 请使用流量片刻再来查看统计!"
 
-msgid "V2ray Traffic Statistics"
+msgid "V2ray Traffic Statistics Status"
 msgstr "当前V2ray流量统计状态"
 
 msgid "1.open statistics"

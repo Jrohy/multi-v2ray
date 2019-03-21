@@ -13,7 +13,7 @@ class Dyport:
         self.aid = aid
 
     def __str__(self):
-        return "open,alterId为{}".format(self.aid) if self.status else "close"
+        return "{}, alterId:{}".format(_("open"), self.aid) if self.status else _("close")
 
 class Quic:
     def __init__(self, security="none", key="", header="none"):
@@ -154,7 +154,7 @@ class Group:
         self.index = index
 
     def show_node(self, index):
-        tls = "open" if self.tls == "tls" else "close"
+        tls = _("open") if self.tls == "tls" else _("close")
         tfo = "TcpFastOpen: {}".format(self.tfo) if self.tfo != None else ""
         dyp = "DynamicPort: {}".format(self.dyp) if self.dyp.status else ""
         port_way = "-{}".format(self.end_port) if self.end_port else ""
@@ -173,7 +173,7 @@ TLS: {tls}
 
     # print一个实例打印的字符串
     def __str__(self):
-        tls = "open" if self.tls == "tls" else "close"
+        tls = _("open") if self.tls == "tls" else _("close")
         tfo = "TcpFastOpen: {}".format(self.tfo) if self.tfo != None else ""
         dyp = "DynamicPort: {}".format(self.dyp) if self.dyp.status else ""
         port_way = "-{}".format(self.end_port) if self.end_port else ""

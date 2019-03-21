@@ -571,3 +571,37 @@ msgid "V2ray MTProto/Shadowsocks protocol not support https!!!"
 msgstr "V2ray MTProto/Shadowsocks协议不支持配置https!!!"
 
 ### tls.py end ###
+
+### update_timer.py start ###
+
+msgid "open"
+msgstr "开启"
+
+msgid "close"
+msgstr "关闭"
+
+msgid "schedule update v2ray task"
+msgstr "当前定时更新任务状态"
+
+msgid "1.open schedule task"
+msgstr "1.开启定时更新任务"
+
+msgid "2.close schedule task"
+msgstr "2.关闭定时更新任务"
+
+msgid "Tip: open schedule update v2ray at 3:00"
+msgstr "Tip: 开启定时更新v2ray的更新时间为每天北京时间3:00更新"
+
+msgid "have open schedule!"
+msgstr "当前定时更新已开启,无需重复操作!"
+
+msgid "close shedule task success"
+msgstr "成功关闭定时更新任务"
+
+msgid "Beijing time: 3, VPS time"
+msgstr "北京时间: 3, VPS 时间"
+
+msgid "success open schedule update task!"
+msgstr "成功设置定时更新任务!"
+
+### update_timer.py end ###

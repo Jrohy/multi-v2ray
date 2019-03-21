@@ -16,6 +16,8 @@ HELP=0
 
 REMOVE=0
 
+CHINESE=0
+
 BASE_SOURCE_PATH="https://raw.githubusercontent.com/Jrohy/multi-v2ray/master"
 
 CLEAN_IPTABLES_SHELL="$BASE_SOURCE_PATH/v2ray_util/global_setting/clean_iptables.sh"
@@ -23,6 +25,8 @@ CLEAN_IPTABLES_SHELL="$BASE_SOURCE_PATH/v2ray_util/global_setting/clean_iptables
 BASH_COMPLETION_SHELL="$BASE_SOURCE_PATH/v2ray.bash"
 
 UTIL_CFG="$BASE_SOURCE_PATH/v2ray_util/util_core/util.cfg"
+
+UTIL_PATH="/etc/v2ray_util/util.cfg"
 
 #Centos 临时取消别名
 [[ -f /etc/redhat-release && -z $(echo $SHELL|grep zsh) ]] && unalias -a
@@ -53,6 +57,10 @@ while [[ $# > 0 ]];do
         -k|--keep)
         INSTALL_WAY=1
         colorEcho ${BLUE} "keep v2ray profile to update\n"
+        ;;
+        --zh)
+        CHINESE=1
+        colorEcho ${BLUE} "安装中文版..\n"
         ;;
         *)
                 # unknown option
@@ -158,19 +166,22 @@ installDependent(){
 
 #设置定时升级任务
 planUpdate(){
-    #计算北京时间早上3点时VPS的实际时间
-    ORIGIN_TIME_ZONE=$(date -R|awk '{printf"%d",$6}')
-    LOCAL_TIME_ZONE=${ORIGIN_TIME_ZONE%00}
-    BEIJING_ZONE=8
-    DIFF_ZONE=$[$BEIJING_ZONE-$LOCAL_TIME_ZONE]
-    LOCAL_TIME=$[$BEIJING_UPDATE_TIME-$DIFF_ZONE]
-    if [ $LOCAL_TIME -lt 0 ];then
-        LOCAL_TIME=$[24+$LOCAL_TIME]
-    elif [ $LOCAL_TIME -ge 24 ];then
-        LOCAL_TIME=$[$LOCAL_TIME-24]
+    if [[ $CHINESE == 1 ]];then
+        #计算北京时间早上3点时VPS的实际时间
+        ORIGIN_TIME_ZONE=$(date -R|awk '{printf"%d",$6}')
+        LOCAL_TIME_ZONE=${ORIGIN_TIME_ZONE%00}
+        BEIJING_ZONE=8
+        DIFF_ZONE=$[$BEIJING_ZONE-$LOCAL_TIME_ZONE]
+        LOCAL_TIME=$[$BEIJING_UPDATE_TIME-$DIFF_ZONE]
+        if [ $LOCAL_TIME -lt 0 ];then
+            LOCAL_TIME=$[24+$LOCAL_TIME]
+        elif [ $LOCAL_TIME -ge 24 ];then
+            LOCAL_TIME=$[$LOCAL_TIME-24]
+        fi
+        colorEcho ${BLUE} "beijing time ${BEIJING_UPDATE_TIME}, VPS time: ${LOCAL_TIME}\n"
+    else
+        LOCAL_TIME=3
     fi
-	colorEcho ${BLUE} "beijing time ${BEIJING_UPDATE_TIME}, VPS time: ${LOCAL_TIME}\n"
-
     OLD_CRONTAB=$(crontab -l)
     echo "SHELL=/bin/bash" >> crontab.txt
     echo "${OLD_CRONTAB}" >> crontab.txt
@@ -197,15 +208,20 @@ updateProject() {
     if [[ -e /usr/local/multi-v2ray/multi-v2ray.conf ]];then
         TEMP_VALUE=$(cat /usr/local/multi-v2ray/multi-v2ray.conf|grep domain|awk 'NR==1')
         DOMAIN=${TEMP_VALUE/*=}
-        if [[ ! -e /etc/v2ray_util/util.cfg ]];then
-            mkdir -p /etc/v2ray_util
-            curl $UTIL_CFG > /etc/v2ray_util/util.cfg
-            [[ ! -z $DOMAIN ]] && sed -i "s/^domain.*/domain=${DOMAIN}/g" /etc/v2ray_util/util.cfg
-        fi
+        rm -rf /usr/local/multi-v2ray
     fi
-    [[ -e /usr/local/multi-v2ray ]] && rm -rf /usr/local/multi-v2ray
 
     pip3 install -U v2ray_util
+
+    if [[ -e $UTIL_PATH ]];then
+        [[ -z $(cat $UTIL_PATH|grep lang) ]] && echo "lang=en" >> $UTIL_PATH
+    else
+        mkdir -p /etc/v2ray_util
+        curl $UTIL_CFG > $UTIL_PATH
+        [[ ! -z $DOMAIN ]] && sed -i "s/^domain.*/domain=${DOMAIN}/g" $UTIL_PATH
+    fi
+
+    [[ $CHINESE == 1 ]] && sed -i "s/lang=en/lang=zh/g" $UTIL_PATH
 
     rm -f /usr/local/bin/v2ray >/dev/null 2>&1
     ln -s $(which v2ray-util) /usr/local/bin/v2ray

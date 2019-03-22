@@ -71,6 +71,7 @@ v2ray [-h|--help] [options]
     stream               modify protocol
     stats                iptables traffic statistics
     clean                clean v2ray log
+    log                  check v2ray log
 ```
 
 ## Pip Source

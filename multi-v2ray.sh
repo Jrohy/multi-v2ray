@@ -200,10 +200,7 @@ planUpdate(){
 updateProject() {
     local DOMAIN=""
 
-    if ! type pip >/dev/null 2>&1;then
-        colorEcho $RED "pip no install!"
-        exit 1
-    fi
+    [[ ! $(type pip3 2>/dev/null) ]] && colorEcho $RED "pip3 no install!" && exit 1
 
     if [[ -e /usr/local/multi-v2ray/multi-v2ray.conf ]];then
         TEMP_VALUE=$(cat /usr/local/multi-v2ray/multi-v2ray.conf|grep domain|awk 'NR==1')

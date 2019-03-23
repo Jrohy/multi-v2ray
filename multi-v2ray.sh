@@ -161,8 +161,7 @@ installDependent(){
     fi
 
     #install python3 & pip3
-    [[ ! $(type python3 2>/dev/null) ]] && bash <(curl -sL https://git.io/fhqMz)
-    [[ ! $(type pip3 2>/dev/null) ]] && python3 <(curl -sL https://bootstrap.pypa.io/get-pip.py)
+    bash <(curl -sL https://git.io/fhqMz)
 }
 
 #设置定时升级任务

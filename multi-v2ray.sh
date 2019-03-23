@@ -154,10 +154,10 @@ checkSys() {
 #安装依赖
 installDependent(){
     if [[ ${OS} == 'CentOS' || ${OS} == 'Fedora' ]];then
-        ${PACKAGE_MANAGER} install wget unzip ntp ntpdate socat crontabs lsof -y
+        ${PACKAGE_MANAGER} install ntpdate crontabs lsof -y
     else
         ${PACKAGE_MANAGER} update
-        ${PACKAGE_MANAGER} install wget unzip ntp ntpdate socat cron lsof -y
+        ${PACKAGE_MANAGER} install ntpdate cron lsof -y
     fi
 
     #install python3 & pip3
@@ -235,7 +235,6 @@ updateProject() {
 #时间同步
 timeSync() {
     if [[ ${INSTALL_WAY} == 0 ]];then
-        systemctl stop ntp &>/dev/null
         echo -e "${Info} Time Synchronizing.. ${Font}"
         ntpdate time.nist.gov
         if [[ $? -eq 0 ]];then 

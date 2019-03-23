@@ -77,5 +77,8 @@ v2ray [-h|--help] [options]
 ## Pip Source
 https://pypi.org/project/v2ray-util/
 
+## Python3 Install Shell
+https://github.com/Jrohy/python3-install
+
 ## Changelog
 see [Changelog](https://github.com/Jrohy/multi-v2ray/blob/master/Changelog.md)

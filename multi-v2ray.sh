@@ -145,6 +145,9 @@ checkSys() {
     elif [[ $(cat /etc/issue | grep Ubuntu) ]];then
         OS='Ubuntu'
         PACKAGE_MANAGER='apt-get'
+    elif [[ $(cat /etc/issue | grep Raspbian) ]];then
+        OS='Raspbian'
+        PACKAGE_MANAGER='apt-get'
     else
         colorEcho ${RED} "Not support OS, Please reinstall OS and retry!"
         exit 1

@@ -11,7 +11,7 @@ WORKDIR /v2ray
 COPY --from=builder /usr/bin/v2ray/* /usr/bin/v2ray/
 COPY run.sh /v2ray
 
-RUN apk --no-cache add python3 bash && \
+RUN apk --no-cache add python3 bash ca-certificates && \
     python3 -m ensurepip && \
     rm -r /usr/lib/python*/ensurepip && \
     pip3 install --upgrade pip setuptools && \

@@ -34,10 +34,11 @@ UTIL_PATH="/etc/v2ray_util/util.cfg"
 [[ -z $(echo $SHELL|grep zsh) ]] && ENV_FILE=".bashrc" || ENV_FILE=".zshrc"
 
 #######color code########
-RED="31m"      # Error message
-GREEN="32m"    # Success message
-YELLOW="33m"   # Warning message
-BLUE="36m"     # Info message
+RED="31m"
+GREEN="32m"
+YELLOW="33m"
+BLUE="36m"
+FUCHSIA="35m"
 
 colorEcho(){
     COLOR=$1
@@ -145,6 +146,9 @@ checkSys() {
     elif [[ $(cat /etc/issue | grep Ubuntu) ]];then
         OS='Ubuntu'
         PACKAGE_MANAGER='apt-get'
+    elif [[ $(cat /etc/issue | grep Raspbian) ]];then
+        OS='Raspbian'
+        PACKAGE_MANAGER='apt-get'
     else
         colorEcho ${RED} "Not support OS, Please reinstall OS and retry!"
         exit 1
@@ -235,13 +239,13 @@ updateProject() {
 timeSync() {
     if [[ ${INSTALL_WAY} == 0 ]];then
         echo -e "${Info} Time Synchronizing.. ${Font}"
-        ntpdate time.nist.gov
+        ntpdate pool.ntp.org
         if [[ $? -eq 0 ]];then 
             echo -e "${OK} Time Sync Success ${Font}"
             echo -e "${OK} now: `date -R`${Font}"
             sleep 1
         else
-            echo -e "${Error} Time sync fail, please run command to sync:${Font}${Yellow}ntpdate time.nist.gov${Font}"
+            echo -e "${Error} Time sync fail, please run command to sync:${Font}${Yellow}ntpdate pool.ntp.org${Font}"
         fi
     fi
 }

@@ -1,6 +1,7 @@
 # multi-v2ray
 a tool to manage v2ray config json, support multiple user && group manage  
 ![](https://img.shields.io/pypi/v/v2ray-util.svg) 
+![](https://img.shields.io/docker/pulls/jrohy/v2ray.svg)
 ![](https://img.shields.io/github/stars/Jrohy/multi-v2ray.svg) 
 ![](https://img.shields.io/github/forks/Jrohy/multi-v2ray.svg) 
 ![](https://img.shields.io/github/license/Jrohy/multi-v2ray.svg)
@@ -30,7 +31,7 @@ a tool to manage v2ray config json, support multiple user && group manage
   - Shadowsocks
   - Quic
 
-## Install
+## How To Use
 new install
 ```
 source <(curl -sL https://git.io/fNgqx)
@@ -74,11 +75,12 @@ v2ray [-h|--help] [options]
     log                  check v2ray log
 ```
 
-## Pip Source
-https://pypi.org/project/v2ray-util/
-
-## Python3 Install Shell
-https://github.com/Jrohy/python3-install
+## Docker   
+see [jrohy/v2ray](https://hub.docker.com/r/jrohy/v2ray)
 
 ## Changelog
 see [Changelog](https://github.com/Jrohy/multi-v2ray/blob/master/Changelog.md)
+
+## Dependent
+pip: https://pypi.org/project/v2ray-util/  
+python3: https://github.com/Jrohy/python3-install

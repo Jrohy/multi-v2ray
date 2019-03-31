@@ -16,6 +16,7 @@ RUN apk --no-cache add python3 bash ca-certificates && \
     rm -r /usr/lib/python*/ensurepip && \
     pip3 install --upgrade pip setuptools && \
     pip3 install v2ray-util && \
+    mkdir /var/log/v2ray/ && \
     chmod +x /usr/bin/v2ray/v2ctl && \
     chmod +x /usr/bin/v2ray/v2ray && \
     chmod +x /v2ray/run.sh && \

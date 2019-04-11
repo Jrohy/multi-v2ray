@@ -192,15 +192,3 @@ def open_port():
         os.system(input_cmd.format("udp", port_str))
         os.system(output_cmd.format("tcp", port_str))
         os.system(output_cmd.format("udp", port_str))
-
-def i18n_create(lang=None):
-    import gettext
-    if not os.path.exists('/etc/v2ray_util/util.cfg'):
-        return
-    if not lang:
-        from .config import Config
-        lang = Config().get_data('lang')
-    if lang == 'zh':
-        gettext.translation('lang', pkg_resources.resource_filename('v2ray_util', 'locale_i18n'), languages=['zh_CH']).install()
-    else:
-        gettext.translation('lang', pkg_resources.resource_filename('v2ray_util', 'locale_i18n'), languages=['en_US']).install()

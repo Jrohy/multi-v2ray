@@ -90,6 +90,10 @@ class Vmess(User):
         self.host = host
         self.header = header
         self.quic = quic
+        if quic:
+            self.header = quic.header
+            self.host = quic.security
+            self.path = quic.key
 
     def stream(self):
         if self.network == "quic":
@@ -137,7 +141,7 @@ Network: {network}
             "tls": tls
         }
         json_data = json.dumps(json_dict)
-        result_link = "vmess://{}".format(bytes.decode(base64.b64encode(bytes(json_data, 'utf-8')))) if self.network != 'quic' else ''
+        result_link = "vmess://{}".format(bytes.decode(base64.b64encode(bytes(json_data, 'utf-8'))))
         return ColorStr.green(result_link)
 
 class Group:

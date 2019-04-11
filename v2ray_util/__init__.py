@@ -1,5 +1,3 @@
-__version__ = '3.1.0'
+__version__ = '3.2.0'
 
-from .util_core.utils import i18n_create
-
-i18n_create()
+from .util_core.trans import _

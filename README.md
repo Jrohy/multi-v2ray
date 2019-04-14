@@ -81,10 +81,15 @@ docker run -d --name v2ray --restart always --network host jrohy/v2ray
 ```
 it will create random port + random header(srtp | wechat-video | utp | dtls) kcp profile  
 **warning**: if u run with centos, u should close firewall first
+```
+systemctl stop firewalld.service
+systemctl disable firewalld.service
+```
 
 ## Changelog
 see [Changelog](https://github.com/Jrohy/multi-v2ray/blob/master/Changelog.md)
 
 ## Dependent
+docker: https://hub.docker.com/r/jrohy/v2ray
 pip: https://pypi.org/project/v2ray-util/  
 python3: https://github.com/Jrohy/python3-install

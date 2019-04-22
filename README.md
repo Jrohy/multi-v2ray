@@ -42,7 +42,7 @@ source <(curl -sL https://git.io/fNgqx)
 source <(curl -sL https://git.io/fNgqx) --zh
 ```
 
-keep profile to update
+keep profile to update(保留配置文件更新)
 ```
 source <(curl -sL https://git.io/fNgqx) -k
 ```

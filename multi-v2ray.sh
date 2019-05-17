@@ -158,10 +158,10 @@ checkSys() {
 #安装依赖
 installDependent(){
     if [[ ${OS} == 'CentOS' || ${OS} == 'Fedora' ]];then
-        ${PACKAGE_MANAGER} install ntpdate crontabs lsof -y
+        ${PACKAGE_MANAGER} install ntpdate socat crontabs lsof -y
     else
         ${PACKAGE_MANAGER} update
-        ${PACKAGE_MANAGER} install ntpdate cron lsof -y
+        ${PACKAGE_MANAGER} install ntpdate socat cron lsof -y
     fi
 
     #install python3 & pip3

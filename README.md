@@ -56,6 +56,7 @@ source <(curl -sL https://git.io/fNgqx) --remove
 ```bash
 v2ray [-h|--help] [options]
     -h, --help           get help
+    -v, --version        get version
     start                start V2Ray
     stop                 stop V2Ray
     restart              restart V2Ray

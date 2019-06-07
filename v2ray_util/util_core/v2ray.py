@@ -23,6 +23,13 @@ class V2ray:
         subprocess.call("service v2ray status", shell=True)
 
     @staticmethod
+    def version():
+        v2ray_version = bytes.decode(subprocess.check_output("/usr/bin/v2ray/v2ray -version | head -n 1 | awk '{print $2}'", shell=True))
+        import v2ray_util
+        print("v2ray: {}".format(ColorStr.green(v2ray_version)))
+        print("v2ray_util: {}".format(ColorStr.green(v2ray_util.__version__)))   
+
+    @staticmethod
     def info():
         from .loader import Loader 
         print(Loader().profile)

@@ -36,6 +36,7 @@ def help():
         print("""
 {0} [-h|--help] [options]
     -h, --help           查看帮助
+    -v, --version        查看版本号
     start                启动 V2Ray
     stop                 停止 V2Ray
     restart              重启 V2Ray
@@ -58,6 +59,7 @@ def help():
         print("""
 {0} [-h|--help] [options]
     -h, --help           get help
+    -v, --version        get version
     start                start V2Ray
     stop                 stop V2Ray
     restart              restart V2Ray
@@ -89,6 +91,8 @@ def parse_arg():
             V2ray.restart()
         elif sys.argv[1] == "-h" or sys.argv[1] == "--help":
             help()
+        elif sys.argv[1] == "-v" or sys.argv[1] == "--version":
+            V2ray.version()
         elif sys.argv[1] == "status":
             V2ray.status()
         elif sys.argv[1] == "info":

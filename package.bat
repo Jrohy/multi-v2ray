@@ -1,17 +1,17 @@
 @echo off
-echo 更新依赖中...
+echo update...
 pip install -U setuptools wheel twine
-echo 打包中...
+echo package...
 python setup.py sdist bdist_wheel
-echo 上传包...
+echo upload...
 twine upload dist/*
-echo 清理打包环境..
+echo clean..
 if exist dist (
-	rd /s /Q build
+    rd /s /Q build
     rd /s /Q dist
     rd /s /Q v2ray_util.egg-info
     rd /s /Q v2ray_util\__pycache__
     rd /s /Q v2ray_util\util_core\__pycache__
 )
-echo 打包完成!
+echo finish!
 pause

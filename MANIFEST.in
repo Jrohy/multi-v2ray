@@ -1,0 +1,7 @@
+include README.md
+include v2ray_util/util_core/util.dat
+include v2ray_util/util_core/util.cfg
+include v2ray_util/locale_i18n/en_US/LC_MESSAGES/lang.mo
+include v2ray_util/locale_i18n/zh_CH/LC_MESSAGES/lang.mo
+recursive-include v2ray_util/json_template *.json
+recursive-include v2ray_util/global_setting *.sh

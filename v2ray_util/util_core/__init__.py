@@ -1,0 +1,1 @@
+from .trans import _

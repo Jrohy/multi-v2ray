@@ -1,3 +1,0 @@
-Flask_HTTPAuth==3.2.4
-Flask==1.0.2
-pyOpenSSL==18.0.0

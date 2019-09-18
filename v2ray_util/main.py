@@ -7,7 +7,7 @@ import pkg_resources
 from .util_core.v2ray import V2ray
 from .util_core.utils import ColorStr, open_port
 from .global_setting import stats_ctr, iptables_ctr, ban_bt, update_timer
-from .config_modify import base, multiple, ss, stream, tls
+from .config_modify import base, multiple, ss, stream, tls, cdn
 
 def loop_input_choice_number(input_tip, number_max):
     """
@@ -173,7 +173,7 @@ def user_manage():
 
 def profile_alter():
     show_text = (_("modify email"), _("modify UUID"), _("modify alterID"), _("modify port"), _("modify stream"), _("modify tls"), 
-                _("modify tcpFastOpen"), _("modify dyn_port"), _("modify shadowsocks method"), _("modify shadowsocks password"))
+                _("modify tcpFastOpen"), _("modify dyn_port"), _("modify shadowsocks method"), _("modify shadowsocks password"), _("open CDN"))
     print("")
     for index, text in enumerate(show_text): 
         print("{}.{}".format(index + 1, text))
@@ -201,6 +201,8 @@ def profile_alter():
         ss.modify('method')
     elif choice == 10:
         ss.modify('password')
+    elif choice == 11:
+        cdn.modify()
     V2ray.restart()
 
 def global_setting():

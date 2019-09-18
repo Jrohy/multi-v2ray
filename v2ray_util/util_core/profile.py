@@ -91,6 +91,9 @@ class Profile:
 
         port_info = str(part_json["port"]).split("-", 2)
 
+        if "domain" in part_json and part_json["domain"]:
+            conf_ip = part_json["domain"]
+
         if len(port_info) == 2:
             port, end_port = port_info
         else:
@@ -119,9 +122,6 @@ class Profile:
             elif conf_stream["tcpSettings"]:
                 host = conf_stream["tcpSettings"]["header"]["request"]["headers"]["Host"]
                 header = "http"
-
-            if (tls == "tls"):
-                conf_ip = Config().get_data('domain')
 
             if conf_stream["network"] == "kcp" and "header" in conf_stream["kcpSettings"]:
                 header = conf_stream["kcpSettings"]["header"]["type"]

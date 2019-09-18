@@ -9,7 +9,8 @@ from ..util_core.selector import GroupSelector
 from ..util_core.utils import get_ip, gen_cert
 
 class TLSModifier:
-    def __init__(self, group_tag, group_index):
+    def __init__(self, group_tag, group_index, domain=''):
+        self.domain = domain
         self.writer = GroupWriter(group_tag, group_index)
     
     def turn_on(self):
@@ -20,17 +21,18 @@ class TLSModifier:
         if choice == "1":
             local_ip = get_ip()
             print(_("local vps ip address: ") + local_ip + "\n")
-            input_domain=input(_("please input your vps domain: "))
-            try:
-                input_ip = socket.gethostbyname(input_domain)
-            except Exception:
-                print(_("domain check error!!!"))
-                print("")
-                return
-            if input_ip != local_ip:
-                print(_("domain can't analysis to local ip!!!"))
-                print("")
-                return
+            if not self.domain:
+                input_domain=input(_("please input your vps domain: "))
+                try:
+                    input_ip = socket.gethostbyname(input_domain)
+                except Exception:
+                    print(_("domain check error!!!"))
+                    print("")
+                    return
+                if input_ip != local_ip:
+                    print(_("domain can't analysis to local ip!!!"))
+                    print("")
+                    return
 
             print("")
             print(_("auto generate SSL certificate, please wait.."))
@@ -46,10 +48,11 @@ class TLSModifier:
             if not os.path.exists(crt_file) or not os.path.exists(key_file):
                 print(_("certificate cert or key not exist!"))
                 return
-            domain = input(_("please input the certificate cert file domain: "))
-            if not domain:
-                print(_("domain is null!"))
-                return
+            if not self.domain:
+                domain = input(_("please input the certificate cert file domain: "))
+                if not domain:
+                    print(_("domain is null!"))
+                    return
             self.writer.write_tls(True, crt_file=crt_file, key_file=key_file, domain=domain)
         else:
             print(_("input error!"))

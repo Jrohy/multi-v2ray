@@ -35,7 +35,7 @@ class CDNModifier:
         TLSModifier(self.group_tag, self.group_index, self.domain).turn_on()
 
 def modify():
-    gs = GroupSelector("run cdn mode")
+    gs = GroupSelector(_("run cdn mode"))
     group = gs.group
 
     if group == None:
@@ -65,7 +65,7 @@ def modify():
 
             if input_ip != local_ip:
                 print(_("domain can't analysis to local ip!!!"))
-                print(_("if cdn is cloudclare, must open dns only mode!"))
+                print(_("must be close cdn proxy!"))
                 print("")
                 return
 

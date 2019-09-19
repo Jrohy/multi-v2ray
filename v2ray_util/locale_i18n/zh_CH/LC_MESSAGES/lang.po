@@ -579,8 +579,8 @@ msgstr "V2ray MTProto/Shadowsocks协议不支持配置https!!!"
 ### tls.py end ###
 
 ### cdn.py start ###
-msgid "1.run cdn mode"
-msgstr "1.走cdn模式"
+msgid "run cdn mode"
+msgstr "走cdn模式"
 
 msgid "1.80 port + ws"
 msgstr "1.80端口 + ws"
@@ -597,8 +597,8 @@ msgstr "请输入走cdn的域名: "
 msgid "domain is empty!"
 msgstr "域名为空!"
 
-msgid "if cdn is cloudclare, must open dns only mode!"
-msgstr "如果是cloudclare cdn, 则需开启dns only模式!"
+msgid "must be close cdn proxy!"
+msgstr "必须先关闭cdn的代理!"
 
 ### update_timer.py start ###
 

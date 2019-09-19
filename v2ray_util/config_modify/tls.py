@@ -18,11 +18,12 @@ class TLSModifier:
         print(_("2. Customize certificate(prepare certificate file paths)"))
         print("")
         choice=input(_("please select: "))
+        input_domain = self.domain
         if choice == "1":
-            if not self.domain:
+            if not input_domain:
                 local_ip = get_ip()
                 print(_("local vps ip address: ") + local_ip + "\n")
-                input_domain=input(_("please input your vps domain: "))
+                input_domain = input(_("please input your vps domain: "))
                 try:
                     input_ip = socket.gethostbyname(input_domain)
                 except Exception:
@@ -48,12 +49,12 @@ class TLSModifier:
             if not os.path.exists(crt_file) or not os.path.exists(key_file):
                 print(_("certificate cert or key not exist!"))
                 return
-            if not self.domain:
-                domain = input(_("please input the certificate cert file domain: "))
-                if not domain:
+            if not input_domain:
+                input_domain = input(_("please input the certificate cert file domain: "))
+                if not input_domain:
                     print(_("domain is null!"))
                     return
-            self.writer.write_tls(True, crt_file=crt_file, key_file=key_file, domain=domain)
+            self.writer.write_tls(True, crt_file=crt_file, key_file=key_file, domain=input_domain)
         else:
             print(_("input error!"))
     

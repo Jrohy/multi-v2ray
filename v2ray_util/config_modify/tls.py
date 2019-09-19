@@ -19,9 +19,9 @@ class TLSModifier:
         print("")
         choice=input(_("please select: "))
         if choice == "1":
-            local_ip = get_ip()
-            print(_("local vps ip address: ") + local_ip + "\n")
             if not self.domain:
+                local_ip = get_ip()
+                print(_("local vps ip address: ") + local_ip + "\n")
                 input_domain=input(_("please input your vps domain: "))
                 try:
                     input_ip = socket.gethostbyname(input_domain)

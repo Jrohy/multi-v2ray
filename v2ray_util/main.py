@@ -173,7 +173,7 @@ def user_manage():
 
 def profile_alter():
     show_text = (_("modify email"), _("modify UUID"), _("modify alterID"), _("modify port"), _("modify stream"), _("modify tls"), 
-                _("modify tcpFastOpen"), _("modify dyn_port"), _("modify shadowsocks method"), _("modify shadowsocks password"), _("open CDN"))
+                _("modify tcpFastOpen"), _("modify dyn_port"), _("modify shadowsocks method"), _("modify shadowsocks password"), _("CDN mode(need domain)"))
     print("")
     for index, text in enumerate(show_text): 
         print("{}.{}".format(index + 1, text))

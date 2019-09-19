@@ -14,6 +14,7 @@ a tool to manage v2ray config json, support multiple user && group manage
 - Ban bittorrent
 - Range port
 - TcpFastOpen
+- CDN mode
 - Vmess/Socks5/MTproto share link
 - Support protocol modify:
   - TCP

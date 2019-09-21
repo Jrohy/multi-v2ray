@@ -13,7 +13,8 @@ class CDNModifier:
         self.domain = domain
         self.group_tag = group_tag
         self.group_index = group_index
-        self.__writeWS(fake_domain)
+        if domain:
+            self.__writeWS(fake_domain)
 
         self.gw = GroupWriter(group_tag, group_index)
     
@@ -27,6 +28,9 @@ class CDNModifier:
         '''
         self.gw.write_port("80")
         self.gw.write_domain(self.domain)
+    
+    def closeHttp(self):
+        self.gw.write_domain()
 
     def openHttps(self):
         '''
@@ -37,7 +41,7 @@ class CDNModifier:
 
 @restart()
 def modify():
-    gs = GroupSelector(_("run cdn mode"))
+    gs = GroupSelector(_("modify cdn"))
     group = gs.group
 
     if group == None:
@@ -46,12 +50,20 @@ def modify():
         print("")
         print(_("1.80 port + ws"))
         print(_("2.443 port + ws"))
+        print(_("3.close cdn(80 port)"))
         choice = input(_("please select: "))
         if not choice:
             return
-        if not choice in ("1", "2"):
+        if not choice in ("1", "2", "3"):
             print(_("input error, please input again"))
             return
+
+        if choice == '3':
+            if group.port != "80":
+                print(ColorStr.yellow(_("only support 80 port cdn close!")))
+                return
+            CDNModifier(group.tag, group.index).closeHttp()
+            return True
             
         fake_domain = input(_("please input ws fake domain(enter to no need): "))
         domain = input(_("please input run cdn mode domain: "))
@@ -81,5 +93,5 @@ def modify():
             cm.openHttp()
         elif choice == '2':
             cm.openHttps()
-
+        
         return True

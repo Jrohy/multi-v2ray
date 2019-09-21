@@ -67,9 +67,9 @@ class StreamModifier:
         sw.write(**kw)
 
     def random_kcp(self):
-        kcp_list = ('mKCP + srtp', 'mKCP + utp', 'mKCP + wechat-video', 'mKCP + dtls')
-        choice = random.randint(4, 7)
-        print("{}: {} \n".format(_("random generate (srtp | wechat-video | utp | dtls) fake header, new protocol"), ColorStr.green(kcp_list[choice - 4])))
+        kcp_list = ('mKCP + srtp', 'mKCP + utp', 'mKCP + wechat-video', 'mKCP + dtls', 'mKCP + wireguard')
+        choice = random.randint(4, 8)
+        print("{}: {} \n".format(_("random generate (srtp | wechat-video | utp | dtls | wireguard) fake header, new protocol"), ColorStr.green(kcp_list[choice - 4])))
         self.select(choice)
 
 @restart()

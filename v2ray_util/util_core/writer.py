@@ -62,12 +62,10 @@ class Writer:
             template = json.load(stream_file)
         return template
 
-    def save(self, need_domain=False):
+    def save(self):
         '''
         save v2ray config.json
         '''
-        if not need_domain and "domain" in self.part_json:
-            del self.part_json["domain"]
         json_dump=json.dumps(self.config, indent=2)
         with open(self.path, 'w') as writer:
             writer.writelines(json_dump)
@@ -235,8 +233,11 @@ class GroupWriter(Writer):
         self.save()
 
     def write_domain(self, domain=''):
-        self.part_json["domain"] = domain
-        self.save(need_domain=True)
+        if domain:
+            self.part_json["domain"] = domain
+        elif "domain" in self.part_json:
+            del self.part_json["domain"]
+        self.save()
 
     def write_ss_password(self, new_password):
         self.part_json["settings"]["password"] = str(new_password)
@@ -283,7 +284,7 @@ class GroupWriter(Writer):
             self.part_json["streamSettings"]["security"] = "tls"
             self.part_json["streamSettings"]["tlsSettings"] = tls_settings
             self.part_json["domain"] = domain
-            self.save(need_domain=True)
+            self.save()
         else:
             if self.part_json["streamSettings"]["network"] == StreamType.H2.value:
                 print(_("close tls will also close HTTP/2!"))

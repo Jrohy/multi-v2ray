@@ -1,3 +1,7 @@
+> v3.6.1
+* Added: 80端口cdn关闭(去掉域名)
+* Added: 随机生成kcp header时增加wireguard header
+
 > v3.6.0
 * Fixed: #218
 * Fixed: v2ray重启失败时提示重启成功

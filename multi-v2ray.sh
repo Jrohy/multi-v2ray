@@ -84,7 +84,7 @@ removeV2Ray() {
     #卸载V2ray官方脚本
     systemctl stop v2ray  >/dev/null 2>&1
     systemctl disable v2ray  >/dev/null 2>&1
-    service v2ray stop  >/dev/null 2>&1
+    systemctl stop v2ray  >/dev/null 2>&1
     update-rc.d -f v2ray remove  >/dev/null 2>&1
     rm -rf  /etc/v2ray/  >/dev/null 2>&1
     rm -rf /usr/bin/v2ray  >/dev/null 2>&1
@@ -107,9 +107,9 @@ removeV2Ray() {
     rm -f crontab.txt >/dev/null 2>&1
 
     if [[ ${OS} == 'CentOS' || ${OS} == 'Fedora' ]];then
-        service crond restart >/dev/null 2>&1
+        systemctl restart crond >/dev/null 2>&1
     else
-        service cron restart >/dev/null 2>&1
+        systemctl restart cron >/dev/null 2>&1
     fi
 
     #删除multi-v2ray环境变量
@@ -189,13 +189,13 @@ planUpdate(){
     OLD_CRONTAB=$(crontab -l)
     echo "SHELL=/bin/bash" >> crontab.txt
     echo "${OLD_CRONTAB}" >> crontab.txt
-	echo "0 ${LOCAL_TIME} * * * bash <(curl -L -s https://install.direct/go.sh) | tee -a /root/v2rayUpdate.log && service v2ray restart" >> crontab.txt
+	echo "0 ${LOCAL_TIME} * * * bash <(curl -L -s https://install.direct/go.sh) | tee -a /root/v2rayUpdate.log && systemctl restart v2ray" >> crontab.txt
 	crontab crontab.txt
 	sleep 1
 	if [[ ${OS} == 'CentOS' || ${OS} == 'Fedora' ]];then
-        service crond restart
+        systemctl restart crond
 	else
-		service cron restart
+        systemctl restart cron
 	fi
 	rm -f crontab.txt
 	colorEcho ${GREEN} "success open schedule update task: beijing time ${BEIJING_UPDATE_TIME}\n"
@@ -309,8 +309,6 @@ main() {
     updateProject
 
     profileInit
-
-    service v2ray restart
 
     installFinish
 }

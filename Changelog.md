@@ -1,4 +1,4 @@
-> v3.6.2
+> v3.6.3
 * Added: 80端口cdn关闭(去掉域名)
 * Added: 随机生成kcp header时增加wireguard header
 * Changed: service命令变为systemctl

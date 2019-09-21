@@ -32,10 +32,10 @@ def new_port(new_stream=None):
             sf = SSFactory()
             info = {"method": sf.get_method(), "password": sf.get_password()}
     else:
-        salt_stream = [StreamType.KCP_DTLS, StreamType.KCP_WECHAT, StreamType.KCP_UTP, StreamType.KCP_SRTP]
+        salt_stream = [StreamType.KCP_DTLS, StreamType.KCP_WECHAT, StreamType.KCP_UTP, StreamType.KCP_SRTP, StreamType.KCP_WG]
         random.shuffle(salt_stream)
         stream = salt_stream[0]
-        print("{}: {} \n".format(_("random generate (srtp | wechat-video | utp | dtls) fake header, new protocol"), ColorStr.green(stream.value)))
+        print("{}: {} \n".format(_("random generate (srtp | wechat-video | utp | dtls | wireguard) fake header, new protocol"), ColorStr.green(stream.value)))
 
     random_port = random.randint(1000, 65535)
     new_port = input("{0} {1}, {2}: ".format(_("random generate port"), ColorStr.green(str(random_port)), _("enter to use, or input customize port")))

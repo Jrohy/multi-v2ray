@@ -72,6 +72,7 @@ v2ray [-h|--help] [options]
     tls                  modify tls
     tfo                  modify tcpFastOpen
     stream               modify protocol
+    cdn                  cdn mode
     stats                iptables traffic statistics
     clean                clean v2ray log
     log                  check v2ray log

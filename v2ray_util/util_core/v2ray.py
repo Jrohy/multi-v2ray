@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import uuid
+import time
 import random
 import subprocess
 import pkg_resources
@@ -14,13 +15,18 @@ class V2ray:
         try:
             subprocess.check_output(command, shell=True)
             open_port()
-            print(ColorStr.green("v2ray {} success !".format(keyword)))
+            print("{}ing v2ray...".format(keyword))
+            time.sleep(2)
+            if subprocess.check_output("systemctl is-active v2ray|grep active", shell=True) or keyword == "stop":
+                print(ColorStr.green("v2ray {} success !".format(keyword)))
+            else:
+                raise subprocess.CalledProcessError
         except subprocess.CalledProcessError:
             print(ColorStr.red("v2ray {} fail !".format(keyword)))
 
     @staticmethod
     def status():
-        subprocess.call("service v2ray status", shell=True)
+        subprocess.call("systemctl status v2ray", shell=True)
 
     @staticmethod
     def version():
@@ -47,23 +53,22 @@ class V2ray:
 
     @staticmethod
     def log():
-        import subprocess
-        f = subprocess.Popen(['tail','-f', '/var/log/v2ray/access.log'],
+        f = subprocess.Popen(['tail','-f', '-n', '100', '/var/log/v2ray/access.log'],
                 stdout=subprocess.PIPE,stderr=subprocess.PIPE)
         while True:
             print(bytes.decode(f.stdout.readline().strip()))
 
     @classmethod
     def restart(cls):
-        cls.run("service v2ray restart", "restart")
+        cls.run("systemctl restart v2ray", "restart")
 
     @classmethod
     def start(cls):
-        cls.run("service v2ray start", "start")
+        cls.run("systemctl start v2ray", "start")
 
     @classmethod
     def stop(cls):
-        cls.run("service v2ray stop", "stop")
+        cls.run("systemctl stop v2ray", "stop")
 
     @classmethod
     def convert(cls):

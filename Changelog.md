@@ -1,3 +1,9 @@
+> v3.6.0
+* Fixed: #218
+* Fixed: v2ray重启失败时提示重启成功
+* Fixed: 没有修改配置文件却触发v2ray重启
+* Added: cdn 命令行传参(v2ray cdn)
+
 > v3.5.2
 * 支持80端口和443端口的cdn模式
 * 支持域名按group存储

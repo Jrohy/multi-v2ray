@@ -3,6 +3,7 @@
 import socket
 
 from .tls import TLSModifier
+from ..util_core.v2ray import restart
 from ..util_core.selector import GroupSelector
 from ..util_core.writer import StreamWriter, GroupWriter
 from ..util_core.utils import StreamType, ColorStr, get_ip
@@ -34,12 +35,13 @@ class CDNModifier:
         self.gw.write_port("443")
         TLSModifier(self.group_tag, self.group_index, self.domain).turn_on()
 
+@restart()
 def modify():
     gs = GroupSelector(_("run cdn mode"))
     group = gs.group
 
     if group == None:
-        exit(-1)
+        pass
     else:
         print("")
         print(_("1.80 port + ws"))
@@ -47,6 +49,10 @@ def modify():
         choice = input(_("please select: "))
         if not choice:
             return
+        if not choice in ("1", "2"):
+            print(_("input error, please input again"))
+            return
+            
         fake_domain = input(_("please input ws fake domain(enter to no need): "))
         domain = input(_("please input run cdn mode domain: "))
         if not domain:
@@ -75,5 +81,5 @@ def modify():
             cm.openHttp()
         elif choice == '2':
             cm.openHttps()
-        else:
-            print(_("input error, please input again"))
+
+        return True

@@ -101,28 +101,20 @@ def parse_arg():
             V2ray.info()
         elif sys.argv[1] == "port":
             base.port()
-            open_port()
-            V2ray.restart()
         elif sys.argv[1] == "tls":
             tls.modify()
-            V2ray.restart()
         elif sys.argv[1] == "tfo":
             base.tfo()
-            V2ray.restart()
         elif sys.argv[1] == "stream":
             stream.modify()
-            V2ray.restart()
         elif sys.argv[1] == "stats":
             iptables_ctr.manage()
         elif sys.argv[1] == "clean":
             V2ray.cleanLog()
         elif sys.argv[1] == "del":
             multiple.del_port()
-            V2ray.restart()
         elif sys.argv[1] == "add":
             multiple.new_port()
-            open_port()
-            V2ray.restart()
         elif sys.argv[1] == "update":
             V2ray.update()
         elif sys.argv[1] == "new":
@@ -133,11 +125,9 @@ def parse_arg():
             V2ray.log()
         elif sys.argv[1] == "cdn":
             cdn.modify()
-            V2ray.restart()
     else:
         if sys.argv[1] == "add":
             multiple.new_port(sys.argv[2])
-            V2ray.restart()
     sys.exit(0)
 
 def service_manage():
@@ -174,7 +164,6 @@ def user_manage():
         multiple.del_user()
     elif choice == 4:
         multiple.del_port()
-    V2ray.restart()
 
 def profile_alter():
     show_text = (_("modify email"), _("modify UUID"), _("modify alterID"), _("modify port"), _("modify stream"), _("modify tls"), 
@@ -193,7 +182,6 @@ def profile_alter():
         base.alterid()
     elif choice == 4:
         base.port()
-        open_port()
     elif choice == 5:
         stream.modify()
     elif choice == 6:
@@ -208,7 +196,6 @@ def profile_alter():
         ss.modify('password')
     elif choice == 11:
         cdn.modify()
-    V2ray.restart()
 
 def global_setting():
     show_text = (_("V2ray Traffic Statistics"), _("Iptables Traffic Statistics"), _("Ban Bittorrent"), _("Schedule Update V2ray"), _("Clean Log"), _("Change Language"))
@@ -222,7 +209,6 @@ def global_setting():
         iptables_ctr.manage()
     elif choice == 3:
         ban_bt.manage()
-        V2ray.restart()
     elif choice == 4:
         update_timer.manage()
     elif choice == 5:

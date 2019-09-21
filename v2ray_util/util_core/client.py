@@ -79,7 +79,7 @@ def generate():
     group = cs.group
 
     if group == None:
-        exit(-1)
+        pass
     else:
         cw = ClientWriter(group, client_index)
         cw.transform()

@@ -18,9 +18,6 @@ class Config:
     def get_path(self, key):
         return self.config.get('path', key)
 
-    def get_web(self, key):
-        return self.config.get('web', key)
-
     def get_data(self, key):
         return self.config.get('data', key)
 

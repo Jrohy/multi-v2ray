@@ -6,7 +6,23 @@ import time
 import random
 import subprocess
 import pkg_resources
+from functools import wraps
 from .utils import ColorStr, open_port
+
+def restart(port_open=False):
+    """
+    运行函数/方法后重启v2ray的装饰器
+    """  
+    def decorate(func):
+        @wraps(func)
+        def wrapper(*args, **kw):
+            result = func(*args, **kw)
+            if port_open:
+                open_port()
+            if result:
+                V2ray.restart()
+        return wrapper
+    return decorate
 
 class V2ray:
 

@@ -3,6 +3,7 @@
 import os
 import re
 
+from ..util_core.v2ray import V2ray
 from ..util_core.loader import Loader
 from ..util_core.writer import GlobalWriter
 from ..util_core.utils import bytes_2_human_readable, ColorStr
@@ -44,10 +45,7 @@ total: {2}
         ColorStr.cyan(bytes_2_human_readable(self.downlink_value + self.uplink_value, 2)))
         )
 
-
 def manage():
-
-    RESTART_CMD = "service v2ray restart"
 
     FIND_V2RAY_CRONTAB_CMD = "crontab -l|grep v2ray"
 
@@ -86,16 +84,17 @@ def manage():
                     continue
             gw = GlobalWriter(group_list)
             gw.write_stats(True)
-            os.system(RESTART_CMD)
+            V2ray.restart()
             print(_("open traffic statistics success!"))
             print("")
             
         elif choice == "2":
             gw = GlobalWriter(group_list)
             gw.write_stats(False)
-            os.system(RESTART_CMD)
+            V2ray.restart()
             print(_("close traffic statistics success!"))
             print("")
+
         elif choice == "3" or choice == "4":
             is_reset = (False if choice == "3" else True)
             action_info = ("check" if choice == "3" else "reset")

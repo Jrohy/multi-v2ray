@@ -55,16 +55,13 @@ class ClientWriter:
             exit(-1)
 
         user_json["port"] = int(self.group.port)
+        user_json["address"] = self.group.ip
 
         if type(self.node) != SS:
             self.client_config["outbounds"][0]["streamSettings"] = self.config["inbounds"][self.group.index]["streamSettings"]
 
         if self.group.tls == 'tls':
-            content = self.config_factory.get_data("domain")
-            user_json["address"] = str(content)
             self.client_config["outbounds"][0]["streamSettings"]["tlsSettings"] = {}
-        else:
-            user_json["address"] = str(get_ip())
 
     def write(self):
         '''

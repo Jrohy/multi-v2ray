@@ -51,6 +51,7 @@ def help():
     tls                  修改tls
     tfo                  修改tcpFastOpen
     stream               修改传输协议
+    cdn                  走cdn
     stats                iptables流量统计
     clean                清理日志
     log                  查看日志
@@ -74,6 +75,7 @@ def help():
     tls                  modify tls
     tfo                  modify tcpFastOpen
     stream               modify protocol
+    cdn                  cdn mode
     stats                iptables traffic statistics
     clean                clean v2ray log
     log                  check v2ray log
@@ -89,9 +91,9 @@ def parse_arg():
             V2ray.stop()
         elif sys.argv[1] == "restart":
             V2ray.restart()
-        elif sys.argv[1] == "-h" or sys.argv[1] == "--help":
+        elif sys.argv[1] in ("-h", "--help"):
             help()
-        elif sys.argv[1] == "-v" or sys.argv[1] == "--version":
+        elif sys.argv[1] in ("-v", "--version"):
             V2ray.version()
         elif sys.argv[1] == "status":
             V2ray.status()
@@ -129,6 +131,9 @@ def parse_arg():
             V2ray.convert()
         elif sys.argv[1] == "log":
             V2ray.log()
+        elif sys.argv[1] == "cdn":
+            cdn.modify()
+            V2ray.restart()
     else:
         if sys.argv[1] == "add":
             multiple.new_port(sys.argv[2])

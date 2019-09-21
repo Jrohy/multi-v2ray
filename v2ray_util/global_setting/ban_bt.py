@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from ..util_core.loader import Loader
+from ..util_core.v2ray import restart
 from ..util_core.writer import GlobalWriter
 
+@restart()
 def manage():
     loader = Loader()
 
@@ -22,3 +24,5 @@ def manage():
     gw.write_ban_bittorrent(ban_bt)
 
     print(_("modify success!"))
+    
+    return True

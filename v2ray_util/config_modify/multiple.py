@@ -3,11 +3,13 @@
 import random
 import sys
 
+from ..util_core.v2ray import restart
 from ..util_core.writer import NodeWriter, GroupWriter
 from ..util_core.group import Vmess, Socks, Mtproto, SS
 from ..util_core.selector import GroupSelector, ClientSelector
 from ..util_core.utils import StreamType, stream_list, is_email, clean_iptables, ColorStr
 
+@restart(True)
 def new_port(new_stream=None):
     info = dict()
     if new_stream:
@@ -47,16 +49,18 @@ def new_port(new_stream=None):
         print("")
         nw = NodeWriter()
         nw.create_new_port(int(new_port), stream, **info)
+        return True
     else:
         print(_("input error, please check is number"))
 
+@restart()
 def new_user():
     gs = GroupSelector(_('user number'))
     group = gs.group
     group_list = gs.group_list
 
     if group == None:
-        exit(-1)
+        pass
     else:
         email = ""
         if type(group.node_list[0]) == Vmess: 
@@ -84,6 +88,7 @@ def new_user():
             nw = NodeWriter(group.tag, group.index)
             info = {'email': email}
             nw.create_new_user(**info)
+            return True
 
         elif type(group.node_list[0]) == Socks:
             print(_("local group is socks, please input user and password to create user"))
@@ -96,6 +101,7 @@ def new_user():
             info = {"user":user, "pass": password}
             nw = NodeWriter(group.tag, group.index)
             nw.create_new_user(**info)
+            return True
 
         elif type(group.node_list[0]) == Mtproto:
             print("")
@@ -105,6 +111,7 @@ def new_user():
             print("")
             print(_("Shadowsocks protocol only support one user, u can add new port to multiple SS!"))
 
+@restart()
 def del_port():
     gs = GroupSelector(_('del port'))
     group = gs.group
@@ -119,9 +126,11 @@ def del_port():
             nw = NodeWriter()
             nw.del_port(group)
             clean_iptables(group.port)
+            return True
         else:
             print(_("undo delete"))
 
+@restart()
 def del_user():
     cs = ClientSelector(_('del user'))
     group = cs.group
@@ -138,5 +147,6 @@ def del_user():
                 clean_iptables(group.port)
             nw = NodeWriter()
             nw.del_user(group, client_index)
+            return True
         else:
             print(_("undo delete"))

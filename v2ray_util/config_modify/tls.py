@@ -3,6 +3,7 @@
 import socket
 import os
 
+from ..util_core.v2ray import restart
 from ..util_core.writer import GroupWriter
 from ..util_core.group import Mtproto, SS
 from ..util_core.selector import GroupSelector
@@ -61,17 +62,18 @@ class TLSModifier:
     def turn_off(self):
         self.writer.write_tls(False)
 
+@restart()
 def modify():
     gs = GroupSelector(_('modify tls'))
     group = gs.group
 
     if group == None:
-        exit(-1)
+        pass
     else:
         if type(group.node_list[0]) == Mtproto or type(group.node_list[0]) == SS:
             print(_("V2ray MTProto/Shadowsocks protocol not support https!!!"))
             print("")
-            exit(-1)
+            return
         tm = TLSModifier(group.tag, group.index)
         tls_status = 'open' if group.tls == 'tls' else 'close'
         print("{}: {}\n".format(_("group tls status"), tls_status))
@@ -79,9 +81,15 @@ def modify():
         print(_("1.open TLS"))
         print(_("2.close TLS"))
         choice = input(_("please select: "))
+        if not choice:
+            return
+        if not choice in ("1", "2"):
+            print(_("input error, please input again"))
+            return
+
         if choice == '1':
             tm.turn_on()
         elif choice == '2':
             tm.turn_off()
-        else:
-            print(_("input error, please input again"))
+            
+        return True

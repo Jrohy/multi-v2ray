@@ -24,7 +24,7 @@ class CDNModifier:
 
     def openHttp(self):
         '''
-        cloudfare cdn proxy 80 port
+        cloudflare cdn proxy 80 port
         '''
         self.gw.write_port("80")
         self.gw.write_domain(self.domain)
@@ -34,7 +34,7 @@ class CDNModifier:
 
     def openHttps(self):
         '''
-        cloudfare cdn proxy 443 port
+        cloudflare cdn proxy 443 port
         '''
         self.gw.write_port("443")
         TLSModifier(self.group_tag, self.group_index, self.domain).turn_on()

@@ -1,109 +1,123 @@
 # multi-v2ray
-a tool to manage v2ray config json, support multiple user && group manage  
+V2ray多用户管理脚本，向导式管理[新增|删除|修改]传输协议，享受V2ray的乐趣~  
 ![](https://img.shields.io/pypi/v/v2ray-util.svg) 
 ![](https://img.shields.io/docker/pulls/jrohy/v2ray.svg)
 ![](https://img.shields.io/github/stars/Jrohy/multi-v2ray.svg) 
 ![](https://img.shields.io/github/forks/Jrohy/multi-v2ray.svg) 
 ![](https://img.shields.io/github/license/Jrohy/multi-v2ray.svg)
 
-## Feature
-- V2ray && Iptables Traffic Statistics
-- Command line to manage
-- Multiple user && port manage
-- Dynamic port
-- Ban bittorrent
-- Range port
-- TcpFastOpen
-- CDN mode
-- Vmess/Socks5/MTproto share link
-- Support protocol modify:
-  - TCP
-  - Fake http
-  - WebSocket
-  - mkcp
-  - mKCP + srtp
-  - mKCP + utp
-  - mKCP + wechat-video
-  - mKCP + dtls
-  - mKCP + wireguard
-  - HTTP/2
+## [中文](README.md)  [English](README_EN.md)
+
+## 特色
+- [x] 调用v2ray官方api进行流量统计
+- [x] **多用户, 多端口管理**, 混合传输协议管理不再是梦
+- [x] 首次安装时产生随机端口，默认配置mkcp + 随机一种 (srtp | wechat-video | utp | dtls) header伪装;  
+  安装完成显示配置信息;  **脚本跑完即可放心食用！**
+- [x] 每天**北京时间**早上3点自动升级重启v2ray核心,降低v2ray因内存小被kill几率。可关闭开启此功能。
+- [x] 查看配置信息显示vmess字符串(v2rayN的分享链接格式)
+- [x] 生成**Telegram**的socks5/MTProto分享链接, 支持socks5 + tls组合
+- [x] 支持http/2, 随机生成伪装h2 path
+- [x] 开启关闭tcpFastOpen
+- [x] 开启关闭动态端口
+- [x] 支持新版v2ray配置文件格式(v4.1+)
+- [x] 支持范围端口修改
+- [x] 支持程序和**命令行参数**管理控制
+- [x] 禁止BT
+
+## 功能
+- 一键 启动 / 停止 / 重启 V2ray 服务端
+- 流量统计(v2ray && iptables)
+- 命令行模式管理v2ray
+- 支持多用户， 多端口管理
+- 开启关闭动态端口
+- bittorrent的禁止与放行
+- 单端口, 范围端口的修改
+- 直接走cdn(80和443端口)
+- 开启关闭tcpFastOpen
+- 快速查看服务器连接信息, 常规配置修改
+- 自由更改**传输配置**：
+  - 常规TCP
+  - HTTP头部伪装
+  - WebSocket流量
+  - 常规mKCP流量
+  - mKCP 伪装 FaceTime通话流量(srtp)
+  - mKCP 伪装 BT下载流量(utp)
+  - mKCP 伪装 微信视频通话流量(wechat-video)
+  - mKCP 伪装 DTLS 1.2流量(dtls)
+  - mKCP 伪装 WireGuard流量(wireguard)
+  - HTTP/2的tls流量(h2)(需备域名) 
   - Socks5
   - MTProto
   - Shadowsocks
   - Quic
 
-## How To Use
-new install
-```
-source <(curl -sL https://git.io/fNgqx)
-```
-
-中文版安装
+## 安装命令
 ```
 source <(curl -sL https://git.io/fNgqx) --zh
 ```
 
-keep profile to update(保留配置文件更新)
+## 升级命令(保留配置文件更新)
 ```
 source <(curl -sL https://git.io/fNgqx) -k
 ```
 
-uninstall
+## 卸载命令
 ```
 source <(curl -sL https://git.io/fNgqx) --remove
 ```
 
-## Command Line
+## 命令行参数
 ```bash
 v2ray [-h|--help] [options]
-    -h, --help           get help
-    -v, --version        get version
-    start                start V2Ray
-    stop                 stop V2Ray
-    restart              restart V2Ray
-    status               check V2Ray status
-    new                  create new json profile
-    update               update v2ray to latest
-    add                  random create mkcp + (srtp|wechat-video|utp|dtls|wireguard) fake header group
-    add [wechat|utp|srtp|dtls|wireguard|socks|mtproto|ss]     create special protocol, random new port
-    del                  delete port group
-    info                 check v2ray profile
-    port                 modify port
-    tls                  modify tls
-    tfo                  modify tcpFastOpen
-    stream               modify protocol
-    cdn                  cdn mode
-    stats                iptables traffic statistics
-    clean                clean v2ray log
-    log                  check v2ray log
+    -h, --help           查看帮助
+    -v, --version        查看版本号
+    start                启动 V2Ray
+    stop                 停止 V2Ray
+    restart              重启 V2Ray
+    status               查看 V2Ray 运行状态
+    new                  重建新的v2ray json配置文件
+    update               更新 V2Ray 到最新Release版本
+    add                  新增mkcp + 随机一种 (srtp|wechat-video|utp|dtls|wireguard) header伪装的端口(Group)
+    add [wechat|utp|srtp|dtls|wireguard|socks|mtproto|ss]     新增一种协议的组，端口随机,如 v2ray add utp 为新增utp协议
+    del                  删除端口组
+    info                 查看配置
+    port                 修改端口
+    tls                  修改tls
+    tfo                  修改tcpFastOpen
+    stream               修改传输协议
+    cdn                  走cdn
+    stats                iptables流量统计
+    clean                清理日志
+    log                  查看日志
 ```
 
-## Docker Run
+## Docker运行
+
+默认创建mkcp + 随机一种伪装头配置文件：
 ```
 docker run -d --name v2ray --restart always --network host jrohy/v2ray
 ```
-it will create random port + random header(srtp | wechat-video | utp | dtls) kcp profile  
 
-check v2ray profile:
+查看v2ray配置:
 ```
 docker exec v2ray bash -c "v2ray info"
 ```
 
-only restart container to make effect when u change v2ray config.json:
+如果修改了v2ray配置文件直接重启v2ray容器来生效:
 ```
 docker restart v2ray
 ```
 
-**warning**: if u run with centos, u should close firewall first
+**warning**: 如果用centos，需要先关闭防火墙
 ```
 systemctl stop firewalld.service
 systemctl disable firewalld.service
 ```
 
-## Changelog
-see [Changelog](https://github.com/Jrohy/multi-v2ray/blob/master/Changelog.md)
+## 变更记录
+查看 [Changelog](https://github.com/Jrohy/multi-v2ray/blob/master/Changelog.md)
 
-## Dependent
+## 依赖
 docker: https://hub.docker.com/r/jrohy/v2ray  
 pip: https://pypi.org/project/v2ray-util/  
 python3: https://github.com/Jrohy/python3-install

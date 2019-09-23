@@ -1,3 +1,6 @@
+> v3.6.4
+* 添加v2ray.sh命令来更新multi-v2ray脚本
+
 > v3.6.3
 * Added: 80端口cdn关闭(去掉域名)
 * Added: 随机生成kcp header时增加wireguard header

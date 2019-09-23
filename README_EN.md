@@ -61,6 +61,7 @@ v2ray [-h|--help] [options]
     status               check V2Ray status
     new                  create new json profile
     update               update v2ray to latest
+    update.sh            update multi-v2ray to latest
     add                  random create mkcp + (srtp|wechat-video|utp|dtls|wireguard) fake header group
     add [wechat|utp|srtp|dtls|wireguard|socks|mtproto|ss]     create special protocol, random new port
     del                  delete port group

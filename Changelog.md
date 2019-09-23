@@ -1,5 +1,5 @@
 > v3.6.4
-* 添加v2ray.sh命令来更新multi-v2ray脚本
+* 添加`v2ray update.sh`命令来更新multi-v2ray脚本
 
 > v3.6.3
 * Added: 80端口cdn关闭(去掉域名)

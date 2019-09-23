@@ -43,6 +43,7 @@ def help():
     status               查看 V2Ray 运行状态
     new                  重建新的v2ray json配置文件
     update               更新 V2Ray 到最新Release版本
+    update.sh            更新 multi-v2ray 到最新版本
     add                  新增mkcp + 随机一种 (srtp|wechat-video|utp|dtls|wireguard) header伪装的端口(Group)
     add [wechat|utp|srtp|dtls|wireguard|socks|mtproto|ss]     新增一种协议的组，端口随机,如 v2ray add utp 为新增utp协议
     del                  删除端口组
@@ -67,6 +68,7 @@ def help():
     status               check V2Ray status
     new                  create new json profile
     update               update v2ray to latest
+    update.sh            update multi-v2ray to latest
     add                  random create mkcp + (srtp|wechat-video|utp|dtls|wireguard) fake header group
     add [wechat|utp|srtp|dtls|wireguard|socks|mtproto|ss]     create special protocol, random new port
     del                  delete port group
@@ -80,6 +82,10 @@ def help():
     clean                clean v2ray log
     log                  check v2ray log
         """.format(exec_name[exec_name.rfind("/") + 1:]))
+
+def updateSh():
+    subprocess.Popen("curl -Ls https://git.io/fNgqx -o temp.sh", shell=True).wait()
+    subprocess.Popen("bash temp.sh -k && rm -f temp.sh", shell=True).wait()
 
 def parse_arg():
     if len(sys.argv) == 1:
@@ -117,6 +123,8 @@ def parse_arg():
             multiple.new_port()
         elif sys.argv[1] == "update":
             V2ray.update()
+        elif sys.argv[1] == "update.sh":
+            updateSh()
         elif sys.argv[1] == "new":
             V2ray.new()
         elif sys.argv[1] == "convert":

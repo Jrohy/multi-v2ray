@@ -77,10 +77,15 @@ v2ray [-h|--help] [options]
 ```
 
 ## Docker Run
+default will create random port + random header(srtp | wechat-video | utp | dtls) kcp profile  
 ```
 docker run -d --name v2ray --restart always --network host jrohy/v2ray
 ```
-it will create random port + random header(srtp | wechat-video | utp | dtls) kcp profile  
+
+custom v2ray config.json:
+```
+docker run -d --name v2ray -v /path/config.json:/etc/v2ray/config.json --restart always --network host jrohy/v2ray
+```
 
 check v2ray profile:
 ```

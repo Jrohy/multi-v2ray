@@ -5,4 +5,6 @@ if [[ ! -e /etc/v2ray ]];then
     v2ray new >/dev/null 2>&1
 fi
 
-/usr/bin/v2ray/v2ray -config=/etc/v2ray/config.json
+/usr/bin/v2ray/v2ray -config=/etc/v2ray/config.json > /.run.log &
+
+tail -f /.run.log

@@ -87,11 +87,6 @@ check v2ray profile:
 docker exec v2ray bash -c "v2ray info"
 ```
 
-only restart container to make effect when u change v2ray config.json:
-```
-docker restart v2ray
-```
-
 **warning**: if u run with centos, u should close firewall first
 ```
 systemctl stop firewalld.service

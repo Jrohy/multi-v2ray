@@ -106,11 +106,6 @@ docker run -d --name v2ray --restart always --network host jrohy/v2ray
 docker exec v2ray bash -c "v2ray info"
 ```
 
-如果修改了v2ray配置文件直接重启v2ray容器来生效:
-```
-docker restart v2ray
-```
-
 **warning**: 如果用centos，需要先关闭防火墙
 ```
 systemctl stop firewalld.service

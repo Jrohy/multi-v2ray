@@ -1,3 +1,6 @@
+> v3.6.5
+* 优化docker平台服务管理
+
 > v3.6.4
 * 添加`v2ray update.sh`命令来更新multi-v2ray脚本
 

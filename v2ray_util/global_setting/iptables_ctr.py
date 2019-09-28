@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import os
 import subprocess
 import pkg_resources
 
@@ -7,6 +8,10 @@ from ..util_core.loader import Loader
 from ..util_core.utils import ColorStr, calcul_iptables_traffic
 
 def manage():
+    if os.path.exists("/.dockerenv"):
+        print(ColorStr.yellow("docker run not support iptables!"))
+        return
+
     loader = Loader()
 
     profile = loader.profile

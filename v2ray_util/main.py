@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import os
 import sys
 import subprocess
 import pkg_resources
@@ -84,8 +85,11 @@ def help():
         """.format(exec_name[exec_name.rfind("/") + 1:]))
 
 def updateSh():
-    subprocess.Popen("curl -Ls https://git.io/fNgqx -o temp.sh", shell=True).wait()
-    subprocess.Popen("bash temp.sh -k && rm -f temp.sh", shell=True).wait()
+    if os.path.exists("/.dockerenv"):
+        print(ColorStr.yellow("docker run not support update!"))
+    else:
+        subprocess.Popen("curl -Ls https://git.io/fNgqx -o temp.sh", shell=True).wait()
+        subprocess.Popen("bash temp.sh -k && rm -f temp.sh", shell=True).wait()
 
 def parse_arg():
     if len(sys.argv) == 1:

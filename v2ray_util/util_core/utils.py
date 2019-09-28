@@ -174,6 +174,8 @@ def clean_iptables(port):
         os.system(clean_cmd.format("OUTPUT", str(line)))
 
 def open_port():
+    if os.path.exists("/.dockerenv"):
+        return
     input_cmd = "iptables -I INPUT -p {0} --dport {1} -j ACCEPT"
     output_cmd = "iptables -I OUTPUT -p {0} --sport {1}"
     check_cmd = "iptables -nvL --line-number|grep -w \"%s\""

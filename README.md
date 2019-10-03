@@ -118,7 +118,7 @@ systemctl disable firewalld.service
 ```
 
 ## 变更记录
-查看 [CHANGELOG](https://github.com/Jrohy/multi-v2ray/blob/master/Changelog.md)
+查看 [Changelog](https://github.com/Jrohy/multi-v2ray/blob/master/Changelog.md)
 
 ## 依赖
 docker: https://hub.docker.com/r/jrohy/v2ray  

@@ -161,10 +161,7 @@ checkSys() {
 #安装依赖
 installDependent(){
     if [[ ${OS} =~ 'CentOS' || ${OS} == 'Fedora' ]];then
-        if [[ ${OS} == 'CentOS8' ]];then
-            rpm -ivh http://mirrors.whsir.com/centos/whsir-release-centos.noarch.rpm
-            ${PACKAGE_MANAGER} install wntp -y
-        else
+        if [[ ${OS} != 'CentOS8' ]];then
             ${PACKAGE_MANAGER} ntpdate -y
         fi
         ${PACKAGE_MANAGER} install socat crontabs lsof which -y
@@ -246,7 +243,7 @@ updateProject() {
 
 #时间同步
 timeSync() {
-    if [[ ${INSTALL_WAY} == 0 ]];then
+    if [[ ${INSTALL_WAY} == 0 && ${OS} != 'CentOS8' ]];then
         echo -e "${Info} Time Synchronizing.. ${Font}"
         ntpdate pool.ntp.org
         if [[ $? -eq 0 ]];then 

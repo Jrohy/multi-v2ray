@@ -185,8 +185,8 @@ msgstr "请输入数字来"
 msgid "last group can't delete!!!"
 msgstr "仅剩最后一个端口无法删除!!!"
 
-msgid "please input group alphabet to"
-msgstr "请输入节点Group字母来"
+msgid "please input group to"
+msgstr "请输入节点Group来"
 
 msgid "input error, please check group"
 msgstr "输入有误，请检查组"

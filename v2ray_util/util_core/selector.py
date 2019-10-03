@@ -83,8 +83,8 @@ class GroupSelector(Selector):
 
     def select_group(self):
         print(self.profile)
-        choice = input("{} {}: ".format(_("please input group alphabet to"), self.action))
-        group_list = [x for x in self.group_list if x.tag == choice]
+        choice = input("{} {}: ".format(_("please input group to"), self.action))
+        group_list = [x for x in self.group_list if x.tag == str.upper(choice)]
         if len(group_list) == 0:
             print(ColorStr.red('{0} {1} {2}'.format(_("input error, please check group"), choice, _("exist"))))
             self.group = None

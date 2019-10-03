@@ -164,7 +164,7 @@ installDependent(){
         ${PACKAGE_MANAGER} install ntpdate socat cron lsof -y
     fi
 
-    #install python3 & pip3
+    #install python3 & pip
     bash <(curl -sL https://git.io/fhqMz)
 }
 
@@ -204,7 +204,7 @@ planUpdate(){
 updateProject() {
     local DOMAIN=""
 
-    [[ ! $(type pip3 2>/dev/null) ]] && colorEcho $RED "pip3 no install!" && exit 1
+    [[ ! $(type pip 2>/dev/null) ]] && colorEcho $RED "pip no install!" && exit 1
 
     if [[ -e /usr/local/multi-v2ray/multi-v2ray.conf ]];then
         TEMP_VALUE=$(cat /usr/local/multi-v2ray/multi-v2ray.conf|grep domain|awk 'NR==1')
@@ -212,7 +212,7 @@ updateProject() {
         rm -rf /usr/local/multi-v2ray
     fi
 
-    pip3 install -U v2ray_util
+    pip install -U v2ray_util
 
     if [[ -e $UTIL_PATH ]];then
         [[ -z $(cat $UTIL_PATH|grep lang) ]] && echo "lang=en" >> $UTIL_PATH

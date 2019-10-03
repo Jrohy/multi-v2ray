@@ -591,9 +591,6 @@ msgstr "2.443端口 + ws"
 msgid "3.close cdn(80 port)"
 msgstr "3.关闭cdn(80端口)"
 
-msgid "please input ws fake domain(enter to no need): "
-msgstr "请输入ws要伪装的域名(不伪装直接回车): "
-
 msgid "please input run cdn mode domain: "
 msgstr "请输入走cdn的域名: "
 

@@ -9,19 +9,15 @@ from ..util_core.writer import StreamWriter, GroupWriter
 from ..util_core.utils import StreamType, ColorStr, get_ip
 
 class CDNModifier:
-    def __init__(self, group_tag='A', group_index=-1, domain='', fake_domain=''):
+    def __init__(self, group_tag='A', group_index=-1, domain=''):
         self.domain = domain
         self.group_tag = group_tag
         self.group_index = group_index
         if domain:
-            self.__writeWS(fake_domain)
+            StreamWriter(self.group_tag, self.group_index, StreamType.WS).write()
 
         self.gw = GroupWriter(group_tag, group_index)
     
-    def __writeWS(self, fake_domain):
-        sw = StreamWriter(self.group_tag, self.group_index, StreamType.WS)
-        sw.write(**{'host': fake_domain})
-
     def openHttp(self):
         '''
         cloudflare cdn proxy 80 port
@@ -65,7 +61,6 @@ def modify():
             CDNModifier(group.tag, group.index).closeHttp()
             return True
             
-        fake_domain = input(_("please input ws fake domain(enter to no need): "))
         domain = input(_("please input run cdn mode domain: "))
         if not domain:
             print(ColorStr.yellow(_("domain is empty!")))
@@ -87,7 +82,7 @@ def modify():
                 print("")
                 return
 
-        cm = CDNModifier(group.tag, group.index, domain, fake_domain)
+        cm = CDNModifier(group.tag, group.index, domain)
 
         if choice == '1':
             cm.openHttp()

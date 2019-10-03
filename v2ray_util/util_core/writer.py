@@ -199,7 +199,8 @@ class StreamWriter(Writer):
             ws = self.load_template('ws.json')
             salt = '/' + ''.join(random.sample(string.ascii_letters + string.digits, 8)) + '/'
             ws["wsSettings"]["path"] = salt
-            ws["wsSettings"]["headers"]["Host"] = kw['host']
+            if "host" in kw:
+                ws["wsSettings"]["headers"]["Host"] = kw['host']
             self.part_json["streamSettings"] = ws
 
         elif self.stream_type == StreamType.H2:

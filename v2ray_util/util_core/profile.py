@@ -71,7 +71,10 @@ class Profile:
             group = self.parse_group(json_part, index, local_ip)
             if group != None:
                 group_ascii = group_ascii + 1
-                group.tag = chr(group_ascii)
+                if group_ascii > 90:
+                    group.tag = str(group_ascii)
+                else:
+                    group.tag = chr(group_ascii)
                 self.group_list.append(group)
         
         if len(self.group_list) == 0:

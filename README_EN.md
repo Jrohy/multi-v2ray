@@ -98,9 +98,6 @@ systemctl stop firewalld.service
 systemctl disable firewalld.service
 ```
 
-## Changelog
-see [Changelog](https://github.com/Jrohy/multi-v2ray/blob/master/Changelog.md)
-
 ## Dependent
 docker: https://hub.docker.com/r/jrohy/v2ray  
 pip: https://pypi.org/project/v2ray-util/  

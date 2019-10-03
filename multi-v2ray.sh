@@ -161,7 +161,13 @@ checkSys() {
 #安装依赖
 installDependent(){
     if [[ ${OS} =~ 'CentOS' || ${OS} == 'Fedora' ]];then
-        ${PACKAGE_MANAGER} install ntpdate socat crontabs lsof which -y
+        if [[ ${OS} == 'CentOS8' ]];then
+            rpm -ivh http://mirrors.whsir.com/centos/whsir-release-centos.noarch.rpm
+            ${PACKAGE_MANAGER} install wntp -y
+        else
+            ${PACKAGE_MANAGER} ntpdate -y
+        fi
+        ${PACKAGE_MANAGER} install socat crontabs lsof which -y
     else
         ${PACKAGE_MANAGER} update
         ${PACKAGE_MANAGER} install ntpdate socat cron lsof -y

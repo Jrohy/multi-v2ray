@@ -106,7 +106,7 @@ removeV2Ray() {
     crontab crontab.txt >/dev/null 2>&1
     rm -f crontab.txt >/dev/null 2>&1
 
-    if [[ ${OS} == 'CentOS' || ${OS} == 'Fedora' ]];then
+    if [[ ${OS} =~ 'CentOS' || ${OS} == 'Fedora' ]];then
         systemctl restart crond >/dev/null 2>&1
     else
         systemctl restart cron >/dev/null 2>&1
@@ -136,6 +136,9 @@ checkSys() {
         if [[ $(cat /etc/redhat-release | grep Fedora) ]];then
             OS='Fedora'
             PACKAGE_MANAGER='dnf'
+        elif [[ $(cat /etc/redhat-release |grep "CentOS Linux release 8") ]];then
+            OS='CentOS8'
+            PACKAGE_MANAGER='dnf'
         else
             OS='CentOS'
             PACKAGE_MANAGER='yum'
@@ -157,7 +160,7 @@ checkSys() {
 
 #安装依赖
 installDependent(){
-    if [[ ${OS} == 'CentOS' || ${OS} == 'Fedora' ]];then
+    if [[ ${OS} =~ 'CentOS' || ${OS} == 'Fedora' ]];then
         ${PACKAGE_MANAGER} install ntpdate socat crontabs lsof which -y
     else
         ${PACKAGE_MANAGER} update
@@ -192,7 +195,7 @@ planUpdate(){
 	echo "0 ${LOCAL_TIME} * * * bash <(curl -L -s https://install.direct/go.sh) | tee -a /root/v2rayUpdate.log && systemctl restart v2ray" >> crontab.txt
 	crontab crontab.txt
 	sleep 1
-	if [[ ${OS} == 'CentOS' || ${OS} == 'Fedora' ]];then
+	if [[ ${OS} =~ 'CentOS' || ${OS} == 'Fedora' ]];then
         systemctl restart crond
 	else
         systemctl restart cron

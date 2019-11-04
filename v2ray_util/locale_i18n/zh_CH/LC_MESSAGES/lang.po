@@ -274,14 +274,17 @@ msgstr "1.开启流量统计"
 msgid "2.close statistics"
 msgstr "2.关闭流量统计"
 
-msgid "3.check statistics result"
-msgstr "3.查看流量统计"
+msgid "3.check user statistics result"
+msgstr "3.查看用户流量统计"
 
-msgid "4.reset statistics"
-msgstr "4.重置流量统计"
+msgid "4.check group statistics result"
+msgstr "4.查看组流量统计"
 
-msgid "tip: only have email node can statistics, restart v2ray will reset traffic statistics!!!"
-msgstr "tip: 具有有效email节点才会统计, 重启v2ray会重置流量统计!!!"
+msgid "5.reset statistics"
+msgstr "5.重置流量统计"
+
+msgid "tip: restart v2ray will reset traffic statistics!!!"
+msgstr "tip: 重启v2ray会重置流量统计!!!"
 
 msgid "open traffic statistics will close schedule update v2ray, continue?(y/n): "
 msgstr "开启流量统计会关闭定时更新v2ray服务, 是否继续y/n: "
@@ -295,11 +298,11 @@ msgstr "开启流量统计成功!"
 msgid "close traffic statistics success!"
 msgstr "关闭流量统计成功!"
 
-msgid "only open traffic statistics can"
-msgstr "流量统计开启状态才能"
+msgid "only open traffic statistics to operate"
+msgstr "流量统计开启状态才能操作"
 
-msgid "please input number or group alphabet to"
-msgstr "请输入流量的组别(字母)或者序号(数字)来"
+msgid "please input number or group alphabet to reset: "
+msgstr "请输入流量的组别(字母)或者序号(数字)来重置: "
 
 msgid "no effective email!!!"
 msgstr "无有效邮箱，无法统计!!!"

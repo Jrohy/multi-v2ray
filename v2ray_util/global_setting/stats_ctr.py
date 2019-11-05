@@ -114,23 +114,20 @@ def manage():
             sf = StatsFactory(profile.stats.door_port)
             print("")
             for group in group_list:
-                tls = _("open") if group.tls == "tls" else _("close")
                 port_way = "-{}".format(group.end_port) if group.end_port else ""
                 for node in group.node_list:
                     print('''
 Group: {group.tag}
 IP: {color_ip}
 Port: {group.port}{port_way}
-TLS: {tls}
 {node}             
-                    '''.format(group=group, color_ip=ColorStr.fuchsia(group.ip), node=node, tls=tls, port_way=port_way).strip())
+                    '''.format(group=group, color_ip=ColorStr.fuchsia(group.ip), node=node, port_way=port_way).strip())
                     if node.user_info:
                         sf.get_stats(node.user_info, False)
                         sf.print_stats(horizontal=True)
                     else:
                         print(ColorStr.yellow(_("no effective email!!!")))
                     print("")
-
 
         elif choice == "4":
             sf = StatsFactory(profile.stats.door_port)

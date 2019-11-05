@@ -1,5 +1,8 @@
 # Change Log
 
+## [v3.6.8](https://github.com/Jrohy/multi-v2ray/releases/tag/v3.6.8)(2019-11-05)
+- 优化v2ray流量统计查看
+
 ## [v3.6.7](https://github.com/Jrohy/multi-v2ray/releases/tag/v3.6.7)(2019-10-03)
 - 选择组时输入的字母不再区分大小写.
 

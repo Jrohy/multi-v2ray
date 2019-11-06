@@ -12,6 +12,7 @@ a tool to manage v2ray config json, support multiple user && group manage
 - V2ray && Iptables Traffic Statistics
 - Command line to manage
 - Multiple user && port manage
+- Support Docker
 - Dynamic port
 - Ban bittorrent
 - Range port

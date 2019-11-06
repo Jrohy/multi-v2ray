@@ -6,8 +6,9 @@ from .tls import TLSModifier
 from ..util_core.v2ray import restart
 from ..util_core.selector import GroupSelector
 from ..util_core.writer import StreamWriter, GroupWriter
-from ..util_core.utils import StreamType, ColorStr, get_ip
+from ..util_core.utils import StreamType, ColorStr, get_ip, loop_input_choice_number, is_ip
 
+# https://support.cloudflare.com/hc/en-us/articles/200169156-Identifying-network-ports-compatible-with-Cloudflare-s-proxy
 class CDNModifier:
     def __init__(self, group_tag='A', group_index=-1, domain=''):
         self.domain = domain
@@ -18,53 +19,58 @@ class CDNModifier:
 
         self.gw = GroupWriter(group_tag, group_index)
     
-    def openHttp(self):
+    def openHttp(self, port=80):
         '''
-        cloudflare cdn proxy 80 port
+        cloudflare cdn proxy http port(80, 8080, 8880, 2052, 2082, 2086, 2095)
         '''
-        self.gw.write_port("80")
+        self.gw.write_port(port)
         self.gw.write_domain(self.domain)
+
+    def openHttps(self, port=443):
+        '''
+        cloudflare cdn proxy https port(443, 2053, 2083, 2087, 2096, 8443)
+        '''
+        self.gw.write_port(port)
+        TLSModifier(self.group_tag, self.group_index, self.domain).turn_on()
     
     def closeHttp(self):
         self.gw.write_domain()
 
-    def openHttps(self):
-        '''
-        cloudflare cdn proxy 443 port
-        '''
-        self.gw.write_port("443")
-        TLSModifier(self.group_tag, self.group_index, self.domain).turn_on()
-
 @restart()
 def modify():
+    choice, port_choice = "", ""
     gs = GroupSelector(_("modify cdn"))
     group = gs.group
+
+    http_list=(80, 8080, 8880, 2052, 2082, 2086, 2095)
+    https_list=(443, 2053, 2083, 2087, 2096, 8443)
 
     if group == None:
         pass
     else:
         print("")
-        print(_("1.80 port + ws"))
-        print(_("2.443 port + ws"))
-        print(_("3.close cdn(80 port)"))
-        choice = input(_("please select: "))
+        print(_("1.open http cdn"))
+        print(_("2.open https cdn"))
+        print(_("3.close http cdn"))
+        choice = loop_input_choice_number(_("please select: "), 3)
         if not choice:
             return
-        if not choice in ("1", "2", "3"):
-            print(_("input error, please input again"))
-            return
 
-        if choice == '3':
-            if group.port != "80":
-                print(ColorStr.yellow(_("only support 80 port cdn close!")))
+        if choice == 3:
+            if group.port not in list(map(str, http_list)):
+                print(ColorStr.yellow(_("only support http port cdn close!")))
                 return
             CDNModifier(group.tag, group.index).closeHttp()
             return True
-            
-        domain = input(_("please input run cdn mode domain: "))
-        if not domain:
-            print(ColorStr.yellow(_("domain is empty!")))
-            return
+
+        if is_ip(group.ip):
+            domain = input(_("please input run cdn mode domain: "))
+            if not domain:
+                print(ColorStr.yellow(_("domain is empty!")))
+                return
+        else:
+            domain = group.ip
+
         try:
             input_ip = socket.gethostbyname(domain)
         except Exception:
@@ -72,7 +78,16 @@ def modify():
             print("")
             return
         
-        if choice == '2':
+        print("")
+        if choice == 1:
+            for index, text in enumerate(http_list): 
+                print("{}.{}".format(index + 1, text))
+            port_choice = loop_input_choice_number(_("please select http port to cdn: "), len(http_list))
+            if not port_choice:
+                return
+            CDNModifier(group.tag, group.index, domain).openHttp(http_list[port_choice - 1])
+
+        elif choice == 2:
             local_ip = get_ip()
             print(_("local vps ip address: ") + local_ip + "\n")
 
@@ -82,11 +97,12 @@ def modify():
                 print("")
                 return
 
-        cm = CDNModifier(group.tag, group.index, domain)
-
-        if choice == '1':
-            cm.openHttp()
-        elif choice == '2':
-            cm.openHttps()
+            for index, text in enumerate(https_list): 
+                print("{}.{}".format(index + 1, text))
+            port_choice = loop_input_choice_number(_("please select https port to cdn: "), len(https_list))
+            if not port_choice:
+                return
+            print("")
+            CDNModifier(group.tag, group.index, domain).openHttps(https_list[port_choice - 1])
         
         return True

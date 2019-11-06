@@ -6,28 +6,9 @@ import subprocess
 import pkg_resources
 
 from .util_core.v2ray import V2ray
-from .util_core.utils import ColorStr, open_port
+from .util_core.utils import ColorStr, open_port, loop_input_choice_number
 from .global_setting import stats_ctr, iptables_ctr, ban_bt, update_timer
 from .config_modify import base, multiple, ss, stream, tls, cdn
-
-def loop_input_choice_number(input_tip, number_max):
-    """
-    循环输入选择的序号,直到符合规定为止
-    """
-    while True:
-        print("")
-        choice = input(input_tip)
-        if not choice:
-            break
-        if choice.isnumeric():
-            choice = int(choice)
-        else:
-            print(ColorStr.red(_("input error, please input again")))
-            continue
-        if (choice <= number_max and choice > 0):
-            return choice
-        else:
-            print(ColorStr.red(_("input error, please input again")))
 
 def help():
     exec_name = sys.argv[0]

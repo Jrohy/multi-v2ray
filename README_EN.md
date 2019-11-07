@@ -12,12 +12,12 @@ a tool to manage v2ray config json, support multiple user && group manage
 - V2ray && Iptables Traffic Statistics
 - Command line to manage
 - Multiple user && port manage
+- Cloudcflare cdn mode
 - Support Docker
 - Dynamic port
 - Ban bittorrent
 - Range port
 - TcpFastOpen
-- CDN mode
 - Vmess/Socks5/MTproto share link
 - Support protocol modify:
   - TCP

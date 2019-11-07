@@ -1,5 +1,9 @@
 # Change Log
 
+## [v3.7.0](https://github.com/Jrohy/multi-v2ray/releases/tag/v3.7.0)(2019-11-07)
+- 添加更多Cloudcflare cdn 端口, 端口详见: [Identifying network ports compatible with Cloudflare's proxy
+](https://support.cloudflare.com/hc/en-us/articles/200169156-Identifying-network-ports-compatible-with-Cloudflare-s-proxy)
+
 ## [v3.6.8](https://github.com/Jrohy/multi-v2ray/releases/tag/v3.6.8)(2019-11-05)
 - 优化v2ray流量统计查看
 

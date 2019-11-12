@@ -72,7 +72,8 @@ v2ray [-h|--help] [options]
     tfo                  modify tcpFastOpen
     stream               modify protocol
     cdn                  cdn mode
-    stats                iptables traffic statistics
+    stats                v2ray traffic statistics
+    iptables             iptables traffic statistics
     clean                clean v2ray log
     log                  check v2ray log
 ```

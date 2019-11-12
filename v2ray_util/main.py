@@ -35,7 +35,8 @@ def help():
     tfo                  修改tcpFastOpen
     stream               修改传输协议
     cdn                  走cdn
-    stats                iptables流量统计
+    stats                v2ray流量统计
+    iptables             iptables流量统计
     clean                清理日志
     log                  查看日志
         """.format(exec_name[exec_name.rfind("/") + 1:]))
@@ -60,7 +61,8 @@ def help():
     tfo                  modify tcpFastOpen
     stream               modify protocol
     cdn                  cdn mode
-    stats                iptables traffic statistics
+    stats                v2ray traffic statistics
+    iptables             iptables traffic statistics
     clean                clean v2ray log
     log                  check v2ray log
         """.format(exec_name[exec_name.rfind("/") + 1:]))
@@ -99,6 +101,8 @@ def parse_arg():
         elif sys.argv[1] == "stream":
             stream.modify()
         elif sys.argv[1] == "stats":
+            stats_ctr.manage()
+        elif sys.argv[1] == "iptables":
             iptables_ctr.manage()
         elif sys.argv[1] == "clean":
             V2ray.cleanLog()

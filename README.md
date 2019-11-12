@@ -89,7 +89,8 @@ v2ray [-h|--help] [options]
     tfo                  修改tcpFastOpen
     stream               修改传输协议
     cdn                  走cdn
-    stats                iptables流量统计
+    stats                v2ray流量统计
+    iptables             iptables流量统计
     clean                清理日志
     log                  查看日志
 ```

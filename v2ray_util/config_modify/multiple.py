@@ -55,7 +55,7 @@ def new_port(new_stream=None):
 
 @restart()
 def new_user():
-    gs = GroupSelector(_('user number'))
+    gs = GroupSelector(_('add user'))
     group = gs.group
     group_list = gs.group_list
 

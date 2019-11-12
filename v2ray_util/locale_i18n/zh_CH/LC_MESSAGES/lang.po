@@ -444,8 +444,8 @@ msgstr "回车直接以该端口新建Group, 否则输入自定义端口"
 msgid "new port"
 msgstr "新端口为"
 
-msgid "user number"
-msgstr "user数量"
+msgid "add user"
+msgstr "新增用户"
 
 msgid "input email to create user, or enter to pass: "
 msgstr "是否输入email来新建用户, 回车直接跳过: "

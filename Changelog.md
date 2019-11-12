@@ -1,5 +1,9 @@
 # Change Log
 
+## [v3.7.1](https://github.com/Jrohy/multi-v2ray/releases/tag/v3.7.1)(2019-11-12)
+- fix [#244](https://github.com/Jrohy/multi-v2ray/issues/244), 修复v2ray流量统计bug
+- 修改v2ray流量统计命令行为`v2ray stats`, iptables流量统计为`v2ray iptables`
+
 ## [v3.7.0](https://github.com/Jrohy/multi-v2ray/releases/tag/v3.7.0)(2019-11-07)
 - 添加更多Cloudcflare cdn 端口, 端口详见: [Identifying network ports compatible with Cloudflare's proxy
 ](https://support.cloudflare.com/hc/en-us/articles/200169156-Identifying-network-ports-compatible-with-Cloudflare-s-proxy)

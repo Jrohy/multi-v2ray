@@ -18,8 +18,8 @@ class StatsFactory:
     def __run_command(self, command):
         value = 0
         result = bytes.decode(subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL).stdout.strip())
-        result_list = re.findall(r"\d+", result)
-        if result and len(result_list) == 1:
+        result_list = re.findall(r"\s+\d+\s+", result)
+        if "v2ctl" not in result and len(result_list) == 1:
             value = int(result_list[0])
         return value
 

@@ -150,7 +150,7 @@ def gen_cert(domain):
     if not os.path.exists("/root/.acme.sh/acme.sh"):
         os.system("curl https://get.acme.sh | sh")
 
-    get_ssl_cmd = "bash /root/.acme.sh/acme.sh  --issue -d " + domain + " --debug --standalone  --keylength ec-256"
+    get_ssl_cmd = "bash /root/.acme.sh/acme.sh --issue -d " + domain + " --debug --standalone --keylength ec-256"
 
     for name in service_name:
         os.system(stop_cmd.format(name))

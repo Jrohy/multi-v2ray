@@ -1,5 +1,8 @@
 # Change Log
 
+## [v3.7.2](https://github.com/Jrohy/multi-v2ray/releases/tag/v3.7.2)(2019-11-15)
+- 优化脚本输入体验, 单个字符输入免回车
+
 ## [v3.7.1](https://github.com/Jrohy/multi-v2ray/releases/tag/v3.7.1)(2019-11-12)
 - fix [#244](https://github.com/Jrohy/multi-v2ray/issues/244), 修复v2ray流量统计bug
 - 修改v2ray流量统计命令行为`v2ray stats`, iptables流量统计为`v2ray iptables`

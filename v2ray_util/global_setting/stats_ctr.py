@@ -7,7 +7,7 @@ import subprocess
 from ..util_core.v2ray import V2ray
 from ..util_core.loader import Loader
 from ..util_core.writer import GlobalWriter
-from ..util_core.utils import bytes_2_human_readable, ColorStr
+from ..util_core.utils import bytes_2_human_readable, ColorStr, readchar
 
 class StatsFactory:
     def __init__(self, door_port):
@@ -81,7 +81,7 @@ def manage():
         print(_("tip: restart v2ray will reset traffic statistics!!!"))
         print("")
 
-        choice = input(_("please select: "))
+        choice = readchar(_("please select: "))
 
         if choice in ("3", "4", "5") and not profile.stats.status:
             print(_("only open traffic statistics to operate"))
@@ -90,7 +90,7 @@ def manage():
 
         if choice == "1":
             if os.popen(FIND_V2RAY_CRONTAB_CMD).readlines():
-                rchoice = input(_("open traffic statistics will close schedule update v2ray, continue?(y/n): "))
+                rchoice = readchar(_("open traffic statistics will close schedule update v2ray, continue?(y/n): "))
                 if rchoice == "y" or rchoice == "Y":
                     #关闭定时更新v2ray服务
                     os.system(DEL_UPDATE_TIMER_CMD)

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from ..util_core.v2ray import restart
+from ..util_core.utils import readchar
 from ..util_core.group import Vmess, Socks, Mtproto, SS
 from ..util_core.writer import ClientWriter, GroupWriter
 from ..util_core.selector import ClientSelector, GroupSelector
@@ -37,8 +38,7 @@ def dyn_port():
     else:
         print('{}: {}'.format(_("dyn_port status"), group.dyp))
         gw = GroupWriter(group.tag, group.index)
-        
-        choice = input(_("open/close dyn_port(y/n): ")).lower()
+        choice = readchar(_("open/close dyn_port(y/n): ")).lower()
 
         if choice == 'y':
             newAlterId = input(_("please input dyn_port alterID(default 32): "))
@@ -68,7 +68,7 @@ def new_email():
     else:
         client_index = cs.client_index
         group_list = cs.group_list
-        print ("{}: {}".format(_("node email"), group.node_list[client_index].user_info))
+        print("{}: {}".format(_("node email"), group.node_list[client_index].user_info))
         email = ""
         while True:
             is_duplicate_email=False
@@ -108,7 +108,7 @@ def new_uuid():
         client_index = cs.client_index
         if type(group.node_list[client_index]) == Vmess:
             print("{}: {}".format(_("node UUID"), group.node_list[client_index].password))
-            choice = input(_("get new UUID?(y/n): ")).lower()
+            choice = readchar(_("get new UUID?(y/n): ")).lower()
             if choice == "y":
                 import uuid
                 new_uuid = uuid.uuid1()
@@ -163,7 +163,7 @@ def tfo():
         print(_("1.open TFO(force open)"))
         print(_("2.close TFO(force close)"))
         print(_("3.delete TFO(use system default profile)"))
-        choice = input(_("please select: "))
+        choice = readchar(_("please select: "))
         if not choice:
             return
         if not choice in ("1", "2", "3"):

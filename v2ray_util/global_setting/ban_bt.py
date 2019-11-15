@@ -3,6 +3,7 @@
 from ..util_core.loader import Loader
 from ..util_core.v2ray import restart
 from ..util_core.writer import GlobalWriter
+from ..util_core.utils import readchar
 
 @restart()
 def manage():
@@ -12,7 +13,7 @@ def manage():
 
     print("{}: {}".format(_("Ban BT status"), profile.ban_bt))
 
-    choice = input(_("Ban BT?(y/n): ")).lower()
+    choice = readchar(_("Ban BT?(y/n): ")).lower()
 
     if not choice:
         return

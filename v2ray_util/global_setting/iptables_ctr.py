@@ -5,7 +5,7 @@ import subprocess
 import pkg_resources
 
 from ..util_core.loader import Loader
-from ..util_core.utils import ColorStr, calcul_iptables_traffic
+from ..util_core.utils import ColorStr, calcul_iptables_traffic, readchar
 
 def manage():
     if os.path.exists("/.dockerenv"):
@@ -27,7 +27,7 @@ def manage():
         print(_("2.reset special port statistics"))
         print("")
 
-        choice = input(_("please select: "))
+        choice = readchar(_("please select: "))
         if choice == "1":
             print("")
             for group in group_list:

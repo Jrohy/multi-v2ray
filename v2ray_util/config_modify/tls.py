@@ -7,7 +7,7 @@ from ..util_core.v2ray import restart
 from ..util_core.writer import GroupWriter
 from ..util_core.group import Mtproto, SS
 from ..util_core.selector import GroupSelector
-from ..util_core.utils import get_ip, gen_cert
+from ..util_core.utils import get_ip, gen_cert, readchar
 
 class TLSModifier:
     def __init__(self, group_tag, group_index, domain=''):
@@ -18,7 +18,7 @@ class TLSModifier:
         print(_("1. Let's Encrypt certificate(auto create, please prepare domain)"))
         print(_("2. Customize certificate(prepare certificate file paths)"))
         print("")
-        choice=input(_("please select: "))
+        choice = readchar(_("please select: "))
         input_domain = self.domain
         if choice == "1":
             if not input_domain:
@@ -80,7 +80,7 @@ def modify():
         print("")
         print(_("1.open TLS"))
         print(_("2.close TLS"))
-        choice = input(_("please select: "))
+        choice = readchar(_("please select: "))
         if not choice:
             return
         if not choice in ("1", "2"):

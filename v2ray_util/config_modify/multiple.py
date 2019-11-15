@@ -7,7 +7,7 @@ from ..util_core.v2ray import restart
 from ..util_core.writer import NodeWriter, GroupWriter
 from ..util_core.group import Vmess, Socks, Mtproto, SS
 from ..util_core.selector import GroupSelector, ClientSelector
-from ..util_core.utils import StreamType, stream_list, is_email, clean_iptables, ColorStr
+from ..util_core.utils import StreamType, stream_list, is_email, clean_iptables, ColorStr, readchar
 
 @restart(True)
 def new_port(new_stream=None):
@@ -121,7 +121,7 @@ def del_port():
     else:
         print(_("del group info: "))
         print(group)
-        choice = input(_("delete?(y/n): ")).lower()
+        choice = readchar(_("delete?(y/n): ")).lower()
         if choice == 'y':
             nw = NodeWriter()
             nw.del_port(group)
@@ -141,7 +141,7 @@ def del_user():
         client_index = cs.client_index
         print(_("del user info:"))
         print(group.show_node(client_index))
-        choice = input(_("delete?(y/n): ")).lower()
+        choice = readchar(_("delete?(y/n): ")).lower()
         if choice == 'y':
             if len(group.node_list) == 1:
                 clean_iptables(group.port)

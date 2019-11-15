@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from .loader import Loader
-from .utils import ColorStr
+from .utils import ColorStr, readchar
 
 class CommonSelector:
     def __init__(self, collection, msg):
@@ -15,7 +15,11 @@ class CommonSelector:
     def select(self):
         for index, element in enumerate(self.collection):
             print("{0}.{1}".format(index + 1, element))
-        choice = input(self.msg)
+
+        if len(self.collection) < 10:
+            choice = readchar(self.msg)                
+        else:
+            choice = input(self.msg)
 
         if not choice.isnumeric():
             raise RuntimeError(_('input error, please check is number'))
@@ -49,7 +53,10 @@ class ClientSelector(Selector):
     def select_client(self):
         print(self.profile)
         self.group = None
-        choice = input("{} {}: ".format(_("please input number to"), self.action))
+        if self.list_size < 10:
+            choice = readchar("{} {}: ".format(_("please input number to"), self.action))
+        else:
+            choice = input("{} {}: ".format(_("please input number to"), self.action))
 
         if not choice.isnumeric():
             print(ColorStr.red(_('input error, please check is number')))
@@ -83,7 +90,10 @@ class GroupSelector(Selector):
 
     def select_group(self):
         print(self.profile)
-        choice = input("{} {}: ".format(_("please input group to"), self.action))
+        if len(self.group_list[-1].tag) == 1:
+            choice = readchar("{} {}: ".format(_("please input group to"), self.action))
+        else:
+            choice = input("{} {}: ".format(_("please input group to"), self.action))
         group_list = [x for x in self.group_list if x.tag == str.upper(choice)]
         if len(group_list) == 0:
             print(ColorStr.red('{0} {1} {2}'.format(_("input error, please check group"), choice, _("exist"))))

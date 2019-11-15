@@ -5,7 +5,7 @@ import time
 import platform
 
 from ..util_core.config import Config
-from ..util_core.utils import ColorStr
+from ..util_core.utils import ColorStr, readchar
 
 IS_CENTOS = True if "centos" in platform.linux_distribution()[0].lower() else False
 
@@ -45,7 +45,7 @@ def manage():
     print("")
     print(_("Tip: open schedule update v2ray at 3:00"))
 
-    choice = input(_("please select: "))
+    choice = readchar(_("please select: "))
 
     if choice == "1":
         if check_result:

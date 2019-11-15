@@ -8,17 +8,16 @@ from ..util_core.group import SS
 from ..util_core.v2ray import restart
 from ..util_core.writer import GroupWriter
 from ..util_core.selector import GroupSelector
-from ..util_core.utils import ss_method, ColorStr
+from ..util_core.utils import ss_method, ColorStr, readchar
 
 class SSFactory:
     def __init__(self):
         self.method_tuple = ss_method()
 
     def get_method(self):
-        print(_("please select shadowsocks method:"))
         for index, method in enumerate(self.method_tuple):
             print ("{}.{}".format(index + 1, method))
-        choice = input()
+        choice = readchar(_("please select shadowsocks method:"))
         choice = int(choice)
         if choice < 0 or choice > len(self.method_tuple):
             print(_("input out of range!!"))

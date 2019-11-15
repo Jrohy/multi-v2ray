@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 import os
 import re
+import sys
+import tty
+import termios
 import pkg_resources
 import urllib.request
 from enum import Enum, unique
@@ -208,7 +211,10 @@ def loop_input_choice_number(input_tip, length):
     """
     while True:
         print("")
-        choice = input(input_tip)
+        if length >= 10:
+            choice = input(input_tip)
+        else:
+            choice = readchar(input_tip)
         if not choice:
             return
         if choice.isnumeric():
@@ -220,3 +226,18 @@ def loop_input_choice_number(input_tip, length):
             return choice
         else:
             print(ColorStr.red(_("input error, please input again")))
+
+def readchar(prompt=""):
+    if prompt:
+        sys.stdout.write(prompt)
+        sys.stdout.flush()
+        
+    fd = sys.stdin.fileno()
+    old_settings = termios.tcgetattr(fd)
+    try:
+        tty.setraw(sys.stdin.fileno())
+        ch = sys.stdin.read(1)
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+
+    return ch.strip()

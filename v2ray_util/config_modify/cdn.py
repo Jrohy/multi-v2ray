@@ -19,6 +19,7 @@ class CDNModifier:
 
         self.gw = GroupWriter(group_tag, group_index)
     
+    @restart()
     def openHttp(self, port=80):
         '''
         cloudflare cdn proxy http port(80, 8080, 8880, 2052, 2082, 2086, 2095)
@@ -33,10 +34,10 @@ class CDNModifier:
         self.gw.write_port(port)
         TLSModifier(self.group_tag, self.group_index, self.domain).turn_on()
     
+    @restart()
     def closeHttp(self):
         self.gw.write_domain()
 
-@restart()
 def modify():
     choice, port_choice = "", ""
     gs = GroupSelector(_("modify cdn"))

@@ -146,20 +146,22 @@ def bytes_2_human_readable(number_of_bytes, precision=1):
     return str(number_of_bytes) + ' ' + unit
 
 def gen_cert(domain):
-    service_name = ["v2ray", "nginx", "httpd", "apache2"]
-    start_cmd = "service {} start >/dev/null 2>&1"
-    stop_cmd = "service {} stop >/dev/null 2>&1"
+    service_name = ["nginx", "httpd", "apache2"]
+    start_cmd = "systemctl start {}  >/dev/null 2>&1"
+    stop_cmd = "systemctl stop {} >/dev/null 2>&1"
 
     if not os.path.exists("/root/.acme.sh/acme.sh"):
         os.system("curl https://get.acme.sh | sh")
 
     get_ssl_cmd = "bash /root/.acme.sh/acme.sh --issue -d " + domain + " --debug --standalone --keylength ec-256"
 
-    for name in service_name:
-        os.system(stop_cmd.format(name))
+    if not os.path.exists("/.dockerenv"):
+        for name in service_name:
+            os.system(stop_cmd.format(name))
     os.system(get_ssl_cmd)
-    for name in service_name:
-        os.system(start_cmd.format(name))
+    if not os.path.exists("/.dockerenv"):
+        for name in service_name:
+            os.system(start_cmd.format(name))
 
 def calcul_iptables_traffic(port):
     traffic_result = os.popen("bash {0} {1}".format(pkg_resources.resource_filename("v2ray_util", "global_setting/calcul_traffic.sh"), str(port))).readlines()
@@ -184,8 +186,6 @@ def clean_iptables(port):
         os.system(clean_cmd.format("OUTPUT", str(line)))
 
 def open_port():
-    if os.path.exists("/.dockerenv"):
-        return
     input_cmd = "iptables -I INPUT -p {0} --dport {1} -j ACCEPT"
     output_cmd = "iptables -I OUTPUT -p {0} --sport {1}"
     check_cmd = "iptables -nvL --line-number|grep -w \"%s\""
@@ -240,4 +240,5 @@ def readchar(prompt=""):
     finally:
         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
 
+    print("")
     return ch.strip()

@@ -195,7 +195,7 @@ planUpdate(){
     OLD_CRONTAB=$(crontab -l)
     echo "SHELL=/bin/bash" >> crontab.txt
     echo "${OLD_CRONTAB}" >> crontab.txt
-	echo "0 ${LOCAL_TIME} * * * bash <(curl -L -s https://install.direct/go.sh) | tee -a /root/v2rayUpdate.log && systemctl restart v2ray" >> crontab.txt
+	echo "0 ${LOCAL_TIME} * * * bash <(curl -L -s https://install.direct/go.sh) | tee -a /root/v2rayUpdate.log && v2ray-util restart" >> crontab.txt
 	crontab crontab.txt
 	sleep 1
 	if [[ ${OS} =~ 'CentOS' || ${OS} == 'Fedora' ]];then

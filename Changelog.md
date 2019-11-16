@@ -1,5 +1,9 @@
 # Change Log
 
+## [v3.7.3](https://github.com/Jrohy/multi-v2ray/releases/tag/v3.7.3)(2019-11-17)
+- 添加完整的docker功能, 包括实现容器内iptables流量统计、证书申请、命令补全  
+  实现iptables流量统计起容器时必须加入--privileged
+
 ## [v3.7.2](https://github.com/Jrohy/multi-v2ray/releases/tag/v3.7.2)(2019-11-15)
 - 优化脚本输入体验, 单个字符输入免回车
 

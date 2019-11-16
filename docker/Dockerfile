@@ -11,11 +11,11 @@ WORKDIR /v2ray
 COPY --from=builder /usr/bin/v2ray/* /usr/bin/v2ray/
 COPY run.sh /v2ray
 
-RUN apk --no-cache add python3 bash ca-certificates && \
+RUN apk --no-cache add python3 bash ca-certificates curl socat openssl iptables lsof && \
     python3 -m ensurepip && \
     rm -r /usr/lib/python*/ensurepip && \
     pip3 install --upgrade pip setuptools && \
-    pip install -U v2ray-util && \
+    pip install v2ray-util && \
     mkdir /var/log/v2ray/ && \
     chmod +x /usr/bin/v2ray/v2ctl && \
     chmod +x /usr/bin/v2ray/v2ray && \

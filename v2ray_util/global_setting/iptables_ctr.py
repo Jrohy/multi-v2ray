@@ -8,10 +8,7 @@ from ..util_core.loader import Loader
 from ..util_core.utils import ColorStr, calcul_iptables_traffic, readchar
 
 def manage():
-    if os.path.exists("/.dockerenv"):
-        print(ColorStr.yellow("docker run not support iptables!"))
-        return
-
+    
     loader = Loader()
 
     profile = loader.profile

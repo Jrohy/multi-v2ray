@@ -99,12 +99,12 @@ v2ray [-h|--help] [options]
 
 默认创建mkcp + 随机一种伪装头配置文件：
 ```
-docker run -d --name v2ray --restart always --network host jrohy/v2ray
+docker run -d --name v2ray --privileged --restart always --network host jrohy/v2ray
 ```
 
 自定义v2ray配置文件:
 ```
-docker run -d --name v2ray -v /path/config.json:/etc/v2ray/config.json --restart always --network host jrohy/v2ray
+docker run -d --name v2ray --privileged -v /path/config.json:/etc/v2ray/config.json --restart always --network host jrohy/v2ray
 ```
 
 查看v2ray配置:

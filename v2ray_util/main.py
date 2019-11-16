@@ -250,7 +250,6 @@ def menu():
             from .util_core import client
             client.generate()
         else:
-            print("")
             break
 
 if __name__ == "__main__":

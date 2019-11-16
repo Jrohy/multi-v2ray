@@ -3,7 +3,7 @@
 import socket
 import os
 
-from ..util_core.v2ray import restart
+from ..util_core.v2ray import restart, V2ray
 from ..util_core.writer import GroupWriter
 from ..util_core.group import Mtproto, SS
 from ..util_core.selector import GroupSelector
@@ -14,7 +14,9 @@ class TLSModifier:
         self.domain = domain
         self.writer = GroupWriter(group_tag, group_index)
     
+    @restart(True)
     def turn_on(self):
+        print("")
         print(_("1. Let's Encrypt certificate(auto create, please prepare domain)"))
         print(_("2. Customize certificate(prepare certificate file paths)"))
         print("")
@@ -38,6 +40,7 @@ class TLSModifier:
 
             print("")
             print(_("auto generate SSL certificate, please wait.."))
+            V2ray.stop()
             gen_cert(input_domain)
             crt_file = "/root/.acme.sh/" + input_domain +"_ecc"+ "/fullchain.cer"
             key_file = "/root/.acme.sh/" + input_domain +"_ecc"+ "/"+ input_domain +".key"
@@ -58,11 +61,14 @@ class TLSModifier:
             self.writer.write_tls(True, crt_file=crt_file, key_file=key_file, domain=input_domain)
         else:
             print(_("input error!"))
-    
+            return
+        return True
+
+    @restart()
     def turn_off(self):
         self.writer.write_tls(False)
+        return True
 
-@restart()
 def modify():
     gs = GroupSelector(_('modify tls'))
     group = gs.group
@@ -91,5 +97,3 @@ def modify():
             tm.turn_on()
         elif choice == '2':
             tm.turn_off()
-            
-        return True

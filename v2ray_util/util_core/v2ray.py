@@ -84,10 +84,7 @@ class V2ray:
 
     @staticmethod
     def update():
-        if os.path.exists("/.dockerenv"):
-            print(ColorStr.yellow("docker run not support update!"))
-        else:
-            subprocess.Popen("curl -L -s https://install.direct/go.sh|bash", shell=True).wait()
+        subprocess.Popen("curl -L -s https://install.direct/go.sh|bash", shell=True).wait()
 
     @staticmethod
     def cleanLog():

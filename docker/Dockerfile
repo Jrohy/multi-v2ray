@@ -14,7 +14,7 @@ COPY run.sh /v2ray
 RUN apk --no-cache add python3 bash ca-certificates && \
     python3 -m ensurepip && \
     rm -r /usr/lib/python*/ensurepip && \
-    pip install --upgrade pip setuptools && \
+    pip3 install --upgrade pip setuptools && \
     pip install -U v2ray-util && \
     mkdir /var/log/v2ray/ && \
     chmod +x /usr/bin/v2ray/v2ctl && \

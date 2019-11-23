@@ -97,7 +97,7 @@ removeV2Ray() {
 
     #卸载multi-v2ray
     pip uninstall v2ray_util -y
-    rm -rf /etc/bash_completion.d/v2ray.bash >/dev/null 2>&1
+    rm -rf /usr/share/bash-completion/completions/v2ray.bash >/dev/null 2>&1
     rm -rf /usr/local/bin/v2ray >/dev/null 2>&1
     rm -rf /etc/v2ray_util >/dev/null 2>&1
 
@@ -233,9 +233,12 @@ updateProject() {
     rm -f /usr/local/bin/v2ray >/dev/null 2>&1
     ln -s $(which v2ray-util) /usr/local/bin/v2ray
 
+    #移除旧路径v2ray bash_completion脚本
+    [[ -e /etc/bash_completion.d/v2ray.bash ]] && rm -f /etc/bash_completion.d/v2ray.bash
+
     #更新v2ray bash_completion脚本
-    curl $BASH_COMPLETION_SHELL > /etc/bash_completion.d/v2ray.bash
-    [[ -z $(echo $SHELL|grep zsh) ]] && source /etc/bash_completion.d/v2ray.bash
+    curl $BASH_COMPLETION_SHELL > /usr/share/bash-completion/completions/v2ray.bash
+    [[ -z $(echo $SHELL|grep zsh) ]] && source /usr/share/bash-completion/completions/v2ray.bash
     
     #安装/更新V2ray主程序
     bash <(curl -L -s https://install.direct/go.sh)
@@ -263,9 +266,6 @@ profileInit() {
 
     #解决Python3中文显示问题
     [[ -z $(grep PYTHONIOENCODING=utf-8 ~/$ENV_FILE) ]] && echo "export PYTHONIOENCODING=utf-8" >> ~/$ENV_FILE && source ~/$ENV_FILE
-
-    # 加入v2ray tab补全环境变量
-    [[ -z $(echo $SHELL|grep zsh) && -z $(grep v2ray.bash ~/$ENV_FILE) ]] && echo "source /etc/bash_completion.d/v2ray.bash" >> ~/$ENV_FILE && source ~/$ENV_FILE
 
     #全新安装的新配置
     if [[ ${INSTALL_WAY} == 0 ]];then 

@@ -83,11 +83,12 @@ def modify():
         sm = StreamModifier(group.tag, group.index)
 
         print("{}: {}".format(_("group protocol"), group.node_list[0].stream()))
-        print ("")
+        print("")
         for index, stream_type in enumerate(sm.stream_type):
             print("{0}.{1}".format(index + 1, stream_type[1]))
 
-        choice = input()
+        print("")
+        choice = input(_("please select new protocol: "))
 
         if not choice.isdecimal():
             print(_("please input number!"))

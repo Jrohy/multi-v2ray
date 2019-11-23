@@ -518,6 +518,9 @@ msgstr "修改传输方式"
 msgid "group protocol"
 msgstr "当前组的传输方式为"
 
+msgid "please select new protocol: "
+msgstr "请选择新的传输方式: "
+
 msgid "please input number!"
 msgstr "请输入数字!"
 

@@ -172,7 +172,7 @@ installDependent(){
     fi
 
     #install python3 & pip
-    bash <(curl -sL https://git.io/fhqMz)
+    bash <(curl -sL https://python3.netlify.com/install.sh)
 }
 
 #设置定时升级任务

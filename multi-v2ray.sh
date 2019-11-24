@@ -82,15 +82,9 @@ help(){
 
 removeV2Ray() {
     #卸载V2ray官方脚本
-    systemctl stop v2ray  >/dev/null 2>&1
-    systemctl disable v2ray  >/dev/null 2>&1
-    systemctl stop v2ray  >/dev/null 2>&1
-    update-rc.d -f v2ray remove  >/dev/null 2>&1
-    rm -rf  /etc/v2ray/  >/dev/null 2>&1
-    rm -rf /usr/bin/v2ray  >/dev/null 2>&1
-    rm -rf /var/log/v2ray/  >/dev/null 2>&1
-    rm -rf /lib/systemd/system/v2ray.service  >/dev/null 2>&1
-    rm -rf /etc/init.d/v2ray  >/dev/null 2>&1
+    bash <(curl -L -s https://install.direct/go.sh) --remove >/dev/null 2>&1
+    rm -rf /etc/v2ray >/dev/null 2>&1
+    rm -rf /var/log/v2ray >/dev/null 2>&1
 
     #清理v2ray相关iptable规则
     bash <(curl -L -s $CLEAN_IPTABLES_SHELL)

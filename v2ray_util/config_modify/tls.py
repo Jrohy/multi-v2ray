@@ -7,7 +7,7 @@ from ..util_core.v2ray import restart, V2ray
 from ..util_core.writer import GroupWriter
 from ..util_core.group import Mtproto, SS
 from ..util_core.selector import GroupSelector
-from ..util_core.utils import get_ip, gen_cert, readchar
+from ..util_core.utils import get_ip, gen_cert, readchar, is_ipv4
 
 class TLSModifier:
     def __init__(self, group_tag, group_index, domain=''):
@@ -28,7 +28,10 @@ class TLSModifier:
                 print(_("local vps ip address: ") + local_ip + "\n")
                 input_domain = input(_("please input your vps domain: "))
                 try:
-                    input_ip = socket.gethostbyname(input_domain)
+                    if is_ipv4(local_ip):
+                        input_ip = socket.gethostbyname(input_domain)
+                    else:
+                        input_ip = socket.getaddrinfo(input_domain, None, socket.AF_INET6)[0][4][0]
                 except Exception:
                     print(_("domain check error!!!"))
                     print("")

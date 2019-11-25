@@ -3,10 +3,9 @@
 import json
 import time
 import os
-import urllib.request
 
 from .config import Config
-from .utils import ColorStr
+from .utils import ColorStr, get_ip
 from .group import SS, Socks, Vmess, Mtproto, Quic, Group, Dyport
 
 class Stats:
@@ -62,9 +61,7 @@ class Profile:
             if "protocol" in rule and "bittorrent" in rule["protocol"]:
                 self.ban_bt = True
 
-        #获取本机IP地址
-        my_ip = urllib.request.urlopen('http://api.ipify.org').read()
-        local_ip = bytes.decode(my_ip)
+        local_ip = get_ip()
 
         group_ascii = 64  # before 'A' ascii code
         for index, json_part in enumerate(conf_inbounds):

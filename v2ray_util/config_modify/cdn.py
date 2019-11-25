@@ -6,7 +6,7 @@ from .tls import TLSModifier
 from ..util_core.v2ray import restart
 from ..util_core.selector import GroupSelector
 from ..util_core.writer import StreamWriter, GroupWriter
-from ..util_core.utils import StreamType, ColorStr, get_ip, loop_input_choice_number, is_ip
+from ..util_core.utils import StreamType, ColorStr, get_ip, loop_input_choice_number, check_ip, is_ipv4
 
 # https://support.cloudflare.com/hc/en-us/articles/200169156-Identifying-network-ports-compatible-with-Cloudflare-s-proxy
 class CDNModifier:
@@ -64,7 +64,7 @@ def modify():
             CDNModifier(group.tag, group.index).closeHttp()
             return True
 
-        if is_ip(group.ip):
+        if check_ip(group.ip):
             domain = input(_("please input run cdn mode domain: "))
             if not domain:
                 print(ColorStr.yellow(_("domain is empty!")))
@@ -72,8 +72,12 @@ def modify():
         else:
             domain = group.ip
 
+        local_ip = get_ip()
         try:
-            input_ip = socket.gethostbyname(domain)
+            if is_ipv4(local_ip):
+                input_ip = socket.gethostbyname(domain)
+            else:
+                input_ip = socket.getaddrinfo(domain, None, socket.AF_INET6)[0][4][0]
         except Exception:
             print(_("domain check error!!!"))
             print("")
@@ -89,7 +93,6 @@ def modify():
             CDNModifier(group.tag, group.index, domain).openHttp(http_list[port_choice - 1])
 
         elif choice == 2:
-            local_ip = get_ip()
             print(_("local vps ip address: ") + local_ip + "\n")
 
             if input_ip != local_ip:

@@ -8,6 +8,9 @@ BEIJING_UPDATE_TIME=3
 #记录最开始运行脚本的路径
 BEGIN_PATH=$(pwd)
 
+# 0: ipv4, 1: ipv6
+NETWORK=0
+
 #安装方式, 0为全新安装, 1为保留v2ray配置更新
 INSTALL_WAY=0
 
@@ -18,7 +21,13 @@ REMOVE=0
 
 CHINESE=0
 
-BASE_SOURCE_PATH="https://raw.githubusercontent.com/Jrohy/multi-v2ray/master"
+[[ `curl -s icanhazip.com` =~ ":" ]] && NETWORK=1
+
+if [[ $NETWORK == 0 ]];then
+    BASE_SOURCE_PATH="https://raw.githubusercontent.com/Jrohy/multi-v2ray/master"
+else
+    BASE_SOURCE_PATH="https://v2rays.netlify.com"
+fi
 
 CLEAN_IPTABLES_SHELL="$BASE_SOURCE_PATH/v2ray_util/global_setting/clean_iptables.sh"
 
@@ -236,7 +245,11 @@ updateProject() {
     [[ -z $(echo $SHELL|grep zsh) ]] && source /usr/share/bash-completion/completions/v2ray.bash
     
     #安装/更新V2ray主程序
-    bash <(curl -L -s https://install.direct/go.sh)
+    if [[ $NETWORK == 1 ]];then
+        bash <(curl -L -s https://install.direct/go.sh) --source jsdelivr
+    else
+        bash <(curl -L -s https://install.direct/go.sh)
+    fi
 }
 
 #时间同步

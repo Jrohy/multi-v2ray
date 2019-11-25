@@ -7,7 +7,7 @@ import random
 import subprocess
 import pkg_resources
 from functools import wraps
-from .utils import ColorStr, open_port
+from .utils import ColorStr, open_port, get_ip, is_ipv6
 
 def restart(port_open=False):
     """
@@ -84,6 +84,10 @@ class V2ray:
 
     @staticmethod
     def update():
+        if is_ipv6(get_ip()):
+            print(ColorStr.yellow("ipv6 network not support update v2ray online, please manual update!"))
+            print(ColorStr.fuchsia("u can run 'bash <(curl -L -s https://install.direct/go.sh) -l v2ray-linux-64.zip' to update v2ray locally"))
+            return
         subprocess.Popen("curl -L -s https://install.direct/go.sh|bash", shell=True).wait()
 
     @staticmethod
@@ -132,7 +136,11 @@ class V2ray:
             subprocess.call("mkdir -p /etc/v2ray_util && cp -f {} /etc/v2ray_util/".format(pkg_resources.resource_filename(__name__, 'util.cfg')), shell=True)
         if not os.path.exists("/usr/bin/v2ray/v2ray"):
             print(ColorStr.yellow(_("check v2ray no install, auto install v2ray..")))
-            cls.update()
+            if is_ipv6(get_ip()):
+                subprocess.Popen("curl -Ls https://git.io/fNgqx -o temp.sh", shell=True).wait()
+                subprocess.Popen("bash temp.sh --source jsdelivr && rm -f temp.sh", shell=True).wait()
+            else:
+                cls.update()
             cls.new()
 
     @classmethod

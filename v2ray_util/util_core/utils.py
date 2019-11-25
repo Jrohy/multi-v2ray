@@ -4,6 +4,7 @@ import os
 import re
 import sys
 import tty
+import socket
 import termios
 import pkg_resources
 import urllib.request
@@ -88,8 +89,19 @@ def get_ip():
     """
     获取本地ip
     """
-    my_ip = urllib.request.urlopen('http://api.ipify.org').read()
-    return bytes.decode(my_ip)
+    my_ip = ""
+    ip_web_list = (
+        "http://icanhazip.com",
+        "https://api.ip.sb/ip",
+        "https://ifconfig.co/ip"
+    )
+    for ip_web in ip_web_list:
+        try:
+            my_ip = urllib.request.urlopen(ip_web).read()
+            break
+        except Exception as e:
+            print(e)
+    return bytes.decode(my_ip).strip()
 
 def port_is_use(port):
     """
@@ -106,12 +118,28 @@ def is_email(email):
     str = r'^[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}$'
     return re.match(str, email)
 
-def is_ip(ip):
-    """
-    判断是否是ip
-    """
-    str = r'^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$'
-    return re.match(str, ip)
+def is_ipv4(ip):
+    try:
+        socket.inet_pton(socket.AF_INET, ip)
+    except AttributeError:  # no inet_pton here, sorry
+        try:
+            socket.inet_aton(ip)
+        except socket.error:
+            return False
+        return ip.count('.') == 3
+    except socket.error:  # not a valid ip
+        return False
+    return True
+ 
+def is_ipv6(ip):
+    try:
+        socket.inet_pton(socket.AF_INET6, ip)
+    except socket.error:  # not a valid ip
+        return False
+    return True
+ 
+def check_ip(ip):
+    return is_ipv4(ip) or is_ipv6(ip)
 
 def bytes_2_human_readable(number_of_bytes, precision=1):
     """

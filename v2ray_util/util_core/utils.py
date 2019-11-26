@@ -90,17 +90,10 @@ def get_ip():
     获取本地ip
     """
     my_ip = ""
-    ip_web_list = (
-        "http://icanhazip.com",
-        "https://api.ip.sb/ip",
-        "https://ifconfig.co/ip"
-    )
-    for ip_web in ip_web_list:
-        try:
-            my_ip = urllib.request.urlopen(ip_web).read()
-            break
-        except Exception as e:
-            print(e)
+    try:
+        my_ip = urllib.request.urlopen('http://api.ipify.org').read()
+    except Exception:
+        my_ip = urllib.request.urlopen('http://icanhazip.com').read()
     return bytes.decode(my_ip).strip()
 
 def port_is_use(port):

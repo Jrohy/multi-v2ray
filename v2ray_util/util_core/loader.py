@@ -21,6 +21,8 @@ class Loader:
                     self.profile = pickle.load(reader)
                 if os.path.getmtime(self.profile.path) != self.profile.modify_time:
                     raise ValueError
+                if not hasattr(self.profile, "network"):
+                    raise ValueError
             else:
                 raise FileNotFoundError
         except Exception:

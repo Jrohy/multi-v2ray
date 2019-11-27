@@ -3,6 +3,7 @@
 import os
 import time
 from ..util_core.config import Config
+from ..util_core.loader import Loader
 from ..util_core.utils import ColorStr, readchar
 
 def restartCron():
@@ -16,6 +17,9 @@ def restartCron():
         os.system("systemctl restart cron >/dev/null 2>&1")
 
 def planUpdate():
+    if Loader().profile.network == "ipv6":
+        print(ColorStr.yellow("ipv6 not support!"))
+        return
     if Config().get_data("lang") == "zh":
         origin_time_zone = int(time.strftime("%z", time.gmtime())[0:-2])
         beijing_time_zone, beijing_update_time = 8, 3

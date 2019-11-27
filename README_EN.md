@@ -13,6 +13,7 @@ a tool to manage v2ray config json, support multiple user && group manage
 - Command line to manage
 - Multiple user && port manage
 - Cloudcflare cdn mode
+- Support pure ipv6 VPS
 - Support Docker
 - Dynamic port
 - Ban bittorrent
@@ -38,17 +39,17 @@ a tool to manage v2ray config json, support multiple user && group manage
 ## How To Use
 new install
 ```
-source <(curl -sL https://git.io/fNgqx)
+source <(curl -sL https://v2rays.netlify.com/install.sh)
 ```
 
 keep profile to update
 ```
-source <(curl -sL https://git.io/fNgqx) -k
+source <(curl -sL https://v2rays.netlify.com/install.sh) -k
 ```
 
 uninstall
 ```
-source <(curl -sL https://git.io/fNgqx) --remove
+source <(curl -sL https://v2rays.netlify.com/install.sh) --remove
 ```
 
 ## Command Line

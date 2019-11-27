@@ -184,8 +184,9 @@ def gen_cert(domain):
         for name in service_name:
             os.system(start_cmd.format(name))
 
-def calcul_iptables_traffic(port):
-    traffic_result = os.popen("bash {0} {1}".format(pkg_resources.resource_filename("v2ray_util", "global_setting/calcul_traffic.sh"), str(port))).readlines()
+def calcul_iptables_traffic(port, ipv6=False):
+    network = "1" if ipv6 else ""
+    traffic_result = os.popen("bash {0} {1} {2}".format(pkg_resources.resource_filename("v2ray_util", "global_setting/calcul_traffic.sh"), str(port), network)).readlines()
     if traffic_result:
         traffic_list = traffic_result[0].split()
         upload_traffic = bytes_2_human_readable(int(traffic_list[0]), 2)
@@ -195,36 +196,41 @@ def calcul_iptables_traffic(port):
                 ColorStr.cyan(upload_traffic), ColorStr.cyan(download_traffic), ColorStr.cyan(total_traffic))
 
 def clean_iptables(port):
-    clean_cmd = "iptables -D {0} {1}"
-    check_cmd = "iptables -nvL %s --line-number|grep -w \"%s\"|awk '{print $1}'|sort -r"
+    from .loader import Loader
+    iptable_way = "iptables" if Loader().profile.network == "ipv4" else "ip6tables" 
 
-    input_result = os.popen(check_cmd % ("INPUT", str(port))).readlines()
+    clean_cmd = "{} -D {} {}"
+    check_cmd = "{} -nvL {} --line-number|grep -w \"{}\"|awk '{print $1}'|sort -r"
+
+    input_result = os.popen(check_cmd.format(iptable_way, "INPUT", str(port))).readlines()
     for line in input_result:
-        os.system(clean_cmd.format("INPUT", str(line)))
+        os.system(clean_cmd.format(iptable_way, "INPUT", str(line)))
 
-    output_result = os.popen(check_cmd % ("OUTPUT", str(port))).readlines()
+    output_result = os.popen(check_cmd.format(iptable_way, "OUTPUT", str(port))).readlines()
     for line in output_result:
-        os.system(clean_cmd.format("OUTPUT", str(line)))
+        os.system(clean_cmd.format(iptable_way, "OUTPUT", str(line)))
 
 def open_port():
-    input_cmd = "iptables -I INPUT -p {0} --dport {1} -j ACCEPT"
-    output_cmd = "iptables -I OUTPUT -p {0} --sport {1}"
-    check_cmd = "iptables -nvL --line-number|grep -w \"%s\""
+    input_cmd = "{} -I INPUT -p {} --dport {} -j ACCEPT"
+    output_cmd = "{} -I OUTPUT -p {} --sport {}"
+    check_cmd = "{} -nvL --line-number|grep -w \"{}\""
 
     from .loader import Loader
 
-    group_list = Loader().profile.group_list
+    profile = Loader().profile
+    iptable_way = "iptables" if profile.network == "ipv4" else "ip6tables" 
+    group_list = profile.group_list
 
     port_set = set([group.port for group in group_list])
 
     for port in port_set:
         port_str = str(port)
-        if len(os.popen(check_cmd % port_str).readlines()) > 0:
+        if len(os.popen(check_cmd.format(iptable_way, port_str)).readlines()) > 0:
             continue
-        os.system(input_cmd.format("tcp", port_str))
-        os.system(input_cmd.format("udp", port_str))
-        os.system(output_cmd.format("tcp", port_str))
-        os.system(output_cmd.format("udp", port_str))
+        os.system(input_cmd.format(iptable_way, "tcp", port_str))
+        os.system(input_cmd.format(iptable_way, "udp", port_str))
+        os.system(output_cmd.format(iptable_way, "tcp", port_str))
+        os.system(output_cmd.format(iptable_way, "udp", port_str))
 
 def loop_input_choice_number(input_tip, length):
     """

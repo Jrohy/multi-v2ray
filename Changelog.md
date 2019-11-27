@@ -1,5 +1,8 @@
 # Change Log
 
+## [v3.7.4](https://github.com/Jrohy/multi-v2ray/releases/tag/v3.7.4)(2019-11-28)
+- 测试支持纯ipv6 vps, 安装脚本路径更换
+
 ## [v3.7.3](https://github.com/Jrohy/multi-v2ray/releases/tag/v3.7.3)(2019-11-17)
 - 添加完整的docker功能, 包括实现容器内iptables流量统计、证书申请、命令补全  
   实现iptables流量统计起容器时必须加入--privileged

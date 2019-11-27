@@ -6,9 +6,9 @@ FROM alpine:latest
 
 LABEL maintainer "Jrohy <euvkzx@Jrohy.com>"
 
-ENV COMPLETION_FILE "/usr/share/bash-completion/completions/v2ray.bash"
+ENV COMPLETION_FILE "/usr/share/bash-completion/completions/v2ray"
 
-ENV SOURCE_COMPLETION_FILE "https://raw.githubusercontent.com/Jrohy/multi-v2ray/master/v2ray.bash"
+ENV SOURCE_COMPLETION_FILE "https://multi.netlify.com/v2ray"
 
 COPY --from=builder /usr/bin/v2ray/v2ray /usr/bin/v2ray/
 COPY --from=builder /usr/bin/v2ray/v2ctl /usr/bin/v2ray/

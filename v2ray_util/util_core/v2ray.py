@@ -85,8 +85,8 @@ class V2ray:
     @staticmethod
     def update():
         if is_ipv6(get_ip()):
-            print(ColorStr.yellow("ipv6 network not support update v2ray online, please manual update!"))
-            print(ColorStr.fuchsia("u can run 'bash <(curl -L -s https://install.direct/go.sh) -l v2ray-linux-64.zip' to update v2ray locally"))
+            print(ColorStr.yellow(_("ipv6 network not support update v2ray online, please manual donwload v2ray to update!")))
+            print(ColorStr.fuchsia(_("download v2ray-linux-xx.zip and run 'bash <(curl -L -s https://install.direct/go.sh) -l v2ray-linux-xx.zip' to update")))
             return
         subprocess.Popen("curl -L -s https://install.direct/go.sh|bash", shell=True).wait()
 
@@ -137,7 +137,7 @@ class V2ray:
         if not os.path.exists("/usr/bin/v2ray/v2ray"):
             print(ColorStr.yellow(_("check v2ray no install, auto install v2ray..")))
             if is_ipv6(get_ip()):
-                subprocess.Popen("curl -Ls https://git.io/fNgqx -o temp.sh", shell=True).wait()
+                subprocess.Popen("curl -Ls https://install.direct/go.sh -o temp.sh", shell=True).wait()
                 subprocess.Popen("bash temp.sh --source jsdelivr && rm -f temp.sh", shell=True).wait()
             else:
                 cls.update()

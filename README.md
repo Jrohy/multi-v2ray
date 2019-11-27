@@ -24,6 +24,7 @@ V2ray多用户管理脚本，向导式管理[新增|删除|修改]传输协议�
 - [x] 支持范围端口修改
 - [x] 支持程序和**命令行参数**管理控制
 - [x] 支持docker部署
+- [x] 支持纯ipv6 vps
 - [x] 禁止BT
 
 ## 功能
@@ -55,17 +56,17 @@ V2ray多用户管理脚本，向导式管理[新增|删除|修改]传输协议�
 
 ## 安装命令
 ```
-source <(curl -sL https://git.io/fNgqx) --zh
+source <(curl -sL https://multi.netlify.com/v2ray.sh) --zh
 ```
 
 ## 升级命令(保留配置文件更新)
 ```
-source <(curl -sL https://git.io/fNgqx) -k
+source <(curl -sL https://multi.netlify.com/v2ray.sh) -k
 ```
 
 ## 卸载命令
 ```
-source <(curl -sL https://git.io/fNgqx) --remove
+source <(curl -sL https://multi.netlify.com/v2ray.sh) --remove
 ```
 
 ## 命令行参数

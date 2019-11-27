@@ -21,17 +21,11 @@ REMOVE=0
 
 CHINESE=0
 
-[[ `curl -s icanhazip.com` =~ ":" ]] && NETWORK=1
-
-if [[ $NETWORK == 0 ]];then
-    BASE_SOURCE_PATH="https://raw.githubusercontent.com/Jrohy/multi-v2ray/master"
-else
-    BASE_SOURCE_PATH="https://v2rays.netlify.com"
-fi
+BASE_SOURCE_PATH="https://multi.netlify.com"
 
 CLEAN_IPTABLES_SHELL="$BASE_SOURCE_PATH/v2ray_util/global_setting/clean_iptables.sh"
 
-BASH_COMPLETION_SHELL="$BASE_SOURCE_PATH/v2ray.bash"
+BASH_COMPLETION_SHELL="$BASE_SOURCE_PATH/v2ray"
 
 UTIL_CFG="$BASE_SOURCE_PATH/v2ray_util/util_core/util.cfg"
 
@@ -101,6 +95,7 @@ removeV2Ray() {
     #卸载multi-v2ray
     pip uninstall v2ray_util -y
     rm -rf /usr/share/bash-completion/completions/v2ray.bash >/dev/null 2>&1
+    rm -rf /usr/share/bash-completion/completions/v2ray >/dev/null 2>&1
     rm -rf /etc/bash_completion.d/v2ray.bash >/dev/null 2>&1
     rm -rf /usr/local/bin/v2ray >/dev/null 2>&1
     rm -rf /etc/v2ray_util >/dev/null 2>&1
@@ -129,6 +124,14 @@ closeSELinux() {
         sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
         setenforce 0
     fi
+}
+
+judgeNetwork() {
+    curl http://api.ipify.org &>/dev/null
+    if [[ $? != 0 ]];then
+        [[ `curl -s icanhazip.com` =~ ":" ]] && NETWORK=1
+    fi
+    export NETWORK=$NETWORK
 }
 
 checkSys() {
@@ -180,6 +183,8 @@ installDependent(){
 
 #设置定时升级任务
 planUpdate(){
+    [[ $NETWORK == 1 ]] && return
+
     if [[ $CHINESE == 1 ]];then
         #计算北京时间早上3点时VPS的实际时间
         ORIGIN_TIME_ZONE=$(date -R|awk '{printf"%d",$6}')
@@ -237,12 +242,13 @@ updateProject() {
     rm -f /usr/local/bin/v2ray >/dev/null 2>&1
     ln -s $(which v2ray-util) /usr/local/bin/v2ray
 
-    #移除旧路径v2ray bash_completion脚本
+    #移除旧的v2ray bash_completion脚本
     [[ -e /etc/bash_completion.d/v2ray.bash ]] && rm -f /etc/bash_completion.d/v2ray.bash
+    [[ -e /usr/share/bash-completion/completions/v2ray.bash ]] && rm -f /usr/share/bash-completion/completions/v2ray.bash
 
     #更新v2ray bash_completion脚本
-    curl $BASH_COMPLETION_SHELL > /usr/share/bash-completion/completions/v2ray.bash
-    [[ -z $(echo $SHELL|grep zsh) ]] && source /usr/share/bash-completion/completions/v2ray.bash
+    curl $BASH_COMPLETION_SHELL > /usr/share/bash-completion/completions/v2ray
+    [[ -z $(echo $SHELL|grep zsh) ]] && source /usr/share/bash-completion/completions/v2ray
     
     #安装/更新V2ray主程序
     if [[ $NETWORK == 1 ]];then
@@ -302,6 +308,7 @@ installFinish() {
 
 
 main() {
+    judgeNetwork
 
     [[ ${HELP} == 1 ]] && help && return
 

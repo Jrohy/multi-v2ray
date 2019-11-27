@@ -1,8 +1,8 @@
-# bash completion for v2ray                             -*- shell-script -*-
+# bash completion for v2ray
 function _auto_tab() {
 	local options_array=("start" "stop" "restart" "status" "update" "update.sh" "add" "del" "info" "port" "tls" "tfo" "stream" "iptables" "cdn" "stats" "clean" "log" "new" "-h" "-v")
 	local add_array=("wechat" "utp" "srtp" "dtls" "wireguard" "socks" "mtproto" "ss")
-	local cur pre
+	local cur prev
 
 	COMPREPLY=()
 	cur="${COMP_WORDS[COMP_CWORD]}"

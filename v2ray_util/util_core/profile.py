@@ -23,6 +23,7 @@ class Profile:
         self.stats = None
         self.ban_bt = False
         self.user_number = 0
+        self.network = "ipv4"
         self.modify_time = os.path.getmtime(self.path)
         self.read_json()
 
@@ -62,6 +63,9 @@ class Profile:
                 self.ban_bt = True
 
         local_ip = get_ip()
+
+        if ":" in local_ip:
+            self.network = "ipv6"
 
         group_ascii = 64  # before 'A' ascii code
         for index, json_part in enumerate(conf_inbounds):

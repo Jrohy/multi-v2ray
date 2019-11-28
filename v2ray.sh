@@ -260,15 +260,17 @@ updateProject() {
 
 #时间同步
 timeSync() {
-    if [[ ${INSTALL_WAY} == 0 && ${OS} != 'CentOS8' ]];then
+    if [[ ${INSTALL_WAY} == 0 ]];then
         echo -e "${Info} Time Synchronizing.. ${Font}"
-        ntpdate pool.ntp.org
+        if [[ `command -v ntpdate` ]];then
+            ntpdate pool.ntp.org
+        elif [[ `command -v chronyc` ]];then
+            chronyc -a makestep
+        fi
+
         if [[ $? -eq 0 ]];then 
             echo -e "${OK} Time Sync Success ${Font}"
             echo -e "${OK} now: `date -R`${Font}"
-            sleep 1
-        else
-            echo -e "${Error} Time sync fail, please run command to sync:${Font}${Yellow}ntpdate pool.ntp.org${Font}"
         fi
     fi
 }

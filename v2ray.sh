@@ -23,7 +23,7 @@ CHINESE=0
 
 BASE_SOURCE_PATH="https://multi.netlify.com"
 
-CLEAN_IPTABLES_SHELL="$BASE_SOURCE_PATH/v2ray_util/global_setting/clean_iptables.sh"
+CLEAN_IPTABLES_SHELL="$BASE_SOURCE_PATH/tools/clean_iptables.sh"
 
 BASH_COMPLETION_SHELL="$BASE_SOURCE_PATH/v2ray"
 

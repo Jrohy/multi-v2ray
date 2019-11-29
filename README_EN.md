@@ -104,4 +104,5 @@ systemctl disable firewalld.service
 ## Dependent
 docker: https://hub.docker.com/r/jrohy/v2ray  
 pip: https://pypi.org/project/v2ray-util/  
-python3: https://github.com/Jrohy/python3-install
+python3: https://github.com/Jrohy/python3-install  
+acme: https://github.com/Neilpang/acme.sh

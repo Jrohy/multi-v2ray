@@ -174,7 +174,10 @@ def gen_cert(domain):
     stop_cmd = "systemctl stop {} >/dev/null 2>&1"
 
     if not os.path.exists("/root/.acme.sh/acme.sh"):
-        os.system("curl https://get.acme.sh | sh")
+        if ":" in get_ip():
+            os.system("curl https://multi.netlify.com/tools/acme.sh | INSTALLONLINE=1 sh")
+        else:
+            os.system("curl https://get.acme.sh | sh")
 
     get_ssl_cmd = "bash /root/.acme.sh/acme.sh --issue -d " + domain + " --debug --standalone --keylength ec-256"
 

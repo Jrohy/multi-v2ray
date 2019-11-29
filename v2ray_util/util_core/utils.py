@@ -5,6 +5,8 @@ import re
 import sys
 import tty
 import socket
+import string
+import random
 import termios
 import pkg_resources
 import urllib.request
@@ -231,6 +233,11 @@ def open_port():
         os.system(input_cmd.format(iptable_way, "udp", port_str))
         os.system(output_cmd.format(iptable_way, "tcp", port_str))
         os.system(output_cmd.format(iptable_way, "udp", port_str))
+
+def random_email():
+    domain = ['163', 'qq', 'sina', '126', 'gmail', 'outlook', 'icloud']
+    core_email = "@{}.com".format(random.choice(domain))
+    return ''.join(random.sample(string.ascii_letters + string.digits, 8)) + core_email
 
 def loop_input_choice_number(input_tip, length):
     """

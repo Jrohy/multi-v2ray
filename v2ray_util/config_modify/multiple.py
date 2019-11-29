@@ -7,7 +7,7 @@ from ..util_core.v2ray import restart
 from ..util_core.writer import NodeWriter, GroupWriter
 from ..util_core.group import Vmess, Socks, Mtproto, SS
 from ..util_core.selector import GroupSelector, ClientSelector
-from ..util_core.utils import StreamType, stream_list, is_email, clean_iptables, ColorStr, readchar
+from ..util_core.utils import StreamType, stream_list, is_email, clean_iptables, random_email, ColorStr, readchar 
 
 @restart(True)
 def new_port(new_stream=None):
@@ -66,10 +66,11 @@ def new_user():
         if type(group.node_list[0]) == Vmess: 
             while True:
                 is_duplicate_email=False
-
-                email = input(_("input email to create user, or enter to pass: "))
+                remail = random_email()
+                tip = _("create random email:") + ColorStr.cyan(remail) + _(", enter to use it or input new email: ")
+                email = input(tip)
                 if email == "":
-                    break
+                    email = remail
                 if not is_email(email):
                     print(_("not email, please input again"))
                     continue

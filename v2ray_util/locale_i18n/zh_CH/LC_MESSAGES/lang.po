@@ -453,8 +453,11 @@ msgstr "新端口为"
 msgid "add user"
 msgstr "新增用户"
 
-msgid "input email to create user, or enter to pass: "
-msgstr "是否输入email来新建用户, 回车直接跳过: "
+msgid "create random email:"
+msgstr "生成随机邮箱:"
+
+msgid ", enter to use it or input new email: "
+msgstr ", 回车直接使用或者输入自定义邮箱: "
 
 msgid "local group is socks, please input user and password to create user"
 msgstr "当前组为socks组, 请输入用户密码创建新的socks用户"

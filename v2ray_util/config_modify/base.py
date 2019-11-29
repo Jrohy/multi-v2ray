@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from ..util_core.v2ray import restart
-from ..util_core.utils import readchar
+from ..util_core.utils import readchar, random_email, ColorStr
 from ..util_core.group import Vmess, Socks, Mtproto, SS
 from ..util_core.writer import ClientWriter, GroupWriter
 from ..util_core.selector import ClientSelector, GroupSelector
@@ -72,9 +72,11 @@ def new_email():
         email = ""
         while True:
             is_duplicate_email=False
-            email = input(_("please input new email: "))
+            remail = random_email()
+            tip = _("create random email:") + ColorStr.cyan(remail) + _(", enter to use it or input new email: ")
+            email = input(tip)
             if email == "":
-                break
+                email = remail
             from ..util_core.utils import is_email
             if not is_email(email):
                 print(_("not email, please input again"))

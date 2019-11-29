@@ -169,12 +169,13 @@ def bytes_2_human_readable(number_of_bytes, precision=1):
     return str(number_of_bytes) + ' ' + unit
 
 def gen_cert(domain):
+    local_ip = get_ip()
     service_name = ["nginx", "httpd", "apache2"]
     start_cmd = "systemctl start {}  >/dev/null 2>&1"
     stop_cmd = "systemctl stop {} >/dev/null 2>&1"
 
     if not os.path.exists("/root/.acme.sh/acme.sh"):
-        if ":" in get_ip():
+        if ":" in local_ip:
             if not os.path.exists("/root/.acme.sh/"):
                 os.makedirs("/root/.acme.sh")
             os.system("curl https://acme-install.netlify.com/acme.sh -o /root/.acme.sh/acme.sh")
@@ -182,6 +183,8 @@ def gen_cert(domain):
             os.system("curl https://get.acme.sh | sh")
 
     get_ssl_cmd = "bash /root/.acme.sh/acme.sh --issue -d " + domain + " --debug --standalone --keylength ec-256"
+    if ":" in local_ip:
+        get_ssl_cmd = get_ssl_cmd + " --listen-v6"
 
     if not os.path.exists("/.dockerenv"):
         for name in service_name:

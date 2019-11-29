@@ -175,7 +175,9 @@ def gen_cert(domain):
 
     if not os.path.exists("/root/.acme.sh/acme.sh"):
         if ":" in get_ip():
-            os.system("curl https://multi.netlify.com/tools/acme.sh | INSTALLONLINE=1 sh")
+            if not os.path.exists("/root/.acme.sh/"):
+                os.makedirs("/root/.acme.sh")
+            os.system("curl https://multi.netlify.com/tools/acme.sh -o /root/.acme.sh/acme.sh")
         else:
             os.system("curl https://get.acme.sh | sh")
 

@@ -1,5 +1,10 @@
 # Change Log
 
+## [v3.7.5](https://github.com/Jrohy/multi-v2ray/releases/tag/v3.7.5)(2019-11-29)
+- 加入生成随机邮箱 [#253](https://github.com/Jrohy/multi-v2ray/issues/253)
+- fix [#255](https://github.com/Jrohy/multi-v2ray/issues/255): 纯IPV6的vps获取SSL证书失败,acme.sh无法安装
+- fix [#256](https://github.com/Jrohy/multi-v2ray/issues/256)
+
 ## [v3.7.4](https://github.com/Jrohy/multi-v2ray/releases/tag/v3.7.4)(2019-11-28)
 - 测试支持纯ipv6 vps, 安装脚本路径更换
 

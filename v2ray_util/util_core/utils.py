@@ -267,5 +267,5 @@ def readchar(prompt=""):
     finally:
         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
 
-    print("")
+    print(ch)
     return ch.strip()

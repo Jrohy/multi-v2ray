@@ -290,7 +290,6 @@ profileInit() {
         v2ray convert
     fi
 
-    bash <(curl -L -s $CLEAN_IPTABLES_SHELL)
     echo ""
 }
 

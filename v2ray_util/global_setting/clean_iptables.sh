@@ -2,7 +2,7 @@
 clean_iptables(){
     local TYPE=$1
     if [[ $NETWORK == 1 ]];then
-        RESULT=$(ip6tables -nvL $TYPE --line-number|grep :|awk '{printf "%s %s\n",$1,$NF}'|sed 's/dpt://g'|sed 's/dpt://g'|sort -n -k1 -r)
+        RESULT=$(ip6tables -nvL $TYPE --line-number|grep :|awk '{printf "%s %s\n",$1,$NF}'|sed 's/dpt://g'|sed 's/spt://g'|sort -n -k1 -r)
     else
         RESULT=$(iptables -nvL $TYPE --line-number|grep :|awk -F ':' '{print $2"  " $1}'|awk '{print $2" "$1}'|sort -n -k1 -r)
     fi

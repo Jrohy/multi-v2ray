@@ -23,13 +23,13 @@ CHINESE=0
 
 BASE_SOURCE_PATH="https://multi.netlify.com"
 
-CLEAN_IPTABLES_SHELL="$BASE_SOURCE_PATH/tools/clean_iptables.sh"
-
-BASH_COMPLETION_SHELL="$BASE_SOURCE_PATH/v2ray"
+UTIL_PATH="/etc/v2ray_util/util.cfg"
 
 UTIL_CFG="$BASE_SOURCE_PATH/v2ray_util/util_core/util.cfg"
 
-UTIL_PATH="/etc/v2ray_util/util.cfg"
+BASH_COMPLETION_SHELL="$BASE_SOURCE_PATH/v2ray"
+
+CLEAN_IPTABLES_SHELL="$BASE_SOURCE_PATH/v2ray_util/global_setting/clean_iptables.sh"
 
 #Centos 临时取消别名
 [[ -f /etc/redhat-release && -z $(echo $SHELL|grep zsh) ]] && unalias -a

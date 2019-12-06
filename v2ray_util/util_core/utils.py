@@ -210,13 +210,13 @@ def clean_iptables(port):
     iptable_way = "iptables" if Loader().profile.network == "ipv4" else "ip6tables" 
 
     clean_cmd = "{} -D {} {}"
-    check_cmd = "{} -nvL {} --line-number|grep -w \"{}\"|awk '{print $1}'|sort -r"
+    check_cmd = "%s -nvL %s --line-number|grep -w \"%s\"|awk '{print $1}'|sort -r"
 
-    input_result = os.popen(check_cmd.format(iptable_way, "INPUT", str(port))).readlines()
+    input_result = os.popen(check_cmd % (iptable_way, "INPUT", str(port))).readlines()
     for line in input_result:
         os.system(clean_cmd.format(iptable_way, "INPUT", str(line)))
 
-    output_result = os.popen(check_cmd.format(iptable_way, "OUTPUT", str(port))).readlines()
+    output_result = os.popen(check_cmd % (iptable_way, "OUTPUT", str(port))).readlines()
     for line in output_result:
         os.system(clean_cmd.format(iptable_way, "OUTPUT", str(line)))
 

@@ -26,6 +26,7 @@ class CDNModifier:
         '''
         self.gw.write_port(port)
         self.gw.write_domain(self.domain)
+        return True
 
     def openHttps(self, port=443):
         '''
@@ -37,6 +38,7 @@ class CDNModifier:
     @restart()
     def closeHttp(self):
         self.gw.write_domain()
+        return True
 
 def modify():
     choice, port_choice = "", ""
@@ -62,7 +64,7 @@ def modify():
                 print(ColorStr.yellow(_("only support http port cdn close!")))
                 return
             CDNModifier(group.tag, group.index).closeHttp()
-            return True
+            return
 
         if check_ip(group.ip):
             domain = input(_("please input run cdn mode domain: "))
@@ -108,5 +110,3 @@ def modify():
                 return
             print("")
             CDNModifier(group.tag, group.index, domain).openHttps(https_list[port_choice - 1])
-        
-        return True

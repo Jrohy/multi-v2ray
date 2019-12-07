@@ -40,7 +40,6 @@ class V2ray:
     def run(command, keyword):
         try:
             subprocess.check_output(command, shell=True)
-            open_port()
             print("{}ing v2ray...".format(keyword))
             time.sleep(2)
             if subprocess.check_output("systemctl is-active v2ray|grep active", shell=True) or keyword == "stop":

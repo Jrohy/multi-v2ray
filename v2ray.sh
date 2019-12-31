@@ -75,7 +75,7 @@ done
 #############################
 
 help(){
-    echo "bash multi-v2ray.sh [-h|--help] [-k|--keep] [--remove]"
+    echo "bash v2ray.sh [-h|--help] [-k|--keep] [--remove]"
     echo "  -h, --help           Show help"
     echo "  -k, --keep           keep the v2ray config.json to update"
     echo "      --remove         remove v2ray && multi-v2ray"
@@ -217,15 +217,7 @@ planUpdate(){
 }
 
 updateProject() {
-    local DOMAIN=""
-
     [[ ! $(type pip 2>/dev/null) ]] && colorEcho $RED "pip no install!" && exit 1
-
-    if [[ -e /usr/local/multi-v2ray/multi-v2ray.conf ]];then
-        TEMP_VALUE=$(cat /usr/local/multi-v2ray/multi-v2ray.conf|grep domain|awk 'NR==1')
-        DOMAIN=${TEMP_VALUE/*=}
-        rm -rf /usr/local/multi-v2ray
-    fi
 
     pip install -U v2ray_util
 
@@ -234,7 +226,6 @@ updateProject() {
     else
         mkdir -p /etc/v2ray_util
         curl $UTIL_CFG > $UTIL_PATH
-        [[ ! -z $DOMAIN ]] && sed -i "s/^domain.*/domain=${DOMAIN}/g" $UTIL_PATH
     fi
 
     [[ $CHINESE == 1 ]] && sed -i "s/lang=en/lang=zh/g" $UTIL_PATH

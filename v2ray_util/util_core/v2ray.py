@@ -152,4 +152,5 @@ class V2ray:
         subprocess.call("sed -i \"s/cc4f8d5b-967b-4557-a4b6-bde92965bc27/{0}/g\" /etc/v2ray/config.json && sed -i \"s/999999999/{1}/g\" /etc/v2ray/config.json".format(new_uuid, random_port), shell=True)
         from ..config_modify import stream
         stream.StreamModifier().random_kcp()
+        open_port()
         cls.restart()

@@ -69,7 +69,7 @@ def help():
 
 def updateSh():
     if os.path.exists("/.dockerenv"):
-        print(ColorStr.yellow("docker run not support update!"))
+        subprocess.Popen("pip install -U v2ray_util", shell=True).wait()
     else:
         subprocess.Popen("curl -Ls https://multi.netlify.com/v2ray.sh -o temp.sh", shell=True).wait()
         subprocess.Popen("bash temp.sh -k && rm -f temp.sh", shell=True).wait()

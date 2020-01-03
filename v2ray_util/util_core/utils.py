@@ -248,12 +248,13 @@ def open_port():
             continue
         if is_centos8:
             os.system(firewall_open_cmd.format(port_str, port_str))
-            os.system("firewall-cmd --reload >/dev/null 2>&1")
         else:
             os.system(input_cmd.format(iptable_way, "tcp", port_str))
             os.system(input_cmd.format(iptable_way, "udp", port_str))
             os.system(output_cmd.format(iptable_way, "tcp", port_str))
             os.system(output_cmd.format(iptable_way, "udp", port_str))
+    if is_centos8:
+        os.system("firewall-cmd --reload >/dev/null 2>&1")
 
 def random_email():
     domain = ['163', 'qq', 'sina', '126', 'gmail', 'outlook', 'icloud']

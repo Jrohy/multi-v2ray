@@ -102,9 +102,21 @@ def port_is_use(port):
     """
     判断端口是否占用
     """
-    cmd = "lsof -i:" + str(port)
-    result = os.popen(cmd).readlines()
-    return result != []
+    s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    try:
+        s.connect('127.0.0.1',int(port))
+        s.shutdown(2)
+        #利用shutdown()函数使socket双向数据传输变为单向数据传输。shutdown()需要一个单独的参数，
+        #该参数表示了如何关闭socket。具体为：0表示禁止将来读；1表示禁止将来写；2表示禁止将来读和写。
+        return True
+    except:
+        return False
+
+def random_port(start_port, end_port):
+    while True:
+        random_port = random.randint(start_port, end_port)
+        if not port_is_use(random_port):
+            return random_port
 
 def is_email(email):
     """

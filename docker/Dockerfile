@@ -20,7 +20,7 @@ COPY run.sh /root
 
 WORKDIR /root
 
-RUN apk --no-cache add python3 bash bash-completion ca-certificates curl socat openssl iptables ip6tables lsof && \
+RUN apk --no-cache add python3 bash bash-completion ca-certificates curl socat openssl iptables ip6tables && \
     python3 -m ensurepip && \
     rm -r /usr/lib/python*/ensurepip && \
     pip3 install --upgrade pip setuptools && \

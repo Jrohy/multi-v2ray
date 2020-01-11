@@ -105,7 +105,7 @@ removeV2Ray() {
     crontab crontab.txt >/dev/null 2>&1
     rm -f crontab.txt >/dev/null 2>&1
 
-    if [[ ${OS} =~ 'CentOS' || ${OS} == 'Fedora' ]];then
+    if [[ ${PACKAGE_MANAGER} == 'dnf' || ${PACKAGE_MANAGER} == 'yum' ]];then
         systemctl restart crond >/dev/null 2>&1
     else
         systemctl restart cron >/dev/null 2>&1
@@ -138,43 +138,28 @@ checkSys() {
     #检查是否为Root
     [ $(id -u) != "0" ] && { colorEcho ${RED} "Error: You must be root to run this script"; exit 1; }
 
-    #检查系统信息
-    if [[ -e /etc/redhat-release ]];then
-        if [[ $(cat /etc/redhat-release | grep Fedora) ]];then
-            OS='Fedora'
-            PACKAGE_MANAGER='dnf'
-        elif [[ $(cat /etc/redhat-release |grep "CentOS Linux release 8") ]];then
-            OS='CentOS8'
-            PACKAGE_MANAGER='dnf'
-        else
-            OS='CentOS'
-            PACKAGE_MANAGER='yum'
-        fi
-    elif [[ $(cat /etc/issue | grep Debian) ]];then
-        OS='Debian'
+    if [[ `command -v apt-get` ]];then
         PACKAGE_MANAGER='apt-get'
-    elif [[ $(cat /etc/issue | grep Ubuntu) ]];then
-        OS='Ubuntu'
-        PACKAGE_MANAGER='apt-get'
-    elif [[ $(cat /etc/issue | grep Raspbian) ]];then
-        OS='Raspbian'
-        PACKAGE_MANAGER='apt-get'
+    elif [[ `command -v dnf` ]];then
+        PACKAGE_MANAGER='dnf'
+    elif [[ `command -v yum` ]];then
+        PACKAGE_MANAGER='yum'
     else
-        colorEcho ${RED} "Not support OS, Please reinstall OS and retry!"
+        colorEcho $RED "Not support OS!"
         exit 1
     fi
 }
 
 #安装依赖
 installDependent(){
-    if [[ ${OS} =~ 'CentOS' || ${OS} == 'Fedora' ]];then
-        if [[ ${OS} != 'CentOS8' ]];then
+    if [[ ${PACKAGE_MANAGER} == 'dnf' || ${PACKAGE_MANAGER} == 'yum' ]];then
+        if [[ ${PACKAGE_MANAGER} == 'yum' ]];then
             ${PACKAGE_MANAGER} ntpdate -y
         fi
-        ${PACKAGE_MANAGER} install socat crontabs lsof which -y
+        ${PACKAGE_MANAGER} install socat crontabs which -y
     else
         ${PACKAGE_MANAGER} update
-        ${PACKAGE_MANAGER} install ntpdate socat cron lsof -y
+        ${PACKAGE_MANAGER} install ntpdate socat cron -y
     fi
 
     #install python3 & pip
@@ -207,7 +192,7 @@ planUpdate(){
 	echo "0 ${LOCAL_TIME} * * * bash <(curl -L -s https://install.direct/go.sh) | tee -a /root/v2rayUpdate.log && v2ray-util restart" >> crontab.txt
 	crontab crontab.txt
 	sleep 1
-	if [[ ${OS} =~ 'CentOS' || ${OS} == 'Fedora' ]];then
+	if [[ ${PACKAGE_MANAGER} == 'dnf' || ${PACKAGE_MANAGER} == 'yum' ]];then
         systemctl restart crond
 	else
         systemctl restart cron

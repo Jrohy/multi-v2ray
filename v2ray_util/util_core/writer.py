@@ -7,7 +7,7 @@ import string
 import uuid
 
 from .config import Config
-from .utils import port_is_use, StreamType
+from .utils import port_is_use, StreamType, random_port
 from .loader import Loader
 from .group import Mtproto, Vmess, Socks
 
@@ -399,11 +399,7 @@ class GlobalWriter(Writer):
             dokodemo_door = stats_json["dokodemoDoor"]
             del stats_json["dokodemoDoor"]
             #产生随机dokodemo_door的连接端口
-            while True:
-                random_port = random.randint(1000, 65535)
-                if not port_is_use(random_port):
-                    break
-            dokodemo_door["port"] = random_port
+            dokodemo_door["port"] = random_port(1000, 65535)
 
             has_door = False
             for inbound in self.config["inbounds"]:

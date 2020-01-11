@@ -7,7 +7,7 @@ from ..util_core.v2ray import restart
 from ..util_core.writer import NodeWriter, GroupWriter
 from ..util_core.group import Vmess, Socks, Mtproto, SS
 from ..util_core.selector import GroupSelector, ClientSelector
-from ..util_core.utils import StreamType, stream_list, is_email, clean_iptables, random_email, ColorStr, readchar 
+from ..util_core.utils import StreamType, stream_list, is_email, clean_iptables, random_email, ColorStr, readchar, random_port
 
 @restart(True)
 def new_port(new_stream=None):
@@ -37,11 +37,11 @@ def new_port(new_stream=None):
         stream = salt_stream[0]
         print("{}: {} \n".format(_("random generate (srtp | wechat-video | utp | dtls | wireguard) fake header, new protocol"), ColorStr.green(stream.value)))
 
-    random_port = random.randint(1000, 65535)
-    new_port = input("{0} {1}, {2}: ".format(_("random generate port"), ColorStr.green(str(random_port)), _("enter to use, or input customize port")))
+    new_random_port = random_port(1000, 65535)
+    new_port = input("{0} {1}, {2}: ".format(_("random generate port"), ColorStr.green(str(new_random_port)), _("enter to use, or input customize port")))
 
     if not new_port:
-        new_port = str(random_port)
+        new_port = str(new_random_port)
 
     if new_port.isnumeric():
         print("")

@@ -1,4 +1,7 @@
 # Change Log
+## [v3.7.7](https://github.com/Jrohy/multi-v2ray/releases/tag/v3.7.7)(2020-01-11)
+- fix [#279](https://github.com/Jrohy/multi-v2ray/issues/279): 生成随机端口时进行端口检测是否占用, 同时不再用lsof来检测端口占用(去掉依赖), 换成python原生socket来检测
+
 ## [v3.7.6](https://github.com/Jrohy/multi-v2ray/releases/tag/v3.7.6)(2020-01-03)
 - 添加 docker 容器内update.sh命令支持
 

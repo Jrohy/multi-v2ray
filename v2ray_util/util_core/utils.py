@@ -194,7 +194,7 @@ def gen_cert(domain):
         else:
             os.system("curl https://get.acme.sh | sh")
 
-    get_ssl_cmd = "bash /root/.acme.sh/acme.sh --issue -d " + domain + " --debug --standalone --keylength ec-256"
+    get_ssl_cmd = "bash /root/.acme.sh/acme.sh --issue -d " + domain + " --debug --alpn --keylength ec-256"
     if ":" in local_ip:
         get_ssl_cmd = get_ssl_cmd + " --listen-v6"
 

@@ -194,7 +194,8 @@ def gen_cert(domain):
         else:
             os.system("curl https://get.acme.sh | sh")
 
-    get_ssl_cmd = "bash /root/.acme.sh/acme.sh --issue -d " + domain + " --debug --alpn --keylength ec-256"
+    open_port(80)
+    get_ssl_cmd = "bash /root/.acme.sh/acme.sh --issue -d " + domain + " --debug --standalone --keylength ec-256"
     if ":" in local_ip:
         get_ssl_cmd = get_ssl_cmd + " --listen-v6"
 
@@ -239,7 +240,7 @@ def clean_iptables(port):
         for line in output_result:
             os.system(clean_cmd.format(iptable_way, "OUTPUT", str(line)))
 
-def open_port():
+def open_port(openport=-1):
     import platform
     from .loader import Loader
 
@@ -253,11 +254,9 @@ def open_port():
     group_list = profile.group_list
     port_set = set([group.port for group in group_list])
 
-    iptable_way = "iptables" if profile.network == "ipv4" else "ip6tables" 
-    for port in port_set:
-        port_str = str(port)
-        if len(os.popen(check_cmd.format(iptable_way, port_str)).readlines()) > 0:
-            continue
+    iptable_way = "iptables" if profile.network == "ipv4" else "ip6tables"
+    if openport != -1:
+        port_str = str(openport)
         if is_centos8:
             os.system(firewall_open_cmd.format(port_str, port_str))
         else:
@@ -265,6 +264,18 @@ def open_port():
             os.system(input_cmd.format(iptable_way, "udp", port_str))
             os.system(output_cmd.format(iptable_way, "tcp", port_str))
             os.system(output_cmd.format(iptable_way, "udp", port_str))
+    else:
+        for port in port_set:
+            port_str = str(port)
+            if len(os.popen(check_cmd.format(iptable_way, port_str)).readlines()) > 0:
+                continue
+            if is_centos8:
+                os.system(firewall_open_cmd.format(port_str, port_str))
+            else:
+                os.system(input_cmd.format(iptable_way, "tcp", port_str))
+                os.system(input_cmd.format(iptable_way, "udp", port_str))
+                os.system(output_cmd.format(iptable_way, "tcp", port_str))
+                os.system(output_cmd.format(iptable_way, "udp", port_str))
     if is_centos8:
         os.system("firewall-cmd --reload >/dev/null 2>&1")
 

@@ -597,29 +597,17 @@ msgstr "V2ray MTProto/Shadowsocks协议不支持配置https!!!"
 msgid "modify cdn"
 msgstr "修改cdn"
 
-msgid "1.open http cdn"
-msgstr "1.开启 http cdn"
-
-msgid "2.open https cdn"
-msgstr "2.开启 https cdn"
-
-msgid "3.close http cdn"
-msgstr "3.关闭http cdn"
-
 msgid "please input run cdn mode domain: "
 msgstr "请输入走cdn的域名: "
 
 msgid "domain is empty!"
 msgstr "域名为空!"
 
+msgid "this group domain {}, enter to use it or input other domain: "
+msgstr "当前组域名为: {}, 回车继续使用或者输入新的域名: "
+
 msgid "must be close cdn proxy!"
 msgstr "必须先关闭cdn的代理!"
-
-msgid "only support http port cdn close!"
-msgstr "仅支持http的cdn关闭!"
-
-msgid "please select http port to cdn: "
-msgstr "请选择走http cdn端口的序号: "
 
 msgid "please select https port to cdn: "
 msgstr "请选择走https cdn端口的序号: "

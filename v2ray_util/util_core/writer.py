@@ -233,13 +233,6 @@ class GroupWriter(Writer):
         self.part_json["port"] = str(port) if str(port).find("-") > 0 else int(port)
         self.save()
 
-    def write_domain(self, domain=''):
-        if domain:
-            self.part_json["domain"] = domain
-        elif "domain" in self.part_json:
-            del self.part_json["domain"]
-        self.save()
-
     def write_ss_password(self, new_password):
         self.part_json["settings"]["password"] = str(new_password)
         self.save()

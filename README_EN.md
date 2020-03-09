@@ -1,5 +1,5 @@
 # multi-v2ray
-a tool to manage v2ray config json, support multiple user && group manage  
+a tool to manage v2ray config with multi-user support  
 ![](https://img.shields.io/pypi/v/v2ray-util.svg) 
 ![](https://img.shields.io/docker/pulls/jrohy/v2ray.svg)
 ![](https://img.shields.io/github/stars/Jrohy/multi-v2ray.svg) 

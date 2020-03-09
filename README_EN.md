@@ -8,19 +8,19 @@ a tool to manage v2ray config json, support multiple user && group manage
 
 ## [中文](README.md)  [English](README_EN.md)
 
-## Feature
-- V2ray && Iptables Traffic Statistics
-- Command line to manage
-- Multiple user && port manage
-- Cloudcflare cdn mode
-- Support pure ipv6 VPS
-- Support Docker
-- Dynamic port
+## Features
+- V2ray && iptables traffic statistics
+- Command line configuration (users and v2ray config)
+- Full multi-user support (same port separate UUID & multiple ports)
+- Cloudflare CDN mode support
+- ipv6 only server (VPS) support
+- Docker support
+- V2ray Dynamic port suport
 - Ban bittorrent
-- Range port
-- TcpFastOpen
+- Range port support
+- TcpFastOpen support
 - Vmess/Socks5/MTproto share link
-- Support protocol modify:
+- Supported protocols:
   - TCP
   - Fake http
   - WebSocket
@@ -42,7 +42,7 @@ new install
 source <(curl -sL https://v2rays.netlify.com/install.sh)
 ```
 
-keep profile to update
+update multi-v2ray to latest version
 ```
 source <(curl -sL https://v2rays.netlify.com/install.sh) -k
 ```
@@ -55,15 +55,15 @@ source <(curl -sL https://v2rays.netlify.com/install.sh) --remove
 ## Command Line
 ```bash
 v2ray [-h|--help] [options]
-    -h, --help           get help
-    -v, --version        get version
+    -h, --help           show help message
+    -v, --version        show multi-v2ray version
     start                start V2Ray
     stop                 stop V2Ray
     restart              restart V2Ray
     status               check V2Ray status
     new                  create new json profile
-    update               update v2ray to latest
-    update.sh            update multi-v2ray to latest
+    update               update v2ray to latest version
+    update.sh            update multi-v2ray to latest version
     add                  random create mkcp + (srtp|wechat-video|utp|dtls|wireguard) fake header group
     add [wechat|utp|srtp|dtls|wireguard|socks|mtproto|ss]     create special protocol, random new port
     del                  delete port group
@@ -80,7 +80,7 @@ v2ray [-h|--help] [options]
 ```
 
 ## Docker Run
-default will create random port + random header(srtp | wechat-video | utp | dtls) kcp profile  
+default config will create random port + random header(srtp | wechat-video | utp | dtls) kcp profile  
 ```
 docker run -d --name v2ray --privileged --restart always --network host jrohy/v2ray
 ```
@@ -101,7 +101,7 @@ systemctl stop firewalld.service
 systemctl disable firewalld.service
 ```
 
-## Dependent
+## Dependencies
 docker: https://hub.docker.com/r/jrohy/v2ray  
 pip: https://pypi.org/project/v2ray-util/  
 python3: https://github.com/Jrohy/python3-install  

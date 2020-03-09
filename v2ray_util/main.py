@@ -163,7 +163,7 @@ def user_manage():
         multiple.del_port()
 
 def profile_alter():
-    show_text = (_("modify email"), _("modify UUID"), _("modify alterID"), _("modify port"), _("modify stream"), _("modify tls"), 
+    show_text = (_("modify email"), _("modify UUID"), _("modify alterID"), _("modify port"), _("modify protocol"), _("modify tls"), 
                 _("modify tcpFastOpen"), _("modify dyn_port"), _("modify shadowsocks method"), _("modify shadowsocks password"), _("CDN mode(need domain)"))
     print("")
     for index, text in enumerate(show_text): 
@@ -225,7 +225,7 @@ def menu():
         print("")
         print(ColorStr.cyan(_("Welcome to v2ray-util")))
         print("")
-        show_text = (_("1.V2ray Manage"), _("2.Group Manage"), _("3.Modify Config"), _("4.Check Config"), _("5.Global Setting"), _("6.Update V2Ray"), _("7.Generate Client Json"))
+        show_text = (_("1.V2ray Manage"), _("2.Group Manage"), _("3.Modify Config"), _("4.Show current config"), _("5.Global Settings"), _("6.Update V2Ray"), _("7.Generate Client Json"))
         for index, text in enumerate(show_text): 
             if index % 2 == 0:
                 print('{:<20}'.format(text), end="")   

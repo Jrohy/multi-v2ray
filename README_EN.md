@@ -39,17 +39,17 @@ a tool to manage v2ray config json, support multiple user && group manage
 ## How To Use
 new install
 ```
-source <(curl -sL https://v2rays.netlify.com/install.sh)
+curl -o v2ray.sh -L https://git.io/JeDsl && bash v2ray.sh
 ```
 
 update multi-v2ray to latest version
 ```
-source <(curl -sL https://v2rays.netlify.com/install.sh) -k
+curl -o v2ray.sh -L https://git.io/JeDsl && bash v2ray.sh -k
 ```
 
 uninstall
 ```
-source <(curl -sL https://v2rays.netlify.com/install.sh) --remove
+curl -o v2ray.sh -L https://git.io/JeDsl && bash v2ray.sh --remove
 ```
 
 ## Command Line

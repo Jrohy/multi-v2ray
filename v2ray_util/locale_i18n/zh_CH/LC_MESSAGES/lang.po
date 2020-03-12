@@ -447,6 +447,9 @@ msgstr "产生随机端口"
 msgid "enter to use, or input customize port"
 msgstr "回车直接以该端口新建Group, 否则输入自定义端口"
 
+msgid "port is use, please input other port!"
+msgstr "端口已经被使用, 请输入其他端口!"
+
 msgid "new port"
 msgstr "新端口为"
 

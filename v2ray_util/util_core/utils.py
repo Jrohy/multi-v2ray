@@ -102,15 +102,19 @@ def port_is_use(port):
     """
     判断端口是否占用
     """
+    tcp_use, udp_use = False, False
     s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    u = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+    s.settimeout(3)
+    tcp_use = s.connect_ex(('127.0.0.1', int(port))) == 0
     try:
-        s.connect('127.0.0.1',int(port))
-        s.shutdown(2)
-        #利用shutdown()函数使socket双向数据传输变为单向数据传输。shutdown()需要一个单独的参数，
-        #该参数表示了如何关闭socket。具体为：0表示禁止将来读；1表示禁止将来写；2表示禁止将来读和写。
-        return True
+        u.bind(('127.0.0.1', int(port)))
     except:
-        return False
+        udp_use = True
+    finally:
+        u.close()
+    return tcp_use or udp_use
+
 
 def random_port(start_port, end_port):
     while True:

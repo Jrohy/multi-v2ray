@@ -166,41 +166,6 @@ installDependent(){
     bash <(curl -sL https://python3.netlify.com/install.sh)
 }
 
-#设置定时升级任务
-planUpdate(){
-    [[ $NETWORK == 1 ]] && return
-
-    if [[ $CHINESE == 1 ]];then
-        #计算北京时间早上3点时VPS的实际时间
-        ORIGIN_TIME_ZONE=$(date -R|awk '{printf"%d",$6}')
-        LOCAL_TIME_ZONE=${ORIGIN_TIME_ZONE%00}
-        BEIJING_ZONE=8
-        DIFF_ZONE=$[$BEIJING_ZONE-$LOCAL_TIME_ZONE]
-        LOCAL_TIME=$[$BEIJING_UPDATE_TIME-$DIFF_ZONE]
-        if [ $LOCAL_TIME -lt 0 ];then
-            LOCAL_TIME=$[24+$LOCAL_TIME]
-        elif [ $LOCAL_TIME -ge 24 ];then
-            LOCAL_TIME=$[$LOCAL_TIME-24]
-        fi
-        colorEcho ${BLUE} "beijing time ${BEIJING_UPDATE_TIME}, VPS time: ${LOCAL_TIME}\n"
-    else
-        LOCAL_TIME=3
-    fi
-    OLD_CRONTAB=$(crontab -l)
-    echo "SHELL=/bin/bash" >> crontab.txt
-    echo "${OLD_CRONTAB}" >> crontab.txt
-	echo "0 ${LOCAL_TIME} * * * bash <(curl -L -s https://install.direct/go.sh) | tee -a /root/v2rayUpdate.log && v2ray-util restart" >> crontab.txt
-	crontab crontab.txt
-	sleep 1
-	if [[ ${PACKAGE_MANAGER} == 'dnf' || ${PACKAGE_MANAGER} == 'yum' ]];then
-        systemctl restart crond
-	else
-        systemctl restart cron
-	fi
-	rm -f crontab.txt
-	colorEcho ${GREEN} "success open schedule update task: beijing time ${BEIJING_UPDATE_TIME}\n"
-}
-
 updateProject() {
     [[ ! $(type pip 2>/dev/null) ]] && colorEcho $RED "pip no install!" && exit 1
 
@@ -300,9 +265,6 @@ main() {
     closeSELinux
 
     timeSync
-
-    #设置定时任务
-    [[ -z $(crontab -l|grep v2ray) ]] && planUpdate
 
     updateProject
 

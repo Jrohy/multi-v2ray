@@ -86,7 +86,11 @@ class V2ray:
             print(ColorStr.yellow(_("ipv6 network not support update v2ray online, please manual donwload v2ray to update!")))
             print(ColorStr.fuchsia(_("download v2ray-linux-xx.zip and run 'bash <(curl -L -s https://install.direct/go.sh) -l v2ray-linux-xx.zip' to update")))
             return
+        if os.path.exists("/.dockerenv"):
+            V2ray.stop()
         subprocess.Popen("curl -L -s https://install.direct/go.sh|bash", shell=True).wait()
+        if os.path.exists("/.dockerenv"):
+            V2ray.start()
 
     @staticmethod
     def cleanLog():

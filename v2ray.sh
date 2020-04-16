@@ -21,7 +21,7 @@ REMOVE=0
 
 CHINESE=0
 
-BASE_SOURCE_PATH="https://multi.netlify.com"
+BASE_SOURCE_PATH="https://multi.netlify.app"
 
 UTIL_PATH="/etc/v2ray_util/util.cfg"
 
@@ -163,7 +163,7 @@ installDependent(){
     fi
 
     #install python3 & pip
-    bash <(curl -sL https://python3.netlify.com/install.sh)
+    bash <(curl -sL https://python3.netlify.app/install.sh)
 }
 
 updateProject() {

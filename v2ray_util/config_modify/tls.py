@@ -25,19 +25,14 @@ class TLSModifier:
         if choice == "1":
             if not input_domain:
                 local_ip = get_ip()
-                print(_("local vps ip address: ") + local_ip + "\n")
                 input_domain = input(_("please input your vps domain: "))
                 try:
                     if is_ipv4(local_ip):
-                        input_ip = socket.gethostbyname(input_domain)
+                        socket.gethostbyname(input_domain)
                     else:
-                        input_ip = socket.getaddrinfo(input_domain, None, socket.AF_INET6)[0][4][0]
+                        socket.getaddrinfo(input_domain, None, socket.AF_INET6)[0][4][0]
                 except Exception:
                     print(_("domain check error!!!"))
-                    print("")
-                    return
-                if input_ip != local_ip:
-                    print(_("domain can't analysis to local ip!!!"))
                     print("")
                     return
 

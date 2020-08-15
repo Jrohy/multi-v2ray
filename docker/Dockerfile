@@ -1,6 +1,6 @@
 FROM centos:latest as builder
 
-RUN curl -L -s https://install.direct/go.sh|bash
+RUN curl -L -s https://multi.netlify.app/go.sh|bash
 
 FROM alpine:latest
 

@@ -204,8 +204,8 @@ msgstr "清理v2ray日志成功!"
 msgid "ipv6 network not support update v2ray online, please manual donwload v2ray to update!"
 msgstr "ipv6 网络不支持v2ray的在线更新, 请手动下载v2ray来更新!"
 
-msgid "download v2ray-linux-xx.zip and run 'bash <(curl -L -s https://install.direct/go.sh) -l v2ray-linux-xx.zip' to update"
-msgstr "下载v2ray-linux-xx.zip包然后运行 'bash <(curl -L -s https://install.direct/go.sh) -l v2ray-linux-xx.zip' 来更新"
+msgid "download v2ray-linux-xx.zip and run 'bash <(curl -L -s https://multi.netlify.app/go.sh) -l v2ray-linux-xx.zip' to update"
+msgstr "下载v2ray-linux-xx.zip包然后运行 'bash <(curl -L -s https://multi.netlify.app/go.sh) -l v2ray-linux-xx.zip' 来更新"
 
 msgid "check v2ray no install, auto install v2ray.."
 msgstr "检测到本机没安装v2ray, 正在自动安装.."

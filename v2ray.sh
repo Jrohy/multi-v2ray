@@ -84,8 +84,8 @@ help(){
 }
 
 removeV2Ray() {
-    #卸载V2ray官方脚本
-    bash <(curl -L -s https://install.direct/go.sh) --remove >/dev/null 2>&1
+    #卸载V2ray脚本
+    bash <(curl -L -s https://multi.netlify.app/go.sh) --remove >/dev/null 2>&1
     rm -rf /etc/v2ray >/dev/null 2>&1
     rm -rf /var/log/v2ray >/dev/null 2>&1
 
@@ -193,9 +193,9 @@ updateProject() {
     
     #安装/更新V2ray主程序
     if [[ $NETWORK == 1 ]];then
-        bash <(curl -L -s https://install.direct/go.sh) --source jsdelivr
+        bash <(curl -L -s https://multi.netlify.app/go.sh) --source jsdelivr
     else
-        bash <(curl -L -s https://install.direct/go.sh)
+        bash <(curl -L -s https://multi.netlify.app/go.sh)
     fi
 }
 

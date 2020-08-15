@@ -122,6 +122,9 @@ systemctl disable firewalld.service
 ## 变更记录
 查看 [Changelog](https://github.com/Jrohy/multi-v2ray/blob/master/Changelog.md)
 
+## 建议
+安装完v2ray后强烈建议开启BBR等加速: [Linux-NetSpeed](https://github.com/chiakge/Linux-NetSpeed)  
+
 ## 依赖
 docker: https://hub.docker.com/r/jrohy/v2ray  
 pip: https://pypi.org/project/v2ray-util/  

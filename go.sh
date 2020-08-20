@@ -104,11 +104,17 @@ archAffix(){
         x86_64|amd64)
             echo '64'
         ;;
-        *armv7*|armv6l)
-            echo 'arm'
+        armv5tel)
+            echo 'arm32-v5'
         ;;
-        *armv8*|aarch64)
-            echo 'arm64'
+        armv6l)
+            echo 'arm32-v6'
+        ;;
+        armv7|armv7l)
+            echo 'arm32-v7a'
+        ;;
+        armv8|aarch64)
+            echo 'arm64-v8a'
         ;;
         *mips64le*)
             echo 'mips64le'
@@ -130,6 +136,9 @@ archAffix(){
         ;;
         ppc64)
             echo 'ppc64'
+        ;;
+        riscv64)
+            echo 'riscv64'
         ;;
         *)
             return 1

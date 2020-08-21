@@ -67,6 +67,7 @@ class StreamType(Enum):
     KCP_DTLS = 'dtls'
     KCP_WECHAT = 'wechat'
     KCP_WG = 'wireguard'
+    VLESS = 'vless'
 
 def stream_list():
     return [ 

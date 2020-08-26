@@ -209,7 +209,10 @@ TLS: {tls}
 {node}{tfo}
 {dyp}
             '''.format(self=self, color_ip=ColorStr.fuchsia(self.ip), node=node,tfo=tfo,dyp=dyp,tls=tls, port_way=port_way)
-            result = "{0}{1}\n\n{2}\n\n".format(result, temp.strip(), node.link(self.ip, int(self.port), self.tls))
+            link = node.link(self.ip, int(self.port), self.tls)
+            result = "{0}{1}\n\n".format(result, temp.strip())
+            if link:
+                result += "{}\n\n".format(link)             
         return result
 
     # 直接调用实例和打印一个实例显示的字符串一样

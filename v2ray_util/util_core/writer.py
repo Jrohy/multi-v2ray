@@ -110,7 +110,7 @@ class StreamWriter(Writer):
             rules.append(routing_bind)
 
     def write(self, **kw):
-        security_backup, tls_settings_backup, origin_protocol = "", "", None
+        security_backup, tls_settings_backup, origin_protocol, domain = "", "", None, ""
 
         if self.part_json['protocol'] == 'shadowsocks':
             origin_protocol = StreamType.SS
@@ -118,17 +118,21 @@ class StreamWriter(Writer):
             origin_protocol = StreamType.MTPROTO
         elif self.part_json['protocol'] == 'socks':
             origin_protocol = StreamType.SOCKS
+        elif self.part_json['protocol'] == 'vless':
+            origin_protocol = StreamType.VLESS
 
         if origin_protocol != StreamType.MTPROTO and origin_protocol != StreamType.SS:
             security_backup = self.part_json["streamSettings"]["security"]
             tls_settings_backup = self.part_json["streamSettings"]["tlsSettings"]
+            if "domain" in self.part_json:
+                domain = self.part_json["domain"]
 
         #mtproto换成其他协议时, 减少mtproto int和out的路由绑定
         if origin_protocol == StreamType.MTPROTO and origin_protocol != self.stream_type:
             clean_mtproto_tag(self.config, self.group_index)
 
-        #原来是socks/mtproto/shadowsocks协议 则先切换为标准的inbound
-        if origin_protocol == StreamType.MTPROTO or origin_protocol == StreamType.SOCKS or origin_protocol == StreamType.SS:
+        #原来是socks/mtproto/shadowsocks/vless协议 则先切换为标准的inbound
+        if origin_protocol in (StreamType.MTPROTO, StreamType.SOCKS, StreamType.SS, StreamType.VLESS):
             vmess = self.load_template('server.json')
             vmess["inbounds"][0]["port"] = self.part_json["port"]
             if "allocate" in self.part_json:
@@ -203,6 +207,23 @@ class StreamWriter(Writer):
                 ws["wsSettings"]["headers"]["Host"] = kw['host']
             self.part_json["streamSettings"] = ws
 
+        elif self.stream_type == StreamType.VLESS:
+            vless = self.load_template('vless.json')
+            vless["clients"][0]["id"] = str(uuid.uuid1())
+            self.part_json['protocol'] = "vless"
+            self.part_json["settings"] = vless
+            self.part_json["streamSettings"] = self.load_template('tcp.json')
+            self.save()
+            alpn = ["h2", "http/1.1"]
+            # tls的设置
+            if security_backup != "tls" or not "certificates" in tls_settings_backup:
+                from ..config_modify.tls import TLSModifier
+                tm = TLSModifier(self.group_tag, self.group_index, alpn=alpn)
+                tm.turn_on(False)
+                return
+            elif not "alpn" in tls_settings_backup:
+                tls_settings_backup["alpn"] = alpn
+
         elif self.stream_type == StreamType.H2:
             http2 = self.load_template('http2.json')
             salt = '/' + ''.join(random.sample(string.ascii_letters + string.digits, 8)) + '/'
@@ -214,13 +235,20 @@ class StreamWriter(Writer):
             if security_backup != "tls" or not "certificates" in tls_settings_backup:
                 from ..config_modify.tls import TLSModifier
                 tm = TLSModifier(self.group_tag, self.group_index)
-                tm.turn_on()
+                tm.turn_on(False)
                 return
 
         if (self.stream_type != StreamType.MTPROTO and origin_protocol != StreamType.MTPROTO 
            and self.stream_type != StreamType.SS and origin_protocol != StreamType.SS):
             self.part_json["streamSettings"]["security"] = security_backup
             self.part_json["streamSettings"]["tlsSettings"] = tls_settings_backup
+
+        if domain:
+            self.part_json["domain"] = domain
+
+        if origin_protocol == StreamType.VLESS and self.stream_type != StreamType.VLESS:
+            if "alpn" in self.part_json["streamSettings"]["tlsSettings"]:
+                del self.part_json["streamSettings"]["tlsSettings"]["alpn"]
 
         self.config["inbounds"][self.group_index] = self.part_json
         self.save()
@@ -267,7 +295,7 @@ class GroupWriter(Writer):
                 del self.part_json["settings"]["detour"]
         self.save()
 
-    def write_tls(self, status = False, *, crt_file=None, key_file=None, domain=None):
+    def write_tls(self, status = False, *, crt_file=None, key_file=None, domain=None, alpn=None):
         if status:
             tls_settings = {"certificates": [
                 {
@@ -275,6 +303,8 @@ class GroupWriter(Writer):
                 "keyFile": key_file
                 }
             ]}
+            if alpn:
+                tls_settings["alpn"] = alpn
             self.part_json["streamSettings"]["security"] = "tls"
             self.part_json["streamSettings"]["tlsSettings"] = tls_settings
             self.part_json["domain"] = domain
@@ -288,6 +318,8 @@ class GroupWriter(Writer):
             else:
                 self.part_json["streamSettings"]["security"] = "none"
                 self.part_json["streamSettings"]["tlsSettings"] = {}
+            if "domain" in self.part_json:
+                del self.part_json["domain"]
             self.save()
 
     def write_tfo(self, action = 'del'):

@@ -245,6 +245,12 @@ def clean_iptables(port):
         for line in output_result:
             os.system(clean_cmd.format(iptable_way, "OUTPUT", str(line)))
 
+def all_port():
+    from .loader import Loader
+    profile = Loader().profile
+    group_list = profile.group_list
+    return set([group.port for group in group_list])
+
 def open_port(openport=-1):
     import platform
     from .loader import Loader
@@ -255,11 +261,9 @@ def open_port(openport=-1):
     check_cmd = "{} -nvL --line-number|grep -w \"{}\""
     firewall_open_cmd = "firewall-cmd --zone=public --add-port={}/tcp --add-port={}/udp --permanent >/dev/null 2>&1"
 
-    profile = Loader().profile
-    group_list = profile.group_list
-    port_set = set([group.port for group in group_list])
+    port_set = all_port()
 
-    iptable_way = "iptables" if profile.network == "ipv4" else "ip6tables"
+    iptable_way = "iptables" if Loader().profile.network == "ipv4" else "ip6tables"
     if openport != -1:
         port_str = str(openport)
         if is_centos8:

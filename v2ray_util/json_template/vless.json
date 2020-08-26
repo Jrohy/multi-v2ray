@@ -1,0 +1,16 @@
+{
+  "clients": [
+    {
+      "id": "d4e321ea-e118-11ea-a265-42010a8c0002"
+    }
+  ],
+  "decryption": "none",
+  "fallback": {
+    "unix": "/dev/shm/default.sock",
+    "xver": 1
+  },
+  "fallback_h2": {
+    "unix": "/dev/shm/h2.sock",
+    "xver": 1
+  }
+}

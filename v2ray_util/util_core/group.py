@@ -88,12 +88,12 @@ class Vless(User):
 
     def __str__(self):
         if self.user_info:
-            return "Email: {self.user_info}\nId: {password}\nEncryption: {self.encryption}\n".format(self=self, password=self.password)
+            return "Email: {self.user_info}\Protocol: {network}\nId: {password}\nEncryption: {self.encryption}\n".format(self=self, network=self.stream(), password=self.password)
         else:
-            return "Id: {password}\nEncryption: {self.encryption}\n".format(self=self, password=self.password)
+            return "Protocol: {network}\nId: {password}\nEncryption: {self.encryption}\n".format(self=self, network=self.stream(), password=self.password)
     
     def stream(self):
-        return "vless"
+        return "VLESS"
 
     def link(self, ip, port, tls):
         return ""

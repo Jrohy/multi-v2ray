@@ -10,12 +10,13 @@ from ..util_core.selector import GroupSelector
 from ..util_core.utils import get_ip, gen_cert, readchar, is_ipv4
 
 class TLSModifier:
-    def __init__(self, group_tag, group_index, domain=''):
+    def __init__(self, group_tag, group_index, domain='', alpn=None):
         self.domain = domain
+        self.alpn = alpn
         self.writer = GroupWriter(group_tag, group_index)
     
     @restart(True)
-    def turn_on(self):
+    def turn_on(self, need_restart=True):
         print("")
         print(_("1. Let's Encrypt certificate(auto create, please prepare domain)"))
         print(_("2. Customize certificate(prepare certificate file paths)"))
@@ -43,7 +44,7 @@ class TLSModifier:
             crt_file = "/root/.acme.sh/" + input_domain +"_ecc"+ "/fullchain.cer"
             key_file = "/root/.acme.sh/" + input_domain +"_ecc"+ "/"+ input_domain +".key"
 
-            self.writer.write_tls(True, crt_file=crt_file, key_file=key_file, domain=input_domain)
+            self.writer.write_tls(True, crt_file=crt_file, key_file=key_file, domain=input_domain, alpn=self.alpn)
 
         elif choice == "2":
             crt_file = input(_("please input certificate cert file path: "))
@@ -56,11 +57,11 @@ class TLSModifier:
                 if not input_domain:
                     print(_("domain is null!"))
                     return
-            self.writer.write_tls(True, crt_file=crt_file, key_file=key_file, domain=input_domain)
+            self.writer.write_tls(True, crt_file=crt_file, key_file=key_file, domain=input_domain, alpn=self.alpn)
         else:
             print(_("input error!"))
             return
-        return True
+        return need_restart
 
     @restart()
     def turn_off(self):

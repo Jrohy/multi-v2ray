@@ -4,10 +4,10 @@ import random
 import string
 
 from ..util_core.v2ray import restart
-from ..util_core.writer import StreamWriter
+from ..util_core.writer import StreamWriter, GroupWriter
 from ..util_core.selector import GroupSelector, CommonSelector
 from ..util_core.group import Mtproto, SS
-from ..util_core.utils import StreamType, header_type_list, ColorStr
+from ..util_core.utils import StreamType, header_type_list, ColorStr, all_port
 
 from .ss import SSFactory
 
@@ -27,7 +27,8 @@ class StreamModifier:
             (StreamType.SOCKS, "Socks5"), 
             (StreamType.MTPROTO, "MTProto"), 
             (StreamType.SS, "Shadowsocks"),
-            (StreamType.QUIC, "Quic")
+            (StreamType.QUIC, "Quic"),
+            (StreamType.VLESS, "VLESS"),
         ]
         self.group_tag = group_tag
         self.group_index = group_index
@@ -64,6 +65,13 @@ class StreamModifier:
             print("")
             header = CommonSelector(header_type_list(), _("please select fake header: ")).select()
             kw = {'security': security, 'key': key, 'header': header}
+        elif index == 14:
+            port_set = all_port()
+            if not "443" in port_set:
+                print("auto switch 443 port..")
+                gw = GroupWriter(self.group_tag, self.group_index)
+                gw.write_port(443)
+                sw = StreamWriter(self.group_tag, self.group_index, self.stream_type[index][0])
         sw.write(**kw)
 
     def random_kcp(self):

@@ -332,16 +332,26 @@ installV2Ray(){
 
 
 installInitScript(){
-    if [[ -n "${SYSTEMCTL_CMD}" ]]; then
-        if [[ ! -f "/etc/systemd/system/v2ray.service" && ! -f "/lib/systemd/system/v2ray.service" ]]; then
-            unzip -oj "$1" "$2systemd/v2ray.service" -d '/etc/systemd/system' && \
-            systemctl enable v2ray.service
-        fi
-    elif [[ -n "${SERVICE_CMD}" ]] && [[ ! -f "/etc/init.d/v2ray" ]]; then
-        installSoftware 'daemon' && \
-        unzip -oj "$1" "$2systemv/v2ray" -d '/etc/init.d' && \
-        chmod +x '/etc/init.d/v2ray' && \
-        update-rc.d v2ray defaults
+    if [[ ! -f "/etc/systemd/system/v2ray.service" && ! -f "/lib/systemd/system/v2ray.service" ]]; then
+        cat > /etc/systemd/system/v2ray.service <<EOF
+[Unit]
+Description=V2Ray Service
+Documentation=https://www.v2ray.com/ https://www.v2fly.org/
+After=network.target nss-lookup.target
+
+[Service]
+Type=simple
+User=root
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
+ExecStart=/usr/bin/v2ray/v2ray -config /etc/v2ray/config.json
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+EOF
+        systemctl enable v2ray.service
     fi
 }
 

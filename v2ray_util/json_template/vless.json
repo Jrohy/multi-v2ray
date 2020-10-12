@@ -5,12 +5,9 @@
     }
   ],
   "decryption": "none",
-  "fallback": {
-    "unix": "/dev/shm/default.sock",
-    "xver": 1
-  },
-  "fallback_h2": {
-    "unix": "/dev/shm/h2.sock",
-    "xver": 1
-  }
+  "fallbacks": [
+    {
+      "dest": 80
+    }
+  ]
 }

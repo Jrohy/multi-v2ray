@@ -4,7 +4,7 @@ import os
 import json
 
 from .config import Config
-from .group import Vmess, Socks, SS, Mtproto
+from .group import Vmess, Vless, Socks, SS, Mtproto, Trojan
 from .selector import ClientSelector
 
 class ClientWriter:
@@ -35,6 +35,15 @@ class ClientWriter:
             user_json["users"][0]["id"] = self.node.password
             user_json["users"][0]["alterId"] = self.node.alter_id
 
+        elif type(self.node) == Vless:
+            self.client_config = self.load_template('client.json')
+            user_json = self.client_config["outbounds"][0]["settings"]["vnext"][0]
+            user_json["users"][0]["id"] = self.node.password
+            del user_json["users"][0]["alterId"]
+            del user_json["users"][0]["security"]
+            user_json["users"][0]["encryption"] = self.node.encryption
+            self.client_config["outbounds"][0]["protocol"] = "vless"
+
         elif type(self.node) == Socks:
             self.client_config = self.load_template('client_socks.json')
             user_json = self.client_config["outbounds"][0]["settings"]["servers"][0]
@@ -45,6 +54,11 @@ class ClientWriter:
             self.client_config = self.load_template('client_ss.json')
             user_json = self.client_config["outbounds"][0]["settings"]["servers"][0]
             user_json["method"] = self.node.method
+            user_json["password"] = self.node.password
+
+        elif type(self.node) == Trojan:
+            self.client_config = self.load_template('client_trojan.json')
+            user_json = self.client_config["outbounds"][0]["settings"]["servers"][0]
             user_json["password"] = self.node.password
 
         elif type(self.node) == Mtproto:

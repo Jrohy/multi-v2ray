@@ -70,7 +70,7 @@ def new_user():
         pass
     else:
         email = ""
-        if type(group.node_list[0]) in (Vmess, Vless): 
+        if type(group.node_list[0]) in (Vmess, Vless, Trojan): 
             while True:
                 is_duplicate_email=False
                 remail = random_email()
@@ -95,6 +95,12 @@ def new_user():
 
             nw = NodeWriter(group.tag, group.index)
             info = {'email': email}
+            if type(group.node_list[0]) == Trojan:
+                password = input(_("please input trojan user password: "))
+                if password == "":
+                    print(_("password is null!!"))
+                    exit(-1)
+                info['password'] = password
             nw.create_new_user(**info)
             return True
 

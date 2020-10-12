@@ -559,8 +559,8 @@ class NodeWriter(Writer):
             if type(node) == Mtproto:
                 clean_mtproto_tag(self.config, group.index)
             del self.config["inbounds"][group.index]
-        elif type(node) in (Vmess, Socks, Vless):
-            client_str = 'clients' if type(node) in (Vmess, Vless, Trojan) else 'accounts'
+        elif type(node) in (Vmess, Socks, Vless, Trojan):
+            client_str = 'accounts' if type(node) == Socks else 'clients'
             del self.config["inbounds"][group.index]["settings"][client_str][client_index]
 
         print(_("del user success!"))

@@ -203,10 +203,8 @@ IP: {color_ip}
 Port: {self.port}{port_way}
 TLS: {tls}
 {node}{tfo}
-{dyp}
-            '''.format(self=self, color_ip=ColorStr.fuchsia(self.ip), port_way=port_way, node=node,tfo=tfo, dyp=dyp,tls=tls)
+{dyp}'''.format(self=self, color_ip=ColorStr.fuchsia(self.ip), port_way=port_way, node=node,tfo=tfo, dyp=dyp,tls=tls)
         link = node.link(self.ip, int(self.port), self.tls)
-        result = "{0}{1}\n\n".format(result, result.strip())
         if link:
             result += "{}\n\n".format(link)
         return result

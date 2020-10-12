@@ -13,7 +13,7 @@ setup(
     description="a tool to manage v2ray config json",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    keywords='python v2ray multi-v2ray vmess socks5',
+    keywords='python v2ray multi-v2ray vmess socks5 vless trojan',
     author='Jrohy',
     author_email='euvkzx@gmail.com',
     url='https://github.com/Jrohy/multi-v2ray',

@@ -29,6 +29,7 @@ class StreamModifier:
             (StreamType.SS, "Shadowsocks"),
             (StreamType.QUIC, "Quic"),
             (StreamType.VLESS, "VLESS"),
+            (StreamType.TROJAN, "Trojan"),
         ]
         self.group_tag = group_tag
         self.group_index = group_index
@@ -72,6 +73,19 @@ class StreamModifier:
                 gw = GroupWriter(self.group_tag, self.group_index)
                 gw.write_port(443)
                 sw = StreamWriter(self.group_tag, self.group_index, self.stream_type[index][0])
+        elif index == 15:
+            port_set = all_port()
+            if not "443" in port_set:
+                print()
+                print(ColorStr.yellow(_("auto switch 443 port..")))
+                gw = GroupWriter(self.group_tag, self.group_index)
+                gw.write_port(443)
+                sw = StreamWriter(self.group_tag, self.group_index, self.stream_type[index][0])
+            password = input(_("please input trojan user password: "))
+            if password == "":
+                print(_("password is null!!"))
+                exit(-1)
+            kw['password'] = password
         sw.write(**kw)
 
     def random_kcp(self):

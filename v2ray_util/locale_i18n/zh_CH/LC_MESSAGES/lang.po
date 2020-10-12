@@ -226,6 +226,9 @@ msgstr "新增端口组成功!"
 msgid "add socks5 user success!"
 msgstr "新建Socks5用户成功!"
 
+msgid "add trojan user success!"
+msgstr "新建trojan用户成功!"
+
 msgid "add user success!"
 msgstr "新建用户成功!"
 
@@ -541,6 +544,15 @@ msgstr "V2ray MTProto/Shadowsocks不支持https, 关闭tls成功!"
 
 msgid "modify protocol success"
 msgstr "传输模式修改成功!"
+
+msgid "auto switch 443 port.."
+msgstr "自动切换到443端口..."
+
+msgid "please input trojan user password: "
+msgstr "请输入trojan用户密码: "
+
+msgid "password is null!!"
+msgstr "密码为空!!! "
 
 ### stream.py end ###
 

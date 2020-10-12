@@ -55,6 +55,22 @@ class SS(User):
     def stream(self):
         return "shadowsocks"
 
+class Trojan(User):
+    def __init__(self, user_number, password, email):
+        super(Trojan, self).__init__(user_number, password, email)
+    
+    def __str__(self):
+        if self.user_info:
+            return "Email: {self.user_info}\nPassword: {password}\n".format(self=self, password=self.password)
+        else:
+            return "Password: {password}\n".format(password=self.password)
+
+    def link(self, ip, port, tls):
+        return ColorStr.green("trojan://{0}@{1}:{2}".format(self.password, ip, port))
+
+    def stream(self):
+        return "trojan"
+
 class Mtproto(User):
     def __str__(self):
         if self.user_info:
@@ -88,7 +104,7 @@ class Vless(User):
 
     def __str__(self):
         if self.user_info:
-            return "Email: {self.user_info}\Protocol: {network}\nId: {password}\nEncryption: {self.encryption}\n".format(self=self, network=self.stream(), password=self.password)
+            return "Email: {self.user_info}\nProtocol: {network}\nId: {password}\nEncryption: {self.encryption}\n".format(self=self, network=self.stream(), password=self.password)
         else:
             return "Protocol: {network}\nId: {password}\nEncryption: {self.encryption}\n".format(self=self, network=self.stream(), password=self.password)
     
@@ -188,8 +204,11 @@ Port: {self.port}{port_way}
 TLS: {tls}
 {node}{tfo}
 {dyp}
-{link}
-            '''.format(self=self, color_ip=ColorStr.fuchsia(self.ip), port_way=port_way, node=node,tfo=tfo, dyp=dyp,tls=tls, link=node.link(self.ip, int(self.port), self.tls))
+            '''.format(self=self, color_ip=ColorStr.fuchsia(self.ip), port_way=port_way, node=node,tfo=tfo, dyp=dyp,tls=tls)
+        link = node.link(self.ip, int(self.port), self.tls)
+        result = "{0}{1}\n\n".format(result, result.strip())
+        if link:
+            result += "{}\n\n".format(link)
         return result
 
     # print一个实例打印的字符串

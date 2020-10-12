@@ -9,7 +9,7 @@ import uuid
 from .config import Config
 from .utils import port_is_use, StreamType, random_port
 from .loader import Loader
-from .group import Mtproto, Vmess, Socks
+from .group import Mtproto, Vmess, Socks, Vless, Trojan
 
 def clean_mtproto_tag(config, group_index):
     '''
@@ -120,6 +120,8 @@ class StreamWriter(Writer):
             origin_protocol = StreamType.SOCKS
         elif self.part_json['protocol'] == 'vless':
             origin_protocol = StreamType.VLESS
+        elif self.part_json['protocol'] == 'trojan':
+            origin_protocol = StreamType.TROJAN
 
         if origin_protocol != StreamType.MTPROTO and origin_protocol != StreamType.SS:
             security_backup = self.part_json["streamSettings"]["security"]
@@ -131,8 +133,8 @@ class StreamWriter(Writer):
         if origin_protocol == StreamType.MTPROTO and origin_protocol != self.stream_type:
             clean_mtproto_tag(self.config, self.group_index)
 
-        #原来是socks/mtproto/shadowsocks/vless协议 则先切换为标准的inbound
-        if origin_protocol in (StreamType.MTPROTO, StreamType.SOCKS, StreamType.SS, StreamType.VLESS):
+        #原来是socks/mtproto/shadowsocks/vless/trojan协议 则先切换为标准的inbound
+        if origin_protocol in (StreamType.MTPROTO, StreamType.SOCKS, StreamType.SS, StreamType.VLESS, StreamType.TROJAN):
             vmess = self.load_template('server.json')
             vmess["inbounds"][0]["port"] = self.part_json["port"]
             if "allocate" in self.part_json:
@@ -214,7 +216,33 @@ class StreamWriter(Writer):
             self.part_json["settings"] = vless
             self.part_json["streamSettings"] = self.load_template('tcp.json')
             self.save()
-            alpn = ["h2", "http/1.1"]
+            alpn = ["http/1.1"]
+            # tls的设置
+            if security_backup != "tls" or not "certificates" in tls_settings_backup:
+                from ..config_modify.tls import TLSModifier
+                tm = TLSModifier(self.group_tag, self.group_index, alpn=alpn)
+                tm.turn_on(False)
+                return
+            elif not "alpn" in tls_settings_backup:
+                tls_settings_backup["alpn"] = alpn
+
+        elif self.stream_type == StreamType.TROJAN:
+            self.part_json['protocol'] = "trojan"
+            self.part_json["settings"] = {
+                "clients": [
+                    {
+                        "password": kw["password"]                  
+                    }
+                ],
+                "fallbacks": [
+                    {
+                        "dest": 80
+                    }
+                ]
+            }
+            self.part_json["streamSettings"] = self.load_template('tcp.json')
+            self.save()
+            alpn = ["http/1.1"]
             # tls的设置
             if security_backup != "tls" or not "certificates" in tls_settings_backup:
                 from ..config_modify.tls import TLSModifier
@@ -246,7 +274,7 @@ class StreamWriter(Writer):
         if domain:
             self.part_json["domain"] = domain
 
-        if origin_protocol == StreamType.VLESS and self.stream_type != StreamType.VLESS:
+        if origin_protocol in (StreamType.VLESS, StreamType.TROJAN) and self.stream_type not in (StreamType.VLESS, StreamType.TROJAN):
             if "alpn" in self.part_json["streamSettings"]["tlsSettings"]:
                 del self.part_json["streamSettings"]["tlsSettings"]["alpn"]
 
@@ -487,11 +515,20 @@ class NodeWriter(Writer):
             self.part_json["settings"]["accounts"].append(user)
             print("{0} user: {1}, pass: {2}".format(_("add socks5 user success!"), kw["user"], kw["pass"]))
         
-        elif self.part_json['protocol'] == 'vmess' :
+        elif self.part_json['protocol'] == 'trojan':
+            user = {"password": kw["password"]}
+            email_info = ""
+            if "email" in kw and kw["email"] != "":
+                user.update({"email": kw["email"]})
+                email_info = ", email: " + kw["email"]
+            self.part_json["settings"]["clients"].append(user)
+            print("{0} pass: {1}{2}".format(_("add trojan user success!"), kw["password"], email_info))
+        
+        elif self.part_json['protocol'] == 'vmess':
             new_uuid = uuid.uuid1()
             email_info = ""
             user = {
-                "alterId": 32,
+                "alterId": 0,
                 "id": "ae1bc6ce-e575-4ee2-85f1-350a0aa506cb"
             }
             if "email" in kw and kw["email"] != "":
@@ -501,6 +538,19 @@ class NodeWriter(Writer):
             self.part_json["settings"]["clients"].append(user)
             print("{0} uuid: {1}, alterId: 32{2}".format(_("add user success!"), str(new_uuid), email_info))
 
+        elif self.part_json['protocol'] == 'vless':
+            new_uuid = uuid.uuid1()
+            email_info = ""
+            user = {
+                "id": str(new_uuid),
+                "encryption": ""
+            }
+            if "email" in kw and kw["email"] != "":
+                user.update({"email":kw["email"]})
+                email_info = ", email: " + kw["email"]
+            self.part_json["settings"]["clients"].append(user)
+            print("{0} id: {1}{2}".format(_("add user success!"), str(new_uuid), email_info))
+
         self.save()
 
     def del_user(self, group, client_index):
@@ -509,8 +559,8 @@ class NodeWriter(Writer):
             if type(node) == Mtproto:
                 clean_mtproto_tag(self.config, group.index)
             del self.config["inbounds"][group.index]
-        elif type(node) == Vmess or type(node) == Socks:
-            client_str = 'clients' if type(node) == Vmess else 'accounts'
+        elif type(node) in (Vmess, Socks, Vless):
+            client_str = 'clients' if type(node) in (Vmess, Vless, Trojan) else 'accounts'
             del self.config["inbounds"][group.index]["settings"][client_str][client_index]
 
         print(_("del user success!"))

@@ -6,7 +6,7 @@ import os
 
 from .config import Config
 from .utils import ColorStr, get_ip
-from .group import SS, Socks, Vmess, Vless, Mtproto, Quic, Group, Dyport
+from .group import SS, Socks, Vmess, Vless, Mtproto, Quic, Group, Dyport, Trojan
 
 class Stats:
     def __init__(self, status=False, door_port=0):
@@ -111,7 +111,7 @@ class Profile:
                     dyp.status = True
                     break
 
-        if protocol in ("vmess", "vless", "socks"):
+        if protocol in ("vmess", "vless", "socks", "trojan"):
             conf_stream = part_json["streamSettings"]
             tls = conf_stream["security"]
 
@@ -143,7 +143,7 @@ class Profile:
             group.node_list.append(ss)
             group.protocol = ss.__class__.__name__
             return group
-        elif protocol == "vmess" or protocol == "vless":
+        elif protocol in ("vmess", "vless", "trojan"):
             clients=conf_settings["clients"]
         elif protocol == "socks":
             clients=conf_settings["accounts"]
@@ -167,6 +167,9 @@ class Profile:
 
             elif protocol == "vless":
                 node = Vless(client["id"], self.user_number, conf_settings["decryption"], email)
+
+            elif protocol == "trojan":
+                node = Trojan(self.user_number, client["password"], email)
                 
             if not group.protocol:
                 group.protocol = node.__class__.__name__

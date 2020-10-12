@@ -24,6 +24,7 @@ V2ray多用户管理脚本，向导式管理[新增|删除|修改]传输协议�
 - [x] 支持范围端口修改
 - [x] 支持程序和**命令行参数**管理控制
 - [x] 支持docker部署
+- [x] 支持VLESS和Trojan(v4.31.0+)
 - [x] 支持纯ipv6 vps
 - [x] 禁止BT
 
@@ -53,6 +54,8 @@ V2ray多用户管理脚本，向导式管理[新增|删除|修改]传输协议�
   - MTProto
   - Shadowsocks
   - Quic
+  - VLESS
+  - Trojan
 
 ## 安装命令
 ```
@@ -124,6 +127,7 @@ systemctl disable firewalld.service
 
 ## 建议
 安装完v2ray后强烈建议开启BBR等加速: [Linux-NetSpeed](https://github.com/chiakge/Linux-NetSpeed)  
+使用Trojan和VLESS协议建议自行安装个nginx, 能让v2ray顺利Fallback到默认的80端口
 
 ## 依赖
 docker: https://hub.docker.com/r/jrohy/v2ray  

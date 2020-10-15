@@ -68,6 +68,7 @@ class StreamType(Enum):
     KCP_WECHAT = 'wechat'
     KCP_WG = 'wireguard'
     VLESS = 'vless'
+    VLESS_XTLS = 'vless_xtls'
     TROJAN = 'trojan'
 
 def stream_list():
@@ -116,7 +117,6 @@ def port_is_use(port):
     finally:
         u.close()
     return tcp_use or udp_use
-
 
 def random_port(start_port, end_port):
     while True:

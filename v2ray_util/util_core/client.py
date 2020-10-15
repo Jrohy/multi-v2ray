@@ -79,6 +79,9 @@ class ClientWriter:
             self.client_config["outbounds"][0]["streamSettings"]["tlsSettings"] = {}
         elif self.group.tls == 'xtls':
             self.client_config["outbounds"][0]["streamSettings"]["xtlsSettings"]["serverName"] = self.group.ip
+            del self.client_config["outbounds"][0]["streamSettings"]["xtlsSettings"]["certificates"]
+            del self.client_config["outbounds"][0]["streamSettings"]["xtlsSettings"]["alpn"]
+            del self.client_config["outbounds"][0]["mux"]
 
     def write(self):
         '''
@@ -92,6 +95,8 @@ class ClientWriter:
 
 def generate():
     cs = ClientSelector(_('generate client json'))
+    if not hasattr(cs, 'client_index'):
+        return
     client_index = cs.client_index
     group = cs.group
 

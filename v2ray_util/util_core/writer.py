@@ -255,7 +255,7 @@ class StreamWriter(Writer):
             self.save()
             alpn = ["http/1.1"]
             # tls的设置
-            if security_backup != "tls" or not "certificates" in tls_settings_backup:
+            if not "certificates" in tls_settings_backup:
                 from ..config_modify.tls import TLSModifier
                 tm = TLSModifier(self.group_tag, self.group_index, alpn=alpn)
                 tm.turn_on(False)
@@ -271,7 +271,7 @@ class StreamWriter(Writer):
             self.save()
 
             # http2 tls的设置
-            if security_backup != "tls" or not "certificates" in tls_settings_backup:
+            if not "certificates" in tls_settings_backup:
                 from ..config_modify.tls import TLSModifier
                 tm = TLSModifier(self.group_tag, self.group_index)
                 tm.turn_on(False)
@@ -283,7 +283,7 @@ class StreamWriter(Writer):
             del self.part_json["streamSettings"]["tlsSettings"]
         elif (self.stream_type != StreamType.MTPROTO and origin_protocol != StreamType.MTPROTO 
            and self.stream_type != StreamType.SS and origin_protocol != StreamType.SS):
-            self.part_json["streamSettings"]["security"] = security_backup
+            self.part_json["streamSettings"]["security"] = "tls" if security_backup == "xtls" else security_backup
             self.part_json["streamSettings"]["tlsSettings"] = tls_settings_backup
 
         if domain:
@@ -562,16 +562,18 @@ class NodeWriter(Writer):
 
         elif self.part_json['protocol'] == 'vless':
             new_uuid = uuid.uuid1()
-            email_info = ""
+            info = ""
             user = {
-                "id": str(new_uuid),
-                "encryption": ""
+                "id": str(new_uuid)
             }
             if "email" in kw and kw["email"] != "":
                 user.update({"email":kw["email"]})
-                email_info = ", email: " + kw["email"]
+                info = ", email: " + kw["email"]
+            if self.part_json["streamSettings"]["security"] == "xtls":
+                user["flow"] = kw["flow"]
+                info += ", flow: " + kw["flow"]
             self.part_json["settings"]["clients"].append(user)
-            print("{0} id: {1}{2}".format(_("add user success!"), str(new_uuid), email_info))
+            print("{0} id: {1}{2}".format(_("add user success!"), str(new_uuid), info))
 
         self.save()
 

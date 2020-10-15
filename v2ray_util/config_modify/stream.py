@@ -7,7 +7,7 @@ from ..util_core.v2ray import restart
 from ..util_core.writer import StreamWriter, GroupWriter
 from ..util_core.selector import GroupSelector, CommonSelector
 from ..util_core.group import Mtproto, SS
-from ..util_core.utils import StreamType, header_type_list, ColorStr, all_port
+from ..util_core.utils import StreamType, header_type_list, ColorStr, all_port, xtls_flow
 
 from .ss import SSFactory
 
@@ -76,7 +76,7 @@ class StreamModifier:
                 gw.write_port(443)
                 sw = StreamWriter(self.group_tag, self.group_index, self.stream_type[index][0])
             if index == 15:
-                flow_list = ('', "xtls-rprx-origin", "xtls-rprx-direct")
+                flow_list = xtls_flow()
                 print("")
                 flow = CommonSelector(flow_list, _("please select xtls flow type: ")).select()
                 kw = {'flow': flow}

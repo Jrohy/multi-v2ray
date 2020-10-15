@@ -29,6 +29,7 @@ class StreamModifier:
             (StreamType.SS, "Shadowsocks"),
             (StreamType.QUIC, "Quic"),
             (StreamType.VLESS, "VLESS"),
+            (StreamType.VLESS_XTLS, "VLESS_XTLS"),
             (StreamType.TROJAN, "Trojan"),
         ]
         self.group_tag = group_tag
@@ -66,7 +67,7 @@ class StreamModifier:
             print("")
             header = CommonSelector(header_type_list(), _("please select fake header: ")).select()
             kw = {'security': security, 'key': key, 'header': header}
-        elif index == 14:
+        elif index == 14 or index == 15:
             port_set = all_port()
             if not "443" in port_set:
                 print()
@@ -74,7 +75,12 @@ class StreamModifier:
                 gw = GroupWriter(self.group_tag, self.group_index)
                 gw.write_port(443)
                 sw = StreamWriter(self.group_tag, self.group_index, self.stream_type[index][0])
-        elif index == 15:
+            if index == 15:
+                flow_list = ('', "xtls-rprx-origin", "xtls-rprx-direct")
+                print("")
+                flow = CommonSelector(flow_list, _("please select xtls flow type: ")).select()
+                kw = {'flow': flow}
+        elif index == 16:
             port_set = all_port()
             if not "443" in port_set:
                 print()

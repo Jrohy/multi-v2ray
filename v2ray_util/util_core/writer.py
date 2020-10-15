@@ -9,7 +9,7 @@ import uuid
 from .config import Config
 from .utils import port_is_use, StreamType, random_port
 from .loader import Loader
-from .group import Mtproto, Vmess, Socks, Vless, Trojan
+from .group import Mtproto, Vmess, Socks, Vless, Trojan, Xtls
 
 def clean_mtproto_tag(config, group_index):
     '''
@@ -583,7 +583,7 @@ class NodeWriter(Writer):
             if type(node) == Mtproto:
                 clean_mtproto_tag(self.config, group.index)
             del self.config["inbounds"][group.index]
-        elif type(node) in (Vmess, Socks, Vless, Trojan):
+        elif type(node) in (Vmess, Socks, Vless, Trojan, Xtls):
             client_str = 'accounts' if type(node) == Socks else 'clients'
             del self.config["inbounds"][group.index]["settings"][client_str][client_index]
 

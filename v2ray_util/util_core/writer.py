@@ -123,7 +123,7 @@ class StreamWriter(Writer):
         elif self.part_json['protocol'] == 'trojan':
             origin_protocol = StreamType.TROJAN
 
-        if origin_protocol = StreamType.VLESS and self.part_json["streamSettings"]["security"] == "xtls":
+        if origin_protocol == StreamType.VLESS and self.part_json["streamSettings"]["security"] == "xtls":
             origin_protocol = StreamType.VLESS_XTLS
 
         if origin_protocol != StreamType.MTPROTO and origin_protocol != StreamType.SS:
@@ -218,7 +218,7 @@ class StreamWriter(Writer):
         elif self.stream_type in (StreamType.VLESS, StreamType.VLESS_XTLS):
             vless = self.load_template('vless.json')
             vless["clients"][0]["id"] = str(uuid.uuid1())
-            if self.stream_type = StreamType.VLESS_XTLS:
+            if self.stream_type == StreamType.VLESS_XTLS:
                 vless["clients"][0]["flow"] = kw["flow"]
             self.part_json['protocol'] = "vless"
             self.part_json["settings"] = vless
@@ -228,7 +228,7 @@ class StreamWriter(Writer):
             # tls的设置
             if not "certificates" in tls_settings_backup:
                 from ..config_modify.tls import TLSModifier
-                if self.stream_type = StreamType.VLESS_XTLS:
+                if self.stream_type == StreamType.VLESS_XTLS:
                     tm = TLSModifier(self.group_tag, self.group_index, alpn=alpn, xtls=True)
                 else:
                     tm = TLSModifier(self.group_tag, self.group_index, alpn=alpn)
@@ -277,11 +277,11 @@ class StreamWriter(Writer):
                 tm.turn_on(False)
                 return
 
-        if self.stream_type = StreamType.VLESS_XTLS:
+        if self.stream_type == StreamType.VLESS_XTLS:
             self.part_json["streamSettings"]["security"] = "xtls"
             self.part_json["streamSettings"]["xtlsSettings"] = tls_settings_backup
             del self.part_json["streamSettings"]["tlsSettings"]
-        else if (self.stream_type != StreamType.MTPROTO and origin_protocol != StreamType.MTPROTO 
+        elif (self.stream_type != StreamType.MTPROTO and origin_protocol != StreamType.MTPROTO 
            and self.stream_type != StreamType.SS and origin_protocol != StreamType.SS):
             self.part_json["streamSettings"]["security"] = security_backup
             self.part_json["streamSettings"]["tlsSettings"] = tls_settings_backup

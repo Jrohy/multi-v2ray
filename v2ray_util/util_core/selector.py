@@ -58,6 +58,8 @@ class ClientSelector(Selector):
         else:
             choice = input("{} {}: ".format(_("please input number to"), self.action))
 
+        if not choice:
+            return
         if not choice.isnumeric():
             print(ColorStr.red(_('input error, please check is number')))
             return

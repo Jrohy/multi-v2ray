@@ -5,7 +5,7 @@ import sys
 
 from ..util_core.v2ray import restart
 from ..util_core.writer import NodeWriter, GroupWriter
-from ..util_core.group import Vmess, Socks, Mtproto, SS, Vless
+from ..util_core.group import Vmess, Socks, Mtproto, SS, Vless, Trojan
 from ..util_core.selector import GroupSelector, ClientSelector
 from ..util_core.utils import StreamType, stream_list, is_email, clean_iptables, random_email, ColorStr, readchar, random_port, port_is_use
 

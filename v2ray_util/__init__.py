@@ -1,3 +1,3 @@
-__version__ = '3.8.0'
+__version__ = '3.8.1'
 
 from .util_core.trans import _

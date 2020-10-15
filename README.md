@@ -24,7 +24,7 @@ V2ray多用户管理脚本，向导式管理[新增|删除|修改]传输协议�
 - [x] 支持范围端口修改
 - [x] 支持程序和**命令行参数**管理控制
 - [x] 支持docker部署
-- [x] 支持VLESS和Trojan(v4.31.0+)
+- [x] 支持VLESS和Trojan以及XTLS(v4.31.0+)
 - [x] 支持纯ipv6 vps
 - [x] 禁止BT
 
@@ -55,6 +55,7 @@ V2ray多用户管理脚本，向导式管理[新增|删除|修改]传输协议�
   - Shadowsocks
   - Quic
   - VLESS
+  - VLESS_XTLS
   - Trojan
 
 ## 安装命令

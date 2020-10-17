@@ -208,7 +208,7 @@ class Group:
         self.index = index
 
     def show_node(self, index):
-        tls = _("close") if self.tls == "" else _("open")
+        tls = _("open") if self.tls in ("tls", "xtls") else _("close")
         tfo = "TcpFastOpen: {}".format(self.tfo) if self.tfo != None else ""
         dyp = "DynamicPort: {}".format(self.dyp) if self.dyp.status else ""
         port_way = "-{}".format(self.end_port) if self.end_port else ""
@@ -228,7 +228,7 @@ TLS: {tls}
 
     # print一个实例打印的字符串
     def __str__(self):
-        tls = _("close") if self.tls == "" else _("open")
+        tls = _("open") if self.tls in ("tls", "xtls") else _("close")
         tfo = "TcpFastOpen: {}".format(self.tfo) if self.tfo != None else ""
         dyp = "DynamicPort: {}".format(self.dyp) if self.dyp.status else ""
         port_way = "-{}".format(self.end_port) if self.end_port else ""

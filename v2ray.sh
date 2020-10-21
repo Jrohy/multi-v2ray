@@ -153,13 +153,10 @@ checkSys() {
 #安装依赖
 installDependent(){
     if [[ ${PACKAGE_MANAGER} == 'dnf' || ${PACKAGE_MANAGER} == 'yum' ]];then
-        if [[ ${PACKAGE_MANAGER} == 'yum' ]];then
-            ${PACKAGE_MANAGER} ntpdate -y
-        fi
-        ${PACKAGE_MANAGER} install socat crontabs which -y
+        ${PACKAGE_MANAGER} install socat crontabs bash-completion which -y
     else
         ${PACKAGE_MANAGER} update
-        ${PACKAGE_MANAGER} install ntpdate socat cron -y
+        ${PACKAGE_MANAGER} install socat cron bash-completion ntpdate -y
     fi
 
     #install python3 & pip

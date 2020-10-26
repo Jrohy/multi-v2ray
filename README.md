@@ -13,17 +13,18 @@ V2ray多用户管理脚本，向导式管理[新增|删除|修改]传输协议�
 - [x] **多用户, 多端口管理**, 混合传输协议管理不再是梦
 - [x] 首次安装时产生随机端口，默认配置mkcp + 随机一种 (srtp | wechat-video | utp | dtls | wireguard) header伪装;  
   安装完成显示配置信息;
-- [x] 每天**北京时间**早上3点自动升级重启v2ray核心,降低v2ray因内存小被kill几率。可关闭开启此功能。
 - [x] 查看配置信息显示vmess字符串(v2rayN的分享链接格式)
 - [x] 生成**Telegram**的socks5/MTProto分享链接, 支持socks5 + tls组合
 - [x] 支持http/2, 随机生成伪装h2 path
 - [x] 开启关闭tcpFastOpen
 - [x] 直接开启[CDN](https://github.com/Jrohy/multi-v2ray/wiki/CloudFlare-cdn%E4%BB%A3%E7%90%86v2ray%E6%B5%81%E9%87%8F)
 - [x] 开启关闭动态端口
+- [x] 定时更新v2ray(需手动开启)
 - [x] 支持新版v2ray配置文件格式(v4.1+)
 - [x] 支持范围端口修改
 - [x] 支持程序和**命令行参数**管理控制
 - [x] 支持docker部署
+- [x] 支持VLESS和Trojan以及XTLS(v4.31.0+)
 - [x] 支持纯ipv6 vps
 - [x] 禁止BT
 
@@ -53,20 +54,23 @@ V2ray多用户管理脚本，向导式管理[新增|删除|修改]传输协议�
   - MTProto
   - Shadowsocks
   - Quic
+  - VLESS
+  - VLESS_XTLS
+  - Trojan
 
 ## 安装命令
 ```
-source <(curl -sL https://multi.netlify.com/v2ray.sh) --zh
+source <(curl -sL https://multi.netlify.app/v2ray.sh) --zh
 ```
 
 ## 升级命令(保留配置文件更新)
 ```
-source <(curl -sL https://multi.netlify.com/v2ray.sh) -k
+source <(curl -sL https://multi.netlify.app/v2ray.sh) -k
 ```
 
 ## 卸载命令
 ```
-source <(curl -sL https://multi.netlify.com/v2ray.sh) --remove
+source <(curl -sL https://multi.netlify.app/v2ray.sh) --remove
 ```
 
 ## 命令行参数
@@ -121,6 +125,10 @@ systemctl disable firewalld.service
 
 ## 变更记录
 查看 [Changelog](https://github.com/Jrohy/multi-v2ray/blob/master/Changelog.md)
+
+## 建议
+安装完v2ray后强烈建议开启BBR等加速: [Linux-NetSpeed](https://github.com/chiakge/Linux-NetSpeed)  
+使用Trojan和VLESS协议建议自行安装个nginx, 能让v2ray顺利Fallback到默认的80端口
 
 ## 依赖
 docker: https://hub.docker.com/r/jrohy/v2ray  

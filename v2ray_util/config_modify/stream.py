@@ -4,10 +4,10 @@ import random
 import string
 
 from ..util_core.v2ray import restart
-from ..util_core.writer import StreamWriter
+from ..util_core.writer import StreamWriter, GroupWriter
 from ..util_core.selector import GroupSelector, CommonSelector
 from ..util_core.group import Mtproto, SS
-from ..util_core.utils import StreamType, header_type_list, ColorStr
+from ..util_core.utils import StreamType, header_type_list, ColorStr, all_port, xtls_flow
 
 from .ss import SSFactory
 
@@ -27,7 +27,10 @@ class StreamModifier:
             (StreamType.SOCKS, "Socks5"), 
             (StreamType.MTPROTO, "MTProto"), 
             (StreamType.SS, "Shadowsocks"),
-            (StreamType.QUIC, "Quic")
+            (StreamType.QUIC, "Quic"),
+            (StreamType.VLESS, "VLESS"),
+            (StreamType.VLESS_XTLS, "VLESS_XTLS"),
+            (StreamType.TROJAN, "Trojan"),
         ]
         self.group_tag = group_tag
         self.group_index = group_index
@@ -64,6 +67,32 @@ class StreamModifier:
             print("")
             header = CommonSelector(header_type_list(), _("please select fake header: ")).select()
             kw = {'security': security, 'key': key, 'header': header}
+        elif index == 14 or index == 15:
+            port_set = all_port()
+            if not "443" in port_set:
+                print()
+                print(ColorStr.yellow(_("auto switch 443 port..")))
+                gw = GroupWriter(self.group_tag, self.group_index)
+                gw.write_port(443)
+                sw = StreamWriter(self.group_tag, self.group_index, self.stream_type[index][0])
+            if index == 15:
+                flow_list = xtls_flow()
+                print("")
+                flow = CommonSelector(flow_list, _("please select xtls flow type: ")).select()
+                kw = {'flow': flow}
+        elif index == 16:
+            port_set = all_port()
+            if not "443" in port_set:
+                print()
+                print(ColorStr.yellow(_("auto switch 443 port..")))
+                gw = GroupWriter(self.group_tag, self.group_index)
+                gw.write_port(443)
+                sw = StreamWriter(self.group_tag, self.group_index, self.stream_type[index][0])
+            password = input(_("please input trojan user password: "))
+            if password == "":
+                print(_("password is null!!"))
+                exit(-1)
+            kw['password'] = password
         sw.write(**kw)
 
     def random_kcp(self):

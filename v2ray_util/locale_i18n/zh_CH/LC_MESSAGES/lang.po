@@ -204,8 +204,8 @@ msgstr "清理v2ray日志成功!"
 msgid "ipv6 network not support update v2ray online, please manual donwload v2ray to update!"
 msgstr "ipv6 网络不支持v2ray的在线更新, 请手动下载v2ray来更新!"
 
-msgid "download v2ray-linux-xx.zip and run 'bash <(curl -L -s https://install.direct/go.sh) -l v2ray-linux-xx.zip' to update"
-msgstr "下载v2ray-linux-xx.zip包然后运行 'bash <(curl -L -s https://install.direct/go.sh) -l v2ray-linux-xx.zip' 来更新"
+msgid "download v2ray-linux-xx.zip and run 'bash <(curl -L -s https://multi.netlify.app/go.sh) -l v2ray-linux-xx.zip' to update"
+msgstr "下载v2ray-linux-xx.zip包然后运行 'bash <(curl -L -s https://multi.netlify.app/go.sh) -l v2ray-linux-xx.zip' 来更新"
 
 msgid "check v2ray no install, auto install v2ray.."
 msgstr "检测到本机没安装v2ray, 正在自动安装.."
@@ -225,6 +225,9 @@ msgstr "新增端口组成功!"
 
 msgid "add socks5 user success!"
 msgstr "新建Socks5用户成功!"
+
+msgid "add trojan user success!"
+msgstr "新建trojan用户成功!"
 
 msgid "add user success!"
 msgstr "新建用户成功!"
@@ -447,6 +450,9 @@ msgstr "产生随机端口"
 msgid "enter to use, or input customize port"
 msgstr "回车直接以该端口新建Group, 否则输入自定义端口"
 
+msgid "port is use, please input other port!"
+msgstr "端口已经被使用, 请输入其他端口!"
+
 msgid "new port"
 msgstr "新端口为"
 
@@ -518,6 +524,9 @@ msgstr "请输入你想要为伪装的域名(不不不需要http):"
 msgid "please select ss method: "
 msgstr "请输入序号选择加密方法: "
 
+msgid "please select xtls flow type: "
+msgstr "请输入序号选择xtls流控: "
+
 msgid "please select fake header: "
 msgstr "请输入序号选择伪装协议: "
 
@@ -538,6 +547,15 @@ msgstr "V2ray MTProto/Shadowsocks不支持https, 关闭tls成功!"
 
 msgid "modify protocol success"
 msgstr "传输模式修改成功!"
+
+msgid "auto switch 443 port.."
+msgstr "自动切换到443端口..."
+
+msgid "please input trojan user password: "
+msgstr "请输入trojan用户密码: "
+
+msgid "password is null!!"
+msgstr "密码为空!!! "
 
 ### stream.py end ###
 

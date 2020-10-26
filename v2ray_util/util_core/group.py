@@ -55,6 +55,22 @@ class SS(User):
     def stream(self):
         return "shadowsocks"
 
+class Trojan(User):
+    def __init__(self, user_number, password, email):
+        super(Trojan, self).__init__(user_number, password, email)
+    
+    def __str__(self):
+        if self.user_info:
+            return "Email: {self.user_info}\nPassword: {password}\n".format(self=self, password=self.password)
+        else:
+            return "Password: {password}\n".format(password=self.password)
+
+    def link(self, ip, port, tls):
+        return ColorStr.green("trojan://{0}@{1}:{2}".format(self.password, ip, port))
+
+    def stream(self):
+        return "trojan"
+
 class Mtproto(User):
     def __str__(self):
         if self.user_info:
@@ -80,6 +96,40 @@ class Socks(User):
 
     def stream(self):
         return "socks"
+
+class Vless(User):
+    def __init__(self, uuid, user_number, encryption=None, email=None):
+        super(Vless, self).__init__(user_number, uuid, email)
+        self.encryption = encryption
+
+    def __str__(self):
+        if self.user_info:
+            return "Email: {self.user_info}\nProtocol: {network}\nId: {password}\nEncryption: {self.encryption}\n".format(self=self, network=self.stream(), password=self.password)
+        else:
+            return "Protocol: {network}\nId: {password}\nEncryption: {self.encryption}\n".format(self=self, network=self.stream(), password=self.password)
+    
+    def stream(self):
+        return "VLESS"
+
+    def link(self, ip, port, tls):
+        return ""
+
+class Xtls(Vless):
+    def __init__(self, uuid, user_number, encryption=None, email=None, flow=""):
+        super(Xtls, self).__init__(uuid, user_number, encryption, email)
+        self.flow = flow
+
+    def __str__(self):
+        if self.user_info:
+            return "Email: {self.user_info}\nProtocol: {network}\nId: {password}\nEncryption: {self.encryption}\nFlow: {self.flow}\n".format(self=self, network=self.stream(), password=self.password)
+        else:
+            return "Protocol: {network}\nId: {password}\nEncryption: {self.encryption}\nFlow: {self.flow}\n".format(self=self, network=self.stream(), password=self.password)
+    
+    def stream(self):
+        return "VLESS_XTLS"
+    
+    def link(self, ip, port, tls):
+        return ""
 
 class Vmess(User):
     def __init__(self, uuid, alter_id: int, network: str, user_number, *, path=None, host=None, header=None, email=None, quic=None):
@@ -158,7 +208,7 @@ class Group:
         self.index = index
 
     def show_node(self, index):
-        tls = _("open") if self.tls == "tls" else _("close")
+        tls = _("open") if self.tls in ("tls", "xtls") else _("close")
         tfo = "TcpFastOpen: {}".format(self.tfo) if self.tfo != None else ""
         dyp = "DynamicPort: {}".format(self.dyp) if self.dyp.status else ""
         port_way = "-{}".format(self.end_port) if self.end_port else ""
@@ -170,14 +220,15 @@ IP: {color_ip}
 Port: {self.port}{port_way}
 TLS: {tls}
 {node}{tfo}
-{dyp}
-{link}
-            '''.format(self=self, color_ip=ColorStr.fuchsia(self.ip), port_way=port_way, node=node,tfo=tfo, dyp=dyp,tls=tls, link=node.link(self.ip, int(self.port), self.tls))
+{dyp}'''.format(self=self, color_ip=ColorStr.fuchsia(self.ip), port_way=port_way, node=node,tfo=tfo, dyp=dyp,tls=tls)
+        link = node.link(self.ip, int(self.port), self.tls)
+        if link:
+            result += "{}\n\n".format(link)
         return result
 
     # print一个实例打印的字符串
     def __str__(self):
-        tls = _("open") if self.tls == "tls" else _("close")
+        tls = _("open") if self.tls in ("tls", "xtls") else _("close")
         tfo = "TcpFastOpen: {}".format(self.tfo) if self.tfo != None else ""
         dyp = "DynamicPort: {}".format(self.dyp) if self.dyp.status else ""
         port_way = "-{}".format(self.end_port) if self.end_port else ""
@@ -192,7 +243,10 @@ TLS: {tls}
 {node}{tfo}
 {dyp}
             '''.format(self=self, color_ip=ColorStr.fuchsia(self.ip), node=node,tfo=tfo,dyp=dyp,tls=tls, port_way=port_way)
-            result = "{0}{1}\n\n{2}\n\n".format(result, temp.strip(), node.link(self.ip, int(self.port), self.tls))
+            link = node.link(self.ip, int(self.port), self.tls)
+            result = "{0}{1}\n\n".format(result, temp.strip())
+            if link:
+                result += "{}\n\n".format(link)             
         return result
 
     # 直接调用实例和打印一个实例显示的字符串一样

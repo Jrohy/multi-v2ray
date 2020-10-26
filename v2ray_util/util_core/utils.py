@@ -67,6 +67,9 @@ class StreamType(Enum):
     KCP_DTLS = 'dtls'
     KCP_WECHAT = 'wechat'
     KCP_WG = 'wireguard'
+    VLESS = 'vless'
+    VLESS_XTLS = 'vless_xtls'
+    TROJAN = 'trojan'
 
 def stream_list():
     return [ 
@@ -87,6 +90,9 @@ def ss_method():
     return ("aes-256-cfb", "aes-128-cfb", "chacha20", 
         "chacha20-ietf", "aes-256-gcm", "aes-128-gcm", "chacha20-poly1305")
 
+def xtls_flow():
+    return ("", "xtls-rprx-origin", "xtls-rprx-direct")
+
 def get_ip():
     """
     获取本地ip
@@ -102,15 +108,18 @@ def port_is_use(port):
     """
     判断端口是否占用
     """
+    tcp_use, udp_use = False, False
     s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    u = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+    s.settimeout(3)
+    tcp_use = s.connect_ex(('127.0.0.1', int(port))) == 0
     try:
-        s.connect('127.0.0.1',int(port))
-        s.shutdown(2)
-        #利用shutdown()函数使socket双向数据传输变为单向数据传输。shutdown()需要一个单独的参数，
-        #该参数表示了如何关闭socket。具体为：0表示禁止将来读；1表示禁止将来写；2表示禁止将来读和写。
-        return True
+        u.bind(('127.0.0.1', int(port)))
     except:
-        return False
+        udp_use = True
+    finally:
+        u.close()
+    return tcp_use or udp_use
 
 def random_port(start_port, end_port):
     while True:
@@ -190,7 +199,7 @@ def gen_cert(domain):
         if ":" in local_ip:
             if not os.path.exists("/root/.acme.sh/"):
                 os.makedirs("/root/.acme.sh")
-            os.system("curl https://acme-install.netlify.com/acme.sh -o /root/.acme.sh/acme.sh")
+            os.system("curl https://acme-install.netlify.app/acme.sh -o /root/.acme.sh/acme.sh")
         else:
             os.system("curl https://get.acme.sh | sh")
 
@@ -240,6 +249,12 @@ def clean_iptables(port):
         for line in output_result:
             os.system(clean_cmd.format(iptable_way, "OUTPUT", str(line)))
 
+def all_port():
+    from .loader import Loader
+    profile = Loader().profile
+    group_list = profile.group_list
+    return set([group.port for group in group_list])
+
 def open_port(openport=-1):
     import platform
     from .loader import Loader
@@ -250,11 +265,9 @@ def open_port(openport=-1):
     check_cmd = "{} -nvL --line-number|grep -w \"{}\""
     firewall_open_cmd = "firewall-cmd --zone=public --add-port={}/tcp --add-port={}/udp --permanent >/dev/null 2>&1"
 
-    profile = Loader().profile
-    group_list = profile.group_list
-    port_set = set([group.port for group in group_list])
+    port_set = all_port()
 
-    iptable_way = "iptables" if profile.network == "ipv4" else "ip6tables"
+    iptable_way = "iptables" if Loader().profile.network == "ipv4" else "ip6tables"
     if openport != -1:
         port_str = str(openport)
         if is_centos8:

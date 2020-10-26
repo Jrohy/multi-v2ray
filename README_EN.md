@@ -35,21 +35,24 @@ a tool to manage v2ray config json, support multiple user && group manage
   - MTProto
   - Shadowsocks
   - Quic
+  - VLESS
+  - VLESS_XTLS
+  - Trojan
 
 ## How To Use
 new install
 ```
-source <(curl -sL https://v2rays.netlify.com/install.sh)
+source <(curl -sL https://multi.netlify.app/v2ray.sh)
 ```
 
 keep profile to update
 ```
-source <(curl -sL https://v2rays.netlify.com/install.sh) -k
+source <(curl -sL https://multi.netlify.app/v2ray.sh) -k
 ```
 
 uninstall
 ```
-source <(curl -sL https://v2rays.netlify.com/install.sh) --remove
+source <(curl -sL https://multi.netlify.app/v2ray.sh) --remove
 ```
 
 ## Command Line

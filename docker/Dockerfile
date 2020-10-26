@@ -1,6 +1,6 @@
 FROM centos:latest as builder
 
-RUN curl -L -s https://install.direct/go.sh|bash
+RUN curl -L -s https://multi.netlify.app/go.sh|bash
 
 FROM alpine:latest
 
@@ -8,7 +8,7 @@ LABEL maintainer "Jrohy <euvkzx@Jrohy.com>"
 
 ENV COMPLETION_FILE "/usr/share/bash-completion/completions/v2ray"
 
-ENV SOURCE_COMPLETION_FILE "https://multi.netlify.com/v2ray"
+ENV SOURCE_COMPLETION_FILE "https://multi.netlify.app/v2ray"
 
 ENV VERSION_LIST "https://api.github.com/repos/Jrohy/multi-v2ray/tags"
 

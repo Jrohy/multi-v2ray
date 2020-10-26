@@ -33,7 +33,7 @@ def planUpdate():
     else:
         local_time = 3
     os.system('echo "SHELL=/bin/bash" >> crontab.txt && echo "$(crontab -l)" >> crontab.txt')
-    os.system('echo "0 {} * * * bash <(curl -L -s https://install.direct/go.sh) | tee -a /root/v2rayUpdate.log && v2ray-util restart" >> crontab.txt'.format(local_time))
+    os.system('echo "0 {} * * * bash <(curl -L -s https://multi.netlify.app/go.sh) | tee -a /root/v2rayUpdate.log && v2ray-util restart" >> crontab.txt'.format(local_time))
     os.system("crontab crontab.txt && rm -f crontab.txt")
     restartCron()
     print(ColorStr.green(_("success open schedule update task!")))

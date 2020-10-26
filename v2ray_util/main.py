@@ -71,7 +71,7 @@ def updateSh():
     if os.path.exists("/.dockerenv"):
         subprocess.Popen("pip install -U v2ray_util", shell=True).wait()
     else:
-        subprocess.Popen("curl -Ls https://multi.netlify.com/v2ray.sh -o temp.sh", shell=True).wait()
+        subprocess.Popen("curl -Ls https://multi.netlify.app/v2ray.sh -o temp.sh", shell=True).wait()
         subprocess.Popen("bash temp.sh -k && rm -f temp.sh", shell=True).wait()
 
 def parse_arg():

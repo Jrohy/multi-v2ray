@@ -20,34 +20,19 @@
   ],
   "outbounds": [
     {
-      "protocol": "vmess",
+      "protocol": "trojan",
       "settings": {
-        "vnext": [
+        "servers": [
           {
-            "address": "123.ocm",
-            "port": 1234,
-            "users": [
-              {
-                "id": "cc4f8d5b-967b-4557-a4b6-bde92965bc27",
-                "alterId": 0,
-                "security": "aes-128-gcm"
-              }
-            ]
+            "address": "serveraddr.com",
+            "port": 443,
+            "password": "passwd"
           }
         ]
       },
       "streamSettings": {
-        "security": "",
-        "tlsSettings": {},
-        "wsSettings": {},
-        "httpSettings": {}, 
-        "network": "tcp", 
-        "kcpSettings": {}, 
-        "tcpSettings": {},
-        "quicSettings": {}
-      },
-      "mux": {
-        "enabled": true
+        "security": "tls",
+        "network": "tcp"
       }
     },
     {
@@ -58,13 +43,6 @@
       "tag": "direct"
     }
   ],
-  "dns": {
-    "servers": [
-      "8.8.8.8",
-      "8.8.4.4",
-      "localhost"
-    ]
-  },
   "routing": {
     "domainStrategy": "IPIfNonMatch",
     "rules": [

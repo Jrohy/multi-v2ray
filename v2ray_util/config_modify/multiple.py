@@ -5,9 +5,9 @@ import sys
 
 from ..util_core.v2ray import restart
 from ..util_core.writer import NodeWriter, GroupWriter
-from ..util_core.group import Vmess, Socks, Mtproto, SS
-from ..util_core.selector import GroupSelector, ClientSelector
-from ..util_core.utils import StreamType, stream_list, is_email, clean_iptables, random_email, ColorStr, readchar, random_port
+from ..util_core.group import Vmess, Socks, Mtproto, SS, Vless, Trojan, Xtls
+from ..util_core.selector import GroupSelector, ClientSelector, CommonSelector
+from ..util_core.utils import StreamType, stream_list, is_email, clean_iptables, random_email, ColorStr, readchar, random_port, port_is_use, xtls_flow
 
 @restart(True)
 def new_port(new_stream=None):
@@ -37,21 +37,28 @@ def new_port(new_stream=None):
         stream = salt_stream[0]
         print("{}: {} \n".format(_("random generate (srtp | wechat-video | utp | dtls | wireguard) fake header, new protocol"), ColorStr.green(stream.value)))
 
-    new_random_port = random_port(1000, 65535)
-    new_port = input("{0} {1}, {2}: ".format(_("random generate port"), ColorStr.green(str(new_random_port)), _("enter to use, or input customize port")))
+    new_port = ""
+    while True:
+        new_random_port = random_port(1000, 65535)
+        new_port = input("{0} {1}, {2}: ".format(_("random generate port"), ColorStr.green(str(new_random_port)), _("enter to use, or input customize port")))
 
-    if not new_port:
-        new_port = str(new_random_port)
+        if not new_port:
+            new_port = str(new_random_port)
+        else:
+            if not new_port.isnumeric():
+                print(_("input error, please input again"))
+                continue
+            elif port_is_use(new_port):
+                print(_("port is use, please input other port!"))
+                continue
+        break
 
-    if new_port.isnumeric():
-        print("")
-        print("{}: {}".format(_("new port"), new_port))
-        print("")
-        nw = NodeWriter()
-        nw.create_new_port(int(new_port), stream, **info)
-        return True
-    else:
-        print(_("input error, please check is number"))
+    print("")
+    print("{}: {}".format(_("new port"), new_port))
+    print("")
+    nw = NodeWriter()
+    nw.create_new_port(int(new_port), stream, **info)
+    return True
 
 @restart()
 def new_user():
@@ -63,7 +70,7 @@ def new_user():
         pass
     else:
         email = ""
-        if type(group.node_list[0]) == Vmess: 
+        if type(group.node_list[0]) in (Vmess, Vless, Trojan, Xtls): 
             while True:
                 is_duplicate_email=False
                 remail = random_email()
@@ -88,6 +95,17 @@ def new_user():
 
             nw = NodeWriter(group.tag, group.index)
             info = {'email': email}
+            if type(group.node_list[0]) == Trojan:
+                password = input(_("please input trojan user password: "))
+                if password == "":
+                    print(_("password is null!!"))
+                    exit(-1)
+                info['password'] = password
+            elif type(group.node_list[0]) == Xtls:
+                flow_list = xtls_flow()
+                print("")
+                flow = CommonSelector(flow_list, _("please select xtls flow type: ")).select()
+                info['flow'] = flow
             nw.create_new_user(**info)
             return True
 

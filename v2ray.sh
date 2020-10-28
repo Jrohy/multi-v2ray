@@ -160,7 +160,7 @@ installDependent(){
     fi
 
     #install python3 & pip
-    bash <(curl -sL https://python3.netlify.app/install.sh)
+    source <(curl -sL https://python3.netlify.app/install.sh)
 }
 
 updateProject() {

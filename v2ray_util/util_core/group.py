@@ -107,7 +107,7 @@ class Vless(User):
 
     def __str__(self):
         if self.user_info:
-            return "Email: {self.user_info}\nProtocol: {network}\nId: {password}\nEncryption: {self.encryption}\n".format(self=self, network=self.stream(), password=self.password)
+            return "Email: {self.user_info}\nProtocol: {network}\nId: {password}\nEncryption: {self.encryption}\nNetwork: {self.network}\nHost: {self.host}\nPath: {self.path}\n".format(self=self, network=self.stream(), password=self.password)
         else:
             return "Protocol: {network}\nId: {password}\nEncryption: {self.encryption}\nNetwork: {self.network}\nHost: {self.host}\nPath: {self.path}\n".format(self=self, network=self.stream(), password=self.password)
     

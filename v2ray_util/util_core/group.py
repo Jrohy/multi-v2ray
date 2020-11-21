@@ -98,15 +98,18 @@ class Socks(User):
         return "socks"
 
 class Vless(User):
-    def __init__(self, uuid, user_number, encryption=None, email=None):
+    def __init__(self, uuid, user_number, encryption=None, email=None, network=None, path=None, host=None):
         super(Vless, self).__init__(user_number, uuid, email)
         self.encryption = encryption
+        self.network = network
+        self.path = path
+        self.host = host
 
     def __str__(self):
         if self.user_info:
             return "Email: {self.user_info}\nProtocol: {network}\nId: {password}\nEncryption: {self.encryption}\n".format(self=self, network=self.stream(), password=self.password)
         else:
-            return "Protocol: {network}\nId: {password}\nEncryption: {self.encryption}\n".format(self=self, network=self.stream(), password=self.password)
+            return "Protocol: {network}\nId: {password}\nEncryption: {self.encryption}\nNetwork: {self.network}\nHost: {self.host}\nPath: {self.path}\n".format(self=self, network=self.stream(), password=self.password)
     
     def stream(self):
         return "VLESS"

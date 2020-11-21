@@ -222,7 +222,21 @@ class StreamWriter(Writer):
                 vless["clients"][0]["flow"] = kw["flow"]
             self.part_json['protocol'] = "vless"
             self.part_json["settings"] = vless
-            self.part_json["streamSettings"] = self.load_template('tcp.json')
+            choice = input("Use 1. TCP, or 2. WS (Default TCP)")
+            if choice.isdigit() and int(choice) == 2:
+                host = input(_("please input fake domain: "))
+                ws = self.load_template('ws.json')
+                salt = '/' + ''.join(random.sample(string.ascii_letters + string.digits, 8)) + '/'
+                ws["wsSettings"]["path"] = salt
+                if "host" in kw:
+                    ws["wsSettings"]["headers"]["Host"] = host
+                self.part_json["streamSettings"] = ws
+                print('Host: ' + host)
+                print('Path: ' + salt)
+                print('Enabled WS.')
+            else:
+                self.part_json["streamSettings"] = self.load_template('tcp.json')
+                print('Enabled TCP.')
             self.save()
             alpn = ["http/1.1"]
             # tls的设置
@@ -390,7 +404,7 @@ class ClientWriter(Writer):
     def __init__(self, group_tag = 'A', group_index = 0, client_index = 0):
         super(ClientWriter, self).__init__(group_tag, group_index)
         self.client_index = client_index
-        self.client_str = "clients" if self.part_json["protocol"] == "vmess" or self.part_json["protocol"] == "vless" else "users"
+        self.client_str = "clients" if self.part_json["protocol"] == "vmess" or self.part_json['protocol'] == 'vless'  else "users"
 
     def write_aid(self, aid = 32):
         self.part_json["settings"][self.client_str][self.client_index]["alterId"] = int(aid)
@@ -404,6 +418,10 @@ class ClientWriter(Writer):
         if self.part_json["protocol"] == "shadowsocks":
             self.part_json["settings"].update({"email": email})
         else:
+            # print(f'First level: \n{self.part_json['settings']}')
+            # print(self.client_str)
+            # print(self.client_index)
+            # print(self.part_json)
             self.part_json["settings"][self.client_str][self.client_index].update({"email": email})
         self.save()
 

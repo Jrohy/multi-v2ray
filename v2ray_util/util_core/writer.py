@@ -222,21 +222,27 @@ class StreamWriter(Writer):
                 vless["clients"][0]["flow"] = kw["flow"]
             self.part_json['protocol'] = "vless"
             self.part_json["settings"] = vless
-            choice = input("Use 1. TCP, or 2. WS (Default TCP)")
-            if choice.isdigit() and int(choice) == 2:
-                host = input(_("please input fake domain: "))
-                ws = self.load_template('ws.json')
-                salt = '/' + ''.join(random.sample(string.ascii_letters + string.digits, 8)) + '/'
-                ws["wsSettings"]["path"] = salt
-                if "host" in kw:
-                    ws["wsSettings"]["headers"]["Host"] = host
-                self.part_json["streamSettings"] = ws
-                print('Host: ' + host)
-                print('Path: ' + salt)
-                print('Enabled WS.')
+
+            if self.stream_type == StreamType.VLESS:
+                choice = input("Use 1. TCP, or 2. WS (Default TCP)")
+                if choice.isdigit() and int(choice) == 2:
+                    host = input(_("please input fake domain: "))
+                    ws = self.load_template('ws.json')
+                    salt = '/' + ''.join(random.sample(string.ascii_letters + string.digits, 8)) + '/'
+                    ws["wsSettings"]["path"] = salt
+                    if "host" in kw:
+                        ws["wsSettings"]["headers"]["Host"] = host
+                    self.part_json["streamSettings"] = ws
+                    print('Host: ' + host)
+                    print('Path: ' + salt)
+                    print('Enabled WS.')
+                else:
+                    self.part_json["streamSettings"] = self.load_template('tcp.json')
+                    print('Enabled TCP.') 
             else:
                 self.part_json["streamSettings"] = self.load_template('tcp.json')
                 print('Enabled TCP.')
+
             self.save()
             alpn = ["http/1.1"]
             # tls的设置
@@ -418,10 +424,6 @@ class ClientWriter(Writer):
         if self.part_json["protocol"] == "shadowsocks":
             self.part_json["settings"].update({"email": email})
         else:
-            # print(f'First level: \n{self.part_json['settings']}')
-            # print(self.client_str)
-            # print(self.client_index)
-            # print(self.part_json)
             self.part_json["settings"][self.client_str][self.client_index].update({"email": email})
         self.save()
 

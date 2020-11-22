@@ -1,7 +1,8 @@
 {
   "clients": [
     {
-      "id": "d4e321ea-e118-11ea-a265-42010a8c0002"
+      "id": "d4e321ea-e118-11ea-a265-42010a8c0002",
+      "flow": ""
     }
   ],
   "decryption": "none",

@@ -524,6 +524,9 @@ msgstr "请输入你想要为伪装的域名(不不不需要http):"
 msgid "please select ss method: "
 msgstr "请输入序号选择加密方法: "
 
+msgid "please select xtls flow type: "
+msgstr "请输入序号选择xtls流控: "
+
 msgid "please select fake header: "
 msgstr "请输入序号选择伪装协议: "
 

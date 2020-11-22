@@ -6,7 +6,7 @@ import os
 
 from .config import Config
 from .utils import ColorStr, get_ip
-from .group import SS, Socks, Vmess, Vless, Mtproto, Quic, Group, Dyport, Trojan
+from .group import SS, Socks, Vmess, Vless, Mtproto, Quic, Group, Dyport, Trojan, Xtls
 
 class Stats:
     def __init__(self, status=False, door_port=0):
@@ -166,7 +166,10 @@ class Profile:
                 node = Mtproto(self.user_number, client["secret"], user_info=email)
 
             elif protocol == "vless":
-                node = Vless(client["id"], self.user_number, conf_settings["decryption"], email)
+                if tls == "xtls":
+                    node = Xtls(client["id"], self.user_number, conf_settings["decryption"], email, client["flow"])
+                else:
+                    node = Vless(client["id"], self.user_number, conf_settings["decryption"], email)
 
             elif protocol == "trojan":
                 node = Trojan(self.user_number, client["password"], email)

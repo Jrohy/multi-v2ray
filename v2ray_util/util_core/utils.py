@@ -68,6 +68,7 @@ class StreamType(Enum):
     KCP_WECHAT = 'wechat'
     KCP_WG = 'wireguard'
     VLESS = 'vless'
+    VLESS_XTLS = 'vless_xtls'
     TROJAN = 'trojan'
 
 def stream_list():
@@ -88,6 +89,9 @@ def header_type_list():
 def ss_method():
     return ("aes-256-cfb", "aes-128-cfb", "chacha20", 
         "chacha20-ietf", "aes-256-gcm", "aes-128-gcm", "chacha20-poly1305")
+
+def xtls_flow():
+    return ("", "xtls-rprx-origin", "xtls-rprx-direct")
 
 def get_ip():
     """
@@ -116,7 +120,6 @@ def port_is_use(port):
     finally:
         u.close()
     return tcp_use or udp_use
-
 
 def random_port(start_port, end_port):
     while True:

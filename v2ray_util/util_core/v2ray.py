@@ -81,14 +81,15 @@ class V2ray:
         print(Loader().profile)
 
     @staticmethod
-    def update():
+    def update(version):
         if is_ipv6(get_ip()):
             print(ColorStr.yellow(_("ipv6 network not support update v2ray online, please manual donwload v2ray to update!")))
             print(ColorStr.fuchsia(_("download v2ray-linux-xx.zip and run 'bash <(curl -L -s https://multi.netlify.app/go.sh) -l v2ray-linux-xx.zip' to update")))
             return
         if os.path.exists("/.dockerenv"):
             V2ray.stop()
-        subprocess.Popen("curl -L -s https://multi.netlify.app/go.sh|bash", shell=True).wait()
+        subprocess.Popen("curl -Ls https://multi.netlify.app/go.sh -o temp.sh", shell=True).wait()
+        subprocess.Popen("bash temp.sh {} && rm -f temp.sh".format("--version {}".format(version) if version else ""), shell=True).wait()
         if os.path.exists("/.dockerenv"):
             V2ray.start()
 

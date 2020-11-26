@@ -113,7 +113,7 @@ def parse_arg():
         elif sys.argv[1] == "add":
             multiple.new_port()
         elif sys.argv[1] == "update":
-            V2ray.update(sys.argv[2])
+            V2ray.update()
         elif sys.argv[1] == "update.sh":
             updateSh()
         elif sys.argv[1] == "new":
@@ -127,6 +127,8 @@ def parse_arg():
     else:
         if sys.argv[1] == "add":
             multiple.new_port(sys.argv[2])
+        elif sys.argv[1] == "update":
+            V2ray.update(sys.argv[2])
     sys.exit(0)
 
 def service_manage():

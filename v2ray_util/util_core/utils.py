@@ -68,6 +68,7 @@ class StreamType(Enum):
     KCP_WECHAT = 'wechat'
     KCP_WG = 'wireguard'
     VLESS = 'vless'
+    VLESS_WS = 'vless_ws'
     VLESS_XTLS = 'vless_xtls'
     TROJAN = 'trojan'
 

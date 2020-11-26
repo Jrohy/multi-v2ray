@@ -215,14 +215,21 @@ class StreamWriter(Writer):
                 ws["wsSettings"]["headers"]["Host"] = kw['host']
             self.part_json["streamSettings"] = ws
 
-        elif self.stream_type in (StreamType.VLESS, StreamType.VLESS_XTLS):
+        elif self.stream_type in (StreamType.VLESS, StreamType.VLESS_XTLS, StreamType.VLESS_WS):
             vless = self.load_template('vless.json')
             vless["clients"][0]["id"] = str(uuid.uuid1())
             if self.stream_type == StreamType.VLESS_XTLS:
                 vless["clients"][0]["flow"] = kw["flow"]
             self.part_json['protocol'] = "vless"
             self.part_json["settings"] = vless
-            self.part_json["streamSettings"] = self.load_template('tcp.json')
+            if self.stream_type == StreamType.VLESS_WS:
+                ws = self.load_template('ws.json')
+                ws["wsSettings"]["path"] = '/' + ''.join(random.sample(string.ascii_letters + string.digits, 8)) + '/'
+                if "host" in kw:
+                    ws["wsSettings"]["headers"]["Host"] = kw['host']
+                self.part_json["streamSettings"] = ws
+            else:
+                self.part_json["streamSettings"] = self.load_template('tcp.json')
             self.save()
             alpn = ["http/1.1"]
             # tls的设置

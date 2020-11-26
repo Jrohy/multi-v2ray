@@ -29,6 +29,7 @@ class StreamModifier:
             (StreamType.SS, "Shadowsocks"),
             (StreamType.QUIC, "Quic"),
             (StreamType.VLESS, "VLESS"),
+            (StreamType.VLESS_WS, "VLESS_WS"),
             (StreamType.VLESS_XTLS, "VLESS_XTLS"),
             (StreamType.TROJAN, "Trojan"),
         ]
@@ -67,7 +68,7 @@ class StreamModifier:
             print("")
             header = CommonSelector(header_type_list(), _("please select fake header: ")).select()
             kw = {'security': security, 'key': key, 'header': header}
-        elif index == 14 or index == 15:
+        elif index in (14, 15, 16):
             port_set = all_port()
             if not "443" in port_set:
                 print()
@@ -76,11 +77,14 @@ class StreamModifier:
                 gw.write_port(443)
                 sw = StreamWriter(self.group_tag, self.group_index, self.stream_type[index][0])
             if index == 15:
+                host = input(_("please input fake domain: "))
+                kw['host'] = host
+            elif index == 16:
                 flow_list = xtls_flow()
                 print("")
                 flow = CommonSelector(flow_list, _("please select xtls flow type: ")).select()
                 kw = {'flow': flow}
-        elif index == 16:
+        elif index == 17:
             port_set = all_port()
             if not "443" in port_set:
                 print()

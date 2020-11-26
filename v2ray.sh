@@ -188,11 +188,13 @@ updateProject() {
     curl $BASH_COMPLETION_SHELL > /usr/share/bash-completion/completions/v2ray
     [[ -z $(echo $SHELL|grep zsh) ]] && source /usr/share/bash-completion/completions/v2ray
     
-    #安装/更新V2ray主程序
-    if [[ $NETWORK == 1 ]];then
-        bash <(curl -L -s https://multi.netlify.app/go.sh) --source jsdelivr
-    else
-        bash <(curl -L -s https://multi.netlify.app/go.sh)
+    #安装V2ray主程序
+    if [[ ${INSTALL_WAY} == 0 ]];then
+        if [[ $NETWORK == 1 ]];then
+            bash <(curl -L -s https://multi.netlify.app/go.sh) --source jsdelivr
+        else
+            bash <(curl -L -s https://multi.netlify.app/go.sh)
+        fi
     fi
 }
 

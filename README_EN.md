@@ -36,6 +36,7 @@ a tool to manage v2ray config json, support multiple user && group manage
   - Shadowsocks
   - Quic
   - VLESS
+  - VLESS_WS
   - VLESS_XTLS
   - Trojan
 

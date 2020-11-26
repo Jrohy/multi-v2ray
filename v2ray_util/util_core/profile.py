@@ -169,7 +169,7 @@ class Profile:
                 if tls == "xtls":
                     node = Xtls(client["id"], self.user_number, conf_settings["decryption"], email, client["flow"])
                 else:
-                    node = Vless(client["id"], self.user_number, conf_settings["decryption"], email)
+                    node = Vless(client["id"], self.user_number, conf_settings["decryption"], email, conf_stream["network"], path, host)
 
             elif protocol == "trojan":
                 node = Trojan(self.user_number, client["password"], email)

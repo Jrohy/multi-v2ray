@@ -81,7 +81,7 @@ class V2ray:
         print(Loader().profile)
 
     @staticmethod
-    def update(version):
+    def update(version=None):
         if is_ipv6(get_ip()):
             print(ColorStr.yellow(_("ipv6 network not support update v2ray online, please manual donwload v2ray to update!")))
             print(ColorStr.fuchsia(_("download v2ray-linux-xx.zip and run 'bash <(curl -L -s https://multi.netlify.app/go.sh) -l v2ray-linux-xx.zip' to update")))

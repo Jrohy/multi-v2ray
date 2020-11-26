@@ -55,6 +55,7 @@ V2ray多用户管理脚本，向导式管理[新增|删除|修改]传输协议�
   - Shadowsocks
   - Quic
   - VLESS
+  - VLESS_WS
   - VLESS_XTLS
   - Trojan
 

@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 import random
 import string
-import sys
 
 from ..util_core.group import SS
 from ..util_core.v2ray import restart

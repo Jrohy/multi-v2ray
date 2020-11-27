@@ -3,7 +3,6 @@
 import socket
 
 from .tls import TLSModifier
-from ..util_core.v2ray import restart
 from ..util_core.selector import GroupSelector
 from ..util_core.writer import StreamWriter, GroupWriter
 from ..util_core.utils import StreamType, ColorStr, get_ip, loop_input_choice_number, check_ip, is_ipv4

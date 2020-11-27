@@ -72,18 +72,6 @@ class StreamType(Enum):
     VLESS_XTLS = 'vless_xtls'
     TROJAN = 'trojan'
 
-def stream_list():
-    return [ 
-        StreamType.KCP_WG, 
-        StreamType.KCP_DTLS, 
-        StreamType.KCP_WECHAT, 
-        StreamType.KCP_UTP, 
-        StreamType.KCP_SRTP, 
-        StreamType.MTPROTO, 
-        StreamType.SOCKS,
-        StreamType.SS
-    ]
-
 def header_type_list():
     return ("none", "srtp", "utp", "wechat-video", "dtls", "wireguard")
 

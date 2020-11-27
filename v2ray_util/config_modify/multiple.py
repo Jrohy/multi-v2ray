@@ -1,42 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import random
-import sys
-
+from .stream import StreamModifier
 from ..util_core.v2ray import restart
-from ..util_core.writer import NodeWriter, GroupWriter
+from ..util_core.loader import Loader
+from ..util_core.writer import NodeWriter
 from ..util_core.group import Vmess, Socks, Mtproto, SS, Vless, Trojan, Xtls
 from ..util_core.selector import GroupSelector, ClientSelector, CommonSelector
-from ..util_core.utils import StreamType, stream_list, is_email, clean_iptables, random_email, ColorStr, readchar, random_port, port_is_use, xtls_flow
+from ..util_core.utils import is_email, clean_iptables, random_email, ColorStr, readchar, random_port, port_is_use, xtls_flow
 
 @restart(True)
 def new_port(new_stream=None):
-    info = dict()
-    if new_stream:
-        correct_list = stream_list()
-        if new_stream not in [x.value for x in correct_list]:
-            print(_("input error! input -h or --help to get help"))
-            exit(-1)
-        
-        stream = list(filter(lambda stream:stream.value == new_stream, correct_list))[0]
-
-        if stream == StreamType.SOCKS:
-            user = input(_("please input socks user: "))
-            password = input(_("please input socks password: "))
-            if user == "" or password == "":
-                print(_("socks user or password is null!!"))
-                exit(-1)
-            info = {"user":user, "pass": password}
-        elif stream == StreamType.SS:
-            from .ss import SSFactory
-            sf = SSFactory()
-            info = {"method": sf.get_method(), "password": sf.get_password()}
-    else:
-        salt_stream = [StreamType.KCP_DTLS, StreamType.KCP_WECHAT, StreamType.KCP_UTP, StreamType.KCP_SRTP, StreamType.KCP_WG]
-        random.shuffle(salt_stream)
-        stream = salt_stream[0]
-        print("{}: {} \n".format(_("random generate (srtp | wechat-video | utp | dtls | wireguard) fake header, new protocol"), ColorStr.green(stream.value)))
-
     new_port = ""
     while True:
         new_random_port = random_port(1000, 65535)
@@ -57,7 +30,11 @@ def new_port(new_stream=None):
     print("{}: {}".format(_("new port"), new_port))
     print("")
     nw = NodeWriter()
-    nw.create_new_port(int(new_port), stream, **info)
+    nw.create_new_port(int(new_port))
+
+    reload_data = Loader()
+    new_group_list = reload_data.profile.group_list
+    StreamModifier.modify(new_group_list[-1], new_stream)
     return True
 
 @restart()

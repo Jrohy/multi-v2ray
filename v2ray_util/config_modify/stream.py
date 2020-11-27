@@ -114,9 +114,6 @@ def modify(group=None, sType=None):
         sm = StreamModifier(group.tag, group.index)
 
         if sType != None:
-            if sType not in [s[0] for s in sm.stream_type]:
-                print(ColorStr.red("{} not support!".format(sType)))
-                return
             sm.select(sType)
             print(_("modify protocol success"))
             return True

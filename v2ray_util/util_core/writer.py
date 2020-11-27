@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import os
 import json
 import random
 import string
 import uuid
 
 from .config import Config
-from .utils import port_is_use, StreamType, random_port
-from .loader import Loader
+from .utils import StreamType, random_port
 from .group import Mtproto, Vmess, Socks, Vless, Trojan, Xtls
 
 def clean_mtproto_tag(config, group_index):
@@ -520,7 +518,7 @@ class GlobalWriter(Writer):
         self.save()
 
 class NodeWriter(Writer):
-    def create_new_port(self, newPort, protocol, **kw):
+    def create_new_port(self, newPort):
         # init new inbound
         server = self.load_template('server.json')
         new_inbound = server["inbounds"][0]
@@ -529,11 +527,6 @@ class NodeWriter(Writer):
         self.config["inbounds"].append(new_inbound)
         print(_("add port group success!"))
         self.save()
-
-        reload_data = Loader()
-        new_group_list = reload_data.profile.group_list
-        stream_writer = StreamWriter(new_group_list[-1].tag, new_group_list[-1].index, protocol)
-        stream_writer.write(**kw)
 
     def create_new_user(self, **kw):
         '''

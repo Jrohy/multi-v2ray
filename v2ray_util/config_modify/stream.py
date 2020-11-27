@@ -6,7 +6,6 @@ import string
 from ..util_core.v2ray import restart
 from ..util_core.writer import StreamWriter, GroupWriter
 from ..util_core.selector import GroupSelector, CommonSelector
-from ..util_core.group import Mtproto, SS
 from ..util_core.utils import StreamType, header_type_list, ColorStr, all_port, xtls_flow
 
 from .ss import SSFactory
@@ -36,25 +35,23 @@ class StreamModifier:
         self.group_tag = group_tag
         self.group_index = group_index
 
-    def select(self, index):
-        sw = StreamWriter(self.group_tag, self.group_index, self.stream_type[index][0])
+    def select(self, sType):
+        sw = StreamWriter(self.group_tag, self.group_index, sType)
         kw = {}
-        if index == 0 or (index >= 3 and index <= 9) or index == 11:
-            pass
-        elif index == 1 or index == 2:
+        if sType in (StreamType.TCP_HOST, StreamType.WS):
             host = input(_("please input fake domain: "))
             kw['host'] = host
-        elif index == 10:
+        elif sType == StreamType.SOCKS:
             user = input(_("please input socks user: "))
             password = input(_("please input socks password: "))
             if user == "" or password == "":
                 print(_("socks user or password is null!!"))
                 exit(-1)
             kw = {'user': user, 'pass': password}
-        elif index == 12:
+        elif sType == StreamType.SS:
             sf = SSFactory()
             kw = {"method": sf.get_method(), "password": sf.get_password()}
-        elif index == 13:
+        elif sType == StreamType.QUIC:
             key = ""
             security_list = ('none', "aes-128-gcm", "chacha20-poly1305")
             print("")
@@ -68,30 +65,30 @@ class StreamModifier:
             print("")
             header = CommonSelector(header_type_list(), _("please select fake header: ")).select()
             kw = {'security': security, 'key': key, 'header': header}
-        elif index in (14, 15, 16):
+        elif sType in (StreamType.VLESS, StreamType.VLESS_WS, StreamType.VLESS_XTLS):
             port_set = all_port()
             if not "443" in port_set:
                 print()
                 print(ColorStr.yellow(_("auto switch 443 port..")))
                 gw = GroupWriter(self.group_tag, self.group_index)
                 gw.write_port(443)
-                sw = StreamWriter(self.group_tag, self.group_index, self.stream_type[index][0])
-            if index == 15:
+                sw = StreamWriter(self.group_tag, self.group_index, sType)
+            if sType == StreamType.VLESS_WS:
                 host = input(_("please input fake domain: "))
                 kw['host'] = host
-            elif index == 16:
+            elif sType == StreamType.VLESS_XTLS:
                 flow_list = xtls_flow()
                 print("")
                 flow = CommonSelector(flow_list, _("please select xtls flow type: ")).select()
                 kw = {'flow': flow}
-        elif index == 17:
+        elif sType == StreamType.TROJAN:
             port_set = all_port()
             if not "443" in port_set:
                 print()
                 print(ColorStr.yellow(_("auto switch 443 port..")))
                 gw = GroupWriter(self.group_tag, self.group_index)
                 gw.write_port(443)
-                sw = StreamWriter(self.group_tag, self.group_index, self.stream_type[index][0])
+                sw = StreamWriter(self.group_tag, self.group_index, sType)
             password = input(_("please input trojan user password: "))
             if password == "":
                 print(_("password is null!!"))
@@ -100,20 +97,29 @@ class StreamModifier:
         sw.write(**kw)
 
     def random_kcp(self):
-        kcp_list = ('mKCP + srtp', 'mKCP + utp', 'mKCP + wechat-video', 'mKCP + dtls', 'mKCP + wireguard')
-        choice = random.randint(4, 8)
-        print("{}: {} \n".format(_("random generate (srtp | wechat-video | utp | dtls | wireguard) fake header, new protocol"), ColorStr.green(kcp_list[choice - 4])))
-        self.select(choice)
+        kcp_list = (StreamType.KCP_SRTP, StreamType.KCP_UTP, StreamType.KCP_WECHAT, StreamType.KCP_DTLS, StreamType.KCP_WG)
+        choice = random.randint(0, 4)
+        print("{}: {} \n".format(_("random generate (srtp | wechat-video | utp | dtls | wireguard) fake header, new protocol"), ColorStr.green(kcp_list[choice])))
+        self.select(kcp_list[choice])
 
 @restart()
-def modify():
-    gs = GroupSelector(_('modify protocol'))
-    group = gs.group
+def modify(group=None, sType=None):
+    if group == None:
+        gs = GroupSelector(_('modify protocol'))
+        group = gs.group
 
     if group == None:
         pass
     else:
         sm = StreamModifier(group.tag, group.index)
+
+        if sType != None:
+            if sType not in [s[0] for s in sm.stream_type]:
+                print(ColorStr.red("{} not support!".format(sType)))
+                return
+            sm.select(sType)
+            print(_("modify protocol success"))
+            return True
 
         print("{}: {}".format(_("group protocol"), group.node_list[0].stream()))
         print("")
@@ -128,10 +134,8 @@ def modify():
         else:
             choice = int(choice)
             if choice > 0 and choice <= len(sm.stream_type):
-                if (sm.stream_type[choice - 1][1] == "MTProto" or sm.stream_type[choice - 1][1] == "Shadowsocks") and group.tls == 'tls':
+                if sm.stream_type[choice - 1][1] in ("MTProto", "Shadowsocks") and group.tls == 'tls':
                     print(_("V2ray MTProto/Shadowsocks not support https, close tls success!"))
-                sm.select(choice - 1)
+                sm.select(sm.stream_type[choice - 1][0])
                 print(_("modify protocol success"))
                 return True
-            else:
-                print(_("input out of range!!"))

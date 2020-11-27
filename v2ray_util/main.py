@@ -3,7 +3,6 @@
 import os
 import sys
 import subprocess
-import pkg_resources
 
 from .util_core.v2ray import V2ray
 from .util_core.utils import ColorStr, open_port, loop_input_choice_number

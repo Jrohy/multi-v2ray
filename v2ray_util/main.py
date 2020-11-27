@@ -26,8 +26,8 @@ def help():
     update               更新 V2Ray 到最新Release版本
     update [version]     更新 V2Ray 到指定版本
     update.sh            更新 multi-v2ray 到最新版本
-    add                  新增mkcp + 随机一种 (srtp|wechat-video|utp|dtls|wireguard) header伪装的端口(Group)
-    add [wechat|utp|srtp|dtls|wireguard|socks|mtproto|ss]     新增一种协议的组，端口随机,如 v2ray add utp 为新增utp协议
+    add                  新增端口组
+    add [protocol]       新增一种协议的组, 端口随机, 如 v2ray add utp 为新增utp协议
     del                  删除端口组
     info                 查看配置
     port                 修改端口
@@ -53,8 +53,8 @@ def help():
     update               update v2ray to latest
     update [version]     update v2ray to special version
     update.sh            update multi-v2ray to latest
-    add                  random create mkcp + (srtp|wechat-video|utp|dtls|wireguard) fake header group
-    add [wechat|utp|srtp|dtls|wireguard|socks|mtproto|ss]     create special protocol, random new port
+    add                  add new group
+    add [protocol]       create special protocol, random new port
     del                  delete port group
     info                 check v2ray profile
     port                 modify port

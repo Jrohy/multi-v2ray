@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from .stream import StreamModifier
 from ..util_core.v2ray import restart
 from ..util_core.loader import Loader
 from ..util_core.writer import NodeWriter
@@ -37,7 +36,8 @@ def new_port(new_stream=None):
 
     reload_data = Loader()
     new_group_list = reload_data.profile.group_list
-    StreamModifier.modify(new_group_list[-1], new_stream)
+    from .stream import modify
+    modify(new_group_list[-1], new_stream)
     return True
 
 @restart()

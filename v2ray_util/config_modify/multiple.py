@@ -9,7 +9,7 @@ from ..util_core.utils import is_email, clean_iptables, random_email, ColorStr, 
 
 @restart(True)
 def new_port(new_stream=None):
-    if new_stream not in StreamType._value2member_map_:
+    if new_stream != None and new_stream not in StreamType._value2member_map_:
         print(ColorStr.red("{} not support!".format(new_stream)))
         return
     new_port = ""

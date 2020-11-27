@@ -6,10 +6,13 @@ from ..util_core.loader import Loader
 from ..util_core.writer import NodeWriter
 from ..util_core.group import Vmess, Socks, Mtproto, SS, Vless, Trojan, Xtls
 from ..util_core.selector import GroupSelector, ClientSelector, CommonSelector
-from ..util_core.utils import is_email, clean_iptables, random_email, ColorStr, readchar, random_port, port_is_use, xtls_flow
+from ..util_core.utils import is_email, clean_iptables, random_email, ColorStr, readchar, random_port, port_is_use, xtls_flow, StreamType
 
 @restart(True)
 def new_port(new_stream=None):
+    if new_stream not in StreamType._value2member_map_:
+        print(ColorStr.red("{} not support!".format(new_stream)))
+        return
     new_port = ""
     while True:
         new_random_port = random_port(1000, 65535)

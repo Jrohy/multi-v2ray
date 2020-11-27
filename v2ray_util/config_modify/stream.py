@@ -99,12 +99,14 @@ class StreamModifier:
     def random_kcp(self):
         kcp_list = (StreamType.KCP_SRTP, StreamType.KCP_UTP, StreamType.KCP_WECHAT, StreamType.KCP_DTLS, StreamType.KCP_WG)
         choice = random.randint(0, 4)
-        print("{}: {} \n".format(_("random generate (srtp | wechat-video | utp | dtls | wireguard) fake header, new protocol"), ColorStr.green(kcp_list[choice])))
+        print("{}: {} \n".format(_("random generate (srtp | wechat-video | utp | dtls | wireguard) fake header, new protocol"), ColorStr.green(kcp_list[choice].value)))
         self.select(kcp_list[choice])
 
 @restart()
 def modify(group=None, sType=None):
+    need_restart = False
     if group == None:
+        need_restart = True
         gs = GroupSelector(_('modify protocol'))
         group = gs.group
 
@@ -114,11 +116,14 @@ def modify(group=None, sType=None):
         sm = StreamModifier(group.tag, group.index)
 
         if sType != None:
-            sm.select(sType)
+            sm.select([v for v in StreamType if v.value == sType][0])
             print(_("modify protocol success"))
-            return True
+            return
 
-        print("{}: {}".format(_("group protocol"), group.node_list[0].stream()))
+        if need_restart:
+            print("")
+            print("{}: {}".format(_("group protocol"), group.node_list[0].stream()))
+
         print("")
         for index, stream_type in enumerate(sm.stream_type):
             print("{0}.{1}".format(index + 1, stream_type[1]))
@@ -135,4 +140,5 @@ def modify(group=None, sType=None):
                     print(_("V2ray MTProto/Shadowsocks not support https, close tls success!"))
                 sm.select(sm.stream_type[choice - 1][0])
                 print(_("modify protocol success"))
-                return True
+                if need_restart:
+                    return True

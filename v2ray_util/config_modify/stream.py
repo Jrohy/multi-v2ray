@@ -90,7 +90,6 @@ class StreamModifier:
                 gw.write_port(443)
                 sw = StreamWriter(self.group_tag, self.group_index, sType)
             random_pass = ''.join(random.sample(string.digits + string.ascii_letters, 8))
-            password = input(_("random : "))
             tip = _("create random trojan user password:") + ColorStr.cyan(random_pass) + _(", enter to use or input new password: ")
             password = input(tip)
             if password == "":

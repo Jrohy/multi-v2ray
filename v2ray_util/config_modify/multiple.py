@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import random
+import string
+
 from ..util_core.v2ray import restart
 from ..util_core.loader import Loader
 from ..util_core.writer import NodeWriter
@@ -76,10 +79,12 @@ def new_user():
             nw = NodeWriter(group.tag, group.index)
             info = {'email': email}
             if type(group.node_list[0]) == Trojan:
-                password = input(_("please input trojan user password: "))
+                random_pass = ''.join(random.sample(string.digits + string.ascii_letters, 8))
+                password = input(_("random : "))
+                tip = _("create random trojan user password:") + ColorStr.cyan(random_pass) + _(", enter to use or input new password: ")
+                password = input(tip)
                 if password == "":
-                    print(_("password is null!!"))
-                    exit(-1)
+                    password = random_pass
                 info['password'] = password
             elif type(group.node_list[0]) == Xtls:
                 flow_list = xtls_flow()

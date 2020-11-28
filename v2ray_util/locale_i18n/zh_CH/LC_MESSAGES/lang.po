@@ -486,6 +486,12 @@ msgstr "撤销删除"
 msgid "del user info:"
 msgstr "你选择的user信息:"
 
+msgid "create random trojan user password:"
+msgstr "生成随机trojan用户密码:"
+
+msgid ", enter to use or input new password: "
+msgstr ", 回车直接使用或者输入自定义密码: "
+
 ### multiple.py end ###
 
 ### ss.py start ###
@@ -550,12 +556,6 @@ msgstr "传输模式修改成功!"
 
 msgid "auto switch 443 port.."
 msgstr "自动切换到443端口..."
-
-msgid "please input trojan user password: "
-msgstr "请输入trojan用户密码: "
-
-msgid "password is null!!"
-msgstr "密码为空!!! "
 
 ### stream.py end ###
 

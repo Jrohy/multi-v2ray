@@ -218,6 +218,8 @@ class StreamWriter(Writer):
             vless["clients"][0]["id"] = str(uuid.uuid1())
             if self.stream_type == StreamType.VLESS_XTLS:
                 vless["clients"][0]["flow"] = kw["flow"]
+            elif self.stream_type == StreamType.VLESS_WS:
+                del vless["fallbacks"]
             self.part_json['protocol'] = "vless"
             self.part_json["settings"] = vless
             if self.stream_type == StreamType.VLESS_WS:

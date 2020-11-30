@@ -630,6 +630,9 @@ msgstr "必须先关闭cdn的代理!"
 msgid "please select https port to cdn: "
 msgstr "请选择走https cdn端口的序号: "
 
+msgid "please select protocol to cdn: "
+msgstr "请选择走cdn的协议: "
+
 ### update_timer.py start ###
 
 msgid "open"

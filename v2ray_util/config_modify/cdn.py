@@ -71,11 +71,14 @@ def modify():
     port_choice = loop_input_choice_number(_("please select https port to cdn: "), len(https_list))
     if not port_choice:
         return
-    elif port_is_use(port_choice):
-        print("{} port is use!".format(port_choice))
+    new_port = https_list[port_choice - 1]
+    if port_is_use(new_port):
+        print("{} port is use!".format(new_port))
         return
     print("")
     for index, text in enumerate(cdn_protocol_list): 
         print("{}.{}".format(index + 1, text))
     cdn_choice = loop_input_choice_number(_("please select protocol to cdn: "), len(cdn_protocol_list))
-    CDNModifier(domain, cdn_choice - 1).open(https_list[port_choice - 1])
+    if not cdn_choice:
+        return
+    CDNModifier(domain, cdn_choice - 1).open(new_port)

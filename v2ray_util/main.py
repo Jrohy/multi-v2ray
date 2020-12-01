@@ -126,6 +126,11 @@ def parse_arg():
             multiple.new_port(sys.argv[2])
         elif sys.argv[1] == "update":
             V2ray.update(sys.argv[2])
+        elif sys.argv[1] == "log":
+            if sys.argv[2] in ("error", "e"):
+                V2ray.log(True)
+            elif sys.argv[2] in ("access", "a"):
+                V2ray.log()
     sys.exit(0)
 
 def service_manage():

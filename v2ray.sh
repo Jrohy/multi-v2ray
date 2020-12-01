@@ -224,11 +224,7 @@ profileInit() {
     [[ -z $(grep PYTHONIOENCODING=utf-8 ~/$ENV_FILE) ]] && echo "export PYTHONIOENCODING=utf-8" >> ~/$ENV_FILE && source ~/$ENV_FILE
 
     #全新安装的新配置
-    if [[ ${INSTALL_WAY} == 0 ]];then 
-        v2ray new
-    else
-        v2ray convert
-    fi
+    [[ ${INSTALL_WAY} == 0 ]] && v2ray new
 
     echo ""
 }

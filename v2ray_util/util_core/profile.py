@@ -38,12 +38,6 @@ class Profile:
         with open(self.path, 'r') as json_file:
             self.config = json.load(json_file)
 
-        if "inbounds" not in self.config:
-            import converter
-            self.modify_time = os.path.getmtime(self.path)
-            with open(self.path, 'r') as json_file:
-                self.config = json.load(json_file)
-
         #读取配置文件大框架
         conf_inbounds = self.config["inbounds"]
         conf_rules = self.config["routing"]["rules"]

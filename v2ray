@@ -2,6 +2,7 @@
 function _auto_tab() {
 	local options_array=("start" "stop" "restart" "status" "update" "update.sh" "add" "del" "info" "port" "tls" "tfo" "stream" "iptables" "cdn" "stats" "clean" "log" "new" "-h" "-v")
 	local add_array=("wechat" "utp" "srtp" "dtls" "wireguard" "socks" "mtproto" "ss" "vless" "vless_ws" "vless_xtls" "trojan" "ss" "quic" "h2" "tcp" "tcp_host" "ws")
+	local log_array=("access" "a" "error" "e")
 	local cur prev
 
 	COMPREPLY=()
@@ -13,6 +14,8 @@ function _auto_tab() {
 			COMPREPLY=( $(compgen -W "${options_array[*]}" -- $cur) ) ;;
 		'add')
 			COMPREPLY=( $(compgen -W "${add_array[*]}" -- $cur) );;
+		'log')
+			COMPREPLY=( $(compgen -W "${log_array[*]}" -- $cur) );;
 		'*')
 			COMPREPLY=( $(compgen -d -f ${cur}) ) ;;
 	esac

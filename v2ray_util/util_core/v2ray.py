@@ -105,8 +105,11 @@ class V2ray:
     def log(error_log=False):
         f = subprocess.Popen(['tail','-f', '-n', '100', '/var/log/v2ray/{}.log'.format("error" if error_log else "access")],
                 stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-        while True:
-            print(bytes.decode(f.stdout.readline().strip()))
+        try:
+            while True:
+                print(bytes.decode(f.stdout.readline().strip()))
+        except BaseException:
+            print()
 
     @classmethod
     def restart(cls):

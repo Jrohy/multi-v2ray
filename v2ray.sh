@@ -8,9 +8,6 @@ BEIJING_UPDATE_TIME=3
 #记录最开始运行脚本的路径
 BEGIN_PATH=$(pwd)
 
-# 0: ipv4, 1: ipv6
-NETWORK=0
-
 #安装方式, 0为全新安装, 1为保留v2ray配置更新
 INSTALL_WAY=0
 
@@ -126,14 +123,6 @@ closeSELinux() {
     fi
 }
 
-judgeNetwork() {
-    curl http://api.ipify.org &>/dev/null
-    if [[ $? != 0 ]];then
-        [[ `curl -s icanhazip.com` =~ ":" ]] && NETWORK=1
-    fi
-    export NETWORK=$NETWORK
-}
-
 checkSys() {
     #检查是否为Root
     [ $(id -u) != "0" ] && { colorEcho ${RED} "Error: You must be root to run this script"; exit 1; }
@@ -189,13 +178,7 @@ updateProject() {
     [[ -z $(echo $SHELL|grep zsh) ]] && source /usr/share/bash-completion/completions/v2ray
     
     #安装V2ray主程序
-    if [[ ${INSTALL_WAY} == 0 ]];then
-        if [[ $NETWORK == 1 ]];then
-            bash <(curl -L -s https://multi.netlify.app/go.sh) --source jsdelivr
-        else
-            bash <(curl -L -s https://multi.netlify.app/go.sh)
-        fi
-    fi
+    [[ ${INSTALL_WAY} == 0 ]] && bash <(curl -L -s https://multi.netlify.app/go.sh)
 }
 
 #时间同步
@@ -245,7 +228,6 @@ installFinish() {
 
 
 main() {
-    judgeNetwork
 
     [[ ${HELP} == 1 ]] && help && return
 

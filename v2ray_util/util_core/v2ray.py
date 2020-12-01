@@ -103,7 +103,7 @@ class V2ray:
 
     @staticmethod
     def log():
-        f = subprocess.Popen(['tail','-f', '-n', '100', '/var/log/v2ray/access.log'],
+        f = subprocess.Popen(['tail','-f', '-n', '100', '/var/log/v2ray/error.log'],
                 stdout=subprocess.PIPE,stderr=subprocess.PIPE)
         while True:
             print(bytes.decode(f.stdout.readline().strip()))

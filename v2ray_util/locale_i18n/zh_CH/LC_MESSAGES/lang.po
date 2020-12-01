@@ -150,13 +150,6 @@ msgstr "生成客户端json"
 
 ### client.py end ###
 
-### converter.py start ###
-
-msgid "tranfrom to v2ray new version json.."
-msgstr "转换配置文件格式中.."
-
-### converter.py end ###
-
 ### group.py start ###
 
 msgid "HTTPS Socks5 don't support telegram share link"

@@ -130,10 +130,6 @@ class V2ray:
             cls.run("systemctl stop v2ray", "stop")
 
     @classmethod
-    def convert(cls):
-        from .converter import ConfigConverter
-
-    @classmethod
     def check(cls):
         if not os.path.exists("/etc/v2ray_util/util.cfg"):
             subprocess.call("mkdir -p /etc/v2ray_util && cp -f {} /etc/v2ray_util/".format(pkg_resources.resource_filename(__name__, 'util.cfg')), shell=True)

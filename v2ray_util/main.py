@@ -117,8 +117,6 @@ def parse_arg():
             updateSh()
         elif sys.argv[1] == "new":
             V2ray.new()
-        elif sys.argv[1] == "convert":
-            V2ray.convert()
         elif sys.argv[1] == "log":
             V2ray.log()
         elif sys.argv[1] == "cdn":

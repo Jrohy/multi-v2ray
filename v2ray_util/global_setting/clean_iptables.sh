@@ -9,7 +9,7 @@ clean_iptables(){
     echo "$RESULT" | while read LINE
     do
         LINE_ARRAY=($LINE)
-        if [[ ${LINE_ARRAY[1]} && -z $(lsof -i:${LINE_ARRAY[1]}) ]];then
+        if [[ ${LINE_ARRAY[1]} && -z $(netstat -tunlp|grep -w ${LINE_ARRAY[1]}) ]];then
             [[ $NETWORK == 1 ]] && ip6tables -D $TYPE ${LINE_ARRAY[0]} || iptables -D $TYPE ${LINE_ARRAY[0]}
         fi
     done

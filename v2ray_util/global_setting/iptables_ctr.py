@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import platform
 import subprocess
 import pkg_resources
 
@@ -8,9 +7,6 @@ from ..util_core.loader import Loader
 from ..util_core.utils import ColorStr, calcul_iptables_traffic, readchar
 
 def manage():
-    if "centos-8" in platform.platform():
-        print("Centos8 don't support iptables traffic statistics")
-        return
     
     loader = Loader()
 

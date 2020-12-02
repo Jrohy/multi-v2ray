@@ -8,9 +8,9 @@ NETWORK=$2
 clean_traffic(){
     local TYPE=$1
     if [[ $NETWORK ]];then
-        RESULT=$(ip6tables -nvL $TYPE --line-numbers|grep -w "$PORT"|awk '{print $1}')
+        RESULT=$(ip6tables -nvL $TYPE --line-numbers 2>/dev/null|grep -w "$PORT"|awk '{print $1}')
     else
-        RESULT=$(iptables -nvL $TYPE --line-numbers|grep -w "$PORT"|awk '{print $1}')
+        RESULT=$(iptables -nvL $TYPE --line-numbers 2>/dev/null|grep -w "$PORT"|awk '{print $1}')
     fi
     echo "$RESULT" | while read LINE
     do

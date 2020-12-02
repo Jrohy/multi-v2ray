@@ -223,7 +223,7 @@ def clean_iptables(port):
     iptable_way = "iptables" if Loader().profile.network == "ipv4" else "ip6tables" 
 
     clean_cmd = "{} -D {} {}"
-    check_cmd = "%s -nvL %s --line-number|grep -w \"%s\"|awk '{print $1}'|sort -r"
+    check_cmd = "%s -nvL %s --line-number 2>/dev/null|grep -w \"%s\"|awk '{print $1}'|sort -r"
     firewall_clean_cmd = "firewall-cmd --zone=public --remove-port={}/tcp --remove-port={}/udp --permanent >/dev/null 2>&1"
 
     if "centos-8" in platform.platform():
@@ -246,7 +246,7 @@ def all_port():
     return set([group.port for group in group_list])
 
 def iptables_open(iptable_way, port):
-    check_cmd = "{} -nvL --line-number|grep -w \"{}\""
+    check_cmd = "{} -nvL --line-number 2>/dev/null|grep -w \"{}\""
     input_cmd = "{} -I INPUT -p {} --dport {} -j ACCEPT"
     output_cmd = "{} -I OUTPUT -p {} --sport {}"
     if len(os.popen(check_cmd.format(iptable_way, port)).readlines()) > 0:

@@ -227,7 +227,7 @@ def clean_iptables(port):
     firewall_clean_cmd = "firewall-cmd --zone=public --remove-port={}/tcp --remove-port={}/udp --permanent >/dev/null 2>&1"
 
     if "centos-8" in platform.platform():
-        os.system("{}-save -c > /etc/sysconfig/iptables".format(iptable_way))
+        os.system("{}-save -c > /etc/sysconfig/iptables 2>/dev/null".format(iptable_way))
         os.system(firewall_clean_cmd.format(str(port), str(port)))
         os.system("firewall-cmd --reload >/dev/null 2>&1")
         os.system("{}-restore -c < /etc/sysconfig/iptables".format(iptable_way))
@@ -269,7 +269,7 @@ def open_port(openport=-1):
     if openport != -1:
         port_str = str(openport)
         if is_centos8:
-            os.system("{}-save -c > /etc/sysconfig/iptables".format(iptable_way))
+            os.system("{}-save -c > /etc/sysconfig/iptables 2>/dev/null".format(iptable_way))
             os.system(firewall_open_cmd.format(port_str, port_str))
             os.system("firewall-cmd --reload >/dev/null 2>&1")
             os.system("{}-restore -c < /etc/sysconfig/iptables".format(iptable_way))
@@ -277,7 +277,7 @@ def open_port(openport=-1):
             iptables_open(iptable_way, port_str)
     else:
         if is_centos8:
-            os.system("{}-save -c > /etc/sysconfig/iptables".format(iptable_way))
+            os.system("{}-save -c > /etc/sysconfig/iptables 2>/dev/null".format(iptable_way))
             for port in port_set:
                 os.system(firewall_open_cmd.format(str(port), str(port)))
             os.system("firewall-cmd --reload >/dev/null 2>&1") 

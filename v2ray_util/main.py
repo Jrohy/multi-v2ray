@@ -4,6 +4,7 @@ import os
 import sys
 import subprocess
 
+from v2ray_util import run_type
 from .util_core.v2ray import V2ray
 from .util_core.utils import ColorStr, open_port, loop_input_choice_number
 from .global_setting import stats_ctr, iptables_ctr, ban_bt, update_timer
@@ -18,16 +19,16 @@ def help():
 {0} [-h|--help] [options]
     -h, --help           查看帮助
     -v, --version        查看版本号
-    start                启动 V2Ray
-    stop                 停止 V2Ray
-    restart              重启 V2Ray
-    status               查看 V2Ray 运行状态
-    new                  重建新的v2ray json配置文件
-    update               更新 V2Ray 到最新Release版本
-    update [version]     更新 V2Ray 到指定版本
+    start                启动 {bin}
+    stop                 停止 {bin}
+    restart              重启 {bin}
+    status               查看 {bin} 运行状态
+    new                  重建新的{bin} json配置文件
+    update               更新 {bin} 到最新Release版本
+    update [version]     更新 {bin} 到指定版本
     update.sh            更新 multi-v2ray 到最新版本
     add                  新增端口组
-    add [protocol]       新增一种协议的组, 端口随机, 如 v2ray add utp 为新增utp协议
+    add [protocol]       新增一种协议的组, 端口随机, 如 {bin} add utp 为新增utp协议
     del                  删除端口组
     info                 查看配置
     port                 修改端口
@@ -35,38 +36,38 @@ def help():
     tfo                  修改tcpFastOpen
     stream               修改传输协议
     cdn                  走cdn
-    stats                v2ray流量统计
+    stats                {bin}流量统计
     iptables             iptables流量统计
     clean                清理日志
     log                  查看日志
-        """.format(exec_name[exec_name.rfind("/") + 1:]))
+        """.format(exec_name[exec_name.rfind("/") + 1:], bin=run_type))
     else:
         print("""
 {0} [-h|--help] [options]
     -h, --help           get help
     -v, --version        get version
-    start                start V2Ray
-    stop                 stop V2Ray
-    restart              restart V2Ray
-    status               check V2Ray status
+    start                start {bin}
+    stop                 stop {bin}
+    restart              restart {bin}
+    status               check {bin} status
     new                  create new json profile
-    update               update v2ray to latest
-    update [version]     update v2ray to special version
+    update               update {bin} to latest
+    update [version]     update {bin} to special version
     update.sh            update multi-v2ray to latest
     add                  add new group
     add [protocol]       create special protocol, random new port
     del                  delete port group
-    info                 check v2ray profile
+    info                 check {bin} profile
     port                 modify port
     tls                  modify tls
     tfo                  modify tcpFastOpen
     stream               modify protocol
     cdn                  cdn mode
-    stats                v2ray traffic statistics
+    stats                {bin} traffic statistics
     iptables             iptables traffic statistics
-    clean                clean v2ray log
-    log                  check v2ray log
-        """.format(exec_name[exec_name.rfind("/") + 1:]))
+    clean                clean {bin} log
+    log                  check {bin} log
+        """.format(exec_name[exec_name.rfind("/") + 1:], bin=run_type))
 
 def updateSh():
     if os.path.exists("/.dockerenv"):

@@ -30,9 +30,11 @@ V2RAY_RUNNING=0
 CMD_INSTALL=""
 CMD_UPDATE=""
 SOFTWARE_UPDATED=0
+KEY="V2Ray"
+KEY_LOWER="v2ray"
+REPOS="v2fly/v2ray-core"
 
 SYSTEMCTL_CMD=$(command -v systemctl 2>/dev/null)
-SERVICE_CMD=$(command -v service 2>/dev/null)
 
 #######color code########
 RED="31m"      # Error message
@@ -40,6 +42,13 @@ GREEN="32m"    # Success message
 YELLOW="33m"   # Warning message
 BLUE="36m"     # Info message
 
+xray_set(){
+    KEY="Xray"
+    KEY_LOWER="xray"
+    REPOS="XTLS/Xray-core"
+    VSRC_ROOT='/tmp/xray'
+    ZIPFILE="/tmp/xray/xray.zip"
+}
 
 #########################
 while [[ $# > 0 ]]; do
@@ -56,6 +65,9 @@ while [[ $# > 0 ]]; do
         ;;
         -c|--check)
         CHECK="1"
+        ;;
+        -x|--xray)
+        xray_set
         ;;
         --remove)
         REMOVE="1"
@@ -174,10 +186,12 @@ zipRoot() {
 }
 
 downloadV2Ray(){
-    rm -rf /tmp/v2ray
-    mkdir -p /tmp/v2ray
-    DOWNLOAD_LINK="https://github.com/v2fly/v2ray-core/releases/download/${NEW_VER}/v2ray-linux-${VDIS}.zip"
-    colorEcho ${BLUE} "Downloading V2Ray: ${DOWNLOAD_LINK}"
+    rm -rf /tmp/$KEY_LOWER
+    mkdir -p /tmp/$KEY_LOWER
+    local PACK_NAME=$KEY_LOWER
+    [[ $KEY == "Xray" ]] && PACK_NAME=$KEY
+    DOWNLOAD_LINK="https://github.com/$REPOS/releases/download/${NEW_VER}/${PACK_NAME}-linux-${VDIS}.zip"
+    colorEcho ${BLUE} "Downloading $KEY: ${DOWNLOAD_LINK}"
     curl ${PROXY} -L -H "Cache-Control: no-cache" -o ${ZIPFILE} ${DOWNLOAD_LINK}
     if [ $? != 0 ];then
         colorEcho ${RED} "Failed to download! Please check your network or try again."
@@ -250,10 +264,10 @@ getVersion(){
         NEW_VER="$(normalizeVersion "$VERSION")"
         return 4
     else
-        VER="$(/usr/bin/v2ray/v2ray -version 2>/dev/null)"
+        VER="$(/usr/bin/$KEY_LOWER/$KEY_LOWER -version 2>/dev/null)"
         RETVAL=$?
         CUR_VER="$(normalizeVersion "$(echo "$VER" | head -n 1 | cut -d " " -f2)")"
-        TAG_URL="https://api.github.com/repos/v2fly/v2ray-core/releases/latest"
+        TAG_URL="https://api.github.com/repos/$REPOS/releases/latest"
         NEW_VER="$(normalizeVersion "$(curl ${PROXY} -H "Accept: application/json" -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:74.0) Gecko/20100101 Firefox/74.0" -s "${TAG_URL}" --connect-timeout 10| grep 'tag_name' | cut -d\" -f4)")"
 
         if [[ $? -ne 0 ]] || [[ $NEW_VER == "" ]]; then
@@ -269,52 +283,81 @@ getVersion(){
 }
 
 stopV2ray(){
-    colorEcho ${BLUE} "Shutting down V2Ray service."
-    if [[ -n "${SYSTEMCTL_CMD}" ]] || [[ -f "/lib/systemd/system/v2ray.service" ]] || [[ -f "/etc/systemd/system/v2ray.service" ]]; then
-        ${SYSTEMCTL_CMD} stop v2ray
-    elif [[ -n "${SERVICE_CMD}" ]] || [[ -f "/etc/init.d/v2ray" ]]; then
-        ${SERVICE_CMD} v2ray stop
+    colorEcho ${BLUE} "Shutting down $KEY service."
+    if [[ -n "${SYSTEMCTL_CMD}" ]] || [[ -f "/lib/systemd/system/$KEY_LOWER.service" ]] || [[ -f "/etc/systemd/system/$KEY_LOWER.service" ]]; then
+        ${SYSTEMCTL_CMD} stop $KEY_LOWER
     fi
     if [[ $? -ne 0 ]]; then
-        colorEcho ${YELLOW} "Failed to shutdown V2Ray service."
+        colorEcho ${YELLOW} "Failed to shutdown $KEY service."
         return 2
     fi
     return 0
 }
 
 startV2ray(){
-    if [ -n "${SYSTEMCTL_CMD}" ] && [[ -f "/lib/systemd/system/v2ray.service" || -f "/etc/systemd/system/v2ray.service" ]]; then
-        ${SYSTEMCTL_CMD} start v2ray
-    elif [ -n "${SERVICE_CMD}" ] && [ -f "/etc/init.d/v2ray" ]; then
-        ${SERVICE_CMD} v2ray start
+    if [ -n "${SYSTEMCTL_CMD}" ] && [[ -f "/lib/systemd/system/$KEY_LOWER.service" || -f "/etc/systemd/system/$KEY_LOWER.service" ]]; then
+        ${SYSTEMCTL_CMD} start $KEY_LOWER
     fi
     if [[ $? -ne 0 ]]; then
-        colorEcho ${YELLOW} "Failed to start V2Ray service."
+        colorEcho ${YELLOW} "Failed to start $KEY service."
         return 2
     fi
     return 0
 }
 
 installV2Ray(){
-    # Install V2Ray binary to /usr/bin/v2ray
-    mkdir -p '/etc/v2ray' '/var/log/v2ray' && \
-    unzip -oj "$1" "$2v2ray" "$2v2ctl" "$2geoip.dat" "$2geosite.dat" -d '/usr/bin/v2ray' && \
-    chmod +x '/usr/bin/v2ray/v2ray' '/usr/bin/v2ray/v2ctl' || {
-        colorEcho ${RED} "Failed to copy V2Ray binary and resources."
-        return 1
-    }
+    # Install $KEY binary to /usr/bin/$KEY_LOWER
+    mkdir -p /etc/$KEY_LOWER /var/log/$KEY_LOWER && \
+    if [[ $KEY == "Xray" ]];then
+        unzip -oj "$1" "$2xray" "$2geoip.dat" "$2geosite.dat" -d /usr/bin/$KEY_LOWER && \
+        chmod +x /usr/bin/$KEY_LOWER/$KEY_LOWER || {
+            colorEcho ${RED} "Failed to copy $KEY binary and resources."
+            return 1
+        }
+    else
+        unzip -oj "$1" "$2v2ray" "$2v2ctl" "$2geoip.dat" "$2geosite.dat" -d /usr/bin/$KEY_LOWER && \
+        chmod +x /usr/bin/$KEY_LOWER/$KEY_LOWER /usr/bin/$KEY_LOWER/v2ctl || {
+            colorEcho ${RED} "Failed to copy $KEY binary and resources."
+            return 1
+        }
+    fi
 
     # Install V2Ray server config to /etc/v2ray
-    if [ ! -f '/etc/v2ray/config.json' ]; then
+    if [ ! -f '/etc/$KEY_LOWER/config.json' ]; then
         local PORT="$(($RANDOM + 10000))"
         local UUID="$(cat '/proc/sys/kernel/random/uuid')"
 
-        unzip -pq "$1" "$2vpoint_vmess_freedom.json" | \
-        sed -e "s/10086/${PORT}/g; s/23ad6b10-8d1a-40f7-8ad0-e3e35cd38297/${UUID}/g;" - > \
-        '/etc/v2ray/config.json' || {
-            colorEcho ${YELLOW} "Failed to create V2Ray configuration file. Please create it manually."
-            return 1
+        if [[ $KEY == "Xray" ]];then
+            cat > /etc/$KEY_LOWER/config.json <<EOF
+{
+  "inbounds": [{
+    "port": 10086,
+    "protocol": "vmess",
+    "settings": {
+      "clients": [
+        {
+          "id": "23ad6b10-8d1a-40f7-8ad0-e3e35cd38297",
+          "level": 1,
+          "alterId": 64
         }
+      ]
+    }
+  }],
+  "outbounds": [{
+    "protocol": "freedom",
+    "settings": {}
+  }]
+}
+EOF
+            sed -i "s/10086/${PORT}/g; s/23ad6b10-8d1a-40f7-8ad0-e3e35cd38297/${UUID}/g;" /etc/$KEY_LOWER/config.json
+        else
+            unzip -pq "$1" "$2vpoint_vmess_freedom.json" | \
+            sed -e "s/10086/${PORT}/g; s/23ad6b10-8d1a-40f7-8ad0-e3e35cd38297/${UUID}/g;" - > \
+            /etc/$KEY_LOWER/config.json || {
+                colorEcho ${YELLOW} "Failed to create $KEY configuration file. Please create it manually."
+                return 1
+            }
+        fi
 
         colorEcho ${BLUE} "PORT:${PORT}"
         colorEcho ${BLUE} "UUID:${UUID}"
@@ -323,11 +366,10 @@ installV2Ray(){
 
 
 installInitScript(){
-    if [[ ! -f "/etc/systemd/system/v2ray.service" && ! -f "/lib/systemd/system/v2ray.service" ]]; then
-        cat > /etc/systemd/system/v2ray.service <<EOF
+    if [[ ! -f "/etc/systemd/system/$KEY_LOWER.service" && ! -f "/lib/systemd/system/$KEY_LOWER.service" ]]; then
+        cat > /etc/systemd/system/$KEY_LOWER.service <<EOF
 [Unit]
-Description=V2Ray Service
-Documentation=https://www.v2ray.com/ https://www.v2fly.org/
+Description=${KEY} Service
 After=network.target nss-lookup.target
 
 [Service]
@@ -336,73 +378,61 @@ User=root
 CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 NoNewPrivileges=true
-ExecStart=/usr/bin/v2ray/v2ray -config /etc/v2ray/config.json
+ExecStart=/usr/bin/$KEY_LOWER/$KEY_LOWER -config /etc/$KEY_LOWER/config.json
 Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
 EOF
-        systemctl enable v2ray.service
+        systemctl enable $KEY_LOWER.service
     fi
 }
 
 Help(){
   cat - 1>& 2 << EOF
-./install-release.sh [-h] [-c] [--remove] [-p proxy] [-f] [--version vx.y.z] [-l file]
+./go.sh [-h] [-c] [--remove] [-p proxy] [-f] [--version vx.y.z] [-l file] [-x]
   -h, --help            Show help
   -p, --proxy           To download through a proxy server, use -p socks5://127.0.0.1:1080 or -p http://127.0.0.1:3128 etc
   -f, --force           Force install
       --version         Install a particular version, use --version v3.15
   -l, --local           Install from a local file
-      --remove          Remove installed V2Ray
+      --remove          Remove installed V2Ray/Xray
+  -x, --xray            Xray mod
   -c, --check           Check for update
 EOF
 }
 
 remove(){
-    if [[ -n "${SYSTEMCTL_CMD}" ]] && [[ -f "/etc/systemd/system/v2ray.service" ]];then
-        if pgrep "v2ray" > /dev/null ; then
+    if [[ -n "${SYSTEMCTL_CMD}" ]] && [[ -f "/etc/systemd/system/$KEY_LOWER.service" ]];then
+        if pgrep "$KEY_LOWER" > /dev/null ; then
             stopV2ray
         fi
-        systemctl disable v2ray.service
-        rm -rf "/usr/bin/v2ray" "/etc/systemd/system/v2ray.service"
+        systemctl disable $KEY_LOWER.service
+        rm -rf "/usr/bin/$KEY_LOWER" "/etc/systemd/system/$KEY_LOWER.service"
         if [[ $? -ne 0 ]]; then
-            colorEcho ${RED} "Failed to remove V2Ray."
+            colorEcho ${RED} "Failed to remove $KEY."
             return 0
         else
-            colorEcho ${GREEN} "Removed V2Ray successfully."
+            colorEcho ${GREEN} "Removed $KEY successfully."
             colorEcho ${BLUE} "If necessary, please remove configuration file and log file manually."
             return 0
         fi
-    elif [[ -n "${SYSTEMCTL_CMD}" ]] && [[ -f "/lib/systemd/system/v2ray.service" ]];then
-        if pgrep "v2ray" > /dev/null ; then
+    elif [[ -n "${SYSTEMCTL_CMD}" ]] && [[ -f "/lib/systemd/system/$KEY_LOWER.service" ]];then
+        if pgrep "$KEY_LOWER" > /dev/null ; then
             stopV2ray
         fi
-        systemctl disable v2ray.service
-        rm -rf "/usr/bin/v2ray" "/lib/systemd/system/v2ray.service"
+        systemctl disable $KEY_LOWER.service
+        rm -rf "/usr/bin/$KEY_LOWER" "/lib/systemd/system/$KEY_LOWER.service"
         if [[ $? -ne 0 ]]; then
-            colorEcho ${RED} "Failed to remove V2Ray."
+            colorEcho ${RED} "Failed to remove $KEY."
             return 0
         else
-            colorEcho ${GREEN} "Removed V2Ray successfully."
-            colorEcho ${BLUE} "If necessary, please remove configuration file and log file manually."
-            return 0
-        fi
-    elif [[ -n "${SERVICE_CMD}" ]] && [[ -f "/etc/init.d/v2ray" ]]; then
-        if pgrep "v2ray" > /dev/null ; then
-            stopV2ray
-        fi
-        rm -rf "/usr/bin/v2ray" "/etc/init.d/v2ray"
-        if [[ $? -ne 0 ]]; then
-            colorEcho ${RED} "Failed to remove V2Ray."
-            return 0
-        else
-            colorEcho ${GREEN} "Removed V2Ray successfully."
+            colorEcho ${GREEN} "Removed $KEY successfully."
             colorEcho ${BLUE} "If necessary, please remove configuration file and log file manually."
             return 0
         fi
     else
-        colorEcho ${YELLOW} "V2Ray not found."
+        colorEcho ${YELLOW} "$KEY not found."
         return 0
     fi
 }
@@ -413,12 +443,12 @@ checkUpdate(){
     getVersion
     RETVAL="$?"
     if [[ $RETVAL -eq 1 ]]; then
-        colorEcho ${BLUE} "Found new version ${NEW_VER} for V2Ray.(Current version:$CUR_VER)"
+        colorEcho ${BLUE} "Found new version ${NEW_VER} for $KEY.(Current version:$CUR_VER)"
     elif [[ $RETVAL -eq 0 ]]; then
         colorEcho ${BLUE} "No new version. Current version is ${NEW_VER}."
     elif [[ $RETVAL -eq 2 ]]; then
-        colorEcho ${YELLOW} "No V2Ray installed."
-        colorEcho ${BLUE} "The newest version for V2Ray is ${NEW_VER}."
+        colorEcho ${YELLOW} "No $KEY installed."
+        colorEcho ${BLUE} "The newest version for $KEY is ${NEW_VER}."
     fi
     return 0
 }
@@ -434,21 +464,10 @@ main(){
 
     # extract local file
     if [[ $LOCAL_INSTALL -eq 1 ]]; then
-        colorEcho ${YELLOW} "Installing V2Ray via local file. Please make sure the file is a valid V2Ray package, as we are not able to determine that."
+        colorEcho ${YELLOW} "Installing $KEY via local file. Please make sure the file is a valid $KEY package, as we are not able to determine that."
         NEW_VER=local
-        rm -rf /tmp/v2ray
+        rm -rf /tmp/$KEY_LOWER
         ZIPFILE="$LOCAL"
-        #FILEVDIS=`ls /tmp/v2ray |grep v2ray-v |cut -d "-" -f4`
-        #SYSTEM=`ls /tmp/v2ray |grep v2ray-v |cut -d "-" -f3`
-        #if [[ ${SYSTEM} != "linux" ]]; then
-        #    colorEcho ${RED} "The local V2Ray can not be installed in linux."
-        #    return 1
-        #elif [[ ${FILEVDIS} != ${VDIS} ]]; then
-        #    colorEcho ${RED} "The local V2Ray can not be installed in ${ARCH} system."
-        #    return 1
-        #else
-        #    NEW_VER=`ls /tmp/v2ray |grep v2ray-v |cut -d "-" -f2`
-        #fi
     else
         # download via network and extract
         installSoftware "curl" || return $?
@@ -463,7 +482,7 @@ main(){
         elif [[ $RETVAL == 3 ]]; then
             return 3
         else
-            colorEcho ${BLUE} "Installing V2Ray ${NEW_VER} on ${ARCH}"
+            colorEcho ${BLUE} "Installing $KEY ${NEW_VER} on ${ARCH}"
             downloadV2Ray || return $?
         fi
     fi
@@ -472,29 +491,29 @@ main(){
     installSoftware unzip || return $?
 
     if [ -n "${EXTRACT_ONLY}" ]; then
-        colorEcho ${BLUE} "Extracting V2Ray package to ${VSRC_ROOT}."
+        colorEcho ${BLUE} "Extracting $KEY package to ${VSRC_ROOT}."
 
         if unzip -o "${ZIPFILE}" -d ${VSRC_ROOT}; then
-            colorEcho ${GREEN} "V2Ray extracted to ${VSRC_ROOT%/}${ZIPROOT:+/${ZIPROOT%/}}, and exiting..."
+            colorEcho ${GREEN} "$KEY extracted to ${VSRC_ROOT%/}${ZIPROOT:+/${ZIPROOT%/}}, and exiting..."
             return 0
         else
-            colorEcho ${RED} "Failed to extract V2Ray."
+            colorEcho ${RED} "Failed to extract $KEY."
             return 2
         fi
     fi
 
-    if pgrep "v2ray" > /dev/null ; then
+    if pgrep "$KEY_LOWER" > /dev/null ; then
         V2RAY_RUNNING=1
         stopV2ray
     fi
     installV2Ray "${ZIPFILE}" "${ZIPROOT}" || return $?
     installInitScript "${ZIPFILE}" "${ZIPROOT}" || return $?
     if [[ ${V2RAY_RUNNING} -eq 1 ]];then
-        colorEcho ${BLUE} "Restarting V2Ray service."
+        colorEcho ${BLUE} "Restarting $KEY service."
         startV2ray
     fi
-    colorEcho ${GREEN} "V2Ray ${NEW_VER} is installed."
-    rm -rf /tmp/v2ray
+    colorEcho ${GREEN} "$KEY ${NEW_VER} is installed."
+    rm -rf /tmp/$KEY_LOWER
     return 0
 }
 

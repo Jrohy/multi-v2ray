@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 import pkg_resources
 import configparser
+from v2ray_util import run_type
 
 CONF_FILE = '/etc/v2ray_util/util.cfg'
-DATA_FILE = 'util.dat'
+DATA_FILE = 'util.dat' if run_type == "v2ray" else 'xray.dat'
 
 class Config:
 
@@ -16,6 +17,8 @@ class Config:
         self.config.read(self.config_path)
 
     def get_path(self, key):
+        if key == 'config_path' and run_type == 'xray':
+            return '/etc/xray/config.json'
         return self.config.get('path', key)
 
     def get_data(self, key):

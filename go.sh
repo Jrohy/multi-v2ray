@@ -346,7 +346,20 @@ installV2Ray(){
   "outbounds": [{
     "protocol": "freedom",
     "settings": {}
-  }]
+  },{
+    "protocol": "blackhole",
+    "settings": {},
+    "tag": "blocked"
+  }],
+  "routing": {
+    "rules": [
+      {
+        "type": "field",
+        "ip": ["geoip:private"],
+        "outboundTag": "blocked"
+      }
+    ]
+  }
 }
 EOF
             sed -i "s/10086/${PORT}/g; s/23ad6b10-8d1a-40f7-8ad0-e3e35cd38297/${UUID}/g;" /etc/$KEY_LOWER/config.json

@@ -1,4 +1,4 @@
-# bash completion for v2ray/xray
+# bash completion for v2ray
 function _auto_tab() {
 	local options_array=("start" "stop" "restart" "status" "update" "update.sh" "add" "del" "info" "port" "tls" "tfo" "stream" "iptables" "cdn" "stats" "clean" "log" "new" "rm" "-h" "-v")
 	local add_array=("wechat" "utp" "srtp" "dtls" "wireguard" "socks" "mtproto" "ss" "vless" "vless_ws" "vless_xtls" "trojan" "ss" "quic" "h2" "tcp" "tcp_host" "ws")
@@ -12,8 +12,6 @@ function _auto_tab() {
 	case $prev in
 		'v2ray')
 			COMPREPLY=( $(compgen -W "${options_array[*]}" -- $cur) ) ;;
-		'xray')
-			COMPREPLY=( $(compgen -W "${options_array[*]}" -- $cur) ) ;;
 		'add')
 			COMPREPLY=( $(compgen -W "${add_array[*]}" -- $cur) );;
 		'log')
@@ -24,4 +22,4 @@ function _auto_tab() {
 
 	return 0
 }
-complete -F _auto_tab v2ray xray
+complete -F _auto_tab v2ray

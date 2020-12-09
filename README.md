@@ -1,5 +1,5 @@
 # multi-v2ray
-V2ray/Xray多用户管理脚本，向导式管理[新增|删除|修改]传输协议 
+V2ray/Xray多用户管理脚本，向导式管理[新增|删除|修改]传输协议  
 ![](https://img.shields.io/pypi/v/v2ray-util.svg) 
 ![](https://img.shields.io/docker/pulls/jrohy/v2ray.svg)
 ![](https://img.shields.io/github/stars/Jrohy/multi-v2ray.svg) 
@@ -77,7 +77,7 @@ source <(curl -sL https://multi.netlify.app/v2ray.sh) --remove
 
 ## 命令行参数
 ```bash
-v2ray [-h|--help] [options]
+v2ray/xray [-h|--help] [options]
     -h, --help           查看帮助
     -v, --version        查看版本号
     start                启动 V2Ray
@@ -102,6 +102,7 @@ v2ray [-h|--help] [options]
     clean                清理日志
     log                  查看日志
 ```
+xray命令和v2ray命令是一样的
 
 ## Docker运行
 

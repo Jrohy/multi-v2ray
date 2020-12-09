@@ -59,7 +59,7 @@ source <(curl -sL https://multi.netlify.app/v2ray.sh) --remove
 
 ## Command Line
 ```bash
-v2ray [-h|--help] [options]
+v2ray/xray [-h|--help] [options]
     -h, --help           get help
     -v, --version        get version
     start                start V2Ray

@@ -86,6 +86,11 @@ removeV2Ray() {
     rm -rf /etc/v2ray >/dev/null 2>&1
     rm -rf /var/log/v2ray >/dev/null 2>&1
 
+    #卸载Xray脚本
+    bash <(curl -L -s https://multi.netlify.app/go.sh) --remove -x >/dev/null 2>&1
+    rm -rf /etc/xray >/dev/null 2>&1
+    rm -rf /var/log/xray >/dev/null 2>&1
+
     #清理v2ray相关iptable规则
     bash <(curl -L -s $CLEAN_IPTABLES_SHELL)
 
@@ -93,12 +98,13 @@ removeV2Ray() {
     pip uninstall v2ray_util -y
     rm -rf /usr/share/bash-completion/completions/v2ray.bash >/dev/null 2>&1
     rm -rf /usr/share/bash-completion/completions/v2ray >/dev/null 2>&1
+    rm -rf /usr/share/bash-completion/completions/xray >/dev/null 2>&1
     rm -rf /etc/bash_completion.d/v2ray.bash >/dev/null 2>&1
     rm -rf /usr/local/bin/v2ray >/dev/null 2>&1
     rm -rf /etc/v2ray_util >/dev/null 2>&1
 
     #删除v2ray定时更新任务
-    crontab -l|sed '/SHELL=/d;/v2ray/d' > crontab.txt
+    crontab -l|sed '/SHELL=/d;/v2ray/d'|sed '/SHELL=/d;/xray/d' > crontab.txt
     crontab crontab.txt >/dev/null 2>&1
     rm -f crontab.txt >/dev/null 2>&1
 
@@ -110,6 +116,7 @@ removeV2Ray() {
 
     #删除multi-v2ray环境变量
     sed -i '/v2ray/d' ~/$ENV_FILE
+    sed -i '/xray/d' ~/$ENV_FILE
     source ~/$ENV_FILE
 
     colorEcho ${GREEN} "uninstall success!"
@@ -175,7 +182,12 @@ updateProject() {
 
     #更新v2ray bash_completion脚本
     curl $BASH_COMPLETION_SHELL > /usr/share/bash-completion/completions/v2ray
-    [[ -z $(echo $SHELL|grep zsh) ]] && source /usr/share/bash-completion/completions/v2ray
+    curl $BASH_COMPLETION_SHELL > /usr/share/bash-completion/completions/xray
+    sed -i 's/v2ray/xray/g' /usr/share/bash-completion/completions/xray
+    if [[ -z $(echo $SHELL|grep zsh) ]];then
+        source /usr/share/bash-completion/completions/v2ray
+        source /usr/share/bash-completion/completions/xray
+    fi
     
     #安装V2ray主程序
     [[ ${INSTALL_WAY} == 0 ]] && bash <(curl -L -s https://multi.netlify.app/go.sh)

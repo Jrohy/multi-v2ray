@@ -57,8 +57,8 @@ msgstr "4.查看配置"
 msgid "5.Global Setting"
 msgstr "5.全局功能"
 
-msgid "6.Update V2Ray"
-msgstr "6.更新V2Ray"
+msgid "6.Update V2ray"
+msgstr "6.更新V2ray"
 
 msgid "6.Update Xray"
 msgstr "6.更新Xray"

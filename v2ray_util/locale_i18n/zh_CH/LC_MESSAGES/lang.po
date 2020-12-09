@@ -33,10 +33,16 @@ msgstr "修改成功!"
 ### 通用翻译 end ###
 
 ### main.py start ###
-msgid "Welcome to v2ray-util"
-msgstr "欢迎使用 v2ray-util 管理程序"
+msgid "Welcome to v2ray manager"
+msgstr "欢迎使用 v2ray 管理程序"
+
+msgid "Welcome to xray manager"
+msgstr "欢迎使用 xray 管理程序"
 
 msgid "1.V2ray Manage"
+msgstr "1.服务管理"
+
+msgid "1.Xray Manage"
 msgstr "1.服务管理"
 
 msgid "2.Group Manage"
@@ -54,22 +60,40 @@ msgstr "5.全局功能"
 msgid "6.Update V2Ray"
 msgstr "6.更新V2Ray"
 
+msgid "6.Update Xray"
+msgstr "6.更新Xray"
+
 msgid "7.Generate Client Json"
 msgstr "7.生成客户端配置文件"
 
 msgid "start v2ray"
 msgstr "启动服务"
 
+msgid "start xray"
+msgstr "启动服务"
+
 msgid "stop v2ray"
+msgstr "停止服务"
+
+msgid "stop xray"
 msgstr "停止服务"
 
 msgid "restart v2ray"
 msgstr "重启服务"
 
+msgid "restart xray"
+msgstr "重启服务"
+
 msgid "v2ray status"
 msgstr "运行状态"
 
+msgid "xray status"
+msgstr "运行状态"
+
 msgid "v2ray log"
+msgstr "运行日志"
+
+msgid "xray log"
 msgstr "运行日志"
 
 msgid "add user"
@@ -120,6 +144,9 @@ msgstr "走CDN(需要域名)"
 msgid "V2ray Traffic Statistics"
 msgstr "流量统计(v2ray)"
 
+msgid "Xray Traffic Statistics"
+msgstr "流量统计(xray)"
+
 msgid "Iptables Traffic Statistics"
 msgstr "流量统计(iptables)"
 
@@ -129,8 +156,14 @@ msgstr "禁止bittorrent"
 msgid "Schedule Update V2ray"
 msgstr "定时更新V2ray"
 
-msgid "Clean Log"
+msgid "Schedule Update Xray"
+msgstr "定时更新Xray"
+
+msgid "Clean V2ray Log"
 msgstr "清理v2ray日志"
+
+msgid "Clean Xray Log"
+msgstr "清理xray日志"
 
 msgid "Change Language"
 msgstr "Switch to English"
@@ -270,6 +303,9 @@ msgstr "当前无流量数据, 请使用流量片刻再来查看统计!"
 msgid "V2ray Traffic Statistics Status"
 msgstr "当前V2ray流量统计状态"
 
+msgid "Xray Traffic Statistics Status"
+msgstr "当前Xray流量统计状态"
+
 msgid "1.open statistics"
 msgstr "1.开启流量统计"
 
@@ -288,8 +324,14 @@ msgstr "5.重置流量统计"
 msgid "tip: restart v2ray will reset traffic statistics!!!"
 msgstr "tip: 重启v2ray会重置流量统计!!!"
 
+msgid "tip: restart xray will reset traffic statistics!!!"
+msgstr "tip: 重启xray会重置流量统计!!!"
+
 msgid "open traffic statistics will close schedule update v2ray, continue?(y/n): "
 msgstr "开启流量统计会关闭定时更新v2ray服务, 是否继续y/n: "
+
+msgid "open traffic statistics will close schedule update xray, continue?(y/n): "
+msgstr "开启流量统计会关闭定时更新xray服务, 是否继续y/n: "
 
 msgid "undo open traffic statistics!!"
 msgstr "撤销开启流量统计!!"
@@ -405,6 +447,9 @@ msgstr "修改tcpFastOpen"
 
 msgid "V2ray MTProto/Shadowsocks don't support tcpFastOpen!!!"
 msgstr "V2ray MTProto/Shadowsocks协议不支持配置tcpFastOpen!!!"
+
+msgid "Xray MTProto/Shadowsocks don't support tcpFastOpen!!!"
+msgstr "Xray MTProto/Shadowsocks协议不支持配置tcpFastOpen!!!"
 
 msgid "group tcpFastOpen"
 msgstr "当前组的tcpFastOpen状态"
@@ -544,6 +589,9 @@ msgstr "请输入数字!"
 msgid "V2ray MTProto/Shadowsocks not support https, close tls success!"
 msgstr "V2ray MTProto/Shadowsocks不支持https, 关闭tls成功!"
 
+msgid "Xray MTProto/Shadowsocks not support https, close tls success!"
+msgstr "Xray MTProto/Shadowsocks不支持https, 关闭tls成功!"
+
 msgid "modify protocol success"
 msgstr "传输模式修改成功!"
 
@@ -599,8 +647,8 @@ msgstr "1.开启 TLS"
 msgid "2.close TLS"
 msgstr "2.关闭 TLS"
 
-msgid "V2ray MTProto/Shadowsocks protocol not support https!!!"
-msgstr "V2ray MTProto/Shadowsocks协议不支持配置https!!!"
+msgid "MTProto/Shadowsocks protocol not support https!!!"
+msgstr "MTProto/Shadowsocks协议不支持配置https!!!"
 
 ### tls.py end ###
 
@@ -637,6 +685,9 @@ msgstr "关闭"
 msgid "schedule update v2ray task"
 msgstr "当前定时更新任务状态"
 
+msgid "schedule update xray task"
+msgstr "当前定时更新任务状态"
+
 msgid "1.open schedule task"
 msgstr "1.开启定时更新任务"
 
@@ -645,6 +696,9 @@ msgstr "2.关闭定时更新任务"
 
 msgid "Tip: open schedule update v2ray at 3:00"
 msgstr "Tip: 开启定时更新v2ray的更新时间为每天北京时间3:00更新"
+
+msgid "Tip: open schedule update xray at 3:00"
+msgstr "Tip: 开启定时更新xray的更新时间为每天北京时间3:00更新"
 
 msgid "have open schedule!"
 msgstr "当前定时更新已开启,无需重复操作!"

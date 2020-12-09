@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from v2ray_util import run_type
+
 from ..util_core.v2ray import restart
 from ..util_core.utils import readchar, random_email, ColorStr
 from ..util_core.group import Vmess, Socks, Mtproto, SS
@@ -156,7 +158,7 @@ def tfo():
         pass
     else:
         if type(group.node_list[0]) == Mtproto or type(group.node_list[0]) == SS:
-            print(_("V2ray MTProto/Shadowsocks don't support tcpFastOpen!!!"))
+            print(_("{} MTProto/Shadowsocks don't support tcpFastOpen!!!".format(run_type.capitalize())))
             print("")
             return
         

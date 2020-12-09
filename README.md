@@ -101,8 +101,8 @@ v2ray/xray [-h|--help] [options]
     iptables             iptables流量统计
     clean                清理日志
     log                  查看日志
+    rm                   卸载core
 ```
-xray命令和v2ray命令是一样的
 
 ## Docker运行
 

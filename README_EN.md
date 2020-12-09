@@ -83,6 +83,7 @@ v2ray/xray [-h|--help] [options]
     iptables             iptables traffic statistics
     clean                clean v2ray log
     log                  check v2ray log
+    rm                   uninstall core
 ```
 
 ## Docker Run

@@ -144,6 +144,17 @@ class V2ray:
             cls.new()
 
     @classmethod
+    def remove(cls):
+        if os.path.exists("/.dockerenv"):
+            print(ColorStr.yellow("docker run don't support remove {}!".format(run_type)))
+            return
+        cls.stop()
+        subprocess.call("systemctl disable {}.service".format(run_type), shell=True)
+        subprocess.call("rm -rf /usr/bin/{bin} /etc/systemd/system/{bin}.service".format(bin=run_type), shell=True)
+        print(ColorStr.green("Removed {} successfully.".format(run_type)))
+        print(ColorStr.blue("If necessary, please remove configuration file and log file manually."))
+
+    @classmethod
     def new(cls):
         subprocess.call("rm -rf /etc/{soft}/config.json && cp {package_path}/server.json /etc/{soft}/config.json".format(soft=run_type, package_path=pkg_resources.resource_filename('v2ray_util', "json_template")), shell=True)
         new_uuid = uuid.uuid1()

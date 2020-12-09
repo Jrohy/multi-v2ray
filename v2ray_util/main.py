@@ -40,6 +40,7 @@ def help():
     iptables             iptables流量统计
     clean                清理日志
     log                  查看日志
+    rm                   卸载{bin}
         """.format(exec_name[exec_name.rfind("/") + 1:], bin=run_type))
     else:
         print("""
@@ -67,6 +68,7 @@ def help():
     iptables             iptables traffic statistics
     clean                clean {bin} log
     log                  check {bin} log
+    rm                   uninstall {bin}
         """.format(exec_name[exec_name.rfind("/") + 1:], bin=run_type))
 
 def updateSh():
@@ -122,6 +124,8 @@ def parse_arg():
             V2ray.log()
         elif sys.argv[1] == "cdn":
             cdn.modify()
+        elif sys.argv[1] == "rm":
+            V2ray.remove()
     else:
         if sys.argv[1] == "add":
             multiple.new_port(sys.argv[2])

@@ -133,7 +133,7 @@ class V2ray:
     @classmethod
     def stop(cls):
         if os.path.exists("/.dockerenv"):
-            cls.docker_run('''ps aux|grep "/usr/bin/{bin}/{bin}"|awk '{print $1}'|xargs  -r kill -9 2>/dev/null'''.format(bin=run_type), "stop")
+            cls.docker_run("ps aux|grep /usr/bin/{bin}/{bin}".format(bin=run_type) + "|awk '{print $1}'|xargs  -r kill -9 2>/dev/null", "stop")
         else:
             cls.run("systemctl stop {}".format(run_type), "stop")
 

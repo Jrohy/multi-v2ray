@@ -86,7 +86,10 @@ class V2ray:
     def update(version=None):
         if is_ipv6(get_ip()):
             print(ColorStr.yellow(_("ipv6 network not support update {soft} online, please manual donwload {soft} to update!".format(soft=run_type))))
-            print(ColorStr.fuchsia(_("download {soft}-linux-xx.zip and run 'bash <(curl -L -s https://multi.netlify.app/go.sh) -l {soft}-linux-xx.zip' to update".format(soft=run_type))))
+            if run_type == "xray":
+                print(ColorStr.fuchsia(_("download Xray-linux-xx.zip and run 'bash <(curl -L -s https://multi.netlify.app/go.sh) -l Xray-linux-xx.zip -x' to update")))
+            else:
+                print(ColorStr.fuchsia(_("download v2ray-linux-xx.zip and run 'bash <(curl -L -s https://multi.netlify.app/go.sh) -l v2ray-linux-xx.zip' to update")))
             sys.exit(0)
         if os.path.exists("/.dockerenv"):
             V2ray.stop()

@@ -175,6 +175,8 @@ updateProject() {
 
     rm -f /usr/local/bin/v2ray >/dev/null 2>&1
     ln -s $(which v2ray-util) /usr/local/bin/v2ray
+    rm -f /usr/local/bin/xray >/dev/null 2>&1
+    ln -s $(which v2ray-util) /usr/local/bin/xray
 
     #移除旧的v2ray bash_completion脚本
     [[ -e /etc/bash_completion.d/v2ray.bash ]] && rm -f /etc/bash_completion.d/v2ray.bash

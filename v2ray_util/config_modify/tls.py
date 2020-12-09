@@ -77,7 +77,7 @@ def modify():
         pass
     else:
         if type(group.node_list[0]) == Mtproto or type(group.node_list[0]) == SS:
-            print(_("V2ray MTProto/Shadowsocks protocol not support https!!!"))
+            print(_("MTProto/Shadowsocks protocol not support https!!!"))
             print("")
             return
         tm = TLSModifier(group.tag, group.index)

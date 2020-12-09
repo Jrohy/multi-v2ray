@@ -4,6 +4,7 @@ import os
 import re
 import subprocess
 
+from v2ray_util import run_type
 from ..util_core.v2ray import V2ray
 from ..util_core.loader import Loader
 from ..util_core.writer import GlobalWriter
@@ -27,6 +28,9 @@ class StatsFactory:
         is_reset = "true" if is_reset else "false"
 
         stats_cmd = "cd /usr/bin/v2ray && ./v2ctl api --server=127.0.0.1:{} StatsService.GetStats 'name: \"{}>>>{}>>>traffic>>>{}\" reset: {}'"
+
+        if run_type == "xray":
+            stats_cmd = "cd /usr/bin/xray && ./xray api --server=127.0.0.1:{} StatsService.GetStats 'name: \"{}>>>{}>>>traffic>>>{}\" reset: {}'"
         type_tag = ("inbound" if is_group else "user")
 
         stats_real_cmd = stats_cmd.format(str(self.door_port), type_tag, meta_info, "downlink", is_reset)
@@ -54,9 +58,9 @@ total: {2}
 
 def manage():
 
-    FIND_V2RAY_CRONTAB_CMD = "crontab -l|grep v2ray"
+    FIND_V2RAY_CRONTAB_CMD = "crontab -l|grep {}".format(run_type)
 
-    DEL_UPDATE_TIMER_CMD = "crontab -l|sed '/SHELL=/d;/v2ray/d' > crontab.txt && crontab crontab.txt >/dev/null 2>&1 && rm -f crontab.txt >/dev/null 2>&1"
+    DEL_UPDATE_TIMER_CMD = "crontab -l|sed '/SHELL=/d;/{}/d' > crontab.txt && crontab crontab.txt >/dev/null 2>&1 && rm -f crontab.txt >/dev/null 2>&1".format(run_type)
 
     while True:
         loader = Loader()
@@ -65,7 +69,7 @@ def manage():
 
         group_list = profile.group_list
 
-        print("{}: {}".format(_("V2ray Traffic Statistics Status"), profile.stats.status))
+        print("{}: {}".format(_("{} Traffic Statistics Status".format(run_type.capitalize())), profile.stats.status))
 
         print("")
         print(_("1.open statistics"))
@@ -78,7 +82,7 @@ def manage():
         print("")
         print(_("5.reset statistics"))
         print("")
-        print(_("tip: restart v2ray will reset traffic statistics!!!"))
+        print(_("tip: restart {} will reset traffic statistics!!!".format(run_type)))
         print("")
 
         choice = readchar(_("please select: "))
@@ -90,7 +94,7 @@ def manage():
 
         if choice == "1":
             if os.popen(FIND_V2RAY_CRONTAB_CMD).readlines():
-                rchoice = readchar(_("open traffic statistics will close schedule update v2ray, continue?(y/n): "))
+                rchoice = readchar(_("open traffic statistics will close schedule update {}, continue?(y/n): ".format(run_type)))
                 if rchoice == "y" or rchoice == "Y":
                     #关闭定时更新v2ray服务
                     os.system(DEL_UPDATE_TIMER_CMD)

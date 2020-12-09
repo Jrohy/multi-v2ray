@@ -3,6 +3,7 @@
 import random
 import string
 
+from v2ray_util import run_type
 from ..util_core.v2ray import restart
 from ..util_core.writer import StreamWriter, GroupWriter
 from ..util_core.selector import GroupSelector, CommonSelector
@@ -138,7 +139,7 @@ def modify(group=None, sType=None):
             choice = int(choice)
             if choice > 0 and choice <= len(sm.stream_type):
                 if sm.stream_type[choice - 1][1] in ("MTProto", "Shadowsocks") and group.tls == 'tls':
-                    print(_("V2ray MTProto/Shadowsocks not support https, close tls success!"))
+                    print(_("{} MTProto/Shadowsocks not support https, close tls success!".format(run_type.capitalize())))
                 sm.select(sm.stream_type[choice - 1][0])
                 print(_("modify protocol success"))
                 if need_restart:

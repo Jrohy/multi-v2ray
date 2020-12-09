@@ -135,7 +135,7 @@ def parse_arg():
     sys.exit(0)
 
 def service_manage():
-    show_text = (_("start v2ray"), _("stop v2ray"), _("restart v2ray"), _("v2ray status"), _("v2ray log"))
+    show_text = (_("start {}".format(run_type)), _("stop {}".format(run_type)), _("restart {}".format(run_type)), _("{} status".format(run_type)), _("{} log".format(run_type)))
     print("")
     for index, text in enumerate(show_text): 
         print("{}.{}".format(index + 1, text))
@@ -202,7 +202,7 @@ def profile_alter():
         cdn.modify()
 
 def global_setting():
-    show_text = (_("V2ray Traffic Statistics"), _("Iptables Traffic Statistics"), _("Ban Bittorrent"), _("Schedule Update V2ray"), _("Clean Log"), _("Change Language"))
+    show_text = (_("{} Traffic Statistics".format(run_type.capitalize())), _("Iptables Traffic Statistics"), _("Ban Bittorrent"), _("Schedule Update {}".format(run_type.capitalize())), _("Clean {} Log".format(run_type.capitalize())), _("Change Language"))
     print("")
     for index, text in enumerate(show_text): 
         print("{}.{}".format(index + 1, text))
@@ -230,9 +230,9 @@ def menu():
     parse_arg()
     while True:
         print("")
-        print(ColorStr.cyan(_("Welcome to v2ray-util")))
+        print(ColorStr.cyan(_("Welcome to {} manager".format(run_type))))
         print("")
-        show_text = (_("1.V2ray Manage"), _("2.Group Manage"), _("3.Modify Config"), _("4.Check Config"), _("5.Global Setting"), _("6.Update V2Ray"), _("7.Generate Client Json"))
+        show_text = (_("1.{} Manage".format(run_type.capitalize())), _("2.Group Manage"), _("3.Modify Config"), _("4.Check Config"), _("5.Global Setting"), _("6.Update {}".format(run_type.capitalize())), _("7.Generate Client Json"))
         for index, text in enumerate(show_text): 
             if index % 2 == 0:
                 print('{:<20}'.format(text), end="")   

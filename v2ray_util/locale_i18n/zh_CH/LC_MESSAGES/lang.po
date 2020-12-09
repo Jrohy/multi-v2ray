@@ -227,14 +227,26 @@ msgstr "是否存在"
 msgid "clean v2ray log success!"
 msgstr "清理v2ray日志成功!"
 
+msgid "clean xray log success!"
+msgstr "清理xray日志成功!"
+
 msgid "ipv6 network not support update v2ray online, please manual donwload v2ray to update!"
 msgstr "ipv6 网络不支持v2ray的在线更新, 请手动下载v2ray来更新!"
+
+msgid "ipv6 network not support update xray online, please manual donwload xray to update!"
+msgstr "ipv6 网络不支持xray的在线更新, 请手动下载xray来更新!"
 
 msgid "download v2ray-linux-xx.zip and run 'bash <(curl -L -s https://multi.netlify.app/go.sh) -l v2ray-linux-xx.zip' to update"
 msgstr "下载v2ray-linux-xx.zip包然后运行 'bash <(curl -L -s https://multi.netlify.app/go.sh) -l v2ray-linux-xx.zip' 来更新"
 
+msgid "download Xray-linux-xx.zip and run 'bash <(curl -L -s https://multi.netlify.app/go.sh) -l Xray-linux-xx.zip -x' to update"
+msgstr "下载Xray-linux-xx.zip包然后运行 'bash <(curl -L -s https://multi.netlify.app/go.sh) -l Xray-linux-xx.zip -x' 来更新"
+
 msgid "check v2ray no install, auto install v2ray.."
 msgstr "检测到本机没安装v2ray, 正在自动安装.."
+
+msgid "check xray no install, auto install xray.."
+msgstr "检测到本机没安装xray, 正在自动安装.."
 
 ### v2ray.py end ###
 
@@ -507,10 +519,10 @@ msgid "local group is socks, please input user and password to create user"
 msgstr "当前组为socks组, 请输入用户密码创建新的socks用户"
 
 msgid "Mtproto protocol only support one user!!"
-msgstr "当前选择的组为MTProto协议, V2ray只支持该协议同组的第一个用户生效, 所以没必要新增用户!"
+msgstr "当前选择的组为MTProto协议, 该协议只支持同组的第一个用户生效, 所以没必要新增用户!"
 
 msgid "Shadowsocks protocol only support one user, u can add new port to multiple SS!"
-msgstr "当前选择的组为Shadowsocks协议, V2ray只支持ss协议一个用户一个端口, 想多用户请新增端口!"
+msgstr "当前选择的组为Shadowsocks协议, ss协议只支持一个用户一个端口, 想多用户请新增端口!"
 
 msgid "del group info: "
 msgstr "你要删除的Group组所有节点信息: "

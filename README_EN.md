@@ -1,9 +1,9 @@
 # multi-v2ray
 a tool to manage v2ray/xray config json, support multiple user && group manage  
 ![](https://img.shields.io/pypi/v/v2ray-util.svg) 
+[![Downloads](https://pepy.tech/badge/v2ray-util)](https://pepy.tech/project/v2ray-util)
+[![Downloads](https://pepy.tech/badge/v2ray-util/month)](https://pepy.tech/project/v2ray-util)
 ![](https://img.shields.io/docker/pulls/jrohy/v2ray.svg)
-![](https://img.shields.io/github/stars/Jrohy/multi-v2ray.svg) 
-![](https://img.shields.io/github/forks/Jrohy/multi-v2ray.svg) 
 ![](https://img.shields.io/github/license/Jrohy/multi-v2ray.svg)
 
 ## [中文](README.md)  [English](README_EN.md)

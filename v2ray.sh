@@ -184,12 +184,7 @@ updateProject() {
 
     #更新v2ray bash_completion脚本
     curl $BASH_COMPLETION_SHELL > /usr/share/bash-completion/completions/v2ray
-    curl $BASH_COMPLETION_SHELL > /usr/share/bash-completion/completions/xray
-    sed -i 's/v2ray/xray/g' /usr/share/bash-completion/completions/xray
-    if [[ -z $(echo $SHELL|grep zsh) ]];then
-        source /usr/share/bash-completion/completions/v2ray
-        source /usr/share/bash-completion/completions/xray
-    fi
+    [[ -z $(echo $SHELL|grep zsh) ]] && source /usr/share/bash-completion/completions/v2ray
     
     #安装V2ray主程序
     [[ ${INSTALL_WAY} == 0 ]] && bash <(curl -L -s https://multi.netlify.app/go.sh)

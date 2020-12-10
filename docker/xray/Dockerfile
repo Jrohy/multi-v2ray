@@ -6,7 +6,7 @@ FROM alpine:latest
 
 LABEL maintainer "Jrohy <euvkzx@Jrohy.com>"
 
-ENV COMPLETION_FILE "/usr/share/bash-completion/completions/xray"
+ENV COMPLETION_FILE "/usr/share/bash-completion/completions/v2ray"
 
 ENV SOURCE_COMPLETION_FILE "https://multi.netlify.app/v2ray"
 
@@ -26,7 +26,6 @@ RUN apk --no-cache add python3 bash bash-completion ca-certificates curl socat o
     LATEST_VERSION=`curl -s $VERSION_LIST|grep name|grep -o "[0-9].*[0-9]"|head -n 1` && \
     pip install v2ray-util==$LATEST_VERSION && \
     curl $SOURCE_COMPLETION_FILE > $COMPLETION_FILE && \
-    sed -i 's/v2ray/xray/g' $COMPLETION_FILE && \
     mkdir /var/log/xray/ && \
     chmod +x /usr/bin/xray/xray && \
     chmod +x /root/run.sh && \

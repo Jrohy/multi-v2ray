@@ -323,7 +323,7 @@ installV2Ray(){
     fi
 
     # Install V2Ray server config to /etc/v2ray
-    if [ ! -f '/etc/$KEY_LOWER/config.json' ]; then
+    if [ ! -f /etc/$KEY_LOWER/config.json ]; then
         local PORT="$(($RANDOM + 10000))"
         local UUID="$(cat '/proc/sys/kernel/random/uuid')"
 

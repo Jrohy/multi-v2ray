@@ -77,9 +77,9 @@ source <(curl -sL https://multi.netlify.app/v2ray.sh) --remove
 
 ## 命令行参数
 ```bash
-v2ray/xray [-h|--help] [options]
-    -h, --help           查看帮助
-    -v, --version        查看版本号
+v2ray/xray [-h|help] [options]
+    -h, help             查看帮助
+    -v, version          查看版本号
     start                启动 V2Ray
     stop                 停止 V2Ray
     restart              重启 V2Ray

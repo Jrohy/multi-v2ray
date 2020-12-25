@@ -16,9 +16,9 @@ def help():
     lang = Config().get_data('lang')
     if lang == 'zh':
         print("""
-{0} [-h|--help] [options]
-    -h, --help           查看帮助
-    -v, --version        查看版本号
+{0} [-h|help] [options]
+    -h, help             查看帮助
+    -v, version          查看版本号
     start                启动 {bin}
     stop                 停止 {bin}
     restart              重启 {bin}
@@ -44,9 +44,9 @@ def help():
         """.format(exec_name[exec_name.rfind("/") + 1:], bin=run_type))
     else:
         print("""
-{0} [-h|--help] [options]
-    -h, --help           get help
-    -v, --version        get version
+{0} [-h|help] [options]
+    -h, help             get help
+    -v, version          get version
     start                start {bin}
     stop                 stop {bin}
     restart              restart {bin}
@@ -88,9 +88,9 @@ def parse_arg():
             V2ray.stop()
         elif sys.argv[1] == "restart":
             V2ray.restart()
-        elif sys.argv[1] in ("-h", "--help"):
+        elif sys.argv[1] in ("-h", "help"):
             help()
-        elif sys.argv[1] in ("-v", "--version"):
+        elif sys.argv[1] in ("-v", "version"):
             V2ray.version()
         elif sys.argv[1] == "status":
             V2ray.status()

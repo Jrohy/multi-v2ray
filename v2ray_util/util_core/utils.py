@@ -76,8 +76,7 @@ def header_type_list():
     return ("none", "srtp", "utp", "wechat-video", "dtls", "wireguard")
 
 def ss_method():
-    return ("aes-256-cfb", "aes-128-cfb", "chacha20", 
-        "chacha20-ietf", "aes-256-gcm", "aes-128-gcm", "chacha20-poly1305")
+    return ("aes-256-gcm", "aes-128-gcm", "chacha20-poly1305")
 
 def xtls_flow():
     return ("", "xtls-rprx-origin", "xtls-rprx-direct")

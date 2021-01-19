@@ -17,12 +17,15 @@ class SSFactory:
         for index, method in enumerate(self.method_tuple):
             print ("{}.{}".format(index + 1, method))
         choice = readchar(_("please select shadowsocks method:"))
-        choice = int(choice)
-        if choice < 0 or choice > len(self.method_tuple):
-            print(_("input out of range!!"))
-            exit(-1)
+        if choice:
+            choice = int(choice)
+            if choice < 0 or choice > len(self.method_tuple):
+                print(_("input out of range!!"))
+                exit(-1)
+            else:
+                return self.method_tuple[choice - 1]
         else:
-            return self.method_tuple[choice - 1]
+            exit(-1)   
 
     def get_password(self):
         random_pass = ''.join(random.sample(string.ascii_letters + string.digits, 16))

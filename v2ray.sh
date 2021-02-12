@@ -57,7 +57,7 @@ while [[ $# > 0 ]];do
         ;;
         -k|--keep)
         INSTALL_WAY=1
-        colorEcho ${BLUE} "keep v2ray profile to update\n"
+        colorEcho ${BLUE} "keep config to update\n"
         ;;
         --zh)
         CHINESE=1
@@ -74,8 +74,8 @@ done
 help(){
     echo "bash v2ray.sh [-h|--help] [-k|--keep] [--remove]"
     echo "  -h, --help           Show help"
-    echo "  -k, --keep           keep the v2ray config.json to update"
-    echo "      --remove         remove v2ray && multi-v2ray"
+    echo "  -k, --keep           keep the config.json to update"
+    echo "      --remove         remove v2ray,xray && multi-v2ray"
     echo "                       no params to new install"
     return 0
 }
@@ -232,11 +232,13 @@ installFinish() {
     [[ ${INSTALL_WAY} == 0 ]] && WAY="install" || WAY="update"
     colorEcho  ${GREEN} "multi-v2ray ${WAY} success!\n"
 
-    clear
+    if [[ ${INSTALL_WAY} == 0 ]]; then
+        clear
 
-    v2ray info
+        v2ray info
 
-    echo -e "please input 'v2ray' command to manage v2ray\n"
+        echo -e "please input 'v2ray' command to manage v2ray\n"
+    fi
 }
 
 

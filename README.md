@@ -55,7 +55,8 @@ V2ray/Xray多用户管理脚本，向导式管理[新增|删除|修改]传输协
   - MTProto
   - Shadowsocks
   - Quic
-  - VLESS
+  - VLESS_TCP
+  - VLESS_TLS
   - VLESS_WS
   - VLESS_XTLS
   - Trojan

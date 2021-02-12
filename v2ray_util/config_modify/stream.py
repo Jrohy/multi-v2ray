@@ -28,7 +28,8 @@ class StreamModifier:
             (StreamType.MTPROTO, "MTProto"), 
             (StreamType.SS, "Shadowsocks"),
             (StreamType.QUIC, "Quic"),
-            (StreamType.VLESS, "VLESS"),
+            (StreamType.VLESS_TCP, "VLESS_TCP"),
+            (StreamType.VLESS_TLS, "VLESS_TLS"),
             (StreamType.VLESS_WS, "VLESS_WS"),
             (StreamType.VLESS_XTLS, "VLESS_XTLS"),
             (StreamType.TROJAN, "Trojan"),
@@ -66,7 +67,7 @@ class StreamModifier:
             print("")
             header = CommonSelector(header_type_list(), _("please select fake header: ")).select()
             kw = {'security': security, 'key': key, 'header': header}
-        elif sType in (StreamType.VLESS, StreamType.VLESS_WS, StreamType.VLESS_XTLS):
+        elif sType in (StreamType.VLESS_TLS, StreamType.VLESS_WS, StreamType.VLESS_XTLS):
             port_set = all_port()
             if not "443" in port_set:
                 print()

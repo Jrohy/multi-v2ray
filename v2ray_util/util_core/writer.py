@@ -117,12 +117,14 @@ class StreamWriter(Writer):
         elif self.part_json['protocol'] == 'socks':
             origin_protocol = StreamType.SOCKS
         elif self.part_json['protocol'] == 'vless':
-            origin_protocol = StreamType.VLESS
+            if self.part_json["streamSettings"]["security"] == "xtls":
+                origin_protocol = StreamType.VLESS_XTLS
+            elif self.part_json["streamSettings"]["security"] == "tls":
+                origin_protocol = StreamType.VLESS_TLS
+            else:
+                origin_protocol = StreamType.VLESS_TCP
         elif self.part_json['protocol'] == 'trojan':
             origin_protocol = StreamType.TROJAN
-
-        if origin_protocol == StreamType.VLESS and self.part_json["streamSettings"]["security"] == "xtls":
-            origin_protocol = StreamType.VLESS_XTLS
 
         if origin_protocol != StreamType.MTPROTO and origin_protocol != StreamType.SS:
             security_backup = self.part_json["streamSettings"]["security"]
@@ -138,7 +140,7 @@ class StreamWriter(Writer):
             clean_mtproto_tag(self.config, self.group_index)
 
         #原来是socks/mtproto/shadowsocks/vless/trojan/xtls协议 则先切换为标准的inbound
-        if origin_protocol in (StreamType.MTPROTO, StreamType.SOCKS, StreamType.SS, StreamType.VLESS, StreamType.TROJAN, StreamType.VLESS_XTLS):
+        if origin_protocol in (StreamType.MTPROTO, StreamType.SOCKS, StreamType.SS, StreamType.VLESS_TLS, StreamType.VLESS_TCP, StreamType.TROJAN, StreamType.VLESS_XTLS):
             vmess = self.load_template('server.json')
             vmess["inbounds"][0]["port"] = self.part_json["port"]
             if "allocate" in self.part_json:
@@ -213,7 +215,7 @@ class StreamWriter(Writer):
                 ws["wsSettings"]["headers"]["Host"] = kw['host']
             self.part_json["streamSettings"] = ws
 
-        elif self.stream_type in (StreamType.VLESS, StreamType.VLESS_XTLS, StreamType.VLESS_WS):
+        elif self.stream_type in (StreamType.VLESS_TCP, StreamType.VLESS_TLS, StreamType.VLESS_XTLS, StreamType.VLESS_WS):
             vless = self.load_template('vless.json')
             vless["clients"][0]["id"] = str(uuid.uuid1())
             if self.stream_type == StreamType.VLESS_XTLS:
@@ -233,16 +235,17 @@ class StreamWriter(Writer):
             self.save()
             alpn = ["http/1.1"]
             # tls的设置
-            if not "certificates" in tls_settings_backup:
-                from ..config_modify.tls import TLSModifier
-                if self.stream_type == StreamType.VLESS_XTLS:
-                    tm = TLSModifier(self.group_tag, self.group_index, alpn=alpn, xtls=True)
-                else:
-                    tm = TLSModifier(self.group_tag, self.group_index, alpn=alpn)
-                tm.turn_on(False)
-                return
-            elif not "alpn" in tls_settings_backup:
-                tls_settings_backup["alpn"] = alpn
+            if self.stream_type != StreamType.VLESS_TCP:
+                if not "certificates" in tls_settings_backup:
+                    from ..config_modify.tls import TLSModifier
+                    if self.stream_type == StreamType.VLESS_XTLS:
+                        tm = TLSModifier(self.group_tag, self.group_index, alpn=alpn, xtls=True)
+                    else:
+                        tm = TLSModifier(self.group_tag, self.group_index, alpn=alpn)
+                    tm.turn_on(False)
+                    return
+                elif not "alpn" in tls_settings_backup:
+                    tls_settings_backup["alpn"] = alpn
 
         elif self.stream_type == StreamType.TROJAN:
             self.part_json['protocol'] = "trojan"
@@ -296,7 +299,8 @@ class StreamWriter(Writer):
         if domain:
             self.part_json["domain"] = domain
 
-        if origin_protocol in (StreamType.VLESS, StreamType.TROJAN, StreamType.VLESS_XTLS) and self.stream_type not in (StreamType.VLESS, StreamType.TROJAN, StreamType.VLESS_XTLS):
+        apln_list = (StreamType.VLESS_TLS, StreamType.VLESS_TCP, StreamType.TROJAN, StreamType.VLESS_XTLS)
+        if origin_protocol in apln_list and self.stream_type not in apln_list:
             if "alpn" in self.part_json["streamSettings"]["tlsSettings"]:
                 del self.part_json["streamSettings"]["tlsSettings"]["alpn"]
 

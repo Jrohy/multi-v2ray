@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import json
 import base64
-
+from urllib.parse import quote
 from .utils import ColorStr
 
 __author__ = 'Jrohy'
@@ -124,7 +124,14 @@ Network: {network}
             return "VLESS"
 
     def link(self, ip, port, tls):
-        return ""
+        result_link = "vless://{s.password}@{ip}:{port}?encryption={s.encryption}".format(s=self, ip=ip, port=port)
+        if tls == "tls":
+            result_link += "&security=tls"
+        if self.network == "ws":
+            result_link += "&type=ws&&host={0}&path={1}".format(self.host, quote(self.path))
+        elif self.network == "tcp":
+            result_link += "&type=tcp"
+        return ColorStr.green(result_link)
 
 class Xtls(Vless):
     def __init__(self, uuid, user_number, encryption=None, email=None, flow=""):
@@ -141,7 +148,8 @@ class Xtls(Vless):
         return "VLESS_XTLS"
     
     def link(self, ip, port, tls):
-        return ""
+        result_link = "vless://{s.password}@{ip}:{port}?encryption={s.encryption}&security=xtls&flow={s.flow}".format(s=self, ip=ip, port=port)
+        return ColorStr.green(result_link)
 
 class Vmess(User):
     def __init__(self, uuid, alter_id: int, network: str, user_number, *, path=None, host=None, header=None, email=None, quic=None):

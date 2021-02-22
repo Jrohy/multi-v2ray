@@ -14,7 +14,7 @@ V2ray/Xray多用户管理脚本，向导式管理[新增|删除|修改]传输协
 - [x] **多用户, 多端口管理**, 混合传输协议管理不再是梦
 - [x] 首次安装时产生随机端口，默认配置mkcp + 随机一种 (srtp | wechat-video | utp | dtls | wireguard) header伪装;  
   安装完成显示配置信息;
-- [x] 查看配置信息显示vmess字符串(v2rayN的分享链接格式)
+- [x] 查看配置信息显示vmess/vless字符串(v2rayN的分享链接格式)
 - [x] 生成**Telegram**的socks5/MTProto分享链接, 支持socks5 + tls组合
 - [x] 支持http/2, 随机生成伪装h2 path
 - [x] 开启关闭tcpFastOpen

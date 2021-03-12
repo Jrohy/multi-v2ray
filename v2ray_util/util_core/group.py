@@ -98,12 +98,15 @@ class Socks(User):
         return "socks"
 
 class Vless(User):
-    def __init__(self, uuid, user_number, encryption=None, email=None, network=None, path=None, host=None):
+    def __init__(self, uuid, user_number, encryption=None, email=None, network=None, path=None, host=None, header=None, seed="", flow=""):
         super(Vless, self).__init__(user_number, uuid, email)
         self.encryption = encryption
         self.path = path
         self.host = host
+        self.header = header
         self.network = network
+        self.seed = seed
+        self.flow = flow
 
     def __str__(self):
         email = ""
@@ -122,33 +125,21 @@ Network: {network}
             return "VLESS WebSocket host: {0}, path: {1}".format(self.host, self.path)
         elif self.network == "tcp":
             return "VLESS"
+        elif self.network == "kcp":
+            return "VLESS {0} {1} seed: {2}".format(self.network, self.header, self.seed)
 
     def link(self, ip, port, tls):
         result_link = "vless://{s.password}@{ip}:{port}?encryption={s.encryption}".format(s=self, ip=ip, port=port)
         if tls == "tls":
             result_link += "&security=tls"
+        elif tls == "xtls":
+            result_link += "&security=xtls&flow={}".format(self.flow)
         if self.network == "ws":
             result_link += "&type=ws&&host={0}&path={1}".format(self.host, quote(self.path))
         elif self.network == "tcp":
             result_link += "&type=tcp"
-        return ColorStr.green(result_link)
-
-class Xtls(Vless):
-    def __init__(self, uuid, user_number, encryption=None, email=None, flow=""):
-        super(Xtls, self).__init__(uuid, user_number, encryption, email)
-        self.flow = flow
-
-    def __str__(self):
-        if self.user_info:
-            return "Email: {self.user_info}\nProtocol: {network}\nId: {password}\nEncryption: {self.encryption}\nFlow: {self.flow}\n".format(self=self, network=self.stream(), password=self.password)
-        else:
-            return "Protocol: {network}\nId: {password}\nEncryption: {self.encryption}\nFlow: {self.flow}\n".format(self=self, network=self.stream(), password=self.password)
-    
-    def stream(self):
-        return "VLESS_XTLS"
-    
-    def link(self, ip, port, tls):
-        result_link = "vless://{s.password}@{ip}:{port}?encryption={s.encryption}&security=xtls&flow={s.flow}".format(s=self, ip=ip, port=port)
+        elif self.network == "kcp":
+            result_link += "&type=kcp&headerType={0}&seed={1}".format(self.header, self.seed)
         return ColorStr.green(result_link)
 
 class Vmess(User):
@@ -229,10 +220,17 @@ class Group:
 
     def show_node(self, index):
         tls = _("open") if self.tls in ("tls", "xtls") else _("close")
+        tls = _("open") if self.tls in ("tls", "xtls") else _("close")
         tfo = "TcpFastOpen: {}".format(self.tfo) if self.tfo != None else ""
         dyp = "DynamicPort: {}".format(self.dyp) if self.dyp.status else ""
         port_way = "-{}".format(self.end_port) if self.end_port else ""
         node = self.node_list[index]
+        if self.tls == "tls":
+            tls = _("open")
+        elif self.tls == "xtls":
+            tls = "xtls {0}, flow: {1}".format(_("open"), node.flow)
+        else:
+            tls = _("close")
         result = '''
 {node.user_number}.
 Group: {self.tag}

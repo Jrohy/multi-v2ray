@@ -6,7 +6,7 @@ import os
 from v2ray_util import run_type
 from .config import Config
 from .utils import ColorStr, get_ip
-from .group import SS, Socks, Vmess, Vless, Mtproto, Quic, Group, Dyport, Trojan, Xtls
+from .group import SS, Socks, Vmess, Vless, Mtproto, Quic, Group, Dyport, Trojan
 
 class Stats:
     def __init__(self, status=False, door_port=0):
@@ -78,7 +78,7 @@ class Profile:
         del self.config
 
     def parse_group(self, part_json, group_index, local_ip):
-        dyp, quic, end_port, tfo, header, tls, path, host, conf_ip = Dyport(), None, None, None, "", "", "", "", local_ip
+        dyp, quic, end_port, tfo, header, tls, path, host, conf_ip, seed = Dyport(), None, None, None, "", "", "", "", local_ip, ""
         
         protocol = part_json["protocol"]
 
@@ -123,6 +123,8 @@ class Profile:
 
             if conf_stream["network"] == "kcp" and "header" in conf_stream["kcpSettings"]:
                 header = conf_stream["kcpSettings"]["header"]["type"]
+                if "seed" in conf_stream["kcpSettings"]:
+                    seed = conf_stream["kcpSettings"]["seed"]
             
             if conf_stream["network"] == "quic" and conf_stream["quicSettings"]:
                 quic_settings = conf_stream["quicSettings"]
@@ -145,7 +147,7 @@ class Profile:
             clients=conf_settings["users"]
 
         for client in clients:
-            email, node = "", None
+            email, node, flow = "", None, flow
             self.user_number = self.user_number + 1
             if "email" in client and client["email"]:
                 email = client["email"]
@@ -161,9 +163,8 @@ class Profile:
 
             elif protocol == "vless":
                 if tls == "xtls":
-                    node = Xtls(client["id"], self.user_number, conf_settings["decryption"], email, client["flow"])
-                else:
-                    node = Vless(client["id"], self.user_number, conf_settings["decryption"], email, conf_stream["network"], path, host)
+                    flow = client["flow"]
+                node = Vless(client["id"], self.user_number, conf_settings["decryption"], email, conf_stream["network"], path, host, header, seed, flow)
 
             elif protocol == "trojan":
                 node = Trojan(self.user_number, client["password"], email)

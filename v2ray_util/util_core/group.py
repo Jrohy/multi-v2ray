@@ -98,14 +98,13 @@ class Socks(User):
         return "socks"
 
 class Vless(User):
-    def __init__(self, uuid, user_number, encryption=None, email=None, network=None, path=None, host=None, header=None, seed="", flow=""):
+    def __init__(self, uuid, user_number, encryption=None, email=None, network=None, path=None, host=None, header=None, flow=""):
         super(Vless, self).__init__(user_number, uuid, email)
         self.encryption = encryption
         self.path = path
         self.host = host
         self.header = header
         self.network = network
-        self.seed = seed
         self.flow = flow
 
     def __str__(self):
@@ -122,11 +121,16 @@ Network: {network}
     
     def stream(self):
         if self.network == "ws":
-            return "VLESS WebSocket host: {0}, path: {1}".format(self.host, self.path)
+            return "WebSocket host: {0}, path: {1}".format(self.host, self.path)
         elif self.network == "tcp":
-            return "VLESS"
+            return "tcp"
         elif self.network == "kcp":
-            return "VLESS {0} {1} seed: {2}".format(self.network, self.header, self.seed)
+            result = "kcp"
+            if self.header and self.header != 'none':
+                result = "{} {}".format(result, self.header)
+            if self.path != "":
+                result = "{} seed: {}".format(result, self.path)
+            return result
 
     def link(self, ip, port, tls):
         result_link = "vless://{s.password}@{ip}:{port}?encryption={s.encryption}".format(s=self, ip=ip, port=port)
@@ -139,7 +143,7 @@ Network: {network}
         elif self.network == "tcp":
             result_link += "&type=tcp"
         elif self.network == "kcp":
-            result_link += "&type=kcp&headerType={0}&seed={1}".format(self.header, self.seed)
+            result_link += "&type=kcp&headerType={0}&seed={1}".format(self.header, self.path)
         return ColorStr.green(result_link)
 
 class Vmess(User):
@@ -168,11 +172,12 @@ class Vmess(User):
                 network = "tcp host: {0}".format(self.host)
             else:
                 network = "tcp"
-        else:
+        elif self.network == "kcp":
+            network = "kcp"
             if self.header and self.header != 'none':
-                network = "{} {}".format(self.network, self.header)
-            else:
-                network = "{}".format(self.network)
+                network = "{} {}".format(network, self.header)
+            if self.path != "":
+                network = "{} seed: {}".format(network, self.path)
         return network
 
     def __str__(self):
@@ -219,8 +224,6 @@ class Group:
         self.index = index
 
     def show_node(self, index):
-        tls = _("open") if self.tls in ("tls", "xtls") else _("close")
-        tls = _("open") if self.tls in ("tls", "xtls") else _("close")
         tfo = "TcpFastOpen: {}".format(self.tfo) if self.tfo != None else ""
         dyp = "DynamicPort: {}".format(self.dyp) if self.dyp.status else ""
         port_way = "-{}".format(self.end_port) if self.end_port else ""
@@ -246,10 +249,15 @@ TLS: {tls}
 
     # print一个实例打印的字符串
     def __str__(self):
-        tls = _("open") if self.tls in ("tls", "xtls") else _("close")
         tfo = "TcpFastOpen: {}".format(self.tfo) if self.tfo != None else ""
         dyp = "DynamicPort: {}".format(self.dyp) if self.dyp.status else ""
         port_way = "-{}".format(self.end_port) if self.end_port else ""
+        if self.tls == "tls":
+            tls = _("open")
+        elif self.tls == "xtls":
+            tls = "xtls {0}, flow: {1}".format(_("open"), self.node_list[0].flow)
+        else:
+            tls = _("close")
         result = ""
         for node in self.node_list:
             temp = '''

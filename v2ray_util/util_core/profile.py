@@ -78,7 +78,7 @@ class Profile:
         del self.config
 
     def parse_group(self, part_json, group_index, local_ip):
-        dyp, quic, end_port, tfo, header, tls, path, host, conf_ip, seed = Dyport(), None, None, None, "", "", "", "", local_ip, ""
+        dyp, quic, end_port, tfo, header, tls, path, host, conf_ip = Dyport(), None, None, None, "", "", "", "", local_ip
         
         protocol = part_json["protocol"]
 
@@ -124,7 +124,7 @@ class Profile:
             if conf_stream["network"] == "kcp" and "header" in conf_stream["kcpSettings"]:
                 header = conf_stream["kcpSettings"]["header"]["type"]
                 if "seed" in conf_stream["kcpSettings"]:
-                    seed = conf_stream["kcpSettings"]["seed"]
+                    path = conf_stream["kcpSettings"]["seed"]
             
             if conf_stream["network"] == "quic" and conf_stream["quicSettings"]:
                 quic_settings = conf_stream["quicSettings"]
@@ -147,7 +147,7 @@ class Profile:
             clients=conf_settings["users"]
 
         for client in clients:
-            email, node, flow = "", None, flow
+            email, node, flow = "", None, ""
             self.user_number = self.user_number + 1
             if "email" in client and client["email"]:
                 email = client["email"]
@@ -164,7 +164,7 @@ class Profile:
             elif protocol == "vless":
                 if tls == "xtls":
                     flow = client["flow"]
-                node = Vless(client["id"], self.user_number, conf_settings["decryption"], email, conf_stream["network"], path, host, header, seed, flow)
+                node = Vless(client["id"], self.user_number, conf_settings["decryption"], email, conf_stream["network"], path, host, header, flow)
 
             elif protocol == "trojan":
                 node = Trojan(self.user_number, client["password"], email)

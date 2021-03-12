@@ -3,7 +3,7 @@
 import json
 
 from .config import Config
-from .group import Vmess, Vless, Socks, SS, Mtproto, Trojan, Xtls
+from .group import Vmess, Vless, Socks, SS, Mtproto, Trojan
 from .selector import ClientSelector
 
 class ClientWriter:
@@ -34,14 +34,14 @@ class ClientWriter:
             user_json["users"][0]["id"] = self.node.password
             user_json["users"][0]["alterId"] = self.node.alter_id
 
-        elif type(self.node) in (Vless, Xtls):
+        elif type(self.node) == Vless:
             self.client_config = self.load_template('client.json')
             user_json = self.client_config["outbounds"][0]["settings"]["vnext"][0]
             user_json["users"][0]["id"] = self.node.password
             del user_json["users"][0]["alterId"]
             del user_json["users"][0]["security"]
             user_json["users"][0]["encryption"] = self.node.encryption
-            if type(self.node) == Xtls:
+            if self.node.tls == "xtls":
                 user_json["users"][0]["flow"] = self.node.flow
             self.client_config["outbounds"][0]["protocol"] = "vless" 
 

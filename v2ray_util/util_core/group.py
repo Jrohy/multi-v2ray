@@ -161,6 +161,7 @@ class Vmess(User):
             self.path = quic.key
 
     def stream(self):
+        network = ""
         if self.network == "quic":
             network = "Quic\n{}".format(self.quic)
         elif self.network == "h2":

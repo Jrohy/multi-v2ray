@@ -107,8 +107,36 @@ class StreamWriter(Writer):
             routing_bind["inboundTag"][0] = self.group_tag
             rules.append(routing_bind)
 
+    def to_kcp(self, header_type):
+        self.part_json["streamSettings"] = self.load_template('kcp.json')
+        type_str = "none"
+        if "utp" in header_type:
+            type_str = "utp"
+        elif "srtp" in header_type:
+            type_str = "srtp"
+        elif "dtls" in header_type:
+            type_str = "dtls"
+        elif "wechat" in header_type:
+            type_str = "wechat-video"
+        elif "wireguard" in header_type:
+            type_str = "wireguard"
+        self.part_json["streamSettings"]["kcpSettings"]["header"]["type"] = type_str
+
+    def to_vmess(self, header_type):
+        self.to_kcp(header_type)
+        self.part_json["protocol"] = "vmess"
+        self.part_json["settings"] = {
+            "clients": [
+                {
+                    "alterId": 0,
+                    "id": str(uuid.uuid1())
+                }
+            ]
+        }
+
     def write(self, **kw):
         security_backup, tls_settings_backup, origin_protocol, domain = "", "", None, ""
+        no_tls_group = (StreamType.MTPROTO, StreamType.SS)
 
         if self.part_json['protocol'] == 'shadowsocks':
             origin_protocol = StreamType.SS
@@ -126,7 +154,7 @@ class StreamWriter(Writer):
         elif self.part_json['protocol'] == 'trojan':
             origin_protocol = StreamType.TROJAN
 
-        if origin_protocol != StreamType.MTPROTO and origin_protocol != StreamType.SS:
+        if origin_protocol not in no_tls_group:
             security_backup = self.part_json["streamSettings"]["security"]
             if origin_protocol == StreamType.VLESS_XTLS:
                 tls_settings_backup = self.part_json["streamSettings"]["xtlsSettings"]
@@ -139,36 +167,8 @@ class StreamWriter(Writer):
         if origin_protocol == StreamType.MTPROTO and origin_protocol != self.stream_type:
             clean_mtproto_tag(self.config, self.group_index)
 
-        #原来是socks/mtproto/shadowsocks/vless/trojan/xtls协议 则先切换为标准的inbound
-        if origin_protocol in (StreamType.MTPROTO, StreamType.SOCKS, StreamType.SS, StreamType.VLESS_TLS, StreamType.VLESS_TCP, StreamType.TROJAN, StreamType.VLESS_XTLS):
-            vmess = self.load_template('server.json')
-            vmess["inbounds"][0]["port"] = self.part_json["port"]
-            if "allocate" in self.part_json:
-                vmess["inbounds"][0]["allocate"] = self.part_json["allocate"]
-            self.part_json = vmess["inbounds"][0]
-
-        if self.stream_type == StreamType.KCP:
-            self.part_json["streamSettings"] = self.load_template('kcp.json')
-        
-        elif self.stream_type == StreamType.KCP_UTP:
-            self.part_json["streamSettings"] = self.load_template('kcp.json')
-            self.part_json["streamSettings"]["kcpSettings"]["header"]["type"] = "utp"
-
-        elif self.stream_type == StreamType.KCP_SRTP:
-            self.part_json["streamSettings"] = self.load_template('kcp.json')
-            self.part_json["streamSettings"]["kcpSettings"]["header"]["type"] = "srtp"
-
-        elif self.stream_type == StreamType.KCP_WECHAT:
-            self.part_json["streamSettings"] = self.load_template('kcp.json')
-            self.part_json["streamSettings"]["kcpSettings"]["header"]["type"] = "wechat-video"
-
-        elif self.stream_type == StreamType.KCP_DTLS:
-            self.part_json["streamSettings"] = self.load_template('kcp.json')
-            self.part_json["streamSettings"]["kcpSettings"]["header"]["type"] = "dtls"
-
-        elif self.stream_type == StreamType.KCP_WG:
-            self.part_json["streamSettings"] = self.load_template('kcp.json')
-            self.part_json["streamSettings"]["kcpSettings"]["header"]["type"] = "wireguard"
+        if "KCP" in self.stream_type.name:
+            self.to_vmess(self.stream_type.value)
 
         elif self.stream_type == StreamType.TCP:
             self.part_json["streamSettings"] = self.load_template('tcp.json')
@@ -215,7 +215,7 @@ class StreamWriter(Writer):
                 ws["wsSettings"]["headers"]["Host"] = kw['host']
             self.part_json["streamSettings"] = ws
 
-        elif self.stream_type in (StreamType.VLESS_TCP, StreamType.VLESS_TLS, StreamType.VLESS_XTLS, StreamType.VLESS_WS):
+        elif "vless" in self.stream_type.value:
             vless = self.load_template('vless.json')
             vless["clients"][0]["id"] = str(uuid.uuid1())
             if self.stream_type == StreamType.VLESS_XTLS:
@@ -230,12 +230,15 @@ class StreamWriter(Writer):
                 if "host" in kw:
                     ws["wsSettings"]["headers"]["Host"] = kw['host']
                 self.part_json["streamSettings"] = ws
+            elif self.stream_type in (StreamType.VLESS_KCP, StreamType.VLESS_UTP, StreamType.VLESS_SRTP, StreamType.VLESS_DTLS, StreamType.VLESS_WECHAT, StreamType.VLESS_WG):
+                self.to_kcp(self.stream_type.value)  
+                self.part_json["streamSettings"]["kcpSettings"]["seed"] = ''.join(random.sample(string.ascii_letters + string.digits, 8))
             else:
                 self.part_json["streamSettings"] = self.load_template('tcp.json')
             self.save()
             alpn = ["http/1.1"]
             # tls的设置
-            if self.stream_type != StreamType.VLESS_TCP:
+            if self.stream_type in (StreamType.VLESS_XTLS, StreamType.VLESS_WS, StreamType.VLESS_TLS):
                 if not "certificates" in tls_settings_backup:
                     from ..config_modify.tls import TLSModifier
                     if self.stream_type == StreamType.VLESS_XTLS:
@@ -291,18 +294,16 @@ class StreamWriter(Writer):
             self.part_json["streamSettings"]["security"] = "xtls"
             self.part_json["streamSettings"]["xtlsSettings"] = tls_settings_backup
             del self.part_json["streamSettings"]["tlsSettings"]
-        elif (self.stream_type != StreamType.MTPROTO and origin_protocol != StreamType.MTPROTO 
-           and self.stream_type != StreamType.SS and origin_protocol != StreamType.SS):
+        elif self.stream_type not in no_tls_group and origin_protocol not in no_tls_group:
             self.part_json["streamSettings"]["security"] = "tls" if security_backup == "xtls" else security_backup
             self.part_json["streamSettings"]["tlsSettings"] = tls_settings_backup
 
-        if domain:
+        if domain and self.stream_type not in no_tls_group:
             self.part_json["domain"] = domain
 
-        apln_list = (StreamType.VLESS_TLS, StreamType.VLESS_TCP, StreamType.TROJAN, StreamType.VLESS_XTLS)
-        if origin_protocol in apln_list and self.stream_type not in apln_list:
-            if "alpn" in self.part_json["streamSettings"]["tlsSettings"]:
-                del self.part_json["streamSettings"]["tlsSettings"]["alpn"]
+        apln_list = (StreamType.VLESS_TLS, StreamType.TROJAN, StreamType.VLESS_XTLS)
+        if "streamSettings" in self.part_json and "alpn" in self.part_json["streamSettings"]["tlsSettings"] and self.stream_type not in apln_list:
+            del self.part_json["streamSettings"]["tlsSettings"]["alpn"]
 
         self.config["inbounds"][self.group_index] = self.part_json
         self.save()

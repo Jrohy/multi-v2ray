@@ -28,6 +28,12 @@ class StreamModifier:
             (StreamType.MTPROTO, "MTProto"), 
             (StreamType.SS, "Shadowsocks"),
             (StreamType.QUIC, "Quic"),
+            (StreamType.VLESS_KCP, "VLESS + mkcp"),
+            (StreamType.VLESS_UTP, "VLESS + mKCP + utp"),
+            (StreamType.VLESS_SRTP, "VLESS + mKCP + srtp"),
+            (StreamType.VLESS_WECHAT, "VLESS + mKCP + wechat-video"),
+            (StreamType.VLESS_DTLS, "VLESS + mKCP + dtls"),
+            (StreamType.VLESS_WG, "VLESS + mKCP + wireguard"),
             (StreamType.VLESS_TCP, "VLESS_TCP"),
             (StreamType.VLESS_TLS, "VLESS_TLS"),
             (StreamType.VLESS_WS, "VLESS_WS"),
@@ -139,7 +145,7 @@ def modify(group=None, sType=None):
         else:
             choice = int(choice)
             if choice > 0 and choice <= len(sm.stream_type):
-                if sm.stream_type[choice - 1][1] in ("MTProto", "Shadowsocks") and group.tls == 'tls':
+                if sm.stream_type[choice - 1][1] in ("MTProto", "Shadowsocks") and group.tls in ('tls', 'xtls'):
                     print(_("{} MTProto/Shadowsocks not support https, close tls success!".format(run_type.capitalize())))
                 sm.select(sm.stream_type[choice - 1][0])
                 print(_("modify protocol success"))

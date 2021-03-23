@@ -41,7 +41,7 @@ class ClientWriter:
             del user_json["users"][0]["alterId"]
             del user_json["users"][0]["security"]
             user_json["users"][0]["encryption"] = self.node.encryption
-            if self.node.tls == "xtls":
+            if self.node.flow:
                 user_json["users"][0]["flow"] = self.node.flow
             self.client_config["outbounds"][0]["protocol"] = "vless" 
 

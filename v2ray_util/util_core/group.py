@@ -98,7 +98,7 @@ class Socks(User):
         return "socks"
 
 class Vless(User):
-    def __init__(self, uuid, user_number, encryption=None, email=None, network=None, path=None, host=None, header=None, flow=""):
+    def __init__(self, uuid, user_number, encryption=None, email=None, network=None, path=None, host=None, header=None, flow="", serviceName=""):
         super(Vless, self).__init__(user_number, uuid, email)
         self.encryption = encryption
         self.path = path
@@ -106,6 +106,7 @@ class Vless(User):
         self.header = header
         self.network = network
         self.flow = flow
+        self.serviceName = serviceName
 
     def __str__(self):
         email = ""
@@ -124,6 +125,8 @@ Network: {network}
             return "WebSocket host: {0}, path: {1}".format(self.host, self.path)
         elif self.network == "tcp":
             return "tcp"
+        elif self.network == "grpc":
+            return "grpc serviceName: {}".format(self.serviceName)
         elif self.network == "kcp":
             result = "kcp"
             if self.header and self.header != 'none':
@@ -139,9 +142,11 @@ Network: {network}
         elif tls == "xtls":
             result_link += "&security=xtls&flow={}".format(self.flow)
         if self.network == "ws":
-            result_link += "&type=ws&&host={0}&path={1}".format(self.host, quote(self.path))
+            result_link += "&type=ws&host={0}&path={1}".format(self.host, quote(self.path))
         elif self.network == "tcp":
             result_link += "&type=tcp"
+        elif self.network == "grpc":
+            result_link += "&type=grpc&serviceName={}".format(self.serviceName)
         elif self.network == "kcp":
             result_link += "&type=kcp&headerType={0}&seed={1}".format(self.header, self.path)
         return ColorStr.green(result_link)

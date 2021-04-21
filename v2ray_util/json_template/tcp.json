@@ -6,5 +6,6 @@
   "kcpSettings": {},
   "wsSettings": {},
   "httpSettings": {},
-  "quicSettings": {}
+  "quicSettings": {},
+  "grpcSettings": {}
 }

@@ -1,7 +1,7 @@
 # bash completion for v2ray/xray
 function _auto_tab() {
 	local options_array=("start" "stop" "restart" "status" "update" "update.sh" "add" "del" "info" "port" "tls" "tfo" "stream" "iptables" "cdn" "stats" "clean" "log" "new" "rm" "-h" "-v" "help" "version")
-	local add_array=("wechat" "utp" "srtp" "dtls" "wireguard" "socks" "mtproto" "ss" "vless_tcp" "vless_tls" "vless_ws" "vless_xtls" "trojan" "ss" "quic" "h2" "tcp" "tcp_host" "ws" "vless_kcp" "vless_utp" "vless_srtp" "vless_dtls" "vless_wechat" "vless_wireguard")
+	local add_array=("wechat" "utp" "srtp" "dtls" "wireguard" "socks" "mtproto" "ss" "vless_tcp" "vless_tls" "vless_ws" "vless_xtls" "trojan" "ss" "quic" "h2" "tcp" "tcp_host" "ws" "vless_kcp" "vless_utp" "vless_srtp" "vless_dtls" "vless_wechat" "vless_wireguard" "vless_grpc")
 	local log_array=("access" "a" "error" "e")
 	local cur prev
 

@@ -38,6 +38,7 @@ class StreamModifier:
             (StreamType.VLESS_TLS, "VLESS_TLS"),
             (StreamType.VLESS_WS, "VLESS_WS"),
             (StreamType.VLESS_XTLS, "VLESS_XTLS"),
+            (StreamType.VLESS_GRPC, "VLESS_GRPC"),
             (StreamType.TROJAN, "Trojan"),
         ]
         self.group_tag = group_tag
@@ -73,7 +74,7 @@ class StreamModifier:
             print("")
             header = CommonSelector(header_type_list(), _("please select fake header: ")).select()
             kw = {'security': security, 'key': key, 'header': header}
-        elif sType in (StreamType.VLESS_TLS, StreamType.VLESS_WS, StreamType.VLESS_XTLS):
+        elif sType in (StreamType.VLESS_TLS, StreamType.VLESS_WS, StreamType.VLESS_XTLS, StreamType.VLESS_GRPC):
             port_set = all_port()
             if not "443" in port_set:
                 print()

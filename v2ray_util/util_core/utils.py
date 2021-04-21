@@ -76,6 +76,7 @@ class StreamType(Enum):
     VLESS_TCP = 'vless_tcp'
     VLESS_TLS = 'vless_tls'
     VLESS_WS = 'vless_ws'
+    VLESS_GRPC = 'vless_grpc'
     VLESS_XTLS = 'vless_xtls'
     TROJAN = 'trojan'
 

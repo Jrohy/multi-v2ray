@@ -145,7 +145,9 @@ class StreamWriter(Writer):
         elif self.part_json['protocol'] == 'socks':
             origin_protocol = StreamType.SOCKS
         elif self.part_json['protocol'] == 'vless':
-            if self.part_json["streamSettings"]["security"] == "xtls":
+            if self.part_json["streamSettings"]["network"] == "grpc":
+                origin_protocol = StreamType.VLESS_GRPC
+            elif self.part_json["streamSettings"]["security"] == "xtls":
                 origin_protocol = StreamType.VLESS_XTLS
             elif self.part_json["streamSettings"]["security"] == "tls":
                 origin_protocol = StreamType.VLESS_TLS
@@ -216,6 +218,7 @@ class StreamWriter(Writer):
             self.part_json["streamSettings"] = ws
 
         elif "vless" in self.stream_type.value:
+            alpn = ["http/1.1"]
             vless = self.load_template('vless.json')
             vless["clients"][0]["id"] = str(uuid.uuid1())
             if self.stream_type == StreamType.VLESS_XTLS:
@@ -235,10 +238,16 @@ class StreamWriter(Writer):
                 self.part_json["streamSettings"]["kcpSettings"]["seed"] = ''.join(random.sample(string.ascii_letters + string.digits, 8))
             else:
                 self.part_json["streamSettings"] = self.load_template('tcp.json')
+                if self.stream_type == StreamType.VLESS_GRPC:
+                    alpn = ["h2"]
+                    self.part_json["streamSettings"]["network"] = "grpc"
+                    self.part_json["streamSettings"]["grpcSettings"]["serviceName"] = ''.join(random.sample(string.ascii_letters + string.digits, 8))
+                    if "fallbacks" in self.part_json["settings"]:
+                        del self.part_json["settings"]["fallbacks"]
+
             self.save()
-            alpn = ["http/1.1"]
             # tls的设置
-            if self.stream_type in (StreamType.VLESS_XTLS, StreamType.VLESS_WS, StreamType.VLESS_TLS):
+            if self.stream_type in (StreamType.VLESS_XTLS, StreamType.VLESS_WS, StreamType.VLESS_TLS, StreamType.VLESS_GRPC):
                 if not "certificates" in tls_settings_backup:
                     from ..config_modify.tls import TLSModifier
                     if self.stream_type == StreamType.VLESS_XTLS:
@@ -247,8 +256,7 @@ class StreamWriter(Writer):
                         tm = TLSModifier(self.group_tag, self.group_index, alpn=alpn)
                     tm.turn_on(False)
                     return
-                elif not "alpn" in tls_settings_backup:
-                    tls_settings_backup["alpn"] = alpn
+                tls_settings_backup["alpn"] = alpn
 
         elif self.stream_type == StreamType.TROJAN:
             self.part_json['protocol'] = "trojan"
@@ -301,7 +309,7 @@ class StreamWriter(Writer):
         if domain and self.stream_type not in no_tls_group:
             self.part_json["domain"] = domain
 
-        apln_list = (StreamType.VLESS_TLS, StreamType.TROJAN, StreamType.VLESS_XTLS)
+        apln_list = (StreamType.VLESS_TLS, StreamType.TROJAN, StreamType.VLESS_XTLS, StreamType.VLESS_GRPC)
         if "streamSettings" in self.part_json and "alpn" in self.part_json["streamSettings"]["tlsSettings"] and self.stream_type not in apln_list:
             del self.part_json["streamSettings"]["tlsSettings"]["alpn"]
 

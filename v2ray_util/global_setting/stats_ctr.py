@@ -26,17 +26,19 @@ class StatsFactory:
 
     def get_stats(self, meta_info, is_reset=False, is_group=False):
         is_reset = "true" if is_reset else "false"
-
-        stats_cmd = "cd /usr/bin/v2ray && ./v2ctl api --server=127.0.0.1:{} StatsService.GetStats 'name: \"{}>>>{}>>>traffic>>>{}\" reset: {}'"
-
-        if run_type == "xray":
-            stats_cmd = "cd /usr/bin/xray && ./xray api stats --server=127.0.0.1:{} StatsService.GetStats 'name: \"{}>>>{}>>>traffic>>>{}\" reset: {}'"
         type_tag = ("inbound" if is_group else "user")
 
-        stats_real_cmd = stats_cmd.format(str(self.door_port), type_tag, meta_info, "downlink", is_reset)
+        if run_type == "xray":
+            stats_cmd = "cd /usr/bin/xray && ./xray api stats --server=127.0.0.1:{} -name \"{}>>>{}>>>traffic>>>{}\""
+            if is_reset:
+                stats_cmd = stats_cmd + " -reset"
+        else:
+            stats_cmd = "cd /usr/bin/v2ray && ./v2ctl api --server=127.0.0.1:{} StatsService.GetStats 'name: \"{}>>>{}>>>traffic>>>{}\"" + " reset: {}'".format(is_reset)
+
+        stats_real_cmd = stats_cmd.format(str(self.door_port), type_tag, meta_info, "downlink")
         self.downlink_value = self.__run_command(stats_real_cmd)
 
-        stats_real_cmd = stats_cmd.format(str(self.door_port), type_tag, meta_info, "uplink", is_reset)
+        stats_real_cmd = stats_cmd.format(str(self.door_port), type_tag, meta_info, "uplink")
         self.uplink_value = self.__run_command(stats_real_cmd)
 
     def print_stats(self, horizontal=False):

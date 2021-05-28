@@ -7,7 +7,7 @@ from v2ray_util import run_type
 from ..util_core.v2ray import restart
 from ..util_core.writer import StreamWriter, GroupWriter
 from ..util_core.selector import GroupSelector, CommonSelector
-from ..util_core.utils import StreamType, header_type_list, ColorStr, all_port, xtls_flow
+from ..util_core.utils import StreamType, header_type_list, ColorStr, all_port, xtls_flow, readchar
 
 from .ss import SSFactory
 
@@ -90,6 +90,11 @@ class StreamModifier:
                 print("")
                 flow = CommonSelector(flow_list, _("please select xtls flow type: ")).select()
                 kw = {'flow': flow}
+            elif sType == StreamType.VLESS_GRPC and run_type == "xray":
+                choice = readchar(_("open xray grpc multiMode?(y/n): ")).lower()
+                if choice == 'y':
+                    kw = {'mode': 'multi'}
+                
         elif sType == StreamType.TROJAN:
             port_set = all_port()
             if not "443" in port_set:

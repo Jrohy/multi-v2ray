@@ -583,6 +583,9 @@ msgstr "请输入序号选择加密方法: "
 msgid "please select xtls flow type: "
 msgstr "请输入序号选择xtls流控: "
 
+msgid "open xray grpc multiMode?(y/n): "
+msgstr "是否开启grpc multiMode(y/n): "
+
 msgid "please select fake header: "
 msgstr "请输入序号选择伪装协议: "
 

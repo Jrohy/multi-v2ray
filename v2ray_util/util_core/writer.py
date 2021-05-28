@@ -242,6 +242,8 @@ class StreamWriter(Writer):
                     alpn = ["h2"]
                     self.part_json["streamSettings"]["network"] = "grpc"
                     self.part_json["streamSettings"]["grpcSettings"]["serviceName"] = ''.join(random.sample(string.ascii_letters + string.digits, 8))
+                    if "mode" in kw and kw["mode"] == "multi":
+                        self.part_json["streamSettings"]["grpcSettings"]["multiMode"] = True
                     if "fallbacks" in self.part_json["settings"]:
                         del self.part_json["settings"]["fallbacks"]
 

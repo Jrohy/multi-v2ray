@@ -78,7 +78,7 @@ class Profile:
         del self.config
 
     def parse_group(self, part_json, group_index, local_ip):
-        dyp, quic, end_port, tfo, header, tls, path, host, conf_ip, serviceName = Dyport(), None, None, None, "", "", "", "", local_ip, ""
+        dyp, quic, end_port, tfo, header, tls, path, host, conf_ip, serviceName, mode = Dyport(), None, None, None, "", "", "", "", local_ip, "", "gun"
         
         protocol = part_json["protocol"]
 
@@ -131,6 +131,8 @@ class Profile:
                 quic = Quic(quic_settings["security"], quic_settings["key"], quic_settings["header"]["type"])
             if conf_stream["network"] == "grpc" and conf_stream["grpcSettings"]:
                 serviceName = conf_stream["grpcSettings"]["serviceName"]
+                if "multiMode" in conf_stream["grpcSettings"] and conf_stream["grpcSettings"]["multiMode"]:
+                    mode = "multi"
         
         group = Group(conf_ip, port,  end_port=end_port, tls=tls, tfo=tfo, dyp=dyp, index=group_index)
 
@@ -166,7 +168,7 @@ class Profile:
             elif protocol == "vless":
                 if tls == "xtls":
                     flow = client["flow"]
-                node = Vless(client["id"], self.user_number, conf_settings["decryption"], email, conf_stream["network"], path, host, header, flow, serviceName)
+                node = Vless(client["id"], self.user_number, conf_settings["decryption"], email, conf_stream["network"], path, host, header, flow, serviceName, mode)
 
             elif protocol == "trojan":
                 node = Trojan(self.user_number, client["password"], email)

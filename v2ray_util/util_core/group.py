@@ -98,7 +98,7 @@ class Socks(User):
         return "socks"
 
 class Vless(User):
-    def __init__(self, uuid, user_number, encryption=None, email=None, network=None, path=None, host=None, header=None, flow="", serviceName=""):
+    def __init__(self, uuid, user_number, encryption=None, email=None, network=None, path=None, host=None, header=None, flow="", serviceName="", mode=""):
         super(Vless, self).__init__(user_number, uuid, email)
         self.encryption = encryption
         self.path = path
@@ -107,6 +107,7 @@ class Vless(User):
         self.network = network
         self.flow = flow
         self.serviceName = serviceName
+        self.mode = mode
 
     def __str__(self):
         email = ""
@@ -126,7 +127,7 @@ Network: {network}
         elif self.network == "tcp":
             return "tcp"
         elif self.network == "grpc":
-            return "grpc serviceName: {}".format(self.serviceName)
+            return "grpc serviceName: {}, mode: {}".format(self.serviceName, self.mode)
         elif self.network == "kcp":
             result = "kcp"
             if self.header and self.header != 'none':
@@ -146,7 +147,7 @@ Network: {network}
         elif self.network == "tcp":
             result_link += "&type=tcp"
         elif self.network == "grpc":
-            result_link += "&type=grpc&serviceName={}".format(self.serviceName)
+            result_link += "&type=grpc&serviceName={}&mode={}".format(self.serviceName, self.mode)
         elif self.network == "kcp":
             result_link += "&type=kcp&headerType={0}&seed={1}".format(self.header, self.path)
         return ColorStr.green(result_link)

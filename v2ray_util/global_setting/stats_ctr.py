@@ -30,7 +30,7 @@ class StatsFactory:
 
         if run_type == "xray":
             stats_cmd = "cd /usr/bin/xray && ./xray api stats --server=127.0.0.1:{} -name \"{}>>>{}>>>traffic>>>{}\""
-            if is_reset == True:
+            if is_reset == "true":
                 stats_cmd = stats_cmd + " -reset"
         else:
             stats_cmd = "cd /usr/bin/v2ray && ./v2ctl api --server=127.0.0.1:{} StatsService.GetStats 'name: \"{}>>>{}>>>traffic>>>{}\"" + " reset: {}'".format(is_reset)

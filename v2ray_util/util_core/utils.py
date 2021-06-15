@@ -200,6 +200,8 @@ def gen_cert(domain):
             os.system("curl https://get.acme.sh | sh")
 
     open_port(80)
+    if int(os.popen("/root/.acme.sh/acme.sh -v|tr -cd '[0-9]'").read()) >= 300:
+        os.system("/root/.acme.sh/acme.sh --set-default-ca --server letsencrypt")
     get_ssl_cmd = "bash /root/.acme.sh/acme.sh --issue -d " + domain + " --debug --standalone --keylength ec-256"
     if ":" in local_ip:
         get_ssl_cmd = get_ssl_cmd + " --listen-v6"

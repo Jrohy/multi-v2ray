@@ -15,6 +15,7 @@ env:
   # github.repository as <account>/<repo>
   IMAGE_NAME_V2RAY: jrohy/v2ray
   IMAGE_NAME_XRAY: jrohy/xray
+  PLATFORMS: linux/amd64,linux/arm64/v8,linux/386
 
 jobs:
   buildx:
@@ -50,7 +51,7 @@ jobs:
           context: ./docker/v2ray/
           file: ./docker/v2ray/Dockerfile
           push: true
-          platforms: linux/amd64,linux/arm64/v8
+          platforms: ${{ PLATFORMS }}
           tags: |
             ${{ env.IMAGE_NAME_V2RAY }}:${{ steps.octokit.outputs.tag }}
             ${{ env.IMAGE_NAME_V2RAY }}:latest  
@@ -63,7 +64,7 @@ jobs:
           context: ./docker/xray/
           file: ./docker/xray/Dockerfile
           push: true
-          platforms: linux/amd64,linux/arm64/v8
+          platforms: ${{ PLATFORMS }}
           tags: |
             ${{ env.IMAGE_NAME_XRAY }}:${{ steps.octokit.outputs.tag }}
             ${{ env.IMAGE_NAME_XRAY }}:latest  

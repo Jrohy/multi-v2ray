@@ -8,8 +8,7 @@ name: Docker
 on:
   workflow_dispatch: #github页面手动触发
   push:
-    # Publish semver tags as releases.
-    tags: [ 'v**' ]
+    tags: [ 'v*' ]
 
 env:
   # github.repository as <account>/<repo>

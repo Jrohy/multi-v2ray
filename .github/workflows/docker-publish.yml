@@ -51,7 +51,7 @@ jobs:
           context: ./docker/v2ray/
           file: ./docker/v2ray/Dockerfile
           push: true
-          platforms: ${{ PLATFORMS }}
+          platforms: ${{ env.PLATFORMS }}
           tags: |
             ${{ env.IMAGE_NAME_V2RAY }}:${{ steps.octokit.outputs.tag }}
             ${{ env.IMAGE_NAME_V2RAY }}:latest  
@@ -64,7 +64,7 @@ jobs:
           context: ./docker/xray/
           file: ./docker/xray/Dockerfile
           push: true
-          platforms: ${{ PLATFORMS }}
+          platforms: ${{ env.PLATFORMS }}
           tags: |
             ${{ env.IMAGE_NAME_XRAY }}:${{ steps.octokit.outputs.tag }}
             ${{ env.IMAGE_NAME_XRAY }}:latest  

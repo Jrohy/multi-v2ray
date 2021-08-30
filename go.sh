@@ -116,26 +116,28 @@ archAffix(){
         ;;
         armv6l)
             echo 'arm32-v6'
+            grep Features /proc/cpuinfo | grep -qw 'vfp' || echo 'arm32-v5'
         ;;
         armv7|armv7l)
             echo 'arm32-v7a'
+            grep Features /proc/cpuinfo | grep -qw 'vfp' || echo 'arm32-v5'
         ;;
         armv8|aarch64)
             echo 'arm64-v8a'
         ;;
-        *mips64le*)
+        mips64le)
             echo 'mips64le'
         ;;
-        *mips64*)
+        mips64)
             echo 'mips64'
         ;;
-        *mipsle*)
-            echo 'mipsle'
+        mipsle)
+            echo 'mips32le'
         ;;
-        *mips*)
-            echo 'mips'
+        mips)
+            echo 'mips32'
         ;;
-        *s390x*)
+        s390x)
             echo 's390x'
         ;;
         ppc64le)

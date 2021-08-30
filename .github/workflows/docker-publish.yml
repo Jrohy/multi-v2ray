@@ -17,11 +17,18 @@ env:
   IMAGE_NAME_XRAY: jrohy/xray
 
 jobs:
-  build:
+  buildx:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+        
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
         
       - name: Get latest tag
         uses: oprypin/find-latest-tag@v1
@@ -43,6 +50,7 @@ jobs:
           context: ./docker/v2ray/
           file: ./docker/v2ray/Dockerfile
           push: true
+          platforms: linux/amd64,linux/arm64/v8,linux/386,linux/arm/v7,linux/ppc64le
           tags: |
             ${{ env.IMAGE_NAME_V2RAY }}:${{ steps.octokit.outputs.tag }}
             ${{ env.IMAGE_NAME_V2RAY }}:latest  
@@ -55,6 +63,7 @@ jobs:
           context: ./docker/xray/
           file: ./docker/xray/Dockerfile
           push: true
+          platforms: linux/amd64,linux/arm64/v8,linux/386,linux/arm/v7,linux/ppc64le
           tags: |
             ${{ env.IMAGE_NAME_XRAY }}:${{ steps.octokit.outputs.tag }}
             ${{ env.IMAGE_NAME_XRAY }}:latest  

@@ -15,7 +15,7 @@ env:
   # github.repository as <account>/<repo>
   IMAGE_NAME_V2RAY: jrohy/v2ray
   IMAGE_NAME_XRAY: jrohy/xray
-  PLATFORMS: linux/amd64,linux/arm64/v8,linux/386,linux/ppc64le
+  PLATFORMS: linux/amd64,linux/arm64/v8,linux/386,linux/arm/v7
 
 jobs:
   buildx:

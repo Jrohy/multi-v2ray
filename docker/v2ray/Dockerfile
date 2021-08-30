@@ -1,4 +1,4 @@
-FROM --platform=$TARGETPLATFORM centos:latest as builder
+FROM --platform=$TARGETPLATFORM centos:7 as builder
 
 RUN curl -L -s https://multi.netlify.app/go.sh|bash
 

@@ -23,7 +23,6 @@ ERROR_IF_UPTODATE=''
 
 CUR_VER=""
 NEW_VER=""
-VDIS=''
 ZIPFILE="/tmp/v2ray/v2ray.zip"
 V2RAY_RUNNING=0
 
@@ -104,53 +103,54 @@ colorEcho(){
 }
 
 archAffix(){
-    case "${1:-"$(uname -m)"}" in
-        i686|i386)
-            echo '32'
+    case "$(uname -m)" in
+      'i386' | 'i686')
+        MACHINE='32'
         ;;
-        x86_64|amd64)
-            echo '64'
+      'amd64' | 'x86_64')
+        MACHINE='64'
         ;;
-        armv5tel)
-            echo 'arm32-v5'
+      'armv5tel')
+        MACHINE='arm32-v5'
         ;;
-        armv6l)
-            echo 'arm32-v6'
-            grep Features /proc/cpuinfo | grep -qw 'vfp' || echo 'arm32-v5'
+      'armv6l')
+        MACHINE='arm32-v6'
+        grep Features /proc/cpuinfo | grep -qw 'vfp' || MACHINE='arm32-v5'
         ;;
-        armv7|armv7l)
-            echo 'arm32-v7a'
-            grep Features /proc/cpuinfo | grep -qw 'vfp' || echo 'arm32-v5'
+      'armv7' | 'armv7l')
+        MACHINE='arm32-v7a'
+        grep Features /proc/cpuinfo | grep -qw 'vfp' || MACHINE='arm32-v5'
         ;;
-        armv8|aarch64)
-            echo 'arm64-v8a'
+      'armv8' | 'aarch64')
+        MACHINE='arm64-v8a'
         ;;
-        mips64le)
-            echo 'mips64le'
+      'mips')
+        MACHINE='mips32'
         ;;
-        mips64)
-            echo 'mips64'
+      'mipsle')
+        MACHINE='mips32le'
         ;;
-        mipsle)
-            echo 'mips32le'
+      'mips64')
+        MACHINE='mips64'
         ;;
-        mips)
-            echo 'mips32'
+      'mips64le')
+        MACHINE='mips64le'
         ;;
-        s390x)
-            echo 's390x'
+      'ppc64')
+        MACHINE='ppc64'
         ;;
-        ppc64le)
-            echo 'ppc64le'
+      'ppc64le')
+        MACHINE='ppc64le'
         ;;
-        ppc64)
-            echo 'ppc64'
+      'riscv64')
+        MACHINE='riscv64'
         ;;
-        riscv64)
-            echo 'riscv64'
+      's390x')
+        MACHINE='s390x'
         ;;
         *)
-            return 1
+        echo "error: The architecture is not supported."
+        exit 1
         ;;
     esac
 
@@ -192,7 +192,7 @@ downloadV2Ray(){
     mkdir -p /tmp/$KEY_LOWER
     local PACK_NAME=$KEY_LOWER
     [[ $KEY == "Xray" ]] && PACK_NAME=$KEY
-    DOWNLOAD_LINK="https://github.com/$REPOS/releases/download/${NEW_VER}/${PACK_NAME}-linux-${VDIS}.zip"
+    DOWNLOAD_LINK="https://github.com/$REPOS/releases/download/${NEW_VER}/${PACK_NAME}-linux-${MACHINE}.zip"
     colorEcho ${BLUE} "Downloading $KEY: ${DOWNLOAD_LINK}"
     curl ${PROXY} -L -H "Cache-Control: no-cache" -o ${ZIPFILE} ${DOWNLOAD_LINK}
     if [ $? != 0 ];then
@@ -475,7 +475,7 @@ main(){
     [[ "$REMOVE" == "1" ]] && remove && return
 
     local ARCH=$(uname -m)
-    VDIS="$(archAffix)"
+    archAffix
 
     # extract local file
     if [[ $LOCAL_INSTALL -eq 1 ]]; then

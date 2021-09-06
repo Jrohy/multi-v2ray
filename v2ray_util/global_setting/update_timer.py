@@ -9,8 +9,7 @@ from ..util_core.loader import Loader
 from ..util_core.utils import ColorStr, readchar
 
 def restartCron():
-    import platform
-    IS_CENTOS = True if "centos" in platform.linux_distribution()[0].lower() else False
+    IS_CENTOS = True if os.popen("command -v yum").readlines() else False
     if os.path.exists("/.dockerenv"):
         pass
     elif IS_CENTOS:

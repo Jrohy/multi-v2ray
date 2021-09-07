@@ -152,7 +152,7 @@ installDependent(){
         ${PACKAGE_MANAGER} install socat crontabs bash-completion which -y
     else
         ${PACKAGE_MANAGER} update
-        ${PACKAGE_MANAGER} install socat cron bash-completion ntpdate -y
+        ${PACKAGE_MANAGER} install socat cron bash-completion ntpdate gawk -y
     fi
 
     #install python3 & pip

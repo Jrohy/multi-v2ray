@@ -102,6 +102,8 @@ removeV2Ray() {
     rm -rf /etc/bash_completion.d/v2ray.bash >/dev/null 2>&1
     rm -rf /usr/local/bin/v2ray >/dev/null 2>&1
     rm -rf /etc/v2ray_util >/dev/null 2>&1
+    rm -rf /etc/profile.d/iptables.sh >/dev/null 2>&1
+    rm -rf /root/.iptables >/dev/null 2>&1
 
     #删除v2ray定时更新任务
     crontab -l|sed '/SHELL=/d;/v2ray/d'|sed '/SHELL=/d;/xray/d' > crontab.txt
@@ -161,6 +163,16 @@ installDependent(){
 
 updateProject() {
     [[ ! $(type pip 2>/dev/null) ]] && colorEcho $RED "pip no install!" && exit 1
+
+    if [[ -e /etc/v2ray_util && ! -e /etc/profile.d/iptables.sh ]];then
+        LOCAL_IP=`curl -s http://api.ipify.org 2>/dev/null`
+        [[ `echo $LOCAL_IP|grep :` ]] && IPTABLE_WAY="ip6tables" || IPTABLE_WAY="iptables" 
+        cat > /etc/profile.d/iptables.sh << EOF
+#!/bin/bash
+$IPTABLE_WAY-restore -c < /root/.iptables
+EOF
+        chmod +x /etc/profile.d/iptables.sh
+    fi
 
     pip install -U v2ray_util
 

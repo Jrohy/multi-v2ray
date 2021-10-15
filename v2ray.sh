@@ -172,6 +172,7 @@ updateProject() {
 $IPTABLE_WAY-restore -c < /root/.iptables
 EOF
         chmod +x /etc/profile.d/iptables.sh
+        $IPTABLE_WAY-save -c > /root/.iptables
     fi
 
     pip install -U v2ray_util

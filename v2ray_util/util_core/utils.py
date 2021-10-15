@@ -270,7 +270,7 @@ def iptables_startup(iptable_way):
         with open('/etc/profile.d/iptables.sh', 'w') as f:
             f.write(
 '''#!/bin/bash
-{}-restore -c < /root/.iptables
+[[ -e /root/.iptables ]] && {}-restore -c < /root/.iptables
 '''.format(iptable_way))
         os.system("chmod +x /etc/profile.d/iptables.sh")
 

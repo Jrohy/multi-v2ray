@@ -169,7 +169,7 @@ updateProject() {
         [[ `echo $LOCAL_IP|grep :` ]] && IPTABLE_WAY="ip6tables" || IPTABLE_WAY="iptables" 
         cat > /etc/profile.d/iptables.sh << EOF
 #!/bin/bash
-$IPTABLE_WAY-restore -c < /root/.iptables
+[[ -e /root/.iptables ]] && $IPTABLE_WAY-restore -c < /root/.iptables
 EOF
         chmod +x /etc/profile.d/iptables.sh
         $IPTABLE_WAY-save -c > /root/.iptables

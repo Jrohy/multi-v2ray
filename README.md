@@ -137,4 +137,4 @@ v2ray docker: https://hub.docker.com/r/jrohy/v2ray
 xray docker: https://hub.docker.com/r/jrohy/xray  
 pip: https://pypi.org/project/v2ray-util/  
 python3: https://github.com/Jrohy/python3-install  
-acme: https://github.com/Neilpang/acme.sh
+acme: https://github.com/acmesh-official/acme.sh

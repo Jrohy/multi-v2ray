@@ -97,7 +97,10 @@ def manage(stat_type=''):
         if choice in ("3", "4", "5") and not profile.stats.status:
             print(_("only open traffic statistics to operate"))
             print("")
-            continue
+            if stat_type:
+                break
+            else:
+                continue
 
         if choice == "1":
             if os.popen(FIND_V2RAY_CRONTAB_CMD).readlines():

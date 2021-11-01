@@ -131,6 +131,10 @@ def parse_arg():
             multiple.new_port(sys.argv[2])
         elif sys.argv[1] == "update":
             V2ray.update(sys.argv[2])
+        elif sys.argv[1] == "iptables":
+            iptables_ctr.manage(sys.argv[2])
+        elif sys.argv[1] == "stats":
+            stats_ctr.manage(sys.argv[2])
         elif sys.argv[1] == "log":
             if sys.argv[2] in ("error", "e"):
                 V2ray.log(True)

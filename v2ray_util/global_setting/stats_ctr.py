@@ -58,7 +58,7 @@ total: {2}
             ColorStr.cyan(bytes_2_human_readable(self.downlink_value + self.uplink_value, 2)))
             )
 
-def manage():
+def manage(stat_type=''):
 
     FIND_V2RAY_CRONTAB_CMD = "crontab -l|grep {}".format(run_type)
 
@@ -71,23 +71,28 @@ def manage():
 
         group_list = profile.group_list
 
-        print("{}: {}".format(_("{} Traffic Statistics Status".format(run_type.capitalize())), profile.stats.status))
+        if stat_type == 'group':
+            choice = 4
+        elif stat_type == 'user':
+            choice = 3
+        else:
+            print("{}: {}".format(_("{} Traffic Statistics Status".format(run_type.capitalize())), profile.stats.status))
 
-        print("")
-        print(_("1.open statistics"))
-        print("")
-        print(_("2.close statistics"))
-        print("")
-        print(_("3.check user statistics result"))
-        print("")
-        print(_("4.check group statistics result"))
-        print("")
-        print(_("5.reset statistics"))
-        print("")
-        print(_("tip: restart {} will reset traffic statistics!!!".format(run_type)))
-        print("")
+            print("")
+            print(_("1.open statistics"))
+            print("")
+            print(_("2.close statistics"))
+            print("")
+            print(_("3.check user statistics result"))
+            print("")
+            print(_("4.check group statistics result"))
+            print("")
+            print(_("5.reset statistics"))
+            print("")
+            print(_("tip: restart {} will reset traffic statistics!!!".format(run_type)))
+            print("")
 
-        choice = readchar(_("please select: "))
+            choice = readchar(_("please select: "))
 
         if choice in ("3", "4", "5") and not profile.stats.status:
             print(_("only open traffic statistics to operate"))
@@ -134,6 +139,8 @@ Port: {group.port}{port_way}
                     else:
                         print(ColorStr.yellow(_("no effective email!!!")))
                     print("")
+            if stat_type:
+                break
 
         elif choice == "4":
             sf = StatsFactory(profile.stats.door_port)
@@ -150,6 +157,8 @@ TLS: {tls}
                 sf.get_stats(group.tag, False, True)
                 sf.print_stats(horizontal=True)
                 print("")
+            if stat_type:
+                break
 
         elif choice == "5":
             if group_list[-1].node_list[-1].user_number > 1:

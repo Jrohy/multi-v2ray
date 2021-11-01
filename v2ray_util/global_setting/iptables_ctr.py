@@ -6,7 +6,7 @@ import pkg_resources
 from ..util_core.loader import Loader
 from ..util_core.utils import ColorStr, calcul_iptables_traffic, readchar
 
-def manage():
+def manage(iptables_type=''):
     
     loader = Loader()
 
@@ -15,21 +15,26 @@ def manage():
     group_list = profile.group_list
 
     while True:
-        print("")
-        print(_("Iptables Traffic Statistics"))
-        print("")
-        print(_("1.check statistics result"))
-        print("")
-        print(_("2.reset special port statistics"))
-        print("")
+        if iptables_type == 'show':
+            choice = 1
+        else:
+            print("")
+            print(_("Iptables Traffic Statistics"))
+            print("")
+            print(_("1.check statistics result"))
+            print("")
+            print(_("2.reset special port statistics"))
+            print("")
 
-        choice = readchar(_("please select: "))
+            choice = readchar(_("please select: "))
         if choice == "1":
             print("")
             ipv6 = True if profile.network == "ipv6" else False
             for group in group_list:
                 print(calcul_iptables_traffic(group.port, ipv6))
             print("")
+            if iptables_type:
+                break
 
         elif choice == "2":
             port = input(_("please input reset port:"))

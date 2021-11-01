@@ -18,6 +18,10 @@ function _auto_tab() {
 			COMPREPLY=( $(compgen -W "${add_array[*]}" -- $cur) );;
 		'log')
 			COMPREPLY=( $(compgen -W "${log_array[*]}" -- $cur) );;
+		'stats')
+			COMPREPLY=( $(compgen -W "group user" -- $cur) );;
+		'iptables')
+			COMPREPLY=( $(compgen -W "show" -- $cur) );;
 		'*')
 			COMPREPLY=( $(compgen -d -f ${cur}) ) ;;
 	esac

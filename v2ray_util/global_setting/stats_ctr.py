@@ -72,9 +72,9 @@ def manage(stat_type=''):
         group_list = profile.group_list
 
         if stat_type == 'group':
-            choice = 4
+            choice = "4"
         elif stat_type == 'user':
-            choice = 3
+            choice = "3"
         else:
             print("{}: {}".format(_("{} Traffic Statistics Status".format(run_type.capitalize())), profile.stats.status))
 

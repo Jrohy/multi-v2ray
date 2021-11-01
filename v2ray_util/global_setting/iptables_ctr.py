@@ -16,7 +16,7 @@ def manage(iptables_type=''):
 
     while True:
         if iptables_type == 'show':
-            choice = 1
+            choice = "1"
         else:
             print("")
             print(_("Iptables Traffic Statistics"))

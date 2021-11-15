@@ -122,8 +122,7 @@ class StreamWriter(Writer):
             type_str = "wireguard"
         self.part_json["streamSettings"]["kcpSettings"]["header"]["type"] = type_str
 
-    def to_vmess(self, header_type):
-        self.to_kcp(header_type)
+    def to_vmess(self):
         self.part_json["protocol"] = "vmess"
         self.part_json["settings"] = {
             "clients": [
@@ -170,7 +169,8 @@ class StreamWriter(Writer):
             clean_mtproto_tag(self.config, self.group_index)
 
         if "KCP" in self.stream_type.name:
-            self.to_vmess(self.stream_type.value)
+            self.to_kcp(self.stream_type.value)
+            self.to_vmess()
 
         elif self.stream_type == StreamType.TCP:
             self.part_json["streamSettings"] = self.load_template('tcp.json')
@@ -218,6 +218,7 @@ class StreamWriter(Writer):
             self.part_json["streamSettings"] = ws
 
         elif self.stream_type == StreamType.GRPC:
+            self.to_vmess()
             alpn = ["h2"]
             self.part_json["streamSettings"] = self.load_template('tcp.json')
             self.part_json["streamSettings"]["network"] = "grpc"

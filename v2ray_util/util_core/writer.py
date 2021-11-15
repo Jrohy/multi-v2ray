@@ -164,7 +164,7 @@ class StreamWriter(Writer):
             server["inbounds"][0]["allocate"] = self.part_json["allocate"]
         self.part_json = server["inbounds"][0]
 
-        if "KCP" in self.stream_type.name:
+        if self.stream_type.name.startswith('KCP'):
             self.to_kcp(self.stream_type.value)
 
         elif self.stream_type == StreamType.TCP:

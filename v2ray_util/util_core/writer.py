@@ -217,6 +217,23 @@ class StreamWriter(Writer):
                 ws["wsSettings"]["headers"]["Host"] = kw['host']
             self.part_json["streamSettings"] = ws
 
+        elif self.stream_type == StreamType.GRPC:
+            alpn = ["h2"]
+            self.part_json["streamSettings"] = self.load_template('tcp.json')
+            self.part_json["streamSettings"]["network"] = "grpc"
+            self.part_json["streamSettings"]["grpcSettings"]["serviceName"] = ''.join(random.sample(string.ascii_letters + string.digits, 8))
+            if "mode" in kw and kw["mode"] == "multi":
+                self.part_json["streamSettings"]["grpcSettings"]["multiMode"] = True
+            if "fallbacks" in self.part_json["settings"]:
+                del self.part_json["settings"]["fallbacks"]
+            self.save()
+            if not "certificates" in tls_settings_backup:
+                from ..config_modify.tls import TLSModifier
+                tm = TLSModifier(self.group_tag, self.group_index, alpn=alpn)
+                tm.turn_on(False)
+                return
+            tls_settings_backup["alpn"] = alpn
+
         elif "vless" in self.stream_type.value:
             alpn = ["http/1.1"]
             vless = self.load_template('vless.json')

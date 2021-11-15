@@ -28,6 +28,7 @@ class StreamModifier:
             (StreamType.MTPROTO, "MTProto"), 
             (StreamType.SS, "Shadowsocks"),
             (StreamType.QUIC, "Quic"),
+            (StreamType.GRPC, "gRPC"),
             (StreamType.VLESS_KCP, "VLESS + mkcp"),
             (StreamType.VLESS_UTP, "VLESS + mKCP + utp"),
             (StreamType.VLESS_SRTP, "VLESS + mKCP + srtp"),
@@ -94,6 +95,11 @@ class StreamModifier:
                 choice = readchar(_("open xray grpc multiMode?(y/n): ")).lower()
                 if choice == 'y':
                     kw = {'mode': 'multi'}
+        
+        elif sType == StreamType.GRPC:
+            choice = readchar(_("open xray grpc multiMode?(y/n): ")).lower()
+            if choice == 'y':
+                kw = {'mode': 'multi'}
                 
         elif sType == StreamType.TROJAN:
             port_set = all_port()

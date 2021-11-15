@@ -60,6 +60,7 @@ class StreamType(Enum):
     MTPROTO = 'mtproto'
     H2 = 'h2'
     WS = 'ws'
+    GRPC = 'grpc'
     QUIC = 'quic'
     KCP = 'kcp'
     KCP_UTP = 'utp'

@@ -24,7 +24,8 @@
       "network": "",
       "kcpSettings": {},
       "tcpSettings": {},
-      "quicSettings": {}
+      "quicSettings": {},
+      "grpcSettings": {}
     }
   }
   ],

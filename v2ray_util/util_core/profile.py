@@ -157,6 +157,9 @@ class Profile:
                 email = client["email"]
 
             if protocol == "vmess":
+                if serviceName:
+                    path = serviceName
+                    header = mode
                 node = Vmess(client["id"], client["alterId"], conf_stream["network"], self.user_number, path=path, host=host, header=header, email=email, quic=quic)
 
             elif protocol == "socks":

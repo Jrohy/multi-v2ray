@@ -174,6 +174,8 @@ class Vmess(User):
             network = "HTTP/2 path: {}".format(self.path)
         elif self.network == "ws":
             network = "WebSocket host: {0}, path: {1}".format(self.host, self.path)
+        elif self.network == "grpc":
+            network =  "grpc serviceName: {}, mode: {}".format(self.path, self.header)
         elif self.network == "tcp":
             if self.host:
                 network = "tcp host: {0}".format(self.host)

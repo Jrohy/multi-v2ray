@@ -163,6 +163,7 @@ class StreamWriter(Writer):
         if "allocate" in self.part_json:
             server["inbounds"][0]["allocate"] = self.part_json["allocate"]
         self.part_json = server["inbounds"][0]
+        self.config["inbounds"][self.group_index] = self.part_json
 
         if self.stream_type.name.startswith('KCP'):
             self.to_kcp(self.stream_type.value)
@@ -258,7 +259,6 @@ class StreamWriter(Writer):
                         self.part_json["streamSettings"]["grpcSettings"]["multiMode"] = True
                     if "fallbacks" in self.part_json["settings"]:
                         del self.part_json["settings"]["fallbacks"]
-
             self.save()
             # tls的设置
             if self.stream_type in (StreamType.VLESS_XTLS, StreamType.VLESS_WS, StreamType.VLESS_TLS, StreamType.VLESS_GRPC):

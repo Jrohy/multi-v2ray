@@ -182,7 +182,7 @@ updateProject() {
         if [[ ! -e $RC_FILE || -z `cat $RC_FILE|grep "/bin/bash"` ]];then
             echo "#!/bin/bash" >> $RC_FILE
         fi
-        if [[ `cat $RC_SERVICE|grep "\[Install\]"` ]];then
+        if [[ -z `cat $RC_SERVICE|grep "\[Install\]"` ]];then
             cat >> $RC_SERVICE << EOF
 [Install]
 WantedBy=multi-user.target

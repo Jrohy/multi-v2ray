@@ -184,6 +184,7 @@ updateProject() {
         fi
         if [[ -z `cat $RC_SERVICE|grep "\[Install\]"` ]];then
             cat >> $RC_SERVICE << EOF
+
 [Install]
 WantedBy=multi-user.target
 EOF

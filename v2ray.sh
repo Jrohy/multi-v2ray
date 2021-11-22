@@ -121,6 +121,12 @@ removeV2Ray() {
     sed -i '/xray/d' ~/$ENV_FILE
     source ~/$ENV_FILE
 
+    RC_SERVICE=`systemctl status rc-local|grep loaded|egrep -o "[A-Za-z/]+/rc-local.service"`
+
+    RC_FILE=`cat $RC_SERVICE|grep ExecStart|awk '{print $1}'|cut -d = -f2`
+
+    sed -i '/iptables/d' ~/$RC_FILE
+
     colorEcho ${GREEN} "uninstall success!"
 }
 
@@ -164,14 +170,30 @@ installDependent(){
 updateProject() {
     [[ ! $(type pip 2>/dev/null) ]] && colorEcho $RED "pip no install!" && exit 1
 
-    if [[ -e /etc/v2ray_util && ! -e /etc/profile.d/iptables.sh ]];then
+    [[ -e /etc/profile.d/iptables.sh ]] && rm -f /etc/profile.d/iptables.sh
+
+    RC_SERVICE=`systemctl status rc-local|grep loaded|egrep -o "[A-Za-z/]+/rc-local.service"`
+
+    RC_FILE=`cat $RC_SERVICE|grep ExecStart|awk '{print $1}'|cut -d = -f2`
+
+    if [[ ! -e $RC_FILE || -z `cat $RC_FILE|grep iptables` ]];then
         LOCAL_IP=`curl -s http://api.ipify.org 2>/dev/null`
         [[ `echo $LOCAL_IP|grep :` ]] && IPTABLE_WAY="ip6tables" || IPTABLE_WAY="iptables" 
-        cat > /etc/profile.d/iptables.sh << EOF
-#!/bin/bash
-[[ -e /root/.iptables ]] && $IPTABLE_WAY-restore -c < /root/.iptables
+        if [[ ! -e $RC_FILE || -z `cat $RC_FILE|grep "/bin/bash"` ]];then
+            echo "#!/bin/bash" >> $RC_FILE
+        fi
+        if [[ `cat $RC_SERVICE|grep "\[Install\]"`]];then
+            cat >> $RC_SERVICE << EOF
+[Install]
+WantedBy=multi-user.target
 EOF
-        chmod +x /etc/profile.d/iptables.sh
+            systemctl daemon-reload
+        fi
+        echo "[[ -e /root/.iptables ]] && $IPTABLE_WAY-restore -c < /root/.iptables" >> $RC_FILE
+        chmod +x $RC_FILE
+        systemctl restart rc-local
+        systemctl enable rc-local
+
         $IPTABLE_WAY-save -c > /root/.iptables
     fi
 

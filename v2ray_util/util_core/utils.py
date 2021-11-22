@@ -266,22 +266,11 @@ def iptables_open(iptable_way, port):
     os.system(output_cmd.format(iptable_way, "tcp", port))
     os.system(output_cmd.format(iptable_way, "udp", port))
 
-def iptables_startup(iptable_way):
-    if not os.path.exists("/.dockerenv") and not os.path.exists("/etc/profile.d/iptables.sh"):
-        with open('/etc/profile.d/iptables.sh', 'w') as f:
-            f.write(
-'''#!/bin/bash
-[[ -e /root/.iptables ]] && {}-restore -c < /root/.iptables
-'''.format(iptable_way))
-        os.system("chmod +x /etc/profile.d/iptables.sh")
-
 def open_port(openport=-1):
     import platform
     from .loader import Loader
 
     iptable_way = "iptables" if Loader().profile.network == "ipv4" else "ip6tables"
-
-    iptables_startup(iptable_way)
 
     is_centos8 = True if "centos-8" in platform.platform() else False
     firewall_open_cmd = "firewall-cmd --zone=public --add-port={}/tcp --add-port={}/udp --permanent >/dev/null 2>&1"

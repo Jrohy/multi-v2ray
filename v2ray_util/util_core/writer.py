@@ -424,7 +424,7 @@ class ClientWriter(Writer):
     def __init__(self, group_tag = 'A', group_index = 0, client_index = 0):
         super(ClientWriter, self).__init__(group_tag, group_index)
         self.client_index = client_index
-        self.client_str = "clients" if self.part_json["protocol"] in ("vmess", "vless") else "users"
+        self.client_str = "clients" if self.part_json["protocol"] in ("vmess", "vless", "trojan") else "users"
 
     def write_aid(self, aid = 32):
         self.part_json["settings"][self.client_str][self.client_index]["alterId"] = int(aid)

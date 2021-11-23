@@ -162,6 +162,8 @@ class StreamWriter(Writer):
         server["inbounds"][0]["settings"]["clients"][0]["id"] = str(uuid.uuid1())
         if "allocate" in self.part_json:
             server["inbounds"][0]["allocate"] = self.part_json["allocate"]
+        if "sniffing" in self.part_json:
+            server["inbounds"][0]["sniffing"] = self.part_json["sniffing"]
         self.part_json = server["inbounds"][0]
         self.config["inbounds"][self.group_index] = self.part_json
 

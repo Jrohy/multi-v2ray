@@ -79,6 +79,8 @@ class StreamWriter(Writer):
         mtproto_in["tag"] = self.group_tag
         if "allocate" in self.part_json:
             mtproto_in["allocate"] = self.part_json["allocate"]
+        if "sniffing" in self.part_json:
+            mtproto_in["sniffing"] = self.part_json["sniffing"]
         salt = "abcdef" + string.digits
         secret = ''.join([random.choice(salt) for _ in range(32)])
         mtproto_in["settings"]["users"][0]["secret"] = secret
@@ -203,6 +205,8 @@ class StreamWriter(Writer):
             ss["port"] = self.part_json["port"]
             if "allocate" in self.part_json:
                 ss["allocate"] = self.part_json["allocate"]
+            if "sniffing" in self.part_json:
+                ss["sniffing"] = self.part_json["sniffing"]
             ss["settings"]["method"] = kw["method"]
             ss["settings"]["password"] = kw["password"]
             self.part_json = ss

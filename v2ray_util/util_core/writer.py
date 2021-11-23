@@ -553,6 +553,15 @@ class NodeWriter(Writer):
         new_inbound = server["inbounds"][0]
         new_inbound["port"] = int(newPort)
         new_inbound["settings"]["clients"][0]["id"] = str(uuid.uuid1())
+        for rule in self.config["routing"]["rules"]:
+            if "protocol" in rule and "bittorrent" in rule["protocol"]:
+                new_inbound.update({
+                    "sniffing": {
+                        "enabled": True,
+                        "destOverride": ["http", "tls"]
+                    }
+                })
+                break
         self.config["inbounds"].append(new_inbound)
         print(_("add port group success!"))
         self.save()

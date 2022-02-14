@@ -310,19 +310,17 @@ startV2ray(){
 installV2Ray(){
     # Install $KEY binary to /usr/bin/$KEY_LOWER
     mkdir -p /etc/$KEY_LOWER /var/log/$KEY_LOWER && \
-    if [[ $KEY == "Xray" ]];then
-        unzip -oj "$1" "$2xray" "$2geoip.dat" "$2geosite.dat" -d /usr/bin/$KEY_LOWER && \
-        chmod +x /usr/bin/$KEY_LOWER/$KEY_LOWER || {
+    unzip -oj "$1" "$2${KEY_LOWER}" "$2geoip.dat" "$2geosite.dat" -d /usr/bin/$KEY_LOWER && \
+    chmod +x /usr/bin/$KEY_LOWER/$KEY_LOWER || {
+        colorEcho ${RED} "Failed to copy $KEY binary and resources."
+        return 1
+    }
+    if [[ $KEY == "V2Ray" && `unzip -l $1|grep v2ctl` ]];then
+        unzip -oj "$1" "$2v2ctl" -d /usr/bin/$KEY_LOWER && \
+        chmod +x /usr/bin/$KEY_LOWER/v2ctl || {
             colorEcho ${RED} "Failed to copy $KEY binary and resources."
             return 1
         }
-    else
-        unzip -oj "$1" "$2v2ray" "$2v2ctl" "$2geoip.dat" "$2geosite.dat" -d /usr/bin/$KEY_LOWER 2>/dev/null && \
-        chmod +x /usr/bin/$KEY_LOWER/$KEY_LOWER || {
-            colorEcho ${RED} "Failed to copy $KEY binary and resources."
-            return 1
-        }
-        [[ -e /usr/bin/$KEY_LOWER/v2ctl ]] && chmod +x /usr/bin/$KEY_LOWER/v2ctl
     fi
 
     # Install V2Ray server config to /etc/v2ray

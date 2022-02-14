@@ -312,15 +312,18 @@ installV2Ray(){
     mkdir -p /etc/$KEY_LOWER /var/log/$KEY_LOWER && \
     if [[ $KEY == "Xray" ]];then
         unzip -oj "$1" "$2xray" "$2geoip.dat" "$2geosite.dat" -d /usr/bin/$KEY_LOWER && \
+        chmod +x /usr/bin/$KEY_LOWER/$KEY_LOWER || {
+            colorEcho ${RED} "Failed to copy $KEY binary and resources."
+            return 1
+        }
     else
         unzip -oj "$1" "$2v2ray" "$2v2ctl" "$2geoip.dat" "$2geosite.dat" -d /usr/bin/$KEY_LOWER 2>/dev/null && \
+        chmod +x /usr/bin/$KEY_LOWER/$KEY_LOWER || {
+            colorEcho ${RED} "Failed to copy $KEY binary and resources."
+            return 1
+        }
         [[ -e /usr/bin/$KEY_LOWER/v2ctl ]] && chmod +x /usr/bin/$KEY_LOWER/v2ctl
     fi
-
-    chmod +x /usr/bin/$KEY_LOWER/$KEY_LOWER || {
-        colorEcho ${RED} "Failed to copy $KEY binary and resources."
-        return 1
-    }
 
     # Install V2Ray server config to /etc/v2ray
     if [ ! -f /etc/$KEY_LOWER/config.json ]; then

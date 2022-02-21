@@ -204,10 +204,12 @@ def gen_cert(domain, cert_type, email=""):
     if int(os.popen("/root/.acme.sh/acme.sh -v|tr -cd '[0-9]'").read()) < 300:
         os.system("/root/.acme.sh/acme.sh --upgrade")
     if cert_type in ("buypass", "zerossl"):
-        os.system("bash /root/.acme.sh/acme.sh --server %s --register-account -m %s".format(cert_type, email))
+        os.system("bash /root/.acme.sh/acme.sh --server {} --register-account -m {}".format(cert_type, email))
     get_ssl_cmd = "bash /root/.acme.sh/acme.sh --issue -d " + domain + " --debug --standalone --keylength ec-256 --force --server " + cert_type
     if ":" in local_ip:
         get_ssl_cmd = get_ssl_cmd + " --listen-v6"
+    if cert_type == "buypass":
+        get_ssl_cmd = get_ssl_cmd + " --days 170"
 
     if not os.path.exists("/.dockerenv"):
         for name in service_name:

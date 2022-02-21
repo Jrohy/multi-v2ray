@@ -617,11 +617,17 @@ msgstr "自动切换到443端口..."
 
 ### tls.py start ###
 
-msgid "1. Let's Encrypt certificate(auto create, please prepare domain)"
-msgstr "1. Let’s Encrypt 生成证书(准备域名)"
+msgid "1. Let's Encrypt certificate"
+msgstr "1. Let’s Encrypt 证书"
 
-msgid "2. Customize certificate(prepare certificate file paths)"
-msgstr "2. 自定义已存在的其他路径的证书(准备证书文件路径)"
+msgid "2. ZeroSSL certificate"
+msgstr "2. ZeroSSL 证书"
+
+msgid "3. BuyPass certificate"
+msgstr "3. BuyPass 证书"
+
+msgid "4. Customize certificate file path"
+msgstr "4. 自定义已存在的其他路径的证书"
 
 msgid "local vps ip address: "
 msgstr "本机器IP地址为："
@@ -634,6 +640,12 @@ msgstr "域名检测错误!!!"
 
 msgid "domain can't analysis to local ip!!!"
 msgstr "输入的域名与本机ip不符!!!"
+
+msgid "please input your email to apply for a certificate: "
+msgstr "请输入用于申请域名的邮箱："
+
+msgid "not valid email, please input again!"
+msgstr "不是有效的邮箱, 请重新输入!"
 
 msgid "auto generate SSL certificate, please wait.."
 msgstr "正在获取SSL证书，请稍等.."

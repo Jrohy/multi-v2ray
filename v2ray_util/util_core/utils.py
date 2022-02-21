@@ -186,7 +186,7 @@ def bytes_2_human_readable(number_of_bytes, precision=1):
  
     return str(number_of_bytes) + ' ' + unit
 
-def gen_cert(domain):
+def gen_cert(domain, cert_type, email=""):
     local_ip = get_ip()
     service_name = ["nginx", "httpd", "apache2"]
     start_cmd = "systemctl start {}  >/dev/null 2>&1"
@@ -201,9 +201,11 @@ def gen_cert(domain):
             os.system("curl https://get.acme.sh | sh")
 
     open_port(80)
-    if int(os.popen("/root/.acme.sh/acme.sh -v|tr -cd '[0-9]'").read()) >= 300:
-        os.system("/root/.acme.sh/acme.sh --set-default-ca --server letsencrypt")
-    get_ssl_cmd = "bash /root/.acme.sh/acme.sh --issue -d " + domain + " --debug --standalone --keylength ec-256"
+    if int(os.popen("/root/.acme.sh/acme.sh -v|tr -cd '[0-9]'").read()) < 300:
+        os.system("/root/.acme.sh/acme.sh --upgrade")
+    if cert_type in ("buypass", "zerossl"):
+        os.system("bash /root/.acme.sh/acme.sh --server %s --register-account -m %s".format(cert_type, email))
+    get_ssl_cmd = "bash /root/.acme.sh/acme.sh --issue -d " + domain + " --debug --standalone --keylength ec-256 --force --server " + cert_type
     if ":" in local_ip:
         get_ssl_cmd = get_ssl_cmd + " --listen-v6"
 

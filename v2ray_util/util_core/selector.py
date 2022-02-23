@@ -21,6 +21,10 @@ class CommonSelector:
         else:
             choice = input(self.msg)
 
+        if not choice:
+            print("use {}".format(self.collection[0]))
+            return self.collection[0]
+
         if not choice.isnumeric():
             raise RuntimeError(_('input error, please check is number'))
 

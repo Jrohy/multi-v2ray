@@ -150,6 +150,7 @@ Network: {network}
             result_link += "&type=grpc&serviceName={}&mode={}".format(self.serviceName, self.mode)
         elif self.network == "kcp":
             result_link += "&type=kcp&headerType={0}&seed={1}".format(self.header, self.path)
+        result_link += "#{}".format(quote("{}:{}".format(ip, port)))
         return ColorStr.green(result_link)
 
 class Vmess(User):
@@ -204,7 +205,7 @@ Network: {network}
     def link(self, ip, port, tls):
         json_dict = {
             "v": "2",
-            "ps": "",
+            "ps": "{}:{}".format(ip, port),
             "add": ip,
             "port": port,
             "aid": self.alter_id,

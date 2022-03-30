@@ -330,7 +330,7 @@ class StreamWriter(Writer):
             self.part_json["domain"] = domain
 
         apln_list = (StreamType.VLESS_TLS, StreamType.TROJAN, StreamType.VLESS_XTLS, StreamType.VLESS_GRPC)
-        if "streamSettings" in self.part_json and "alpn" in self.part_json["streamSettings"]["tlsSettings"] and self.stream_type not in apln_list:
+        if self.stream_type not in apln_list and "streamSettings" in self.part_json and "tlsSettings" in self.part_json["streamSettings"] and "alpn" in self.part_json["streamSettings"]["tlsSettings"]:
             del self.part_json["streamSettings"]["tlsSettings"]["alpn"]
 
         self.config["inbounds"][self.group_index] = self.part_json

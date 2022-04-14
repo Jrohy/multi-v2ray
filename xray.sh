@@ -227,7 +227,7 @@ EOF
     fi
     
     #安装Xray主程序
-    [[ ${INSTALL_WAY} == 0 ]] && bash <(curl -L -s https://multi.netlify.app/go.sh) -xray
+    [[ ${INSTALL_WAY} == 0 ]] && bash <(curl -L -s https://multi.netlify.app/go.sh) --xray
 }
 
 #时间同步

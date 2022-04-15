@@ -37,7 +37,7 @@
   {
     "protocol": "blackhole",
     "settings": {},
-    "tag": "blocked"
+    "tag": "block"
   }
   ],
   "routing": {
@@ -60,7 +60,7 @@
           "fc00::/7",
           "fe80::/10"
         ],
-        "outboundTag": "blocked"
+        "outboundTag": "block"
       }
     ]
   }

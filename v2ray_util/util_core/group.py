@@ -66,7 +66,7 @@ class Trojan(User):
             return "Password: {password}\n".format(password=self.password)
 
     def link(self, ip, port, tls):
-        return ColorStr.green("trojan://{0}@{1}:{2}".format(self.password, ip, port))
+        return ColorStr.green("trojan://{0}@{1}:{2}#{1}:{2}".format(self.password, ip, port))
 
     def stream(self):
         return "trojan"

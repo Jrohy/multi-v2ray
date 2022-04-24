@@ -160,7 +160,7 @@ class V2ray:
     @classmethod
     def new(cls):
         subprocess.call("rm -rf /etc/{soft}/config.json && cp {package_path}/server.json /etc/{soft}/config.json".format(soft=run_type, package_path=pkg_resources.resource_filename('v2ray_util', "json_template")), shell=True)
-        new_uuid = uuid.uuid1()
+        new_uuid = uuid.uuid4()
         print("new UUID: {}".format(ColorStr.green(str(new_uuid))))
         new_port = random_port(1000, 65535)
         print("new port: {}".format(ColorStr.green(str(new_port))))

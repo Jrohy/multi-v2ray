@@ -161,7 +161,7 @@ class StreamWriter(Writer):
 
         server = self.load_template('server.json')
         server["inbounds"][0]["port"] = self.part_json["port"]
-        server["inbounds"][0]["settings"]["clients"][0]["id"] = str(uuid.uuid1())
+        server["inbounds"][0]["settings"]["clients"][0]["id"] = str(uuid.uuid4())
         if "allocate" in self.part_json:
             server["inbounds"][0]["allocate"] = self.part_json["allocate"]
         if "sniffing" in self.part_json:
@@ -239,7 +239,7 @@ class StreamWriter(Writer):
         elif "vless" in self.stream_type.value:
             alpn = ["http/1.1"]
             vless = self.load_template('vless.json')
-            vless["clients"][0]["id"] = str(uuid.uuid1())
+            vless["clients"][0]["id"] = str(uuid.uuid4())
             if self.stream_type == StreamType.VLESS_XTLS:
                 vless["clients"][0]["flow"] = kw["flow"]
             elif self.stream_type == StreamType.VLESS_WS:
@@ -361,7 +361,7 @@ class GroupWriter(Writer):
 
     def write_dyp(self, status = False, aid = '32'):
         if status:
-            short_uuid = str(uuid.uuid1())[0:7]
+            short_uuid = str(uuid.uuid4())[0:7]
             dynamic_port_tag = "dynamicPort" + short_uuid
             self.part_json["settings"].update({"detour":{"to":dynamic_port_tag}})
             dyn_json = self.load_template('dyn_port.json')
@@ -558,7 +558,7 @@ class NodeWriter(Writer):
         server = self.load_template('server.json')
         new_inbound = server["inbounds"][0]
         new_inbound["port"] = int(newPort)
-        new_inbound["settings"]["clients"][0]["id"] = str(uuid.uuid1())
+        new_inbound["settings"]["clients"][0]["id"] = str(uuid.uuid4())
         for rule in self.config["routing"]["rules"]:
             if "protocol" in rule and "bittorrent" in rule["protocol"]:
                 new_inbound.update({
@@ -591,7 +591,7 @@ class NodeWriter(Writer):
             print("{0} pass: {1}{2}".format(_("add trojan user success!"), kw["password"], email_info))
         
         elif self.part_json['protocol'] == 'vmess':
-            new_uuid = uuid.uuid1()
+            new_uuid = uuid.uuid4()
             email_info = ""
             user = {
                 "alterId": 0,
@@ -605,7 +605,7 @@ class NodeWriter(Writer):
             print("{0} uuid: {1}, alterId: 32{2}".format(_("add user success!"), str(new_uuid), email_info))
 
         elif self.part_json['protocol'] == 'vless':
-            new_uuid = uuid.uuid1()
+            new_uuid = uuid.uuid4()
             info = ""
             user = {
                 "id": str(new_uuid)

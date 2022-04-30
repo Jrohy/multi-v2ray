@@ -115,7 +115,7 @@ def new_uuid():
             choice = readchar(_("get new UUID?(y/n): ")).lower()
             if choice == "y":
                 import uuid
-                new_uuid = uuid.uuid1()
+                new_uuid = uuid.uuid4()
                 print("{}: {}".format(_("new UUID"),new_uuid))
                 cw = ClientWriter(group.tag, group.index, client_index)
                 cw.write_uuid(new_uuid)

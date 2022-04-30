@@ -379,8 +379,8 @@ msgstr "请输入新的alterID: "
 msgid "alterId modify success!"
 msgstr "alterID修改成功!"
 
-msgid "only vmess protocol can modify alterId!"
-msgstr "只有vmess协议才能修改alterId!"
+msgid "only vmess/VLESS protocol can modify alterId!"
+msgstr "只有vmess/VLESS协议才能修改alterId!"
 
 msgid "modify dyn_port"
 msgstr "修改动态端口"

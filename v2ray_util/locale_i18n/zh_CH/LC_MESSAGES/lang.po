@@ -439,8 +439,8 @@ msgstr "UUID修改成功!"
 msgid "undo modify"
 msgstr "已取消生成新的UUID,未执行任何操作"
 
-msgid "only vmess protocol can modify uuid!"
-msgstr "只有vmess协议才能修改uuid!"
+msgid "only vmess/VLESS protocol can modify uuid!"
+msgstr "只有vmess/VLESS协议才能修改uuid!"
 
 msgid "modify port"
 msgstr "修改port"

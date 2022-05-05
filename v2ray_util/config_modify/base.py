@@ -4,7 +4,7 @@ from v2ray_util import run_type
 
 from ..util_core.v2ray import restart
 from ..util_core.utils import readchar, random_email, ColorStr
-from ..util_core.group import Vmess, Socks, Mtproto, SS
+from ..util_core.group import Vless, Vmess, Socks, Mtproto, SS
 from ..util_core.writer import ClientWriter, GroupWriter
 from ..util_core.selector import ClientSelector, GroupSelector
 
@@ -110,7 +110,7 @@ def new_uuid():
         pass
     else:
         client_index = cs.client_index
-        if type(group.node_list[client_index]) == Vmess:
+        if type(group.node_list[client_index]) == Vmess or type(group.node_list[client_index]) == Vless:
             print("{}: {}".format(_("node UUID"), group.node_list[client_index].password))
             choice = readchar(_("get new UUID?(y/n): ")).lower()
             if choice == "y":
@@ -124,7 +124,7 @@ def new_uuid():
             else:
                 print(_("undo modify"))
         else:
-            print(_("only vmess protocol can modify uuid!"))
+            print(_("only vmess/VLESS protocol can modify uuid!"))
 
 @restart(True)
 def port():

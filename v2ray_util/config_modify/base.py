@@ -110,7 +110,7 @@ def new_uuid():
         pass
     else:
         client_index = cs.client_index
-        if type(group.node_list[client_index]) == Vmess or type(group.node_list[client_index]) == Vless:
+        if type(group.node_list[client_index]) in (Vmess, Vless):
             print("{}: {}".format(_("node UUID"), group.node_list[client_index].password))
             choice = readchar(_("get new UUID?(y/n): ")).lower()
             if choice == "y":

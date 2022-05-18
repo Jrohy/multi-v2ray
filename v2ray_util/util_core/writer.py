@@ -391,7 +391,8 @@ class GroupWriter(Writer):
             if xtls:
                 self.part_json["streamSettings"]["security"] = "xtls"
                 self.part_json["streamSettings"]["xtlsSettings"] = tls_settings
-                del self.part_json["streamSettings"]["tlsSettings"]
+                if "tlsSettings" in self.part_json["streamSettings"]:
+                    del self.part_json["streamSettings"]["tlsSettings"]
             else:
                 self.part_json["streamSettings"]["security"] = "tls"
                 self.part_json["streamSettings"]["tlsSettings"] = tls_settings

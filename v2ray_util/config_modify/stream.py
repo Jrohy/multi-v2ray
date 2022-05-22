@@ -67,7 +67,7 @@ class StreamModifier:
             print("")
             security = CommonSelector(security_list, _("please select ss method: ")).select()
             if security != "none":
-                key = ''.join(random.sample(string.ascii_letters + string.digits, 8))
+                key = ''.join(random.sample(string.ascii_letters + string.digits, 18))
                 new_pass = input('{} {}, {}'.format(_("random generate password"), key, _("enter to use, or input customize password: ")))
                 if new_pass:
                     key = new_pass

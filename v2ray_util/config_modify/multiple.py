@@ -79,7 +79,7 @@ def new_user():
             nw = NodeWriter(group.tag, group.index)
             info = {'email': email}
             if type(group.node_list[0]) == Trojan:
-                random_pass = ''.join(random.sample(string.digits + string.ascii_letters, 8))
+                random_pass = ''.join(random.sample(string.digits + string.ascii_letters, 18))
                 tip = _("create random trojan user password:") + ColorStr.cyan(random_pass) + _(", enter to use or input new password: ")
                 password = input(tip)
                 if password == "":

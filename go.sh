@@ -389,7 +389,7 @@ User=root
 CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 NoNewPrivileges=true
-ExecStart=/usr/bin/$KEY_LOWER/$KEY_LOWER -config /etc/$KEY_LOWER/config.json
+ExecStart=/usr/bin/$KEY_LOWER/$KEY_LOWER run -config /etc/$KEY_LOWER/config.json
 Restart=on-failure
 
 [Install]

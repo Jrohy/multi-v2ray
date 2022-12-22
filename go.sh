@@ -23,6 +23,7 @@ ERROR_IF_UPTODATE=''
 
 CUR_VER=""
 NEW_VER=""
+VER_COMPATIBILITY_RUN=" run -c "
 ZIPFILE="/tmp/v2ray/v2ray.zip"
 V2RAY_RUNNING=0
 
@@ -271,6 +272,7 @@ getVersion(){
         CUR_VER="$(normalizeVersion "$(echo "$VER" | head -n 1 | cut -d " " -f2)")"
         TAG_URL="https://api.github.com/repos/$REPOS/releases/latest"
         NEW_VER="$(normalizeVersion "$(curl ${PROXY} -H "Accept: application/json" -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:74.0) Gecko/20100101 Firefox/74.0" -s "${TAG_URL}" --connect-timeout 10| grep 'tag_name' | cut -d\" -f4)")"
+        VER_COMPATIBILITY_RUN="$(versionCompatibilityCheck ${NEW_VER})"
 
         if [[ $? -ne 0 ]] || [[ $NEW_VER == "" ]]; then
             colorEcho ${RED} "Failed to fetch release information. Please check your network or try again."
@@ -281,6 +283,21 @@ getVersion(){
             return 1
         fi
         return 0
+    fi
+}
+
+versionCompatibilityCheck() {
+    if [ -n "$1" ]; then
+        case "$1" in
+            v5*)
+                echo " run -c "
+            ;;
+            v4*)
+                echo " --config="
+            ;;
+        esac
+    else
+        echo " run -c "
     fi
 }
 
@@ -389,7 +406,7 @@ User=root
 CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 NoNewPrivileges=true
-ExecStart=/usr/bin/$KEY_LOWER/$KEY_LOWER -config /etc/$KEY_LOWER/config.json
+ExecStart=/usr/bin/$KEY_LOWER/$KEY_LOWER $VER_COMPATIBILITY_RUN/etc/$KEY_LOWER/config.json
 Restart=on-failure
 
 [Install]

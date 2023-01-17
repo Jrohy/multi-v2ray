@@ -266,8 +266,8 @@ getVersion(){
         NEW_VER="$(normalizeVersion "$VERSION")"
         return 4
     else
-        VER="$(/usr/bin/$KEY_LOWER/$KEY_LOWER version 2>/dev/null)"
-        [[ -z $VER ]] && VER="$(/usr/bin/$KEY_LOWER/$KEY_LOWER -version 2>/dev/null)"
+        VER="$(/usr/bin/$KEY_LOWER/$KEY_LOWER -version 2>/dev/null)"
+        [[ -z $VER ]] && VER="$(/usr/bin/$KEY_LOWER/$KEY_LOWER version 2>/dev/null)"
         RETVAL=$?
         CUR_VER="$(normalizeVersion "$(echo "$VER" | head -n 1 | cut -d " " -f2)")"
         TAG_URL="https://api.github.com/repos/$REPOS/releases/latest"

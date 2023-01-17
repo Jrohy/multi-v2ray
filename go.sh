@@ -266,7 +266,8 @@ getVersion(){
         NEW_VER="$(normalizeVersion "$VERSION")"
         return 4
     else
-        VER="$(/usr/bin/$KEY_LOWER/$KEY_LOWER -version 2>/dev/null)"
+        VER="$(/usr/bin/$KEY_LOWER/$KEY_LOWER version 2>/dev/null)"
+        [[ -z $VER ]] && VER="$(/usr/bin/$KEY_LOWER/$KEY_LOWER -version 2>/dev/null)"
         RETVAL=$?
         CUR_VER="$(normalizeVersion "$(echo "$VER" | head -n 1 | cut -d " " -f2)")"
         TAG_URL="https://api.github.com/repos/$REPOS/releases/latest"
@@ -389,13 +390,30 @@ User=root
 CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 NoNewPrivileges=true
-ExecStart=/usr/bin/$KEY_LOWER/$KEY_LOWER -config /etc/$KEY_LOWER/config.json
+ExecStart=/usr/bin/$KEY_LOWER/$KEY_LOWER run -c /etc/$KEY_LOWER/config.json
 Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
 EOF
         systemctl enable $KEY_LOWER.service
+    fi
+    if [[ $KEY_LOWER == "v2ray" ]];then
+        local MODIFY_SERVICE=0
+        local CHECK_RUN="cat /etc/systemd/system/$KEY_LOWER.service|grep ExecStart|grep run"
+        if [[ ${NEW_VER} =~ "v4" ]];then
+            if [[ $CHECK_RUN ]];then
+                MODIFY_SERVICE=1
+                sed -i "s?^ExecStart.*?ExecStart=/usr/bin/$KEY_LOWER/$KEY_LOWER -config /etc/$KEY_LOWER/config.json?g" /etc/systemd/system/$KEY_LOWER.service
+            fi
+        elif [[ -z $CHECK_RUN ]];then
+            MODIFY_SERVICE=1
+            sed -i "s?^ExecStart.*?ExecStart=/usr/bin/$KEY_LOWER/$KEY_LOWER run -c /etc/$KEY_LOWER/config.json?g" /etc/systemd/system/$KEY_LOWER.service
+        fi
+        if [[ $MODIFY_SERVICE == 1 ]];then
+            systemctl daemon-reload
+            systemctl restart $KEY_LOWER
+        fi
     fi
 }
 

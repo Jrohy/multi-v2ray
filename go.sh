@@ -400,7 +400,7 @@ EOF
     fi
     if [[ $KEY_LOWER == "v2ray" ]];then
         local MODIFY_SERVICE=0
-        local CHECK_RUN="cat /etc/systemd/system/$KEY_LOWER.service|grep ExecStart|grep run"
+        local CHECK_RUN="`cat /etc/systemd/system/$KEY_LOWER.service|grep ExecStart|grep run`"
         if [[ ${NEW_VER} =~ "v4" ]];then
             if [[ $CHECK_RUN ]];then
                 MODIFY_SERVICE=1

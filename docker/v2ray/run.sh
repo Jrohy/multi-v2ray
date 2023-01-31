@@ -15,6 +15,6 @@ if [[ ! -e /etc/v2ray ]];then
 fi
 
 touch /.run.log
-/usr/bin/v2ray/v2ray -config=/etc/v2ray/config.json > /.run.log &
+/usr/bin/v2ray/v2ray run -c /etc/v2ray/config.json > /.run.log &
 
 tail -f /.run.log

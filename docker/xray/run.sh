@@ -15,6 +15,6 @@ if [[ ! -e /etc/xray ]];then
 fi
 
 touch /.run.log
-/usr/bin/xray/xray -config=/etc/xray/config.json > /.run.log &
+/usr/bin/xray/xray run -c /etc/xray/config.json > /.run.log &
 
 tail -f /.run.log

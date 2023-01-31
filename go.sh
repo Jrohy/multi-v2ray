@@ -378,6 +378,7 @@ EOF
 
 
 installInitScript(){
+    [[ -e /.dockerenv ]] && return
     if [[ ! -f "/etc/systemd/system/$KEY_LOWER.service" && ! -f "/lib/systemd/system/$KEY_LOWER.service" ]]; then
         cat > /etc/systemd/system/$KEY_LOWER.service <<EOF
 [Unit]

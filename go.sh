@@ -378,7 +378,16 @@ EOF
 
 
 installInitScript(){
-    [[ -e /.dockerenv ]] && return
+    if [[ -e /.dockerenv ]]; then
+        if [[ $KEY_LOWER == "v2ray" ]];then
+            if [[ ${NEW_VER} =~ "v4" ]];then
+                sed -i "s/run -c/-config/g" /root/run.sh
+            else
+                sed -i "s/-config/run -c/g" /root/run.sh
+            fi
+        fi
+        return
+    fi
     if [[ ! -f "/etc/systemd/system/$KEY_LOWER.service" && ! -f "/lib/systemd/system/$KEY_LOWER.service" ]]; then
         cat > /etc/systemd/system/$KEY_LOWER.service <<EOF
 [Unit]

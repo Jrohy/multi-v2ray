@@ -13,7 +13,6 @@ ENV SOURCE_COMPLETION_FILE "https://multi.netlify.app/v2ray"
 ENV VERSION_LIST "https://api.github.com/repos/Jrohy/multi-v2ray/tags"
 
 COPY --from=builder /usr/bin/v2ray/v2ray /usr/bin/v2ray/
-COPY --from=builder /usr/bin/v2ray/v2ctl /usr/bin/v2ray/
 COPY --from=builder /usr/bin/v2ray/geoip.dat /usr/bin/v2ray/
 COPY --from=builder /usr/bin/v2ray/geosite.dat /usr/bin/v2ray/
 COPY run.sh /root
@@ -28,7 +27,6 @@ RUN apk --no-cache add python3 bash bash-completion ca-certificates curl socat o
     pip install v2ray-util==$LATEST_VERSION && \
     curl $SOURCE_COMPLETION_FILE > $COMPLETION_FILE && \
     mkdir /var/log/v2ray/ && \
-    chmod +x /usr/bin/v2ray/v2ctl && \
     chmod +x /usr/bin/v2ray/v2ray && \
     chmod +x /root/run.sh && \
     chmod +x $COMPLETION_FILE && \

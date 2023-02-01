@@ -72,7 +72,9 @@ class V2ray:
 
     @staticmethod
     def version():
-        v2ray_version = bytes.decode(subprocess.check_output("/usr/bin/{bin}/{bin}".format(bin=run_type) + " -version | head -n 1 | awk '{print $2}'", shell=True))
+        v2ray_version = bytes.decode(subprocess.check_output("/usr/bin/{bin}/{bin}".format(bin=run_type) + " -version 2>/dev/null | head -n 1 | awk '{print $2}'", shell=True))
+        if not v2ray_version:
+            v2ray_version = bytes.decode(subprocess.check_output("/usr/bin/{bin}/{bin}".format(bin=run_type) + " version 2>/dev/null | head -n 1 | awk '{print $2}'", shell=True))
         import v2ray_util
         print("{}: {}".format(run_type, ColorStr.green(v2ray_version)))
         print("v2ray_util: {}".format(ColorStr.green(v2ray_util.__version__)))    
@@ -126,7 +128,11 @@ class V2ray:
     @classmethod
     def start(cls):
         if os.path.exists("/.dockerenv"):
-            cls.docker_run("/usr/bin/{bin}/{bin} -config=/etc/{bin}/config.json > /.run.log &".format(bin=run_type), "start")
+            try:
+                subprocess.check_output("/usr/bin/{bin}/{bin}".format(bin=run_type) + " -version 2>/dev/null", shell=True)
+                cls.docker_run("/usr/bin/{bin}/{bin} -config /etc/{bin}/config.json > /.run.log &".format(bin=run_type), "start")
+            except:
+                cls.docker_run("/usr/bin/{bin}/{bin} run -c /etc/{bin}/config.json > /.run.log &".format(bin=run_type), "start")
         else:
             cls.run("systemctl start {}".format(run_type), "start")
 

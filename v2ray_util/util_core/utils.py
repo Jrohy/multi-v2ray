@@ -88,7 +88,7 @@ def ss_method():
     return ("aes-256-gcm", "aes-128-gcm", "chacha20-poly1305")
 
 def xtls_flow():
-    return ("xtls-rprx-direct", "xtls-rprx-origin")
+    return ("xtls-rprx-vision", "xtls-rprx-direct", "xtls-rprx-splice", "xtls-rprx-origin")
 
 def get_ip():
     """

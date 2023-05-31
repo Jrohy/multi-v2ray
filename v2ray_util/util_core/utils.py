@@ -78,7 +78,7 @@ class StreamType(Enum):
     VLESS_TLS = 'vless_tls'
     VLESS_WS = 'vless_ws'
     VLESS_GRPC = 'vless_grpc'
-    VLESS_XTLS = 'vless_xtls'
+    VLESS_REALITY = 'vless_reality'
     TROJAN = 'trojan'
 
 def header_type_list():
@@ -88,7 +88,7 @@ def ss_method():
     return ("aes-256-gcm", "aes-128-gcm", "chacha20-poly1305")
 
 def xtls_flow():
-    return ("xtls-rprx-vision", "xtls-rprx-direct", "xtls-rprx-splice", "xtls-rprx-origin")
+    return ("xtls-rprx-vision", "none")
 
 def get_ip():
     """

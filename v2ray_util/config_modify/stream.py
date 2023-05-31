@@ -38,7 +38,7 @@ class StreamModifier:
             (StreamType.VLESS_TCP, "VLESS_TCP"),
             (StreamType.VLESS_TLS, "VLESS_TLS"),
             (StreamType.VLESS_WS, "VLESS_WS"),
-            (StreamType.VLESS_XTLS, "VLESS_XTLS"),
+            (StreamType.VLESS_REALITY, "VLESS_REALITY"),
             (StreamType.VLESS_GRPC, "VLESS_GRPC"),
             (StreamType.TROJAN, "Trojan"),
         ]
@@ -75,7 +75,7 @@ class StreamModifier:
             print("")
             header = CommonSelector(header_type_list(), _("please select fake header: ")).select()
             kw = {'security': security, 'key': key, 'header': header}
-        elif sType in (StreamType.VLESS_TLS, StreamType.VLESS_WS, StreamType.VLESS_XTLS, StreamType.VLESS_GRPC):
+        elif sType in (StreamType.VLESS_TLS, StreamType.VLESS_WS, StreamType.VLESS_REALITY, StreamType.VLESS_GRPC):
             port_set = all_port()
             if not "443" in port_set:
                 print()
@@ -86,7 +86,7 @@ class StreamModifier:
             if sType == StreamType.VLESS_WS:
                 host = input(_("please input fake domain: "))
                 kw['host'] = host
-            elif sType == StreamType.VLESS_XTLS:
+            elif sType == StreamType.VLESS_REALITY:
                 flow_list = xtls_flow()
                 print("")
                 flow = CommonSelector(flow_list, _("please select xtls flow type: ")).select()
@@ -157,7 +157,7 @@ def modify(group=None, sType=None):
         else:
             choice = int(choice)
             if choice > 0 and choice <= len(sm.stream_type):
-                if sm.stream_type[choice - 1][1] in ("MTProto", "Shadowsocks") and group.tls in ('tls', 'xtls'):
+                if sm.stream_type[choice - 1][1] in ("MTProto", "Shadowsocks") and group.tls in ('tls', 'reality'):
                     print(_("{} MTProto/Shadowsocks not support https, close tls success!".format(run_type.capitalize())))
                 sm.select(sm.stream_type[choice - 1][0])
                 print(_("modify protocol success"))

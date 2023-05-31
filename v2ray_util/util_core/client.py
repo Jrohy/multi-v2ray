@@ -76,10 +76,10 @@ class ClientWriter:
 
         if self.group.tls == 'tls':
             self.client_config["outbounds"][0]["streamSettings"]["tlsSettings"] = {}
-        elif self.group.tls == 'xtls':
-            self.client_config["outbounds"][0]["streamSettings"]["xtlsSettings"]["serverName"] = self.group.ip
-            del self.client_config["outbounds"][0]["streamSettings"]["xtlsSettings"]["certificates"]
-            del self.client_config["outbounds"][0]["streamSettings"]["xtlsSettings"]["alpn"]
+        elif self.group.tls == 'reality':
+            self.client_config["outbounds"][0]["streamSettings"]["realitySettings"]["serverName"] = self.group.ip
+            del self.client_config["outbounds"][0]["streamSettings"]["realitySettings"]["certificates"]
+            del self.client_config["outbounds"][0]["streamSettings"]["realitySettings"]["alpn"]
             del self.client_config["outbounds"][0]["mux"]
 
     def write(self):

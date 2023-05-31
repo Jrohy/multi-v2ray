@@ -85,7 +85,7 @@ def new_user():
                 if password == "":
                     password = random_pass
                 info['password'] = password
-            elif type(group.node_list[0]) == Vless and group.tls == "xtls":
+            elif type(group.node_list[0]) == Vless and group.tls == "reality":
                 flow_list = xtls_flow()
                 print("")
                 flow = CommonSelector(flow_list, _("please select xtls flow type: ")).select()

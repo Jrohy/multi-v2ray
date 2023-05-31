@@ -140,8 +140,8 @@ Network: {network}
         result_link = "vless://{s.password}@{ip}:{port}?encryption={s.encryption}".format(s=self, ip=ip, port=port)
         if tls == "tls":
             result_link += "&security=tls"
-        elif tls == "xtls":
-            result_link += "&security=xtls&flow={}".format(self.flow)
+        elif tls == "reality":
+            result_link += "&security=reality&flow={}".format(self.flow)
         if self.network == "ws":
             result_link += "&type=ws&host={0}&path={1}".format(self.host, quote(self.path))
         elif self.network == "tcp":
@@ -240,8 +240,8 @@ class Group:
         node = self.node_list[index]
         if self.tls == "tls":
             tls = _("open")
-        elif self.tls == "xtls":
-            tls = "xtls {0}, flow: {1}".format(_("open"), node.flow)
+        elif self.tls == "reality":
+            tls = "reality {0}, flow: {1}".format(_("open"), node.flow)
         else:
             tls = _("close")
         result = '''
@@ -264,8 +264,8 @@ TLS: {tls}
         port_way = "-{}".format(self.end_port) if self.end_port else ""
         if self.tls == "tls":
             tls = _("open")
-        elif self.tls == "xtls":
-            tls = "xtls {0}, flow: {1}".format(_("open"), self.node_list[0].flow)
+        elif self.tls == "reality":
+            tls = "reality {0}, flow: {1}".format(_("open"), self.node_list[0].flow)
         else:
             tls = _("close")
         result = ""

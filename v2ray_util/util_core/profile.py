@@ -169,7 +169,7 @@ class Profile:
                 node = Mtproto(self.user_number, client["secret"], user_info=email)
 
             elif protocol == "vless":
-                if tls == "xtls":
+                if tls == "reality":
                     flow = client["flow"]
                 node = Vless(client["id"], self.user_number, conf_settings["decryption"], email, conf_stream["network"], path, host, header, flow, serviceName, mode)
 

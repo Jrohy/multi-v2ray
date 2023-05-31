@@ -1,0 +1,7 @@
+{
+    "show": false,
+    "dest": "www.yahoo.com:443",
+    "serverNames": ["www.yahoo.com", "news.yahoo.com"],
+    "privateKey": "kOsBHSgxhAfCeQIQyJvupiXTmQrMmsqi6y6Wc5OQZXc",
+    "shortIds": ["d49d578f280fd83a"]
+}

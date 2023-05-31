@@ -137,8 +137,8 @@ class StreamWriter(Writer):
         elif self.part_json['protocol'] == 'vless':
             if self.part_json["streamSettings"]["network"] == "grpc":
                 origin_protocol = StreamType.VLESS_GRPC
-            elif self.part_json["streamSettings"]["security"] == "xtls":
-                origin_protocol = StreamType.VLESS_XTLS
+            elif self.part_json["streamSettings"]["security"] == "reality":
+                origin_protocol = StreamType.VLESS_REALITY
             elif self.part_json["streamSettings"]["security"] == "tls":
                 origin_protocol = StreamType.VLESS_TLS
             else:
@@ -148,8 +148,8 @@ class StreamWriter(Writer):
 
         if origin_protocol not in no_tls_group:
             security_backup = self.part_json["streamSettings"]["security"]
-            if origin_protocol == StreamType.VLESS_XTLS:
-                tls_settings_backup = self.part_json["streamSettings"]["xtlsSettings"]
+            if origin_protocol == StreamType.VLESS_REALITY:
+                tls_settings_backup = self.part_json["streamSettings"]["realitySettings"]
             else:
                 tls_settings_backup = self.part_json["streamSettings"]["tlsSettings"]
             if "domain" in self.part_json:
@@ -240,7 +240,7 @@ class StreamWriter(Writer):
             alpn = ["http/1.1"]
             vless = self.load_template('vless.json')
             vless["clients"][0]["id"] = str(uuid.uuid4())
-            if self.stream_type == StreamType.VLESS_XTLS:
+            if self.stream_type in (StreamType.VLESS_TLS, StreamType.VLESS_REALITY):
                 vless["clients"][0]["flow"] = kw["flow"]
             elif self.stream_type == StreamType.VLESS_WS:
                 del vless["fallbacks"]
@@ -267,11 +267,11 @@ class StreamWriter(Writer):
                         del self.part_json["settings"]["fallbacks"]
             self.save()
             # tls的设置
-            if self.stream_type in (StreamType.VLESS_XTLS, StreamType.VLESS_WS, StreamType.VLESS_TLS, StreamType.VLESS_GRPC):
+            if self.stream_type in (StreamType.VLESS_REALITY, StreamType.VLESS_WS, StreamType.VLESS_TLS, StreamType.VLESS_GRPC):
                 if not "certificates" in tls_settings_backup:
                     from ..config_modify.tls import TLSModifier
-                    if self.stream_type == StreamType.VLESS_XTLS:
-                        tm = TLSModifier(self.group_tag, self.group_index, alpn=alpn, xtls=True)
+                    if self.stream_type == StreamType.VLESS_REALITY:
+                        tm = TLSModifier(self.group_tag, self.group_index, alpn=alpn, reality=True)
                     else:
                         tm = TLSModifier(self.group_tag, self.group_index, alpn=alpn)
                     tm.turn_on(False)
@@ -318,18 +318,18 @@ class StreamWriter(Writer):
                 tm.turn_on(False)
                 return
 
-        if self.stream_type == StreamType.VLESS_XTLS:
-            self.part_json["streamSettings"]["security"] = "xtls"
-            self.part_json["streamSettings"]["xtlsSettings"] = tls_settings_backup
+        if self.stream_type == StreamType.VLESS_REALITY:
+            self.part_json["streamSettings"]["security"] = "reality"
+            self.part_json["streamSettings"]["realitySettings"] = tls_settings_backup
             del self.part_json["streamSettings"]["tlsSettings"]
         elif self.stream_type not in no_tls_group and origin_protocol not in no_tls_group:
-            self.part_json["streamSettings"]["security"] = "tls" if security_backup == "xtls" else security_backup
+            self.part_json["streamSettings"]["security"] = "tls" if security_backup == "reality" else security_backup
             self.part_json["streamSettings"]["tlsSettings"] = tls_settings_backup
 
         if domain and self.stream_type not in no_tls_group:
             self.part_json["domain"] = domain
 
-        apln_list = (StreamType.VLESS_TLS, StreamType.TROJAN, StreamType.VLESS_XTLS, StreamType.VLESS_GRPC)
+        apln_list = (StreamType.VLESS_TLS, StreamType.TROJAN, StreamType.VLESS_REALITY, StreamType.VLESS_GRPC)
         if self.stream_type not in apln_list and "streamSettings" in self.part_json and "tlsSettings" in self.part_json["streamSettings"] and "alpn" in self.part_json["streamSettings"]["tlsSettings"]:
             del self.part_json["streamSettings"]["tlsSettings"]["alpn"]
 
@@ -378,7 +378,7 @@ class GroupWriter(Writer):
                 del self.part_json["settings"]["detour"]
         self.save()
 
-    def write_tls(self, status = False, xtls = False, *, crt_file=None, key_file=None, domain=None, alpn=None):
+    def write_tls(self, status = False, reality = False, *, crt_file=None, key_file=None, domain=None, alpn=None):
         if status:
             tls_settings = {"certificates": [
                 {
@@ -388,9 +388,9 @@ class GroupWriter(Writer):
             ]}
             if alpn:
                 tls_settings["alpn"] = alpn
-            if xtls:
-                self.part_json["streamSettings"]["security"] = "xtls"
-                self.part_json["streamSettings"]["xtlsSettings"] = tls_settings
+            if reality:
+                self.part_json["streamSettings"]["security"] = "reality"
+                self.part_json["streamSettings"]["realitySettings"] = tls_settings
                 if "tlsSettings" in self.part_json["streamSettings"]:
                     del self.part_json["streamSettings"]["tlsSettings"]
             else:
@@ -407,8 +407,8 @@ class GroupWriter(Writer):
             else:
                 self.part_json["streamSettings"]["security"] = "none"
                 self.part_json["streamSettings"]["tlsSettings"] = {}
-                if "xtlsSettings" in self.part_json["streamSettings"]:
-                    del self.part_json["streamSettings"]["xtlsSettings"]
+                if "realitySettings" in self.part_json["streamSettings"]:
+                    del self.part_json["streamSettings"]["realitySettings"]
             if "domain" in self.part_json:
                 del self.part_json["domain"]
             self.save()
@@ -614,7 +614,7 @@ class NodeWriter(Writer):
             if "email" in kw and kw["email"] != "":
                 user.update({"email":kw["email"]})
                 info = ", email: " + kw["email"]
-            if self.part_json["streamSettings"]["security"] == "xtls":
+            if self.part_json["streamSettings"]["security"] in ("reality", "tls"):
                 user["flow"] = kw["flow"]
                 info += ", flow: " + kw["flow"]
             self.part_json["settings"]["clients"].append(user)

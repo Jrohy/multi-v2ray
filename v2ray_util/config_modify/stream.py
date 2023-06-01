@@ -77,7 +77,7 @@ class StreamModifier:
             kw = {'security': security, 'key': key, 'header': header}
         elif sType in (StreamType.VLESS_TLS, StreamType.VLESS_WS, StreamType.VLESS_REALITY, StreamType.VLESS_GRPC):
             port_set = all_port()
-            if not "443" in port_set:
+            if not "443" in port_set and sType == StreamType.VLESS_TLS:
                 print()
                 print(ColorStr.yellow(_("auto switch 443 port..")))
                 gw = GroupWriter(self.group_tag, self.group_index)
@@ -87,10 +87,9 @@ class StreamModifier:
                 host = input(_("please input fake domain: "))
                 kw['host'] = host
             elif sType == StreamType.VLESS_REALITY:
-                flow_list = xtls_flow()
-                print("")
-                flow = CommonSelector(flow_list, _("please select xtls flow type: ")).select()
-                kw = {'flow': flow}
+                serverName = input(_("please input reality serverName(domain): "))
+                kw = {'flow': xtls_flow()[0]}
+                kw['serverNames'] = [serverName]
             elif sType == StreamType.VLESS_GRPC and run_type == "xray":
                 choice = readchar(_("open xray grpc multiMode?(y/n): ")).lower()
                 if choice == 'y':

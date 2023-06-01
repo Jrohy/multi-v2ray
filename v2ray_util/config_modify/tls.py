@@ -10,10 +10,9 @@ from ..util_core.selector import GroupSelector
 from ..util_core.utils import get_ip, gen_cert, readchar, is_ipv4, is_email
 
 class TLSModifier:
-    def __init__(self, group_tag, group_index, domain='', alpn=None, reality=False):
+    def __init__(self, group_tag, group_index, domain='', alpn=None):
         self.domain = domain
         self.alpn = alpn
-        self.reality = reality
         self.writer = GroupWriter(group_tag, group_index)
     
     @restart(True)
@@ -58,7 +57,7 @@ class TLSModifier:
             crt_file = "/root/.acme.sh/" + input_domain +"_ecc"+ "/fullchain.cer"
             key_file = "/root/.acme.sh/" + input_domain +"_ecc"+ "/"+ input_domain +".key"
 
-            self.writer.write_tls(True, crt_file=crt_file, key_file=key_file, domain=input_domain, alpn=self.alpn, reality=self.reality)
+            self.writer.write_tls(True, crt_file=crt_file, key_file=key_file, domain=input_domain, alpn=self.alpn)
 
         elif choice == "4":
             crt_file = input(_("please input certificate cert file path: "))
@@ -71,7 +70,7 @@ class TLSModifier:
                 if not input_domain:
                     print(_("domain is null!"))
                     return
-            self.writer.write_tls(True, crt_file=crt_file, key_file=key_file, domain=input_domain, alpn=self.alpn, reality=self.reality)
+            self.writer.write_tls(True, crt_file=crt_file, key_file=key_file, domain=input_domain, alpn=self.alpn)
         else:
             print(_("input error!"))
             return
@@ -93,9 +92,8 @@ def modify():
             print(_("MTProto/Shadowsocks protocol not support https!!!"))
             print("")
             return
-        reality = True if group.tls == "reality" else False
-        tm = TLSModifier(group.tag, group.index, reality=reality)
-        tls_status = 'open' if group.tls in ('tls', 'reality') else 'close'
+        tm = TLSModifier(group.tag, group.index)
+        tls_status = 'open' if group.tls == 'tls' else 'close'
         print("{}: {}\n".format(_("group tls status"), tls_status))
         print(_("1.open TLS"))
         print(_("2.close TLS"))

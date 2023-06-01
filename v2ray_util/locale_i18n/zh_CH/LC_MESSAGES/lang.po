@@ -580,8 +580,8 @@ msgstr "请输入伪装域名(不需要直接回车):"
 msgid "please select ss method: "
 msgstr "请输入序号选择加密方法: "
 
-msgid "please select xtls flow type: "
-msgstr "请输入序号选择xtls流控: "
+msgid "please input reality serverName(domain): "
+msgstr "请输入客户端访问的域名(serverName): "
 
 msgid "open xray grpc multiMode?(y/n): "
 msgstr "是否开启grpc multiMode(y/n): "

@@ -78,7 +78,7 @@ class Profile:
         del self.config
 
     def parse_group(self, part_json, group_index, local_ip):
-        dyp, quic, end_port, tfo, header, tls, path, host, conf_ip, serviceName, mode = Dyport(), None, None, None, "", "", "", "", local_ip, "", "gun"
+        dyp, quic, end_port, tfo, header, tls, path, host, conf_ip, serviceName, mode, serverName, privateKey, shortId = Dyport(), None, None, None, "", "", "", "", local_ip, "", "gun", "", "", ""
         
         protocol = part_json["protocol"]
 
@@ -108,6 +108,11 @@ class Profile:
         if protocol in ("vmess", "vless", "socks", "trojan"):
             conf_stream = part_json["streamSettings"]
             tls = conf_stream["security"]
+
+            if tls == "reality" and conf_stream["realitySettings"]:
+                serverName = conf_stream["realitySettings"]["serverNames"][0]
+                privateKey = conf_stream["realitySettings"]["privateKey"]
+                shortId = conf_stream["realitySettings"]["shortId"][0]
 
             if "sockopt" in conf_stream and "tcpFastOpen" in conf_stream["sockopt"]:
                 tfo = "open" if conf_stream["sockopt"]["tcpFastOpen"] else "close"
@@ -169,9 +174,9 @@ class Profile:
                 node = Mtproto(self.user_number, client["secret"], user_info=email)
 
             elif protocol == "vless":
-                if tls == "reality":
+                if "flow" in client:
                     flow = client["flow"]
-                node = Vless(client["id"], self.user_number, conf_settings["decryption"], email, conf_stream["network"], path, host, header, flow, serviceName, mode)
+                node = Vless(client["id"], self.user_number, conf_settings["decryption"], email, conf_stream["network"], path, host, header, flow, serviceName, mode, serverName, privateKey, shortId)
 
             elif protocol == "trojan":
                 node = Trojan(self.user_number, client["password"], email)

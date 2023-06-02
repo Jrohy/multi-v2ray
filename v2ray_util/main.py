@@ -240,7 +240,7 @@ def menu():
         print("")
         print(ColorStr.cyan(_("Welcome to {} manager".format(run_type))))
         print("")
-        show_text = (_("1.{} Manage".format(run_type.capitalize())), _("2.Group Manage"), _("3.Modify Config"), _("4.Check Config"), _("5.Global Setting"), _("6.Update {}".format(run_type.capitalize())), _("7.Generate Client Json"))
+        show_text = (_("1.{} Manage".format(run_type.capitalize())), _("2.Group Manage"), _("3.Modify Config"), _("4.Check Config"), _("5.Global Setting"), _("6.Update {}".format(run_type.capitalize())))
         for index, text in enumerate(show_text): 
             if index % 2 == 0:
                 print('{:<20}'.format(text), end="")   
@@ -261,9 +261,9 @@ def menu():
             global_setting()
         elif choice == 6:
             V2ray.update()
-        elif choice == 7:
-            from .util_core import client
-            client.generate()
+        # elif choice == 7:
+        #     from .util_core import client
+        #     client.generate()
         else:
             break
 

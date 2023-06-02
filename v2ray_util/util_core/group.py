@@ -268,7 +268,7 @@ TLS: {tls}
         if self.tls == "tls":
             tls = _("open")
         elif self.tls == "reality":
-            tls = "reality {0}, flow: {1}".format(_("open"), self.node_list[0].flow)
+            tls = "reality serverName: {0}, flow: {1}, publicKey: {2}, shortId: {3}".format(self.node_list[0].serverName, self.node_list[0].flow, x25519_key(self.node_list[0].privateKey)[1], self.node_list[0].shortId)
         else:
             tls = _("close")
         result = ""

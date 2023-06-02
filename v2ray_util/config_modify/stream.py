@@ -86,6 +86,8 @@ class StreamModifier:
             if sType == StreamType.VLESS_WS:
                 host = input(_("please input fake domain: "))
                 kw['host'] = host
+            elif sType == StreamType.VLESS_TLS:
+                kw = {'flow': xtls_flow()[0]}
             elif sType == StreamType.VLESS_REALITY:
                 serverName = input(_("please input reality serverName(domain): "))
                 kw = {'flow': xtls_flow()[0]}

@@ -39,7 +39,7 @@ a tool to manage v2ray/xray config json, support multiple user && group manage
   - VLESS_TCP
   - VLESS_TLS
   - VLESS_WS
-  - VLESS_XTLS
+  - VLESS_REALITY
   - Trojan
 
 ## How To Use

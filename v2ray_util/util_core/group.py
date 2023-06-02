@@ -143,6 +143,8 @@ Network: {network}
         result_link = "vless://{s.password}@{ip}:{port}?encryption={s.encryption}".format(s=self, ip=ip, port=port)
         if tls == "tls":
             result_link += "&security=tls"
+            if self.flow:
+                result_link += "&flow={}".format(self.flow)
         elif tls == "reality":
             result_link += "&security=reality&fp=chrome&flow={}&sni={}&pbk={}&sid={}".format(self.flow, self.serverName, x25519_key(self.privateKey)[1], self.shortId)
         if self.network == "ws":
@@ -153,8 +155,6 @@ Network: {network}
             result_link += "&type=grpc&serviceName={}&mode={}".format(self.serviceName, self.mode)
         elif self.network == "kcp":
             result_link += "&type=kcp&headerType={0}&seed={1}".format(self.header, self.path)
-        if self.flow:
-            result_link += "&flow={}".format(self.flow)
         result_link += "#{}".format(quote("{}:{}".format(ip, port)))
         return ColorStr.green(result_link)
 

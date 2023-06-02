@@ -153,6 +153,8 @@ Network: {network}
             result_link += "&type=grpc&serviceName={}&mode={}".format(self.serviceName, self.mode)
         elif self.network == "kcp":
             result_link += "&type=kcp&headerType={0}&seed={1}".format(self.header, self.path)
+        if self.flow:
+            result_link += "&flow={}".format(self.flow)
         result_link += "#{}".format(quote("{}:{}".format(ip, port)))
         return ColorStr.green(result_link)
 
@@ -267,6 +269,8 @@ TLS: {tls}
         port_way = "-{}".format(self.end_port) if self.end_port else ""
         if self.tls == "tls":
             tls = _("open")
+            if self.node_list[0].flow:
+                tls += " flow: {}".format(self.node_list[0].flow)
         elif self.tls == "reality":
             tls = "reality serverName: {0}, flow: {1}, publicKey: {2}, shortId: {3}".format(self.node_list[0].serverName, self.node_list[0].flow, x25519_key(self.node_list[0].privateKey)[1], self.node_list[0].shortId)
         else:

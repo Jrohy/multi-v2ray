@@ -247,7 +247,6 @@ def menu():
             else:
                 print(text)
                 print("")
-        print("")
         choice = loop_input_choice_number(_("please select: "), len(show_text))
         if choice == 1:
             service_manage()

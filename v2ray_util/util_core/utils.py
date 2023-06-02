@@ -260,7 +260,7 @@ def x25519_key(private_key=None):
     if private_key:
         gen_cmd = "{} -i '{}'".format(gen_cmd, private_key)
     gen_result = os.popen(gen_cmd + "|awk -F ':' '{print $2}'|sed 's/ //g'").readlines()
-    return gen_result
+    return list(map(lambda x: x.strip(), gen_result))
 
 def all_port():
     from .loader import Loader

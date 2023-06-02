@@ -112,7 +112,7 @@ class Profile:
             if tls == "reality" and conf_stream["realitySettings"]:
                 serverName = conf_stream["realitySettings"]["serverNames"][0]
                 privateKey = conf_stream["realitySettings"]["privateKey"]
-                shortId = conf_stream["realitySettings"]["shortId"][0]
+                shortId = conf_stream["realitySettings"]["shortIds"][0]
 
             if "sockopt" in conf_stream and "tcpFastOpen" in conf_stream["sockopt"]:
                 tfo = "open" if conf_stream["sockopt"]["tcpFastOpen"] else "close"

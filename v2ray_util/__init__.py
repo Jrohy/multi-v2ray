@@ -1,4 +1,4 @@
-__version__ = '3.11.2'
+__version__ = '3.11.3'
 
 import sys
 if "xray" in sys.argv[0]:

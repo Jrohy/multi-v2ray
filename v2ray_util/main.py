@@ -260,9 +260,6 @@ def menu():
             global_setting()
         elif choice == 6:
             V2ray.update()
-        # elif choice == 7:
-        #     from .util_core import client
-        #     client.generate()
         else:
             break
 

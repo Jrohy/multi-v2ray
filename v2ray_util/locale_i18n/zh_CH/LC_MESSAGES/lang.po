@@ -170,19 +170,6 @@ msgstr "Switch to English"
 
 ### main.py end ###
 
-### client.py start ###
-
-msgid "MTProto protocol only use Telegram, and can't generate client json!"
-msgstr "MTProto协议只支持Telegram通信, 所以无法生成配置文件!"
-
-msgid "save json success!"
-msgstr "保存成功!"
-
-msgid "generate client json"
-msgstr "生成客户端json"
-
-### client.py end ###
-
 ### group.py start ###
 
 msgid "HTTPS Socks5 don't support telegram share link"

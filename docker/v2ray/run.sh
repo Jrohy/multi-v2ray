@@ -1,11 +1,11 @@
 #!/bin/bash
 
-UPTIME=`cat /proc/uptime |awk '{print $1}'`
-if [[ `echo "$UPTIME < 100"|bc` -eq 1 ]];then
-    LOCAL_IP=`curl -s http://api.ipify.org 2>/dev/null`
+uptime=`cat /proc/uptime |awk '{print $1}'`
+if [[ `echo "$uptime < 100"|bc` -eq 1 ]];then
+    local_ip=`curl -s http://api.ipify.org 2>/dev/null`
     if [[ -e /root/.iptables ]];then
-        [[ `echo $LOCAL_IP|grep :` ]] && IPTABLE_WAY="ip6tables" || IPTABLE_WAY="iptables" 
-        $IPTABLE_WAY-restore -c < /root/.iptables
+        [[ `echo $local_ip|grep :` ]] && iptable_way="ip6tables" || iptable_way="iptables" 
+        $iptable_way-restore -c < /root/.iptables
     fi
 fi
 

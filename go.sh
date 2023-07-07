@@ -9,86 +9,86 @@
 # 3: Network error
 
 # CLI arguments
-PROXY=''
-HELP=''
-FORCE=''
-CHECK=''
-REMOVE=''
-VERSION=''
-VSRC_ROOT='/tmp/v2ray'
-EXTRACT_ONLY=''
-LOCAL=''
-LOCAL_INSTALL=''
-ERROR_IF_UPTODATE=''
+proxy=''
+help=''
+force=''
+check=''
+remove=''
+version=''
+vsrc_root='/tmp/v2ray'
+extract_only=''
+local=''
+local_install=''
+error_if_uptodate=''
 
-CUR_VER=""
-NEW_VER=""
-ZIPFILE="/tmp/v2ray/v2ray.zip"
-V2RAY_RUNNING=0
+cur_ver=""
+new_ver=""
+zipfile="/tmp/v2ray/v2ray.zip"
+v2ray_running=0
 
-CMD_INSTALL=""
-CMD_UPDATE=""
-SOFTWARE_UPDATED=0
-KEY="V2Ray"
-KEY_LOWER="v2ray"
-REPOS="v2fly/v2ray-core"
+cmd_install=""
+cmd_update=""
+software_updated=0
+key="V2Ray"
+key_lower="v2ray"
+repos="v2fly/v2ray-core"
 
-SYSTEMCTL_CMD=$(command -v systemctl 2>/dev/null)
+systemctl_cmd=$(command -v systemctl 2>/dev/null)
 
 #######color code########
-RED="31m"      # Error message
-GREEN="32m"    # Success message
-YELLOW="33m"   # Warning message
-BLUE="36m"     # Info message
+red="31m"      # Error message
+green="32m"    # Success message
+yellow="33m"   # Warning message
+blue="36m"     # Info message
 
 xray_set(){
-    KEY="Xray"
-    KEY_LOWER="xray"
-    REPOS="XTLS/Xray-core"
-    VSRC_ROOT='/tmp/xray'
-    ZIPFILE="/tmp/xray/xray.zip"
+    key="Xray"
+    key_lower="xray"
+    repos="XTLS/Xray-core"
+    vsrc_root='/tmp/xray'
+    zipfile="/tmp/xray/xray.zip"
 }
 
 #########################
 while [[ $# > 0 ]]; do
     case "$1" in
         -p|--proxy)
-        PROXY="-x ${2}"
+        proxy="-x ${2}"
         shift # past argument
         ;;
         -h|--help)
-        HELP="1"
+        help="1"
         ;;
         -f|--force)
-        FORCE="1"
+        force="1"
         ;;
         -c|--check)
-        CHECK="1"
+        check="1"
         ;;
         -x|--xray)
         xray_set
         ;;
         --remove)
-        REMOVE="1"
+        remove="1"
         ;;
         --version)
-        VERSION="$2"
+        version="$2"
         shift
         ;;
         --extract)
-        VSRC_ROOT="$2"
+        vsrc_root="$2"
         shift
         ;;
         --extractonly)
-        EXTRACT_ONLY="1"
+        extract_only="1"
         ;;
         -l|--local)
-        LOCAL="$2"
-        LOCAL_INSTALL="1"
+        local="$2"
+        local_install="1"
         shift
         ;;
         --errifuptodate)
-        ERROR_IF_UPTODATE="1"
+        error_if_uptodate="1"
         ;;
         *)
                 # unknown option
@@ -105,48 +105,48 @@ colorEcho(){
 archAffix(){
     case "$(uname -m)" in
       'i386' | 'i686')
-        MACHINE='32'
+        machine='32'
         ;;
       'amd64' | 'x86_64')
-        MACHINE='64'
+        machine='64'
         ;;
       'armv5tel')
-        MACHINE='arm32-v5'
+        machine='arm32-v5'
         ;;
       'armv6l')
-        MACHINE='arm32-v6'
-        grep Features /proc/cpuinfo | grep -qw 'vfp' || MACHINE='arm32-v5'
+        machine='arm32-v6'
+        grep Features /proc/cpuinfo | grep -qw 'vfp' || machine='arm32-v5'
         ;;
       'armv7' | 'armv7l')
-        MACHINE='arm32-v7a'
-        grep Features /proc/cpuinfo | grep -qw 'vfp' || MACHINE='arm32-v5'
+        machine='arm32-v7a'
+        grep Features /proc/cpuinfo | grep -qw 'vfp' || machine='arm32-v5'
         ;;
       'armv8' | 'aarch64')
-        MACHINE='arm64-v8a'
+        machine='arm64-v8a'
         ;;
       'mips')
-        MACHINE='mips32'
+        machine='mips32'
         ;;
       'mipsle')
-        MACHINE='mips32le'
+        machine='mips32le'
         ;;
       'mips64')
-        MACHINE='mips64'
+        machine='mips64'
         ;;
       'mips64le')
-        MACHINE='mips64le'
+        machine='mips64le'
         ;;
       'ppc64')
-        MACHINE='ppc64'
+        machine='ppc64'
         ;;
       'ppc64le')
-        MACHINE='ppc64le'
+        machine='ppc64le'
         ;;
       'riscv64')
-        MACHINE='riscv64'
+        machine='riscv64'
         ;;
       's390x')
-        MACHINE='s390x'
+        machine='s390x'
         ;;
         *)
         echo "error: The architecture is not supported."
@@ -188,41 +188,41 @@ zipRoot() {
 }
 
 downloadV2Ray(){
-    rm -rf /tmp/$KEY_LOWER
-    mkdir -p /tmp/$KEY_LOWER
-    local PACK_NAME=$KEY_LOWER
-    [[ $KEY == "Xray" ]] && PACK_NAME=$KEY
-    DOWNLOAD_LINK="https://github.com/$REPOS/releases/download/${NEW_VER}/${PACK_NAME}-linux-${MACHINE}.zip"
-    colorEcho ${BLUE} "Downloading $KEY: ${DOWNLOAD_LINK}"
-    curl ${PROXY} -L -H "Cache-Control: no-cache" -o ${ZIPFILE} ${DOWNLOAD_LINK}
+    rm -rf /tmp/$key_lower
+    mkdir -p /tmp/$key_lower
+    local pack_name=$key_lower
+    [[ $key == "Xray" ]] && pack_name=$key
+    download_link="https://github.com/$repos/releases/download/${new_ver}/${pack_name}-linux-${machine}.zip"
+    colorEcho ${blue} "Downloading $key: ${download_link}"
+    curl ${proxy} -L -H "Cache-Control: no-cache" -o ${zipfile} ${download_link}
     if [ $? != 0 ];then
-        colorEcho ${RED} "Failed to download! Please check your network or try again."
+        colorEcho ${red} "Failed to download! Please check your network or try again."
         return 3
     fi
     return 0
 }
 
 installSoftware(){
-    COMPONENT=$1
-    if [[ -n `command -v $COMPONENT` ]]; then
+    component=$1
+    if [[ -n `command -v $component` ]]; then
         return 0
     fi
 
     getPMT
     if [[ $? -eq 1 ]]; then
-        colorEcho ${RED} "The system package manager tool isn't APT or YUM, please install ${COMPONENT} manually."
+        colorEcho ${red} "The system package manager tool isn't APT or YUM, please install ${component} manually."
         return 1
     fi
-    if [[ $SOFTWARE_UPDATED -eq 0 ]]; then
-        colorEcho ${BLUE} "Updating software repo"
-        $CMD_UPDATE
-        SOFTWARE_UPDATED=1
+    if [[ $software_updated -eq 0 ]]; then
+        colorEcho ${blue} "Updating software repo"
+        $cmd_update
+        software_updated=1
     fi
 
-    colorEcho ${BLUE} "Installing ${COMPONENT}"
-    $CMD_INSTALL $COMPONENT
+    colorEcho ${blue} "Installing ${component}"
+    $cmd_install $component
     if [[ $? -ne 0 ]]; then
-        colorEcho ${RED} "Failed to install ${COMPONENT}. Please install it manually."
+        colorEcho ${red} "Failed to install ${component}. Please install it manually."
         return 1
     fi
     return 0
@@ -231,14 +231,14 @@ installSoftware(){
 # return 1: not apt, yum, or zypper
 getPMT(){
     if [[ -n `command -v apt-get` ]];then
-        CMD_INSTALL="apt-get -y -qq install"
-        CMD_UPDATE="apt-get -qq update"
+        cmd_install="apt-get -y -qq install"
+        cmd_update="apt-get -qq update"
     elif [[ -n `command -v yum` ]]; then
-        CMD_INSTALL="yum -y -q install"
-        CMD_UPDATE="yum -q makecache"
+        cmd_install="yum -y -q install"
+        cmd_update="yum -q makecache"
     elif [[ -n `command -v zypper` ]]; then
-        CMD_INSTALL="zypper -y install"
-        CMD_UPDATE="zypper ref"
+        cmd_install="zypper -y install"
+        cmd_update="zypper ref"
     else
         return 1
     fi
@@ -262,23 +262,23 @@ normalizeVersion() {
 
 # 1: new V2Ray. 0: no. 2: not installed. 3: check failed. 4: don't check.
 getVersion(){
-    if [[ -n "$VERSION" ]]; then
-        NEW_VER="$(normalizeVersion "$VERSION")"
+    if [[ -n "$version" ]]; then
+        new_ver="$(normalizeVersion "$version")"
         return 4
     else
-        VER="$(/usr/bin/$KEY_LOWER/$KEY_LOWER -version 2>/dev/null)"
-        [[ -z $VER ]] && VER="$(/usr/bin/$KEY_LOWER/$KEY_LOWER version 2>/dev/null)"
-        RETVAL=$?
-        CUR_VER="$(normalizeVersion "$(echo "$VER" | head -n 1 | cut -d " " -f2)")"
-        TAG_URL="https://api.github.com/repos/$REPOS/releases/latest"
-        NEW_VER="$(normalizeVersion "$(curl ${PROXY} -H "Accept: application/json" -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:74.0) Gecko/20100101 Firefox/74.0" -s "${TAG_URL}" --connect-timeout 10| grep 'tag_name' | cut -d\" -f4)")"
+        ver="$(/usr/bin/$key_lower/$key_lower -version 2>/dev/null)"
+        [[ -z $ver ]] && ver="$(/usr/bin/$key_lower/$key_lower version 2>/dev/null)"
+        retval=$?
+        cur_ver="$(normalizeVersion "$(echo "$ver" | head -n 1 | cut -d " " -f2)")"
+        tag_url="https://api.github.com/repos/$repos/releases/latest"
+        new_ver="$(normalizeVersion "$(curl ${proxy} -H "Accept: application/json" -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:74.0) Gecko/20100101 Firefox/74.0" -s "${tag_url}" --connect-timeout 10| grep 'tag_name' | cut -d\" -f4)")"
 
-        if [[ $? -ne 0 ]] || [[ $NEW_VER == "" ]]; then
-            colorEcho ${RED} "Failed to fetch release information. Please check your network or try again."
+        if [[ $? -ne 0 ]] || [[ $new_ver == "" ]]; then
+            colorEcho ${red} "Failed to fetch release information. Please check your network or try again."
             return 3
-        elif [[ $RETVAL -ne 0 ]];then
+        elif [[ $retval -ne 0 ]];then
             return 2
-        elif [[ $NEW_VER != $CUR_VER ]];then
+        elif [[ $new_ver != $cur_ver ]];then
             return 1
         fi
         return 0
@@ -286,48 +286,48 @@ getVersion(){
 }
 
 stopV2ray(){
-    colorEcho ${BLUE} "Shutting down $KEY service."
-    if [[ -n "${SYSTEMCTL_CMD}" ]] || [[ -f "/lib/systemd/system/$KEY_LOWER.service" ]] || [[ -f "/etc/systemd/system/$KEY_LOWER.service" ]]; then
-        ${SYSTEMCTL_CMD} stop $KEY_LOWER
+    colorEcho ${blue} "Shutting down $key service."
+    if [[ -n "${systemctl_cmd}" ]] || [[ -f "/lib/systemd/system/$key_lower.service" ]] || [[ -f "/etc/systemd/system/$key_lower.service" ]]; then
+        ${systemctl_cmd} stop $key_lower
     fi
     if [[ $? -ne 0 ]]; then
-        colorEcho ${YELLOW} "Failed to shutdown $KEY service."
+        colorEcho ${yellow} "Failed to shutdown $key service."
         return 2
     fi
     return 0
 }
 
 startV2ray(){
-    if [ -n "${SYSTEMCTL_CMD}" ] && [[ -f "/lib/systemd/system/$KEY_LOWER.service" || -f "/etc/systemd/system/$KEY_LOWER.service" ]]; then
-        ${SYSTEMCTL_CMD} start $KEY_LOWER
+    if [ -n "${systemctl_cmd}" ] && [[ -f "/lib/systemd/system/$key_lower.service" || -f "/etc/systemd/system/$key_lower.service" ]]; then
+        ${systemctl_cmd} start $key_lower
     fi
     if [[ $? -ne 0 ]]; then
-        colorEcho ${YELLOW} "Failed to start $KEY service."
+        colorEcho ${yellow} "Failed to start $key service."
         return 2
     fi
     return 0
 }
 
 installV2Ray(){
-    # Install $KEY binary to /usr/bin/$KEY_LOWER
-    if [[ $KEY == "V2Ray" && `unzip -l $1|grep v2ctl` ]];then
-        UNZIP_PARAM="$2v2ctl"
-        CHMOD_PARAM="/usr/bin/$KEY_LOWER/v2ctl"
+    # Install $key binary to /usr/bin/$key_lower
+    if [[ $key == "V2Ray" && `unzip -l $1|grep v2ctl` ]];then
+        unzip_param="$2v2ctl"
+        chmod_param="/usr/bin/$key_lower/v2ctl"
     fi
-    mkdir -p /etc/$KEY_LOWER /var/log/$KEY_LOWER && \
-    unzip -oj "$1" "$2${KEY_LOWER}" "$2geoip.dat" "$2geosite.dat" $UNZIP_PARAM -d /usr/bin/$KEY_LOWER && \
-    chmod +x /usr/bin/$KEY_LOWER/$KEY_LOWER $CHMOD_PARAM || {
-        colorEcho ${RED} "Failed to copy $KEY binary and resources."
+    mkdir -p /etc/$key_lower /var/log/$key_lower && \
+    unzip -oj "$1" "$2${key_lower}" "$2geoip.dat" "$2geosite.dat" $unzip_param -d /usr/bin/$key_lower && \
+    chmod +x /usr/bin/$key_lower/$key_lower $chmod_param || {
+        colorEcho ${red} "Failed to copy $key binary and resources."
         return 1
     }
 
     # Install V2Ray server config to /etc/v2ray
-    if [ ! -f /etc/$KEY_LOWER/config.json ]; then
-        local PORT="$(($RANDOM + 10000))"
-        local UUID="$(cat '/proc/sys/kernel/random/uuid')"
+    if [ ! -f /etc/$key_lower/config.json ]; then
+        local port="$(($RANDOM + 10000))"
+        local uuid="$(cat '/proc/sys/kernel/random/uuid')"
 
-        if [[ $KEY == "Xray" ]];then
-            cat > /etc/$KEY_LOWER/config.json <<EOF
+        if [[ $key == "Xray" ]];then
+            cat > /etc/$key_lower/config.json <<EOF
 {
   "inbounds": [{
     "port": 10086,
@@ -361,26 +361,26 @@ installV2Ray(){
   }
 }
 EOF
-            sed -i "s/10086/${PORT}/g; s/23ad6b10-8d1a-40f7-8ad0-e3e35cd38297/${UUID}/g;" /etc/$KEY_LOWER/config.json
+            sed -i "s/10086/${port}/g; s/23ad6b10-8d1a-40f7-8ad0-e3e35cd38297/${uuid}/g;" /etc/$key_lower/config.json
         else
             unzip -pq "$1" "$2vpoint_vmess_freedom.json" | \
-            sed -e "s/10086/${PORT}/g; s/23ad6b10-8d1a-40f7-8ad0-e3e35cd38297/${UUID}/g;" - > \
-            /etc/$KEY_LOWER/config.json || {
-                colorEcho ${YELLOW} "Failed to create $KEY configuration file. Please create it manually."
+            sed -e "s/10086/${port}/g; s/23ad6b10-8d1a-40f7-8ad0-e3e35cd38297/${uuid}/g;" - > \
+            /etc/$key_lower/config.json || {
+                colorEcho ${yellow} "Failed to create $key configuration file. Please create it manually."
                 return 1
             }
         fi
 
-        colorEcho ${BLUE} "PORT:${PORT}"
-        colorEcho ${BLUE} "UUID:${UUID}"
+        colorEcho ${blue} "port:${port}"
+        colorEcho ${blue} "uuid:${uuid}"
     fi
 }
 
 
 installInitScript(){
     if [[ -e /.dockerenv ]]; then
-        if [[ $KEY_LOWER == "v2ray" ]];then
-            if [[ ${NEW_VER} =~ "v4" ]];then
+        if [[ $key_lower == "v2ray" ]];then
+            if [[ ${new_ver} =~ "v4" ]];then
                 sed -i "s/run -c/-config/g" /root/run.sh
             else
                 sed -i "s/-config/run -c/g" /root/run.sh
@@ -388,10 +388,10 @@ installInitScript(){
         fi
         return
     fi
-    if [[ ! -f "/etc/systemd/system/$KEY_LOWER.service" && ! -f "/lib/systemd/system/$KEY_LOWER.service" ]]; then
-        cat > /etc/systemd/system/$KEY_LOWER.service <<EOF
+    if [[ ! -f "/etc/systemd/system/$key_lower.service" && ! -f "/lib/systemd/system/$key_lower.service" ]]; then
+        cat > /etc/systemd/system/$key_lower.service <<EOF
 [Unit]
-Description=${KEY} Service
+Description=${key} Service
 After=network.target nss-lookup.target
 
 [Service]
@@ -400,29 +400,29 @@ User=root
 CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 NoNewPrivileges=true
-ExecStart=/usr/bin/$KEY_LOWER/$KEY_LOWER run -c /etc/$KEY_LOWER/config.json
+ExecStart=/usr/bin/$key_lower/$key_lower run -c /etc/$key_lower/config.json
 Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
 EOF
-        systemctl enable $KEY_LOWER.service
+        systemctl enable $key_lower.service
     fi
-    if [[ $KEY_LOWER == "v2ray" ]];then
-        local MODIFY_SERVICE=0
-        local CHECK_RUN="`cat /etc/systemd/system/$KEY_LOWER.service|grep ExecStart|grep run`"
-        if [[ ${NEW_VER} =~ "v4" ]];then
-            if [[ $CHECK_RUN ]];then
-                MODIFY_SERVICE=1
-                sed -i "s?^ExecStart.*?ExecStart=/usr/bin/$KEY_LOWER/$KEY_LOWER -config /etc/$KEY_LOWER/config.json?g" /etc/systemd/system/$KEY_LOWER.service
+    if [[ $key_lower == "v2ray" ]];then
+        local modify_service=0
+        local check_run="`cat /etc/systemd/system/$key_lower.service|grep ExecStart|grep run`"
+        if [[ ${new_ver} =~ "v4" ]];then
+            if [[ $check_run ]];then
+                modify_service=1
+                sed -i "s?^ExecStart.*?ExecStart=/usr/bin/$key_lower/$key_lower -config /etc/$key_lower/config.json?g" /etc/systemd/system/$key_lower.service
             fi
-        elif [[ -z $CHECK_RUN ]];then
-            MODIFY_SERVICE=1
-            sed -i "s?^ExecStart.*?ExecStart=/usr/bin/$KEY_LOWER/$KEY_LOWER run -c /etc/$KEY_LOWER/config.json?g" /etc/systemd/system/$KEY_LOWER.service
+        elif [[ -z $check_run ]];then
+            modify_service=1
+            sed -i "s?^ExecStart.*?ExecStart=/usr/bin/$key_lower/$key_lower run -c /etc/$key_lower/config.json?g" /etc/systemd/system/$key_lower.service
         fi
-        if [[ $MODIFY_SERVICE == 1 ]];then
+        if [[ $modify_service == 1 ]];then
             systemctl daemon-reload
-            systemctl restart $KEY_LOWER
+            systemctl restart $key_lower
         fi
     fi
 }
@@ -442,117 +442,117 @@ EOF
 }
 
 remove(){
-    if [[ -n "${SYSTEMCTL_CMD}" ]] && [[ -f "/etc/systemd/system/$KEY_LOWER.service" ]];then
-        if pgrep "$KEY_LOWER" > /dev/null ; then
+    if [[ -n "${systemctl_cmd}" ]] && [[ -f "/etc/systemd/system/$key_lower.service" ]];then
+        if pgrep "$key_lower" > /dev/null ; then
             stopV2ray
         fi
-        systemctl disable $KEY_LOWER.service
-        rm -rf "/usr/bin/$KEY_LOWER" "/etc/systemd/system/$KEY_LOWER.service"
+        systemctl disable $key_lower.service
+        rm -rf "/usr/bin/$key_lower" "/etc/systemd/system/$key_lower.service"
         if [[ $? -ne 0 ]]; then
-            colorEcho ${RED} "Failed to remove $KEY."
+            colorEcho ${red} "Failed to remove $key."
             return 0
         else
-            colorEcho ${GREEN} "Removed $KEY successfully."
-            colorEcho ${BLUE} "If necessary, please remove configuration file and log file manually."
+            colorEcho ${green} "Removed $key successfully."
+            colorEcho ${blue} "If necessary, please remove configuration file and log file manually."
             return 0
         fi
-    elif [[ -n "${SYSTEMCTL_CMD}" ]] && [[ -f "/lib/systemd/system/$KEY_LOWER.service" ]];then
-        if pgrep "$KEY_LOWER" > /dev/null ; then
+    elif [[ -n "${systemctl_cmd}" ]] && [[ -f "/lib/systemd/system/$key_lower.service" ]];then
+        if pgrep "$key_lower" > /dev/null ; then
             stopV2ray
         fi
-        systemctl disable $KEY_LOWER.service
-        rm -rf "/usr/bin/$KEY_LOWER" "/lib/systemd/system/$KEY_LOWER.service"
+        systemctl disable $key_lower.service
+        rm -rf "/usr/bin/$key_lower" "/lib/systemd/system/$key_lower.service"
         if [[ $? -ne 0 ]]; then
-            colorEcho ${RED} "Failed to remove $KEY."
+            colorEcho ${red} "Failed to remove $key."
             return 0
         else
-            colorEcho ${GREEN} "Removed $KEY successfully."
-            colorEcho ${BLUE} "If necessary, please remove configuration file and log file manually."
+            colorEcho ${green} "Removed $key successfully."
+            colorEcho ${blue} "If necessary, please remove configuration file and log file manually."
             return 0
         fi
     else
-        colorEcho ${YELLOW} "$KEY not found."
+        colorEcho ${yellow} "$key not found."
         return 0
     fi
 }
 
 checkUpdate(){
     echo "Checking for update."
-    VERSION=""
+    version=""
     getVersion
-    RETVAL="$?"
-    if [[ $RETVAL -eq 1 ]]; then
-        colorEcho ${BLUE} "Found new version ${NEW_VER} for $KEY.(Current version:$CUR_VER)"
-    elif [[ $RETVAL -eq 0 ]]; then
-        colorEcho ${BLUE} "No new version. Current version is ${NEW_VER}."
-    elif [[ $RETVAL -eq 2 ]]; then
-        colorEcho ${YELLOW} "No $KEY installed."
-        colorEcho ${BLUE} "The newest version for $KEY is ${NEW_VER}."
+    retval="$?"
+    if [[ $retval -eq 1 ]]; then
+        colorEcho ${blue} "Found new version ${new_ver} for $key.(Current version:$cur_ver)"
+    elif [[ $retval -eq 0 ]]; then
+        colorEcho ${blue} "No new version. Current version is ${new_ver}."
+    elif [[ $retval -eq 2 ]]; then
+        colorEcho ${yellow} "No $key installed."
+        colorEcho ${blue} "The newest version for $key is ${new_ver}."
     fi
     return 0
 }
 
 main(){
     #helping information
-    [[ "$HELP" == "1" ]] && Help && return
-    [[ "$CHECK" == "1" ]] && checkUpdate && return
-    [[ "$REMOVE" == "1" ]] && remove && return
+    [[ "$help" == "1" ]] && Help && return
+    [[ "$check" == "1" ]] && checkUpdate && return
+    [[ "$remove" == "1" ]] && remove && return
 
-    local ARCH=$(uname -m)
+    local arch=$(uname -m)
     archAffix
 
     # extract local file
-    if [[ $LOCAL_INSTALL -eq 1 ]]; then
-        colorEcho ${YELLOW} "Installing $KEY via local file. Please make sure the file is a valid $KEY package, as we are not able to determine that."
-        NEW_VER=local
-        rm -rf /tmp/$KEY_LOWER
-        ZIPFILE="$LOCAL"
+    if [[ $local_install -eq 1 ]]; then
+        colorEcho ${yellow} "Installing $key via local file. Please make sure the file is a valid $key package, as we are not able to determine that."
+        new_ver=local
+        rm -rf /tmp/$key_lower
+        zipfile="$local"
     else
         # download via network and extract
         installSoftware "curl" || return $?
         getVersion
-        RETVAL="$?"
-        if [[ $RETVAL == 0 ]] && [[ "$FORCE" != "1" ]]; then
-            colorEcho ${BLUE} "Latest version ${CUR_VER} is already installed."
-            if [ -n "${ERROR_IF_UPTODATE}" ]; then
+        retval="$?"
+        if [[ $retval == 0 ]] && [[ "$force" != "1" ]]; then
+            colorEcho ${blue} "Latest version ${cur_ver} is already installed."
+            if [ -n "${error_if_uptodate}" ]; then
               return 10
             fi
             return
-        elif [[ $RETVAL == 3 ]]; then
+        elif [[ $retval == 3 ]]; then
             return 3
         else
-            colorEcho ${BLUE} "Installing $KEY ${NEW_VER} on ${ARCH}"
+            colorEcho ${blue} "Installing $key ${new_ver} on ${arch}"
             downloadV2Ray || return $?
         fi
     fi
 
-    local ZIPROOT="$(zipRoot "${ZIPFILE}")"
+    local ziproot="$(zipRoot "${zipfile}")"
     installSoftware unzip || return $?
 
-    if [ -n "${EXTRACT_ONLY}" ]; then
-        colorEcho ${BLUE} "Extracting $KEY package to ${VSRC_ROOT}."
+    if [ -n "${extract_only}" ]; then
+        colorEcho ${blue} "Extracting $key package to ${vsrc_root}."
 
-        if unzip -o "${ZIPFILE}" -d ${VSRC_ROOT}; then
-            colorEcho ${GREEN} "$KEY extracted to ${VSRC_ROOT%/}${ZIPROOT:+/${ZIPROOT%/}}, and exiting..."
+        if unzip -o "${zipfile}" -d ${vsrc_root}; then
+            colorEcho ${green} "$key extracted to ${vsrc_root%/}${ziproot:+/${ziproot%/}}, and exiting..."
             return 0
         else
-            colorEcho ${RED} "Failed to extract $KEY."
+            colorEcho ${red} "Failed to extract $key."
             return 2
         fi
     fi
 
-    if pgrep "$KEY_LOWER" > /dev/null ; then
-        V2RAY_RUNNING=1
+    if pgrep "$key_lower" > /dev/null ; then
+        v2ray_running=1
         stopV2ray
     fi
-    installV2Ray "${ZIPFILE}" "${ZIPROOT}" || return $?
-    installInitScript "${ZIPFILE}" "${ZIPROOT}" || return $?
-    if [[ ${V2RAY_RUNNING} -eq 1 ]];then
-        colorEcho ${BLUE} "Restarting $KEY service."
+    installV2Ray "${zipfile}" "${ziproot}" || return $?
+    installInitScript "${zipfile}" "${ziproot}" || return $?
+    if [[ ${v2ray_running} -eq 1 ]];then
+        colorEcho ${blue} "Restarting $key service."
         startV2ray
     fi
-    colorEcho ${GREEN} "$KEY ${NEW_VER} is installed."
-    rm -rf /tmp/$KEY_LOWER
+    colorEcho ${green} "$key ${new_ver} is installed."
+    rm -rf /tmp/$key_lower
     return 0
 }
 

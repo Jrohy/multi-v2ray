@@ -5,25 +5,25 @@ function _auto_tab() {
 	local log_array=("access" "a" "error" "e")
 	local cur prev
 
-	COMPREPLY=()
+	compreply=()
 	cur="${COMP_WORDS[COMP_CWORD]}"
 	prev="${COMP_WORDS[COMP_CWORD-1]}"
 
 	case $prev in
 		'v2ray')
-			COMPREPLY=( $(compgen -W "${options_array[*]}" -- $cur) ) ;;
+			compreply=( $(compgen -W "${options_array[*]}" -- $cur) ) ;;
 		'xray')
-			COMPREPLY=( $(compgen -W "${options_array[*]}" -- $cur) ) ;;
+			compreply=( $(compgen -W "${options_array[*]}" -- $cur) ) ;;
 		'add')
-			COMPREPLY=( $(compgen -W "${add_array[*]}" -- $cur) );;
+			compreply=( $(compgen -W "${add_array[*]}" -- $cur) );;
 		'log')
-			COMPREPLY=( $(compgen -W "${log_array[*]}" -- $cur) );;
+			compreply=( $(compgen -W "${log_array[*]}" -- $cur) );;
 		'stats')
-			COMPREPLY=( $(compgen -W "group user" -- $cur) );;
+			compreply=( $(compgen -W "group user" -- $cur) );;
 		'iptables')
-			COMPREPLY=( $(compgen -W "show" -- $cur) );;
+			compreply=( $(compgen -W "show" -- $cur) );;
 		'*')
-			COMPREPLY=( $(compgen -d -f ${cur}) ) ;;
+			compreply=( $(compgen -d -f ${cur}) ) ;;
 	esac
 
 	return 0

@@ -20,8 +20,8 @@ class StatsFactory:
         value = 0
         result = bytes.decode(subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL).stdout.strip())
         result_list = re.findall(r"\d+", result)
-        if "v2ctl" not in result and len(result_list) == 1:
-            value = int(result_list[0])
+        if len(result_list) > 0:
+            value = int(result_list[-1])
         return value
 
     def get_stats(self, meta_info, is_reset=False, is_group=False):

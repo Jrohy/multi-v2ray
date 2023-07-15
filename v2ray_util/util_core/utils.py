@@ -85,7 +85,7 @@ def header_type_list():
     return ("none", "srtp", "utp", "wechat-video", "dtls", "wireguard")
 
 def ss_method():
-    return ("aes-256-gcm", "aes-128-gcm", "chacha20-poly1305")
+    return ("aes-256-gcm", "aes-128-gcm", "chacha20-poly1305","2022-blake3-aes-128-gcm","2022-blake3-aes-256-gcm","2022-blake3-chacha20-poly1305")
 
 def xtls_flow():
     return ("xtls-rprx-vision", "none")

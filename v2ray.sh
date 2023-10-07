@@ -195,7 +195,7 @@ EOF
         $iptable_way-save -c > /root/.iptables
     fi
 
-    pip install -U v2ray_util
+    pip install -U v2ray_util --break-system-packages
 
     if [[ -e $util_path ]];then
         [[ -z $(cat $util_path|grep lang) ]] && echo "lang=en" >> $util_path

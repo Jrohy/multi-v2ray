@@ -33,7 +33,7 @@ class StatsFactory:
             if is_reset == "true":
                 stats_cmd = stats_cmd + " -reset"
         else:
-            stats_cmd = "cd /usr/bin/v2ray && ./v2ctl api --server=127.0.0.1:{} StatsService.GetStats 'name: \"{}>>>{}>>>traffic>>>{}\"" + " reset: {}'".format(is_reset)
+            stats_cmd = "cd /usr/bin/v2ray && ./v2ray api stats --server=127.0.0.1:{} StatsService.GetStats 'name: \"{}>>>{}>>>traffic>>>{}\"" + " reset: {}'".format(is_reset)
 
         stats_real_cmd = stats_cmd.format(str(self.door_port), type_tag, meta_info, "downlink")
         self.downlink_value = self.__run_command(stats_real_cmd)
